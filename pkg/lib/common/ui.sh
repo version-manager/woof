@@ -3,28 +3,39 @@
 # printing
 ui.private.print_list() {
 	local index="$1"; shift
+	# index represents the center (ex. 17)
+
+	local start=$((index - (global_tty_height / 2)))
+	local end=$((start + global_tty_height))
 
 	# cursor to home
 	printf '\033[%d;%dH' 0 0 # tput cup 0 0
 
-	# LINES, COLUMNS
-	local pointer=
-	for ((line=0; line<global_tty_height; line++)); do
-		if ((line != 0)); then
+	local str= prefix=
+	for ((i=start; i<end; i++)); do
+		if ((i != start)); then
 			# cursor down one line
 			printf '\e[1B' # tput cud1
 		fi
 
-		if ((line == global_tty_height / 2)); then
-			pointer='> '
+		if ((index+1 == i)); then
+			prefix='> '
 		else
-			pointer='  '
+			prefix='  '
 		fi
-		# cursor to start of line, erase from cursor to end of line
-		printf '\r\e[0K' # printf '\r'; tput el
 
-		printf '%s' "${pointer}$RANDOM"
-	done; unset line
+		# Greater than zero since "$0"
+		if ((i > 0 && i<$#+1)); then
+			str="${prefix}${*:$i:1}"
+		else
+			str="${prefix}\033[1;30m~\033[0m"
+		fi
+
+		printf '\r\e[0K' # printf '\r'; tput el
+		printf "$str"
+	done; unset i
+
+	printf '%s\n' "$index" >&2
 }
 
 # backwards
@@ -56,39 +67,47 @@ ui.private.backwards_one() {
 
 # forwards
 ui.private.forwards_full_screen() {
-	if ((version_index + global_tty_height < ${#versions[@]})); then
-				version_index=$((version_index + global_tty_height))
-			else
-				version_index=$((${#versions[@]}-1))
-			fi
+	local array_length=$1
+
+	if ((version_index + global_tty_height < array_length)); then
+		version_index=$((version_index + global_tty_height))
+	else
+		version_index=$((array_length-1))
+	fi
 }
 
-ui.private.fowards_half_screen() {
-	if ((version_index + (global_tty_height/2) < ${#versions[@]})); then
+ui.private.forwards_half_screen() {
+	local array_length=$1
+
+	if ((version_index + (global_tty_height/2) < array_length)); then
 		version_index=$((version_index + (global_tty_height/2)))
 	else
-		version_index=$((${#versions[@]}-1))
+		version_index=$((array_length-1))
 	fi
 }
 
 ui.private.forwards_one() {
-	if ((version_index+1 < ${#versions[@]})); then
+	local array_length=$1
+
+	if ((version_index+1 < array_length)); then
 		version_index=$((version_index+1))
 	fi
 }
 
 ui.private.forwards_all() {
-	version_index=$((${#versions[@]}-1))
+	local array_length=$1
+
+	version_index=$((array_length-1))
 }
 
 ui.select_version() {
 	unset REPLY; REPLY=
 
-	local original_version_index="$1"
+	local original_version_index="$1"; shift
 
 	local version_index="$original_version_index"
 
-	ui.private.print_list "$version_index" "${versions[@]}"
+	ui.private.print_list "$version_index" "$@"
 	while :; do
 		if ! read -rsN1 key; then
 			die 'Could not read input'
@@ -99,10 +118,10 @@ ui.select_version() {
 		$'\x02') ui.private.backwards_full_screen ;; # C-b
 		$'\x15') ui.private.backwards_half_screen ;; # C-u
 		k|$'\x10') ui.private.backwards_one ;; # k, C-p
-		$'\x06') ui.private.forwards_full_screen ;; # C-f
-		$'\x04') ui.private.fowards_half_screen ;; # C-d
-		j|$'\x0e') ui.private.forwards_one ;; # j, C-n
-		G) ui.private.forwards_all ;;
+		$'\x06') ui.private.forwards_full_screen $# ;; # C-f
+		$'\x04') ui.private.forwards_half_screen $# ;; # C-d
+		j|$'\x0e') ui.private.forwards_one $# ;; # j, C-n
+		G) ui.private.forwards_all $# ;;
 		$'\n'|$'\x0d') break ;; # enter (success)
 		q|$'\x7f') # q, backspace (fail)
 			version_index="$original_version_index"
@@ -125,11 +144,11 @@ ui.select_version() {
 
 				case "$key" in
 				$'\x41') ui.private.backwards_one ;; # up
-				$'\x42') ui.private.forwards_one ;; # down
-				$'\x43') ui.private.forwards_one ;; # right
+				$'\x42') ui.private.forwards_one $# ;; # down
+				$'\x43') ui.private.forwards_one $# ;; # right
 				$'\x44') ui.private.backwards_one ;; # left
 				$'\x48') ui.private.backwards_all ;; # home
-				$'\x46') ui.private.forwards_all ;; # end
+				$'\x46') ui.private.forwards_all $# ;; # end
 				$'\x35')
 					if ! read -rsN1 -t 0.1 key; then
 						# escape (fail)
@@ -149,7 +168,7 @@ ui.select_version() {
 					fi
 
 					case "$key" in
-					$'\x7e') ui.private.forwards_full_screen ;; # pagedown
+					$'\x7e') ui.private.forwards_full_screen $# ;; # pagedown
 					esac
 				esac
 				;;
@@ -157,7 +176,7 @@ ui.select_version() {
 			;;
 		esac
 
-		ui.private.print_list "$version_index" "${versions[@]}"
+		ui.private.print_list "$version_index" "$@"
 	done
 	unset key
 

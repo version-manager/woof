@@ -11,6 +11,7 @@ nodejs.list() {
 
 	# ui.select_version 2 "$json"
 	# local selected_version="$REPLY"
+	ui.select_version 0 one two three four five
 	ui.select_version 0 "${versions[@]}"
 	local selected_version="$REPLY"
 	g.stty_deinit
