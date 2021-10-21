@@ -1,0 +1,20 @@
+[package]
+name = 'woof'
+slug = 'woof'
+version = '0.1.0'
+authors = ['Edwin Kofler <edwin@kofler.dev>']
+description = ''
+
+[run]
+dependencies = ['https://github.com/hyperupcall/bats-common-utils.git@21a733ea8a1cc65a44e0bdcf4fcb4a34e695391f']
+sourceDirs = ['pkg/lib/common']
+builtinDirs = []
+binDirs = []
+completionDirs = []
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+
+[run.shoptOptions]
