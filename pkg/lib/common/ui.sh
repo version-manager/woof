@@ -1,5 +1,32 @@
 # shellcheck shell=bash
 
+# printing
+ui.private.print_list() {
+	local index="$1"; shift
+
+	# cursor to home
+	printf '\033[%d;%dH' 0 0 # tput cup 0 0
+
+	# LINES, COLUMNS
+	local pointer=
+	for ((line=0; line<global_tty_height; line++)); do
+		if ((line != 0)); then
+			# cursor down one line
+			printf '\e[1B' # tput cud1
+		fi
+
+		if ((line == global_tty_height / 2)); then
+			pointer='> '
+		else
+			pointer='  '
+		fi
+		# cursor to start of line, erase from cursor to end of line
+		printf '\r\e[0K' # printf '\r'; tput el
+
+		printf '%s' "${pointer}$RANDOM"
+	done; unset line
+}
+
 # backwards
 ui.private.backwards_all() {
 	version_index=0
@@ -54,13 +81,18 @@ ui.private.forwards_all() {
 	version_index=$((${#versions[@]}-1))
 }
 
-ui.private.select_loop() {
+ui.select_version() {
 	unset REPLY; REPLY=
 
 	local original_version_index="$1"
-	nodejs.private.select_version "$version_index" "${versions[@]}"
+
+	local version_index="$original_version_index"
+
+	ui.private.print_list "$version_index" "${versions[@]}"
 	while :; do
-		read -rsN1 key
+		if ! read -rsN1 key; then
+			die 'Could not read input'
+		fi
 
 		case "$key" in
 		g) ui.private.backwards_all ;;
@@ -71,7 +103,7 @@ ui.private.select_loop() {
 		$'\x04') ui.private.fowards_half_screen ;; # C-d
 		j|$'\x0e') ui.private.forwards_one ;; # j, C-n
 		G) ui.private.forwards_all ;;
-		''|$'\x0d') break ;; # enter (success)
+		$'\n'|$'\x0d') break ;; # enter (success)
 		q|$'\x7f') # q, backspace (fail)
 			version_index="$original_version_index"
 			break
@@ -125,20 +157,9 @@ ui.private.select_loop() {
 			;;
 		esac
 
-		echo "$version_index" "${#versions[@]}" >&2
-		nodejs.private.select_version "$version_index" "${versions[@]}"
+		ui.private.print_list "$version_index" "${versions[@]}"
 	done
 	unset key
 
 	REPLY="$version_index"
-}
-
-ui.select_version() {
-	local current_version_index="$1"
-	local json="$2"
-
-	local -a versions=()
-	readarray -t versions < <(jq -r '.[] | .version' <<< "$json" | sort -V)
-
-	ui.private.select_loop "$current_version_index" "${versions[@]}"
 }

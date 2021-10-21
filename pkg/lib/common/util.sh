@@ -14,14 +14,12 @@ util.init() {
 		read -r global_tty_height global_tty_width < <(stty size)
 	}
 
-	trap g.stty_deinit EXIT SIGHUP SIGABRT SIGINT SIGQUIT SIGTERM SIGTSTP
+	trap 'g.stty_deinit; exit' EXIT SIGHUP SIGABRT SIGINT SIGQUIT SIGTERM SIGTSTP
 	g.stty_deinit() {
 		tput rmcup 2>/dev/null # restore screen contents
 		tput rc # restore cursor position
 		tput cnorm 2>/dev/null # cursor to normal
 		stty "$global_stty_saved"
-
-		exit
 	}
 
 	trap trap.sigwinch SIGWINCH
