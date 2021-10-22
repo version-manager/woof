@@ -34,8 +34,6 @@ ui.private.print_list() {
 		printf '\r\e[0K' # printf '\r'; tput el
 		printf "$str"
 	done; unset i
-
-	printf '%s\n' "$index" >&2
 }
 
 # backwards
