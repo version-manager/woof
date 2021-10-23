@@ -67,3 +67,55 @@ util.fetch() {
 		return $?
 	fi
 }
+
+# reply examples 'crystal', 'nodejs', 'go'
+util.get_module_name() {
+	unset REPLY; REPLY=
+
+	local module_name="${BASH_SOURCE[-3]}"
+	module_name="${module_name##*/}"
+	module_name="${module_name%.*}"
+
+	if [ -z "$module_name" ]; then
+		fatal "Variable 'module_name' must not be empty"
+	fi
+
+	REPLY="$module_name"
+}
+
+util.run_function() {
+	local function_name="$1"
+
+	if ! declare -f "$function_name" >/dev/null 2>&1; then
+		die "Function '$function_name' not defined"
+	fi
+}
+
+util.is_version_valid() {
+	local valid_versions_variable="$1"
+	local version="$2"
+
+	local -n valid_versions="$valid_versions_variable"
+	for valid_version in "${valid_versions[@]}"; do
+		if [ "$valid_version" = "$version" ]; then
+			return 0
+		fi
+	done
+	unset valid_version
+
+	return 1
+}
+
+util.wcl() {
+	unset REPLY; REPLY=
+
+	local file="$1"
+
+	local -i i=0
+	while IFS= read -r line; do
+		i=$((i++))
+	done < "$file"
+	unset line
+
+	REPLY=$i
+}
