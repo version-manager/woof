@@ -46,7 +46,7 @@ Compatible in many ways with [asdf](https://asdf-vm.com/manage/configuration.htm
 
 ## Installation
 
-NOTE: `Woof` is currently non-functional with respect to how its advertised
+NOTE: Woof is currently non-functional with respect to how its advertised
 
 Use [Basalt](https://github.com/hyperupcall/basalt), a Bash package manager, to install this project globally
 
@@ -57,8 +57,8 @@ basalt global add hyperupcall/woof
 ## Prerequisites (for now)
 
 - cURL
-- `sort -w`
-- tput (i think optional)
+- `sort -V`
+- tput
 - stty
 - clear
 - perl (somewhat optional)
