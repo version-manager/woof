@@ -1,22 +1,16 @@
 # shellcheck shell=bash
 
-die() {
+print.die() {
 	if [ -n "$1" ]; then
-		error "$1. Exiting"
+		print.error "$1. Exiting"
 	else
-		error "Exiting"
+		print.error "Exiting"
 	fi
 
 	exit 1
 }
 
-die.code() {
-	err.code "$@"
-
-	exit 1
-}
-
-fatal() {
+print.fatal() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Fatal: $1" >&2
 	else
@@ -24,7 +18,7 @@ fatal() {
 	fi
 }
 
-error() {
+print.error() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Error: $1" >&2
 	else
@@ -32,16 +26,7 @@ error() {
 	fi
 }
 
-err.code() {
-	# TODO: print plugin name and improve error messages
-
-	case "$1" in
-	FAILED_GET_VERSIONS) error "Could not get version list" ;;
-	*) die "Enum '$1' not valid for err.code()" ;;
-	esac
-}
-
-warn() {
+print.warn() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Warn: $1" >&2
 	else
@@ -49,29 +34,10 @@ warn() {
 	fi
 }
 
-info() {
+print.info() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Info: $1"
 	else
 		printf "\033[0;34m%s\033[0m %s\n" 'Info' "$1"
 	fi
-}
-
-show_help() {
-	cat <<-"EOF"
-	Usage:
-	  woof --list [--all](TODO)
-	  woof [module] [action] [version] # TODO (brackets)
-
-	Actions: (TODO)
-	  install
-	  uninstall
-	  list
-	  current
-	  where
-	  which
-	  set-shell
-	  set-local
-	  set-global
-	EOF
 }

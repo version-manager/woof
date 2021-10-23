@@ -3,13 +3,13 @@ name = 'woof'
 slug = 'woof'
 version = '0.1.0'
 authors = ['Edwin Kofler <edwin@kofler.dev>']
-description = ''
+description = 'The version manager to end all version managers'
 
 [run]
 dependencies = ['https://github.com/hyperupcall/bats-common-utils.git@21a733ea8a1cc65a44e0bdcf4fcb4a34e695391f', 'https://github.com/hyperupcall/bash-error.git@v0.1.1']
-sourceDirs = ['pkg/lib/common']
+sourceDirs = ['pkg/lib/util']
 builtinDirs = []
-binDirs = []
+binDirs = ['./bin']
 completionDirs = []
 manDirs = []
 

@@ -3,13 +3,13 @@
 # reference: https://github.com/nodejs/node
 # don't use node on spidermonkey, jsc, chakra, etc.
 
-nodejs.private.fetch() {
+nodejs.fetch() {
 	local json=
 	if ! json="$(curl -sSf -o- https://nodejs.org/download/release/index.json)"; then
-		die "Could not fetch 'https://nodejs.org/download/release/index.json'"
+		print.die "Could not fetch 'https://nodejs.org/download/release/index.json'"
 	fi
 
-	<<< "$json" jq -r 'to_entries[] | [.key, .value] | .[1].version' | sort -V
+	jq -r 'to_entries[] | [.key, .value] | .[1].version' <<< "$json" | sort -V
 }
 
 nodejs.install() {

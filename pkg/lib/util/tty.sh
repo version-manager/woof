@@ -1,7 +1,25 @@
 # shellcheck shell=bash
 
+tty.fullscreen_init() {
+	global_stty_saved="$(stty --save)"
+	stty -echo
+	tput civis 2>/dev/null # cursor to invisible
+	tput sc # save cursor position
+	tput smcup 2>/dev/null # save screen contents
+
+	clear
+	read -r global_tty_height global_tty_width < <(stty size)
+}
+
+tty.fullscreen_deinit() {
+	tput rmcup 2>/dev/null # restore screen contents
+	tput rc # restore cursor position
+	tput cnorm 2>/dev/null # cursor to normal
+	stty "$global_stty_saved"
+}
+
 # printing
-ui.private.print_list() {
+tty.private.print_list() {
 	local index="$1"; shift
 	# index represents the center (ex. 17)
 
@@ -32,16 +50,17 @@ ui.private.print_list() {
 		fi
 
 		printf '\r\e[0K' # printf '\r'; tput el
+		# shellcheck disable=SC2059
 		printf "$str"
 	done; unset i
 }
 
 # backwards
-ui.private.backwards_all() {
+tty.private.backwards_all() {
 	version_index=0
 }
 
-ui.private.backwards_full_screen() {
+tty.private.backwards_full_screen() {
 	if ((version_index - global_tty_height > 0)); then
 		version_index=$((version_index - global_tty_height))
 	else
@@ -49,7 +68,7 @@ ui.private.backwards_full_screen() {
 	fi
 }
 
-ui.private.backwards_half_screen() {
+tty.private.backwards_half_screen() {
 	if ((version_index - (global_tty_height/2) > 0)); then
 		version_index=$((version_index - (global_tty_height/2)))
 	else
@@ -57,14 +76,14 @@ ui.private.backwards_half_screen() {
 	fi
 }
 
-ui.private.backwards_one() {
+tty.private.backwards_one() {
 	if ((version_index > 0)); then
 		version_index=$((version_index-1))
 	fi
 }
 
 # forwards
-ui.private.forwards_full_screen() {
+tty.private.forwards_full_screen() {
 	local array_length=$1
 
 	if ((version_index + global_tty_height < array_length)); then
@@ -74,7 +93,7 @@ ui.private.forwards_full_screen() {
 	fi
 }
 
-ui.private.forwards_half_screen() {
+tty.private.forwards_half_screen() {
 	local array_length=$1
 
 	if ((version_index + (global_tty_height/2) < array_length)); then
@@ -84,7 +103,7 @@ ui.private.forwards_half_screen() {
 	fi
 }
 
-ui.private.forwards_one() {
+tty.private.forwards_one() {
 	local array_length=$1
 
 	if ((version_index+1 < array_length)); then
@@ -92,34 +111,34 @@ ui.private.forwards_one() {
 	fi
 }
 
-ui.private.forwards_all() {
+tty.private.forwards_all() {
 	local array_length=$1
 
 	version_index=$((array_length-1))
 }
 
-ui.select_version() {
+tty.select_version() {
 	unset REPLY; REPLY=
 
 	local original_version_index="$1"; shift
 
 	local version_index="$original_version_index"
 
-	ui.private.print_list "$version_index" "$@"
+	tty.private.print_list "$version_index" "$@"
 	while :; do
 		if ! read -rsN1 key; then
-			die 'Could not read input'
+			print.die 'Could not read input'
 		fi
 
 		case "$key" in
-		g) ui.private.backwards_all ;;
-		$'\x02') ui.private.backwards_full_screen ;; # C-b
-		$'\x15') ui.private.backwards_half_screen ;; # C-u
-		k|$'\x10') ui.private.backwards_one ;; # k, C-p
-		$'\x06') ui.private.forwards_full_screen $# ;; # C-f
-		$'\x04') ui.private.forwards_half_screen $# ;; # C-d
-		j|$'\x0e') ui.private.forwards_one $# ;; # j, C-n
-		G) ui.private.forwards_all $# ;;
+		g) tty.private.backwards_all ;;
+		$'\x02') tty.private.backwards_full_screen ;; # C-b
+		$'\x15') tty.private.backwards_half_screen ;; # C-u
+		k|$'\x10') tty.private.backwards_one ;; # k, C-p
+		$'\x06') tty.private.forwards_full_screen $# ;; # C-f
+		$'\x04') tty.private.forwards_half_screen $# ;; # C-d
+		j|$'\x0e') tty.private.forwards_one $# ;; # j, C-n
+		G) tty.private.forwards_all $# ;;
 		$'\n'|$'\x0d') break ;; # enter (success)
 		q|$'\x7f') # q, backspace (fail)
 			version_index="$original_version_index"
@@ -141,12 +160,12 @@ ui.select_version() {
 				fi
 
 				case "$key" in
-				$'\x41') ui.private.backwards_one ;; # up
-				$'\x42') ui.private.forwards_one $# ;; # down
-				$'\x43') ui.private.forwards_one $# ;; # right
-				$'\x44') ui.private.backwards_one ;; # left
-				$'\x48') ui.private.backwards_all ;; # home
-				$'\x46') ui.private.forwards_all $# ;; # end
+				$'\x41') tty.private.backwards_one ;; # up
+				$'\x42') tty.private.forwards_one $# ;; # down
+				$'\x43') tty.private.forwards_one $# ;; # right
+				$'\x44') tty.private.backwards_one ;; # left
+				$'\x48') tty.private.backwards_all ;; # home
+				$'\x46') tty.private.forwards_all $# ;; # end
 				$'\x35')
 					if ! read -rsN1 -t 0.1 key; then
 						# escape (fail)
@@ -155,7 +174,7 @@ ui.select_version() {
 					fi
 
 					case "$key" in
-					$'\x7e') ui.private.backwards_full_screen ;; # pageup
+					$'\x7e') tty.private.backwards_full_screen ;; # pageup
 					esac
 					;;
 				$'\x36')
@@ -166,7 +185,7 @@ ui.select_version() {
 					fi
 
 					case "$key" in
-					$'\x7e') ui.private.forwards_full_screen $# ;; # pagedown
+					$'\x7e') tty.private.forwards_full_screen $# ;; # pagedown
 					esac
 				esac
 				;;
@@ -174,7 +193,7 @@ ui.select_version() {
 			;;
 		esac
 
-		ui.private.print_list "$version_index" "$@"
+		tty.private.print_list "$version_index" "$@"
 	done
 	unset key
 

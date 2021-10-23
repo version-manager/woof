@@ -8,5 +8,5 @@ crystal.list() {
 
 	ui.select_version 0 "${versions[@]}"
 	local selected_version="$REPLY"
-	g.stty_deinit
+	tty.fullscreen_deinit
 }

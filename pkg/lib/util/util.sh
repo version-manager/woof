@@ -1,33 +1,13 @@
 # shellcheck shell=bash
 
-global_stty_saved=
 util.init() {
-	trap g.stty_init SIGCONT
-	g.stty_init() {
-		global_stty_saved="$(stty --save)"
-		stty -echo
-		tput civis 2>/dev/null # cursor to invisible
-		tput sc # save cursor position
-		tput smcup 2>/dev/null # save screen contents
-
-		clear
-		read -r global_tty_height global_tty_width < <(stty size)
-	}
-
-	trap 'g.stty_deinit; exit' EXIT SIGHUP SIGABRT SIGINT SIGQUIT SIGTERM SIGTSTP
-	g.stty_deinit() {
-		tput rmcup 2>/dev/null # restore screen contents
-		tput rc # restore cursor position
-		tput cnorm 2>/dev/null # cursor to normal
-		stty "$global_stty_saved"
-	}
+	trap tty.fullscreen_init SIGCONT
+	trap 'tty.fullscreen_deinit; exit' EXIT SIGHUP SIGABRT SIGINT SIGQUIT SIGTERM SIGTSTP
 
 	trap trap.sigwinch SIGWINCH
 	trap.sigwinch() {
 		read -r global_tty_height global_tty_width < <(stty size)
 	}
-
-	g.stty_init
 }
 
 util.versions_from_git() {
@@ -77,7 +57,7 @@ util.get_module_name() {
 	module_name="${module_name%.*}"
 
 	if [ -z "$module_name" ]; then
-		fatal "Variable 'module_name' must not be empty"
+		print.fatal "Variable 'module_name' must not be empty"
 	fi
 
 	REPLY="$module_name"
@@ -87,7 +67,7 @@ util.run_function() {
 	local function_name="$1"
 
 	if ! declare -f "$function_name" >/dev/null 2>&1; then
-		die "Function '$function_name' not defined"
+		print.die "Function '$function_name' not defined"
 	fi
 }
 
@@ -118,4 +98,57 @@ util.wcl() {
 	unset line
 
 	REPLY=$i
+}
+
+util.get_detected() {
+	local kernel_name="$(uname -s)"
+	local machine_hardware="$(uname -m)"
+
+	case "$kernel_name" in
+		Linux)
+			;;
+		Darwin)
+			;;
+		FreeBSD)
+			;;
+	esac
+
+	case "$machine_hardware" in
+		x86)
+			;;
+		ia64)
+			;;
+		amd64|x86_64)
+			;;
+		sparc64)
+			;;
+	esac
+
+	REPLY1="x86_64"
+	REPLY2=""
+}
+
+util.ensure_cd() {
+	if ! cd "$@"; then
+		print.die "Could not cd"
+	fi
+}
+
+util.show_help() {
+	cat <<-"EOF"
+	Usage:
+	  woof --list [--all](TODO)
+	  woof [module] [action] [version] # TODO (brackets)
+
+	Actions: (TODO)
+	  install
+	  uninstall
+	  list
+	  current
+	  where
+	  which
+	  set-shell
+	  set-local
+	  set-global
+	EOF
 }

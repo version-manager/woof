@@ -4,6 +4,7 @@ Woof aims to support the following languages / package managers / programs
 
 ## NodeJS
 
+- [Primary](https://github.com/nodejs/node)
 - [asdf-node](https://github.com/asdf-vm/asdf-node)
 - [n](https://github.com/tj/n)
 - [nvm](https://github.com/nvm-sh/nvm)
@@ -17,6 +18,7 @@ Supports `.node-version`, and `.nvmrc`
 
 # Deno
 
+- [Primary](https://github.com/denoland/deno)
 - [asdf-deno](https://github.com/asdf-community/asdf-deno)
 - [justjavac/dvm](https://github.com/justjavac/dvm)
 - [ghosind/dvm](https://github.com/ghosind/dvm)
@@ -25,6 +27,7 @@ Supports `.dvmrc`
 
 # Go
 
+- [Primary](https://github.com/google/go-github)
 - [asdf-golang](https://github.com/kennyp/asdf-golang)
 - [gvm](https://github.com/moovweb/gvm)
 - [g](https://github.com/stefanmaric/g)
@@ -32,6 +35,7 @@ Supports `.dvmrc`
 
 # Ruby
 
+- [Primary](https://github.com/ruby/ruby)
 - [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
 - [rvm](https://rvm.io)
 - [rbenv](https://github.com/rbenv/rbenv)
@@ -41,6 +45,7 @@ Supports `.ruby-version` and `rvmrc`
 
 # PHP
 
+- [Primary](https://github.com/php/php-src)
 - [asdf-php](https://github.com/asdf-community/asdf-php)
 - [phpenv](https://github.com/phpenv/phpenv)
 - [phpbrew](https://github.com/phpbrew/phpbrew)
@@ -48,26 +53,31 @@ Supports `.ruby-version` and `rvmrc`
 
 ## Python
 
+- [Primary](https://github.com/python/cpython)
 - [asdf-python](https://github.com/asdf-vm/asdf-python)
 - [pyenv](https://github.com/pyenv/pyenv)
 
 # R
 
+- [Primary](https://www.r-project.org)
 - [asdf-r](https://github.com/asdf-community/asdf-R)
 - [renv](https://github.com/rstudio/renv)
 - [Renv](https://github.com/viking/Renv)
 
 # Julia
 
+- [Primary](https://github.com/JuliaLang/julia)
 - [asdf-julia](https://github.com/rkyleg/asdf-julia)
 - [juliavm](https://github.com/pmargreff/juliavm)
 
 # Swiftenv
 
+- [Primary](https://github.com/apple/swift)
 - [swiftenv](https://github.com/kylef/swiftenv)
 
 # Java
 
+- [Primary](https://github.com/openjdk/jdk)
 - [asdf-java](https://github.com/halcyon/asdf-java)
 - [jenv.be](https://www.jenv.be)
 - [sdkman](https://sdkman.io)
@@ -76,11 +86,13 @@ Supports `.ruby-version` and `rvmrc`
 
 ## erlang
 
+- [Primary](https://github.com/erlang/otp)
 - [asdf-erlang](https://github.com/asdf-vm/asdf-erlang)
 - [kerl](https://github.com/kerl/kerl)
 
 ## exlixir
 
+- [Primary](https://github.com/elixir-lang/elixir)
 - [asdf-elixir](https://github.com/asdf-vm/asdf-elixir)
 - [exenv](https://github.com/exenv/exenv)
 - [kiex](https://github.com/taylor/kiex)
@@ -89,70 +101,162 @@ Supports `.ruby-version` and `rvmrc`
 
 ## crystal
 
+- [Primary](https://github.com/crystal-lang/crystal)
+- [asdf-crystal](https://github.com/asdf-community/asdf-crystal)
+- [crenv](https://github.com/crenv/crenv)
+
 ## kubectl
+
+- [Primary](https://github.com/kubernetes/kubectl)
+- [asdf-kubectl](https://github.com/asdf-community/asdf-kubectl)
+
+Supports `.kubectl_version`
 
 ## haskell
 
-## rust
+- [Primary](https://github.com/ghc/ghc)
+- [asdf-haskell](https://github.com/asdf-community/asdf-haskell)
 
 ## gleam
 
-## poetry
+- [Primary](https://github.com/gleam-lang/gleam)
+- [asdf-gleam](https://github.com/asdf-community/asdf-gleam)
 
 ## kotlin
 
-## ocaml
+- [Primary](https://github.com/JetBrains/kotlin)
+- [asdf-kotlin](https://github.com/asdf-community/asdf-kotlin)
+- [kotlin-sdkman](https://sdkman.io/sdks#kotlin)
 
-## elm
+## Elm
 
-## haxe
+- [Primary](https://github.com/elm/compiler)
+- [asdf-elm](https://github.com/asdf-community/asdf-elm)
 
-## scala
+## Haxe
 
-## racket
+- [asdf-haxe](https://github.com/asdf-community/asdf-haxe)
+- [jasononeil/hvm](https://github.com/jasononeil/hvm)
+- [dpeek/hvm](https://github.com/dpeek/hvm)
 
-## graalvm
+## Scala
 
-## opam
+- [Primary](https://github.com/lampepfl/dotty)
+- [asdf-scala](https://github.com/sylph01/asdf-scala)
+- [sdkman-scala](https://sdkman.io/sdks#scala)
 
-## nim
+## Racket
 
-## clojure
+- [Primary](https://github.com/racket/racket)
+- [asdf-racket](https://github.com/asdf-community/asdf-racket)
+
+## GraalVM
+
+- [Primary](https://github.com/oracle/graal)
+- [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)
+
+## Nim
+
+- [Primary](https://github.com/nim-lang/Nim)
+- [asdf-nim](https://github.com/asdf-community/asdf-nim)
+- [choosenim](https://github.com/dom96/choosenim)
+
+## Clojure
+
+- [Primary](https://github.com/clojure/clojure)
+- [clojure](https://github.com/asdf-community/asdf-clojure)
 
 ## lfe
 
 ## sml
 
-## dotty
+- [Primary](https://smlnj.org)
+- [asdf-sml](https://github.com/asdf-community/asdf-sml)
 
-## neko
+## Dotty
+
+- [Primary](https://github.com/lampepfl/dotty)
+- [asdf-dotty](https://github.com/asdf-community/asdf-dotty)
+- [dvm](https://github.com/d-ogxwx/dvm)
+
+## Neko
+
+- [Primary](https://github.com/HaxeFoundation/neko)
+- [asdf-neko](https://github.com/asdf-community/asdf-neko)
 
 ## mlton
 
-## esy
+- [Primary](https://github.com/MLton/mlton)
+- [asdf-mlton](https://github.com/asdf-community/asdf-mlton)
 
-## peco
+## Groovy
 
-## lean
+- [Primary](https://github.com/apache/groovy)
+- [asdf-groovy](https://github.com/weibemoura/asdf-groovy)
+- [sdkman-groovy](https://sdkman.io/sdks#groovy)
 
-## zig
+## Peco
 
-## idris, idris2
+- [Primary](https://github.com/peco/peco)
+- [asdf-peco](https://github.com/asdf-community/asdf-peco)
 
-## please
+## Lean
+
+- [Primary](https://github.com/leanprover/lean4)
+- [asdf-lean](https://github.com/asdf-community/asdf-lean)
+
+## Zig
+
+- [Primary](https://github.com/ziglang/zig)
+- [asdf-zig](https://github.com/cheetah/asdf-zig)
+
+## idris
+
+- [Primary](https://www.idris-lang.org)
+- [adsf-idris](https://github.com/asdf-community/asdf-idris)
+
+## idris2
+
+- [Primary](https://github.com/idris-lang/Idris2)
+- [asdf-idris2](https://github.com/asdf-community/asdf-idris2)
+
+## Please
+
+- [Primary](https://github.com/thought-machine/please)
+- [asdf-please](https://github.com/asdf-community/asdf-please)
 
 ## fstar
 
+- [Primary](https://github.com/FStarLang/FStar)
+- [asdf-fstar](https://github.com/asdf-community/asdf-fstar)
+
 ## scheme
 
-## cue
+## Cue
 
-## chezscheme
+- [cue-lang](https://github.com/cue-lang/cue)
+- [asdf-cue](https://github.com/asdf-community/asdf-cue)
 
-## dasel
+## ChezScheme
 
-## arkade
+- [ChezScheme](https://github.com/asdf-community/asdf-chezscheme)
 
-## mill
+## Dasel
 
-## aria2c, elasticsearch, ninja, ccache, neko, rlwrap, alp, meson, trident, grpcurl, getenvoy (out of scope)
+## Arkade
+
+- [Primary](https://github.com/alexellis/arkade)
+
+## Solidity
+
+- [Solidity](https://github.com/ethereum/solidity)
+- [svm](https://github.com/web3j/svm)
+
+## Terraform
+
+- [Primary](https://github.com/hashicorp/terraform)
+- [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)
+- [tfenfv](https://github.com/tfutils/tfenv)
+
+## opam
+## aria2c, elasticsearch, rlwrap, ninja, ccache, neko, rlwrap, alp, meson, trident, grpcurl, getenvoy, esy, ocaml, other sdkmans, poetry, hhvm, rust all out of scope

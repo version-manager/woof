@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
-deno.list() {
+elixir.list() {
 	local -a versions=()
-	util.versions_from_git 'versions' 'https://github.com/denoland/deno' 'refs/tags/v'
+	util.versions_from_git 'versions' 'https://github.com/elixir-lang/elixir' 'refs/tags/v'
 	versions=("${versions[@]/#/v}")
 
 	ui.select_version 0 "${versions[@]}"
 	local selected_version="$REPLY"
-	g.stty_deinit
+	tty.fullscreen_deinit
 }

@@ -3,7 +3,7 @@
 julia.list() {
 	local json=
 	if ! json="$(util.fetch -o- https://julialang-s3.julialang.org/bin/versions.json)"; then
-		die.code 'FAILED_GET_VERSIONS'
+		print.die.code 'FAILED_GET_VERSIONS'
 	fi
 
 	local -a versions=()
@@ -13,5 +13,5 @@ julia.list() {
 
 	ui.select_version 0 "${versions[@]}"
 	local selected_version="$REPLY"
-	g.stty_deinit
+	tty.fullscreen_deinit
 }
