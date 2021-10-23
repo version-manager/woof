@@ -17,7 +17,7 @@ Woof plans to support at least 15+ languages from the getgo. See the full list i
 - If the [Nix](https://nixos.org)/[Guix](https://guix.gnu.org/en/download) solution is overkill for you and both [asdf](https://github.com/asdf-vm/asdf) and [sdkman](https://github.com/sdkman/sdkman-cli) don't work for you
 - When container engines are overkill
 - For my fellow polyglots
--
+
 ## Current Support
 
 - Linux (later Darwin, FreeBSD)
@@ -46,9 +46,13 @@ Compatible in many ways with [asdf](https://asdf-vm.com/manage/configuration.htm
 
 ## Installation
 
+NOTE: `Woof` is currently non-functional with respect to how its advertised
+
 Use [Basalt](https://github.com/hyperupcall/basalt), a Bash package manager, to install this project globally
 
+```sh
 basalt global add hyperupcall/woof
+```
 
 ## Prerequisites (for now)
 
