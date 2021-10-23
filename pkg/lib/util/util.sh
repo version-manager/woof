@@ -134,11 +134,15 @@ util.ensure_cd() {
 	fi
 }
 
+util.safe_shift() {
+	if ! shift "$@"; then :; fi
+}
+
 util.show_help() {
 	cat <<-"EOF"
 	Usage:
 	  woof --list [--all](TODO)
-	  woof [module] [action] [version] # TODO (brackets)
+	  woof [action] [module] [version] # TODO (brackets)
 
 	Actions: (TODO)
 	  install

@@ -28,7 +28,23 @@ main.woof() {
 			;;
 	esac done; unset arg
 
-	local module_name="${cmds[0]}"; shift
+	# Get action name
+	local action_name="${cmds[0]}"; util.safe_shift
+	if [ -z "$action_name" ]; then
+		print.die "No action was given"
+	fi
+
+	if [[ $action_name == *private* ]]; then
+		print.die "Specifying private actions is invalid"
+	fi
+
+	case "$action_name" in
+		install|uninstall) ;;
+		*) print.die "Action '$action_name' not recognized" ;;
+	esac
+
+	# Get module name
+	local module_name="${cmds[1]}"; util.safe_shift
 	if [ -z "$module_name" ]; then
 		print.die "No module was given"
 	fi
@@ -42,26 +58,17 @@ main.woof() {
 		print.die "Could not successfully source module '$module_name'"
 	fi
 
-	local action_name="${cmds[1]}"; shift
-	if [ -z "$action_name" ]; then
-		print.die "No action was given"
-	fi
-
-	if [[ $action_name == *private* ]]; then
-		print.die "Specifying private actions is invalid"
-	fi
-
 	if ! declare -f "$module_name.$action_name" >/dev/null 2>&1; then
 		print.die "Action '$action_name' not defined for module '$module_name'"
 	fi
-	local version_string="${cmds[2]}"; shift
+
+	# Get version string
+	local versions=()
+	local cached_versions="$WOOF_DATA_HOME/cached/$module_name-versions.txt"
+local version_string="${cmds[2]}"; shift
 	if [ -z "$version_string" ]; then
 		print.die "No version string was given"
 	fi
-
-	local versions=()
-	local cached_versions="$WOOF_DATA_HOME/cached/$module_name-versions.txt"
-
 	local use_cache=no
 	if [ -f "$cached_versions" ]; then
 		util.wcl "$cached_versions"

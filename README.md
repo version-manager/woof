@@ -20,8 +20,8 @@ Woof plans to support at least 15+ languages from the getgo. See the full list i
 -
 ## Current Support
 
-- Linux (maybe later Darwin, Linux, Aix, Cygwin, FreeBSD, OpenBSD, Solaris, Illumos)
-- x86_64 (maybe later ppc64, arm64, s390x, armhf)
+- Linux (later Darwin, FreeBSD)
+- amd64 (later x86, armv7l, aarch64)
 
 ## Example (hypothetical)
 
