@@ -18,9 +18,71 @@ tty.fullscreen_deinit() {
 	stty "$global_stty_saved"
 }
 
-# printing
+# backwards
+tty.private.backwards_all() {
+	new_version_index=0
+}
+
+tty.private.backwards_full_screen() {
+	if ((new_version_index - global_tty_height > 0)); then
+		new_version_index=$((new_version_index - global_tty_height))
+	else
+		new_version_index=0
+	fi
+}
+
+tty.private.backwards_half_screen() {
+	if ((new_version_index - (global_tty_height/2) > 0)); then
+		new_version_index=$((new_version_index - (global_tty_height/2)))
+	else
+		new_version_index=0
+	fi
+}
+
+tty.private.backwards_one() {
+	if ((new_version_index > 0)); then
+		new_version_index=$((new_version_index-1))
+	fi
+}
+
+# forwards
+tty.private.forwards_full_screen() {
+	local array_length=$1
+
+	if ((new_version_index + global_tty_height < array_length)); then
+		new_version_index=$((new_version_index + global_tty_height))
+	else
+		new_version_index=$((array_length-1))
+	fi
+}
+
+tty.private.forwards_half_screen() {
+	local array_length=$1
+
+	if ((new_version_index + (global_tty_height/2) < array_length)); then
+		new_version_index=$((new_version_index + (global_tty_height/2)))
+	else
+		new_version_index=$((array_length-1))
+	fi
+}
+
+tty.private.forwards_one() {
+	local array_length=$1
+
+	if ((new_version_index+1 < array_length)); then
+		new_version_index=$((new_version_index+1))
+	fi
+}
+
+tty.private.forwards_all() {
+	local array_length=$1
+
+	new_version_index=$((array_length-1))
+}
+
 tty.private.print_list() {
 	local index="$1"; shift
+
 	# index represents the center (ex. 17)
 
 	local start=$((index - (global_tty_height / 2)))
@@ -55,81 +117,33 @@ tty.private.print_list() {
 	done; unset i
 }
 
-# backwards
-tty.private.backwards_all() {
-	version_index=0
-}
-
-tty.private.backwards_full_screen() {
-	if ((version_index - global_tty_height > 0)); then
-		version_index=$((version_index - global_tty_height))
-	else
-		version_index=0
-	fi
-}
-
-tty.private.backwards_half_screen() {
-	if ((version_index - (global_tty_height/2) > 0)); then
-		version_index=$((version_index - (global_tty_height/2)))
-	else
-		version_index=0
-	fi
-}
-
-tty.private.backwards_one() {
-	if ((version_index > 0)); then
-		version_index=$((version_index-1))
-	fi
-}
-
-# forwards
-tty.private.forwards_full_screen() {
-	local array_length=$1
-
-	if ((version_index + global_tty_height < array_length)); then
-		version_index=$((version_index + global_tty_height))
-	else
-		version_index=$((array_length-1))
-	fi
-}
-
-tty.private.forwards_half_screen() {
-	local array_length=$1
-
-	if ((version_index + (global_tty_height/2) < array_length)); then
-		version_index=$((version_index + (global_tty_height/2)))
-	else
-		version_index=$((array_length-1))
-	fi
-}
-
-tty.private.forwards_one() {
-	local array_length=$1
-
-	if ((version_index+1 < array_length)); then
-		version_index=$((version_index+1))
-	fi
-}
-
-tty.private.forwards_all() {
-	local array_length=$1
-
-	version_index=$((array_length-1))
-}
-
 tty.multiselect() {
 	unset REPLY; REPLY=
-	local original_version_index="$1"; shift
+	local old_version_index="$1"; shift
+	local old_version="$1"; shift
+	local select_keys_variable_name="$1"; shift
+	local select_table_variable_name="$1"; shift
 
-	if (( $# == 0)); then
-		print.fatal "No selections were passed to tty.multiselect"
+	local new_version_index="$old_version_index"
+	local old_version="$old_version"
+	local -n select_keys_variable="$select_keys_variable_name"
+	local -n select_table_variable="$select_table_variable_name"
+
+	# If '$old_version' is not in 'select_table_version', then
+	if ! [ ${select_table_variable["$old_version"]+x} ]; then
+		# TODO: if so, remove it from state
+		old_version="${select_keys_variable[0]}"
 	fi
 
-	local version_index="$original_version_index"
+	if ! util.key_to_index "$select_keys_variable_name" "$old_version"; then
+		tty.fullscreen_deinit
+		print.fatal 'Key not found in array' # TODO: error message
+	fi
+	new_version_index="$REPLY"
 
 	# TODO: properly deinit on errors etc.
 	tty.fullscreen_init
-	tty.private.print_list "$version_index" "$@"
+	tty.private.print_list "$new_version_index" "${select_keys_variable[@]}"
 	while :; do
 		if ! read -rsN1 key; then
 			print.die 'Could not read input'
@@ -140,19 +154,19 @@ tty.multiselect() {
 		$'\x02') tty.private.backwards_full_screen ;; # C-b
 		$'\x15') tty.private.backwards_half_screen ;; # C-u
 		k|$'\x10') tty.private.backwards_one ;; # k, C-p
-		$'\x06') tty.private.forwards_full_screen $# ;; # C-f
-		$'\x04') tty.private.forwards_half_screen $# ;; # C-d
-		j|$'\x0e') tty.private.forwards_one $# ;; # j, C-n
-		G) tty.private.forwards_all $# ;;
+		$'\x06') tty.private.forwards_full_screen ${#select_keys_variable[@]} ;; # C-f
+		$'\x04') tty.private.forwards_half_screen ${#select_keys_variable[@]} ;; # C-d
+		j|$'\x0e') tty.private.forwards_one ${#select_keys_variable[@]} ;; # j, C-n
+		G) tty.private.forwards_all ${#select_keys_variable[@]} ;;
 		$'\n'|$'\x0d') break ;; # enter (success)
 		q|$'\x7f') # q, backspace (fail)
-			version_index="$original_version_index"
+			new_version_index="$old_version_index"
 			break
 			;;
 		$'\x1b') # escape
 			if ! read -rsN1 -t 0.1 key; then
 				# escape (fail)
-				version_index="$original_version_index"
+				new_version_index="$old_version_index"
 				break
 			fi
 
@@ -160,21 +174,21 @@ tty.multiselect() {
 			$'\x5b')
 				if ! read -rsN1 -t 0.1 key; then
 					# escape (fail)
-					version_index="$original_version_index"
+					new_version_index="$old_version_index"
 					break
 				fi
 
 				case "$key" in
 				$'\x41') tty.private.backwards_one ;; # up
-				$'\x42') tty.private.forwards_one $# ;; # down
-				$'\x43') tty.private.forwards_one $# ;; # right
+				$'\x42') tty.private.forwards_one ${#select_keys_variable[@]} ;; # down
+				$'\x43') tty.private.forwards_one ${#select_keys_variable[@]} ;; # right
 				$'\x44') tty.private.backwards_one ;; # left
 				$'\x48') tty.private.backwards_all ;; # home
-				$'\x46') tty.private.forwards_all $# ;; # end
+				$'\x46') tty.private.forwards_all ${#select_keys_variable[@]} ;; # end
 				$'\x35')
 					if ! read -rsN1 -t 0.1 key; then
 						# escape (fail)
-						version_index="$original_version_index"
+						new_version_index="$old_version_index"
 						break
 					fi
 
@@ -185,12 +199,12 @@ tty.multiselect() {
 				$'\x36')
 					if ! read -rsN1 -t 0.1 key; then
 						# escape (fail)
-						version_index="$original_version_index"
+						new_version_index="$old_version_index"
 						break
 					fi
 
 					case "$key" in
-					$'\x7e') tty.private.forwards_full_screen $# ;; # pagedown
+					$'\x7e') tty.private.forwards_full_screen ${#select_keys_variable[@]} ;; # pagedown
 					esac
 				esac
 				;;
@@ -198,10 +212,10 @@ tty.multiselect() {
 			;;
 		esac
 
-		tty.private.print_list "$version_index" "$@"
+		tty.private.print_list "$new_version_index" "${select_keys_variable[@]}"
 	done
 	unset key
 	tty.fullscreen_deinit
 
-	REPLY="$version_index"
+	REPLY="${select_keys_variable[$new_version_index]}"
 }

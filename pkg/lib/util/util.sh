@@ -104,6 +104,29 @@ util.log() {
 	printf '%s\n' "$1" > "/tmp/tmp.G9i2mlntjx/file"
 }
 
+util.key_to_index() {
+	unset REPLY; REPLY=
+
+	local -n array_name="$1"
+	local key="$2"
+
+	local -i index=-1
+	for el in "${array_name[@]}"; do
+		if [ "$el" = "$key" ]; then
+			index=$i
+			break
+		fi
+
+		i=$((i++))
+	done; unset el
+
+	if ((index == -1)); then
+		return 1
+	else
+		REPLY=$index
+	fi
+}
+
 util.show_help() {
 	cat <<-"EOF"
 	Usage:
@@ -227,16 +250,15 @@ util.select_version() {
 		read -r version_string kernel architecture <<< "$key"
 		IFS="$old_ifs"
 
-		if [ "$current_kernel" != "$kernel" ] && [ "$current_architecture" != "$architecture" ]; then
-			continue
+		if [ "$current_kernel" = "$kernel" ] && [ "$current_architecture" == "$architecture" ]; then
+				ui_keys+=("$version_string")
+				ui_table["$version_string"]="$value"
 		fi
-
-		ui_keys+=("$version_string")
-		ui_table["$key"]="$value"
 
 		unset version_string kernel architecture
 	done; unset key
 
-	tty.multiselect 2 "${ui_keys[@]}"
+	# ex. v17.0.1|linux|amd64
+	tty.multiselect 2 v16.4.1 ui_keys ui_table
 	REPLY="$REPLY|$current_kernel|$current_architecture"
 }
