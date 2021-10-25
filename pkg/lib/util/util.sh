@@ -65,9 +65,16 @@ util.get_module_name() {
 
 util.run_function() {
 	local function_name="$1"
+	if ! shift; then :; fi
 
 	if ! declare -f "$function_name" >/dev/null 2>&1; then
 		print.die "Function '$function_name' not defined"
+	fi
+
+	if "$function_name" "$@"; then
+		return $?
+	else
+		return $?
 	fi
 }
 
@@ -86,63 +93,22 @@ util.is_version_valid() {
 	return 1
 }
 
-util.wcl() {
-	unset REPLY; REPLY=
-
-	local file="$1"
-
-	local -i i=0
-	while IFS= read -r line; do
-		i=$((i++))
-	done < "$file"
-	unset line
-
-	REPLY=$i
-}
-
-util.get_detected() {
-	local kernel_name="$(uname -s)"
-	local machine_hardware="$(uname -m)"
-
-	case "$kernel_name" in
-		Linux)
-			;;
-		Darwin)
-			;;
-		FreeBSD)
-			;;
-	esac
-
-	case "$machine_hardware" in
-		x86)
-			;;
-		ia64)
-			;;
-		amd64|x86_64)
-			;;
-		sparc64)
-			;;
-	esac
-
-	REPLY1="x86_64"
-	REPLY2=""
-}
-
 util.ensure_cd() {
 	if ! cd "$@"; then
 		print.die "Could not cd"
 	fi
 }
 
-util.safe_shift() {
-	if ! shift "$@"; then :; fi
+# TODO: stub function
+util.log() {
+	printf '%s\n' "$1" > "/tmp/tmp.G9i2mlntjx/file"
 }
 
 util.show_help() {
 	cat <<-"EOF"
 	Usage:
 	  woof --list [--all](TODO)
-	  woof [action] [module] [version] # TODO (brackets)
+	  woof <action> <module> [version] # TODO (brackets)
 
 	Actions: (TODO)
 	  install
@@ -155,4 +121,122 @@ util.show_help() {
 	  set-local
 	  set-global
 	EOF
+}
+
+util.get_current_system_attributes() {
+	local kernel= hardware=
+
+	if ! kernel="$(uname -s)"; then
+		die "Could not 'uname -s'"
+	fi
+
+	if ! hardware="$(uname -m)"; then
+		die "Could not 'uname -m'"
+	fi
+
+	local kernel_pretty= hardware_pretty=
+
+	# linux|darwin|freebsd
+	case "$kernel" in
+		Linux)
+			;;
+		Darwin)
+			;;
+		FreeBSD)
+			;;
+	esac
+	kernel_pretty='linux'
+
+	# amd64|x86|armv7l|aarch64
+	case "$hardware" in
+		x86)
+			;;
+		ia64)
+			;;
+		amd64|x86_64)
+			;;
+		sparc64)
+			;;
+	esac
+	hardware_pretty='amd64'
+
+	REPLY1="$kernel_pretty"
+	REPLY2="$hardware_pretty"
+}
+
+util.construct_version_matrix() {
+	local module_name="$1"
+	local matrix_keys_variable_name="$2"
+	local matrix_table_variable_name="$3"
+
+	local -n matrix_key_variable="$matrix_keys_variable_name"
+	local -n matrix_table_variable="$matrix_table_variable_name"
+
+	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+	local use_cache=no
+	if [ -f "$matrix_file" ]; then
+		use_cache=yes
+	fi
+
+	if [ "$use_cache" = no ]; then
+		local matrix_string=
+		if matrix_string="$(util.run_function "$module_name.matrix")"; then
+			if err.exists; then
+				print.error "$ERR"
+				exit "$ERRCODE"
+			fi
+		else
+			print.die "A fatal error occured while running '$module_name.matrix'"
+		fi
+
+		if ! printf '%s' "$matrix_string" > "$matrix_file"; then
+			rm -f "$matrix_file"
+			print.die "Could not write to '$matrix_file'"
+		fi
+
+		unset matrix_string
+	fi
+
+	while IFS=' ' read -r key value; do
+		matrix_key_variable+=("$key")
+		matrix_table_variable["$key"]="$value"
+	done < "$matrix_file"; unset key value
+}
+
+util.select_version() {
+	local matrix_keys_variable_name="$1"
+	local matrix_table_variable_name="$2"
+
+	local -n matrix_key_variable="$matrix_keys_variable_name"
+	local -n matrix_table_variable="$matrix_table_variable_name"
+
+	# Similar to 'matrix_key' and 'matrix_key', except this is shown
+	# directly to the user in a multiselect screen
+	local -a ui_keys=()
+	local -A ui_table=()
+
+	util.get_current_system_attributes
+	local current_kernel="$REPLY1"
+	local current_architecture="$REPLY2"
+
+	for key in "${matrix_key_variable[@]}"; do
+		local value="${matrix_table_variable["$key"]}"
+
+		local old_ifs="$IFS"; IFS='|'
+		local version_string= kernel= architecture=
+		read -r version_string kernel architecture <<< "$key"
+		IFS="$old_ifs"
+
+		if [ "$current_kernel" != "$kernel" ] && [ "$current_architecture" != "$architecture" ]; then
+			continue
+		fi
+
+		ui_keys+=("$version_string")
+		ui_table["$key"]="$value"
+
+		unset version_string kernel architecture
+	done; unset key
+
+	tty.multiselect 2 "${ui_keys[@]}"
+	REPLY="$REPLY|$current_kernel|$current_architecture"
 }

@@ -5,7 +5,7 @@ deno.list() {
 	util.versions_from_git 'versions' 'https://github.com/denoland/deno' 'refs/tags/v'
 	versions=("${versions[@]/#/v}")
 
-	ui.select_version 0 "${versions[@]}"
+	tty.multiselect 0 "${versions[@]}"
 	local selected_version="$REPLY"
 	tty.fullscreen_deinit
 }

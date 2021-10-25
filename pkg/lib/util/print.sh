@@ -1,11 +1,7 @@
 # shellcheck shell=bash
 
 print.die() {
-	if [ -n "$1" ]; then
-		print.error "$1. Exiting"
-	else
-		print.error "Exiting"
-	fi
+	print.error "$@"
 
 	exit 1
 }
@@ -16,6 +12,8 @@ print.fatal() {
 	else
 		printf "\033[0;31m%s\033[0m %s\n" 'Fatal' "$1" >&2
 	fi
+
+	exit 1
 }
 
 print.error() {

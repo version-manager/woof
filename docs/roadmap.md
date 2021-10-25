@@ -4,7 +4,7 @@ Woof aims to support the following languages / package managers / programs
 
 ## NodeJS
 
-- [Primary](https://github.com/nodejs/node)
+- [Official](https://github.com/nodejs/node)
 - [asdf-node](https://github.com/asdf-vm/asdf-node)
 - [n](https://github.com/tj/n)
 - [nvm](https://github.com/nvm-sh/nvm)
@@ -13,12 +13,14 @@ Woof aims to support the following languages / package managers / programs
 - [avn](https://github.com/wbyoung/avn)
 - [fnm](https://github.com/Schniz/fnm)
 - [nave](https://github.com/isaacs/nave)
+- [nodist](https://github.com/nullivex/nodist)
+- [nodenv](https://github.com/nodenv/nodenv)
 
 Supports `.node-version`, and `.nvmrc`
 
 # Deno
 
-- [Primary](https://github.com/denoland/deno)
+- [Official](https://github.com/denoland/deno)
 - [asdf-deno](https://github.com/asdf-community/asdf-deno)
 - [justjavac/dvm](https://github.com/justjavac/dvm)
 - [ghosind/dvm](https://github.com/ghosind/dvm)
@@ -27,25 +29,29 @@ Supports `.dvmrc`
 
 # Go
 
-- [Primary](https://github.com/google/go-github)
+- [Official](https://github.com/google/go-github)
 - [asdf-golang](https://github.com/kennyp/asdf-golang)
 - [gvm](https://github.com/moovweb/gvm)
-- [g](https://github.com/stefanmaric/g)
+- [stefanmaric/g](https://github.com/stefanmaric/g)
+- [voidint/g](https://github.com/voidint/g)
 - [goenv](https://github.com/syndbg/goenv)
+- [goup](https://github.com/owenthereal/goup)
+- [oo](https://github.com/hit9/oo)
 
 # Ruby
 
-- [Primary](https://github.com/ruby/ruby)
+- [Official](https://github.com/ruby/ruby)
 - [asdf-ruby](https://github.com/asdf-vm/asdf-ruby)
 - [rvm](https://rvm.io)
 - [rbenv](https://github.com/rbenv/rbenv)
 - [chruby](https://github.com/postmodern/chruby)
+- [frum](https://github.com/TaKO8Ki/frum)
 
 Supports `.ruby-version` and `rvmrc`
 
 # PHP
 
-- [Primary](https://github.com/php/php-src)
+- [Official](https://github.com/php/php-src)
 - [asdf-php](https://github.com/asdf-community/asdf-php)
 - [phpenv](https://github.com/phpenv/phpenv)
 - [phpbrew](https://github.com/phpbrew/phpbrew)
@@ -53,31 +59,31 @@ Supports `.ruby-version` and `rvmrc`
 
 ## Python
 
-- [Primary](https://github.com/python/cpython)
+- [Official](https://github.com/python/cpython)
 - [asdf-python](https://github.com/asdf-vm/asdf-python)
 - [pyenv](https://github.com/pyenv/pyenv)
 
 # R
 
-- [Primary](https://www.r-project.org)
+- [Official](https://www.r-project.org)
 - [asdf-r](https://github.com/asdf-community/asdf-R)
 - [renv](https://github.com/rstudio/renv)
 - [Renv](https://github.com/viking/Renv)
 
 # Julia
 
-- [Primary](https://github.com/JuliaLang/julia)
+- [Official](https://github.com/JuliaLang/julia)
 - [asdf-julia](https://github.com/rkyleg/asdf-julia)
 - [juliavm](https://github.com/pmargreff/juliavm)
 
 # Swiftenv
 
-- [Primary](https://github.com/apple/swift)
+- [Official](https://github.com/apple/swift)
 - [swiftenv](https://github.com/kylef/swiftenv)
 
 # Java
 
-- [Primary](https://github.com/openjdk/jdk)
+- [Official](https://github.com/openjdk/jdk)
 - [asdf-java](https://github.com/halcyon/asdf-java)
 - [jenv.be](https://www.jenv.be)
 - [sdkman](https://sdkman.io)
@@ -86,13 +92,13 @@ Supports `.ruby-version` and `rvmrc`
 
 ## erlang
 
-- [Primary](https://github.com/erlang/otp)
+- [Official](https://github.com/erlang/otp)
 - [asdf-erlang](https://github.com/asdf-vm/asdf-erlang)
 - [kerl](https://github.com/kerl/kerl)
 
-## exlixir
+## Elixir
 
-- [Primary](https://github.com/elixir-lang/elixir)
+- [Official](https://github.com/elixir-lang/elixir)
 - [asdf-elixir](https://github.com/asdf-vm/asdf-elixir)
 - [exenv](https://github.com/exenv/exenv)
 - [kiex](https://github.com/taylor/kiex)
@@ -101,36 +107,37 @@ Supports `.ruby-version` and `rvmrc`
 
 ## crystal
 
-- [Primary](https://github.com/crystal-lang/crystal)
+- [Official](https://github.com/crystal-lang/crystal)
 - [asdf-crystal](https://github.com/asdf-community/asdf-crystal)
 - [crenv](https://github.com/crenv/crenv)
 
 ## kubectl
 
-- [Primary](https://github.com/kubernetes/kubectl)
+- [Official](https://github.com/kubernetes/kubectl)
 - [asdf-kubectl](https://github.com/asdf-community/asdf-kubectl)
+- [kubenvz](https://github.com/nutellinoit/kubenvz)
 
 Supports `.kubectl_version`
 
 ## haskell
 
-- [Primary](https://github.com/ghc/ghc)
+- [Official](https://github.com/ghc/ghc)
 - [asdf-haskell](https://github.com/asdf-community/asdf-haskell)
 
 ## gleam
 
-- [Primary](https://github.com/gleam-lang/gleam)
+- [Official](https://github.com/gleam-lang/gleam)
 - [asdf-gleam](https://github.com/asdf-community/asdf-gleam)
 
 ## kotlin
 
-- [Primary](https://github.com/JetBrains/kotlin)
+- [Official](https://github.com/JetBrains/kotlin)
 - [asdf-kotlin](https://github.com/asdf-community/asdf-kotlin)
 - [kotlin-sdkman](https://sdkman.io/sdks#kotlin)
 
 ## Elm
 
-- [Primary](https://github.com/elm/compiler)
+- [Official](https://github.com/elm/compiler)
 - [asdf-elm](https://github.com/asdf-community/asdf-elm)
 
 ## Haxe
@@ -141,96 +148,104 @@ Supports `.kubectl_version`
 
 ## Scala
 
-- [Primary](https://github.com/lampepfl/dotty)
+- [Official](https://github.com/lampepfl/dotty)
 - [asdf-scala](https://github.com/sylph01/asdf-scala)
 - [sdkman-scala](https://sdkman.io/sdks#scala)
 
 ## Racket
 
-- [Primary](https://github.com/racket/racket)
+- [Official](https://github.com/racket/racket)
 - [asdf-racket](https://github.com/asdf-community/asdf-racket)
 
 ## GraalVM
 
-- [Primary](https://github.com/oracle/graal)
+- [Official](https://github.com/oracle/graal)
 - [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)
 
 ## Nim
 
-- [Primary](https://github.com/nim-lang/Nim)
+- [Official](https://github.com/nim-lang/Nim)
 - [asdf-nim](https://github.com/asdf-community/asdf-nim)
 - [choosenim](https://github.com/dom96/choosenim)
 
 ## Clojure
 
-- [Primary](https://github.com/clojure/clojure)
+- [Official](https://github.com/clojure/clojure)
 - [clojure](https://github.com/asdf-community/asdf-clojure)
 
 ## lfe
 
 ## sml
 
-- [Primary](https://smlnj.org)
+- [Official](https://smlnj.org)
 - [asdf-sml](https://github.com/asdf-community/asdf-sml)
 
 ## Dotty
 
-- [Primary](https://github.com/lampepfl/dotty)
+- [Official](https://github.com/lampepfl/dotty)
 - [asdf-dotty](https://github.com/asdf-community/asdf-dotty)
 - [dvm](https://github.com/d-ogxwx/dvm)
 
 ## Neko
 
-- [Primary](https://github.com/HaxeFoundation/neko)
+- [Official](https://github.com/HaxeFoundation/neko)
 - [asdf-neko](https://github.com/asdf-community/asdf-neko)
 
 ## mlton
 
-- [Primary](https://github.com/MLton/mlton)
+- [Official](https://github.com/MLton/mlton)
 - [asdf-mlton](https://github.com/asdf-community/asdf-mlton)
 
 ## Groovy
 
-- [Primary](https://github.com/apache/groovy)
+- [Official](https://github.com/apache/groovy)
 - [asdf-groovy](https://github.com/weibemoura/asdf-groovy)
 - [sdkman-groovy](https://sdkman.io/sdks#groovy)
 
 ## Peco
 
-- [Primary](https://github.com/peco/peco)
+- [Official](https://github.com/peco/peco)
 - [asdf-peco](https://github.com/asdf-community/asdf-peco)
 
 ## Lean
 
-- [Primary](https://github.com/leanprover/lean4)
+- [Official](https://github.com/leanprover/lean4)
 - [asdf-lean](https://github.com/asdf-community/asdf-lean)
 
 ## Zig
 
-- [Primary](https://github.com/ziglang/zig)
+- [Official](https://github.com/ziglang/zig)
 - [asdf-zig](https://github.com/cheetah/asdf-zig)
 
 ## idris
 
-- [Primary](https://www.idris-lang.org)
+- [Official](https://www.idris-lang.org)
 - [adsf-idris](https://github.com/asdf-community/asdf-idris)
 
 ## idris2
 
-- [Primary](https://github.com/idris-lang/Idris2)
+- [Official](https://github.com/idris-lang/Idris2)
 - [asdf-idris2](https://github.com/asdf-community/asdf-idris2)
 
 ## Please
 
-- [Primary](https://github.com/thought-machine/please)
+- [Official](https://github.com/thought-machine/please)
 - [asdf-please](https://github.com/asdf-community/asdf-please)
 
 ## fstar
 
-- [Primary](https://github.com/FStarLang/FStar)
+- [Official](https://github.com/FStarLang/FStar)
 - [asdf-fstar](https://github.com/asdf-community/asdf-fstar)
 
+## flutter
+
+- [fvm](https://github.com/befovy/fvm)
+
 ## scheme
+
+## Yarn
+
+- [yarn](https://github.com/tophat/yvm)
 
 ## Cue
 
@@ -245,7 +260,7 @@ Supports `.kubectl_version`
 
 ## Arkade
 
-- [Primary](https://github.com/alexellis/arkade)
+- [Official](https://github.com/alexellis/arkade)
 
 ## Solidity
 
@@ -254,9 +269,15 @@ Supports `.kubectl_version`
 
 ## Terraform
 
-- [Primary](https://github.com/hashicorp/terraform)
+- [Official](https://github.com/hashicorp/terraform)
 - [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)
 - [tfenfv](https://github.com/tfutils/tfenv)
+- [terraenv](https://github.com/aaratn/terraenv)
+
+# Dart
+
+- [Official](https://dart.dev)
+- [dvm](https://github.com/cbracken/dvm)
 
 ## opam
 ## aria2c, elasticsearch, rlwrap, ninja, ccache, neko, rlwrap, alp, meson, trident, grpcurl, getenvoy, esy, ocaml, other sdkmans, poetry, hhvm, rust all out of scope

@@ -8,7 +8,7 @@ while($var =~ /(?<url>https:\/\/github\.com\/erlang\/otp\/releases\/download\/OT
 }' < <(util.fetch -o- 'https://erlang.org/download/otp_versions_tree.html'))
 	versions=("${versions[@]/#/v}")
 
-	ui.select_version 0 "${versions[@]}"
+	tty.multiselect 0 "${versions[@]}"
 	local selected_version="$REPLY"
 	tty.fullscreen_deinit
 }

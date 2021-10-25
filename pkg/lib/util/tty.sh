@@ -117,13 +117,18 @@ tty.private.forwards_all() {
 	version_index=$((array_length-1))
 }
 
-tty.select_version() {
+tty.multiselect() {
 	unset REPLY; REPLY=
-
 	local original_version_index="$1"; shift
+
+	if (( $# == 0)); then
+		print.fatal "No selections were passed to tty.multiselect"
+	fi
 
 	local version_index="$original_version_index"
 
+	# TODO: properly deinit on errors etc.
+	tty.fullscreen_init
 	tty.private.print_list "$version_index" "$@"
 	while :; do
 		if ! read -rsN1 key; then
@@ -196,6 +201,7 @@ tty.select_version() {
 		tty.private.print_list "$version_index" "$@"
 	done
 	unset key
+	tty.fullscreen_deinit
 
 	REPLY="$version_index"
 }

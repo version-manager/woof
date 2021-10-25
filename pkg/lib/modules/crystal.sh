@@ -6,7 +6,7 @@ crystal.list() {
 	util.array_filter_out 'versions' '*ruby*'
 	versions=("${versions[@]/#/v}")
 
-	ui.select_version 0 "${versions[@]}"
+	tty.multiselect 0 "${versions[@]}"
 	local selected_version="$REPLY"
 	tty.fullscreen_deinit
 }
