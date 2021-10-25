@@ -59,37 +59,83 @@ main.woof() {
 
 	# Get version string
 	local version_string="${cmds[2]}"
-	local -a matrix_keys=()
-	local -A matrix_table=()
 	if [ -z "$version_string" ]; then
+		local -a matrix_keys=()
+		local -A matrix_table=()
+
 		util.construct_version_matrix "$module_name" matrix_keys matrix_table
 		util.select_version "$module_name" matrix_keys matrix_table
 		version_string="$REPLY"
+
+		unset matrix_keys matrix_table
 	fi
 
 	printf '%s\n' "Chosen: $version_string"
-	# local cached_versions="$WOOF_DATA_HOME/cached/$module_name-versions.txt"
-	# if ! util.is_version_valid 'versions' "$version_string" "$cached_versions"; then
-	# 	print.die "Version '$version_string' is not valid for module '$module_name'"
-	# fi
+	if ! util.get_module_value_from_key "$module_name" "$version_string"; then
+		print.die "Version '$version_string' is not valid for module '$module_name'"
+	fi
+	unset REPLY
 
-	# case "$action_name" in
-	# install)
-	# 	local workspace_dir="$WOOF_DATA_HOME/workspace-$module_name"
-	# 	local dest_dir="$WOOF_DATA_HOME/modules/$module_name/$version_string"
-	# 	mkdir -p "$workspace_dir" "$dest_dir"
+	case "$action_name" in
+	install)
+		local workspace_dir="$WOOF_DATA_HOME/workspace-$module_name"
+		local dest_dir="$WOOF_DATA_HOME/installs/$module_name/$version_string"
 
-	# 	local old_pwd="$PWD"
-	# 	util.ensure_cd "$workspace_dir"
+		if [ -d "$dest_dir" ]; then
+			print.die "Version '$version_string' is already installed for module '$module_name'"
+		fi
 
-	# 	unset REPLY_BINS REPLY_MANS
-	# 	declare -ag REPLY_BINS=() REPLY_MANS=()
-	# 	"$module_name.$action_name" "$workspace_dir" "$dest_dir" "${version_string/#v}"
+		mkdir -p "$workspace_dir" "${dest_dir%/*}"
 
-	# 	util.ensure_cd "$old_pwd"
-	# 	;;
-	# uninstall)
-	# 	"$module_name.$action_name" ;;
-	# esac
+		util.get_module_value_from_key "$module_name" "$version_string"
+		local old_ifs="$IFS"; IFS='|'
+		local url= notes=
+		read -r url notes <<< "$REPLY"
+		IFS="$old_ifs"
 
+		local old_pwd="$PWD"
+		util.ensure_cd "$workspace_dir"
+		unset REPLY_DIR REPLY_BINS REPLY_MANS
+		declare -g REPLY_DIR=
+		declare -ag REPLY_BINS=() REPLY_MANS=()
+		if "$module_name.install" "$url" "${version_string/#v}"; then
+			if err.exists; then
+				print.error "$ERR"
+				exit "$ERRCODE"
+			fi
+		else
+			print.die "Unexpected error while calling '$module_name.install'"
+		fi
+		util.ensure_cd "$old_pwd"
+
+
+		if ! mv "$workspace_dir/$REPLY_DIR" "$dest_dir"; then
+			print.die "Could not move extracted contents to '$dest_dir'"
+		fi
+
+		if ((${#REPLY_BINS[@]} > 0)); then
+			mkdir -p "$WOOF_DATA_HOME/symlinks-global/bin"
+		fi
+
+		for reply_bin in "${REPLY_BINS[@]}"; do
+			for bin_file in "$dest_dir/$reply_bin"/*; do
+				if ! ln -sf "$bin_file" "$WOOF_DATA_HOME/symlinks-global/bin"; then
+					print.die "Link failed"
+				fi
+			done; unset bin_file
+		done; unset reply_bin
+
+		rm -rf "$workspace_dir"
+
+		;;
+	uninstall)
+		local install_dir="$WOOF_DATA_HOME/installs/$module_name/$version_string"
+		if [ -e "$install_dir" ]; then
+			rm -rf "$install_dir"
+			print.info "Removed version '$version_string' for module '$module_name'"
+		else
+			print.die "Version '$version_string' for module '$module_name' is not installed"
+		fi
+		;;
+	esac
 }

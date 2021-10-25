@@ -2,7 +2,7 @@
 
 nodejs.matrix() {
 	local json=
-	if ! json="$(util.fetch https://nodejs.org/download/release/index.json)"; then
+	if ! json="$(mutil.fetch https://nodejs.org/download/release/index.json)"; then
 		err.set "Could not fetch 'https://nodejs.org/download/release/index.json'"
 		return
 	fi
@@ -54,25 +54,15 @@ nodejs.matrix() {
 	done <<< "$json"; unset line
 }
 
-nodejs.fetch() {
-	local json=
-	if ! json="$(curl -sSf -o- https://nodejs.org/download/release/index.json)"; then
-		print.die "Could not fetch 'https://nodejs.org/download/release/index.json'"
-	fi
-
-	jq -r 'to_entries[] | [.key, .value] | .[1].version' <<< "$json" | sort -V
-}
-
 nodejs.install() {
-	local workspace_dir="$1"
-	local dest_dir="$2"
-	local version="$3"
+	local url="$1"
+	local version="$2"
 
-	local platform='linux'
-	local arch='x64'
-	curl -fsSo download.tar.xz "https://nodejs.org/download/release/v$version/node-v$version-$platform-$arch.tar.xz"
-	tar xf download.tar.xz
+	mutil.ensure mutil.fetch -o file.tar.gz "$url"
+	mkdir -p 'dir'
+	mutil.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
 
+	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
 	REPLY_MANS=('./share/man/man1')
 }

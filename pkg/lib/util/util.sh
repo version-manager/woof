@@ -42,11 +42,6 @@ util.array_filter_out() {
 	unset new_array
 }
 
-util.fetch() {
-	if curl -fsS "$@"; then :; else
-		return $?
-	fi
-}
 
 # reply examples 'crystal', 'nodejs', 'go'
 util.get_module_name() {
@@ -78,17 +73,27 @@ util.run_function() {
 	fi
 }
 
-util.is_version_valid() {
-	local valid_versions_variable="$1"
-	local version="$2"
+util.get_module_value_from_key() {
+	unset REPLY; REPLY=
+	local module_name="$1"
+	local version_string="$2"
 
-	local -n valid_versions="$valid_versions_variable"
-	for valid_version in "${valid_versions[@]}"; do
-		if [ "$valid_version" = "$version" ]; then
+	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+	if [ ! -f "$matrix_file" ]; then
+		print.fatal "File '$matrix_file' does not exist, but was expected to"
+	fi
+
+	while IFS=' ' read -r key value; do
+		local old_ifs="$IFS"; IFS='|'
+		local version= kernel= architecture=
+		read -r version kernel architecture <<< "$key"
+		IFS="$old_ifs"
+
+		if [ "$version_string" = "$version" ]; then
+			REPLY="$value"
 			return 0
 		fi
-	done
-	unset valid_version
+	done < "$matrix_file"; unset key value
 
 	return 1
 }
@@ -231,7 +236,9 @@ util.construct_version_matrix() {
 }
 
 # @description For a particular module, prompt the user for the version
-# they want to perform the operation on
+# they want to perform the operation on. Write the selected version to a
+# file (to be the initial value if invoked again), and set REPLY with the
+# value
 util.select_version() {
 	local module_name="$1"
 	local matrix_keys_variable_name="$2"
@@ -284,5 +291,5 @@ util.select_version() {
 		print.die "Could not write to '$current_choice_file'"
 	fi
 
-	REPLY="$REPLY|$current_kernel|$current_architecture"
+	REPLY="$selected_version"
 }

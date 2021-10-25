@@ -2,7 +2,7 @@
 
 julia.list() {
 	local json=
-	if ! json="$(util.fetch -o- https://julialang-s3.julialang.org/bin/versions.json)"; then
+	if ! json="$(mutil.fetch -o- https://julialang-s3.julialang.org/bin/versions.json)"; then
 		print.die.code 'FAILED_GET_VERSIONS'
 	fi
 
