@@ -185,6 +185,12 @@ util.get_current_system_attributes() {
 	REPLY2="$hardware_pretty"
 }
 
+# @description For a given module, construct a matrix of all versions for all
+# platforms (kernel and architecture). Each key looks like 'v0.8.6|linux|x86'
+# while each value looks like 'https://nodejs.org/download/release/v0.8.6/
+# node-v0.8.6-linux-x86.tar.gz|(Released 2012-08-06)'. The 'matrix_keys'
+# variable is an array of all the keys contained within 'matrix_table'. It is a
+# separate variable to make sorting work
 util.construct_version_matrix() {
 	local module_name="$1"
 	local matrix_keys_variable_name="$2"
@@ -224,12 +230,25 @@ util.construct_version_matrix() {
 	done < "$matrix_file"; unset key value
 }
 
+# @description For a particular module, prompt the user for the version
+# they want to perform the operation on
 util.select_version() {
-	local matrix_keys_variable_name="$1"
-	local matrix_table_variable_name="$2"
+	local module_name="$1"
+	local matrix_keys_variable_name="$2"
+	local matrix_table_variable_name="$3"
 
 	local -n matrix_key_variable="$matrix_keys_variable_name"
 	local -n matrix_table_variable="$matrix_table_variable_name"
+
+	# Current choice
+	local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
+	local current_choice=
+	if [ -r "$current_choice_file" ]; then
+		if ! current_choice="$(<"$current_choice_file")"; then
+			print.die "Could not read from '$current_choice_file'"
+		fi
+		rm -f "$current_choice_file"
+	fi
 
 	# Similar to 'matrix_key' and 'matrix_key', except this is shown
 	# directly to the user in a multiselect screen
@@ -256,7 +275,14 @@ util.select_version() {
 		unset version_string kernel architecture
 	done; unset key
 
-	# ex. v17.0.1|linux|amd64
-	tty.multiselect 'v16.4.1' ui_keys ui_table
+	tty.multiselect "$current_choice" ui_keys ui_table
+	local selected_version="$REPLY"
+
+	mkdir -p "${current_choice_file%/*}"
+	if ! printf '%s\n' "$selected_version" > "$current_choice_file"; then
+		rm -f "$current_choice_file"
+		print.die "Could not write to '$current_choice_file'"
+	fi
+
 	REPLY="$REPLY|$current_kernel|$current_architecture"
 }

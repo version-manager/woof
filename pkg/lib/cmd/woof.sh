@@ -59,25 +59,15 @@ main.woof() {
 
 	# Get version string
 	local version_string="${cmds[2]}"
-	# 'matrix_table' is an associative array containing keys that look like
-	# 'v0.8.6|linux|x86' and values that look like 'https://nodejs.org/download/
-	# release/v0.8.6/node-v0.8.6-linux-x86.tar.gz|(Released 2012-08-06)'
-	# 'matrix_keys' is just a list that contains every key in 'matrix_table'. It
-	# is a separate order so we can change easily change / guarantee ordering
 	local -a matrix_keys=()
 	local -A matrix_table=()
 	if [ -z "$version_string" ]; then
 		util.construct_version_matrix "$module_name" matrix_keys matrix_table
-		# for key in "${matrix_keys[@]}"; do
-		# 	printf '%s\n' "$key: ${matrix_table["$key"]}"
-		# done; unset key
-
-		util.select_version matrix_keys matrix_table
-		# The selected reply is 
-		echo "uwu: $REPLY"
+		util.select_version "$module_name" matrix_keys matrix_table
+		version_string="$REPLY"
 	fi
 
-
+	printf '%s\n' "Chosen: $version_string"
 	# local cached_versions="$WOOF_DATA_HOME/cached/$module_name-versions.txt"
 	# if ! util.is_version_valid 'versions' "$version_string" "$cached_versions"; then
 	# 	print.die "Version '$version_string' is not valid for module '$module_name'"

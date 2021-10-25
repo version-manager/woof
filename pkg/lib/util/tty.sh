@@ -132,6 +132,11 @@ tty.multiselect() {
 	local -n select_keys_variable="$select_keys_variable_name"
 	local -n select_table_variable="$select_table_variable_name"
 
+	if [ -z "$old_version" ]; then
+		# TODO: if so, remove it from state
+		old_version="${select_keys_variable[0]}"
+	fi
+
 	# If '$old_version' is not in 'select_table_version', then
 	if ! [ ${select_table_variable["$old_version"]+x} ]; then
 		# TODO: if so, remove it from state
