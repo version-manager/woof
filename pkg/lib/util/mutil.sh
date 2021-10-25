@@ -11,3 +11,8 @@ mutil.fetch() {
 		return $?
 	fi
 }
+
+# TODO: implement logging
+mutil.log() {
+	printf '%s\n' "$1" >/dev/null
+}

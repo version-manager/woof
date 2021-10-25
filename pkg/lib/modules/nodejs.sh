@@ -37,7 +37,7 @@ nodejs.matrix() {
 					osx-x32-tar) normalized_platform='darwin|x86' ;;
 					osx-x64-tar) normalized_platform='darwin|amd64' ;;
 					osx-arm64-tar) normalized_platform='darwin|arm64' ;;
-					*) util.log "nodejs: $version_string: $platform: Not supported"; continue ;;
+					*) mutil.log "nodejs: $version_string: $platform: Not supported"; continue ;;
 				esac
 
 				local platform_uri="$platform"
