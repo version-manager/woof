@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# TODO: tput optional
 tty.fullscreen_init() {
 	global_stty_saved="$(stty --save)"
 	stty -echo
@@ -15,7 +16,12 @@ tty.fullscreen_deinit() {
 	tput rmcup 2>/dev/null # restore screen contents
 	tput rc # restore cursor position
 	tput cnorm 2>/dev/null # cursor to normal
-	stty "$global_stty_saved"
+	if [ -z "$global_stty_saved" ]; then
+		stty sane
+		print.warn "Variable 'global_stty_saved' is empty. Falling back to 'stty sane'"
+	else
+		stty "$global_stty_saved"
+	fi
 }
 
 # backwards
@@ -119,13 +125,10 @@ tty.private.print_list() {
 
 tty.multiselect() {
 	unset REPLY; REPLY=
-	local old_version_index="$1"; shift
 	local old_version="$1"; shift
 	local select_keys_variable_name="$1"; shift
 	local select_table_variable_name="$1"; shift
 
-	local new_version_index="$old_version_index"
-	local old_version="$old_version"
 	local -n select_keys_variable="$select_keys_variable_name"
 	local -n select_table_variable="$select_table_variable_name"
 
@@ -139,7 +142,8 @@ tty.multiselect() {
 		tty.fullscreen_deinit
 		print.fatal 'Key not found in array' # TODO: error message
 	fi
-	new_version_index="$REPLY"
+	old_version_index="$REPLY"
+	new_version_index="$old_version_index"
 
 	# TODO: properly deinit on errors etc.
 	tty.fullscreen_init

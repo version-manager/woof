@@ -111,14 +111,12 @@ util.key_to_index() {
 	local key="$2"
 
 	local -i index=-1
-	for el in "${array_name[@]}"; do
-		if [ "$el" = "$key" ]; then
+	for ((i=0; i<${#array_name[@]}; i++)); do
+		if [ "${array_name[$i]}" = "$key" ]; then
 			index=$i
 			break
 		fi
-
-		i=$((i++))
-	done; unset el
+	done; unset i
 
 	if ((index == -1)); then
 		return 1
@@ -250,7 +248,7 @@ util.select_version() {
 		read -r version_string kernel architecture <<< "$key"
 		IFS="$old_ifs"
 
-		if [ "$current_kernel" = "$kernel" ] && [ "$current_architecture" == "$architecture" ]; then
+		if [ "$current_kernel" = "$kernel" ] && [ "$current_architecture" = "$architecture" ]; then
 				ui_keys+=("$version_string")
 				ui_table["$version_string"]="$value"
 		fi
@@ -259,6 +257,6 @@ util.select_version() {
 	done; unset key
 
 	# ex. v17.0.1|linux|amd64
-	tty.multiselect 2 v16.4.1 ui_keys ui_table
+	tty.multiselect 'v16.4.1' ui_keys ui_table
 	REPLY="$REPLY|$current_kernel|$current_architecture"
 }
