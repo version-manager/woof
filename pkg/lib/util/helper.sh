@@ -89,6 +89,40 @@ helper.get_version_string() {
 	REPLY="$version_string"
 }
 
+# @description Get the installed version string, if one was not already specified
+helper.get_installed_version_string() {
+	local module_name="$1"
+	local version_string="$2"
+
+	if [ -z "$version_string" ]; then
+		local -a versions_list=("$WOOF_DATA_HOME/installs/$module_name"/*/)
+		versions_list=("${versions_list[@]%/}")
+		versions_list=("${versions_list[@]##*/}")
+
+		local -A versions_table=()
+		for v in "${versions_list[@]}"; do
+			versions_table["$v"]=
+		done; unset v
+
+		# Current choice (WET)
+		local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
+		local current_choice=
+		if [ -r "$current_choice_file" ]; then
+			if ! current_choice="$(<"$current_choice_file")"; then
+				print.die "Could not read from '$current_choice_file'"
+			fi
+			rm -f "$current_choice_file"
+		fi
+
+		tty.multiselect "$current_choice" versions_list versions_table
+		version_string="$REPLY"
+	fi
+
+	if ! util.get_matrix_value_from_key "$module_name" "$version_string"; then
+		print.die "Version '$version_string' is not valid for module '$module_name'"
+	fi
+}
+
 # @description For a particular module, prompt the user for the version
 # they want to perform the operation on. Write the selected version to a
 # file (to be the initial value if invoked again), and set REPLY with the
@@ -102,7 +136,7 @@ helper.select_version() {
 	local -n matrix_key_variable="$matrix_keys_variable_name"
 	local -n matrix_table_variable="$matrix_table_variable_name"
 
-	# Current choice
+	# Current choice (WET)
 	local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
 	local current_choice=
 	if [ -r "$current_choice_file" ]; then

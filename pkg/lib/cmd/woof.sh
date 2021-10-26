@@ -54,8 +54,7 @@ main.woof() {
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
-		# TODO: make uninstall only show installed things
-		helper.get_version_string "$module_name" "${subcmds[2]}"
+		helper.get_installed_version_string "$module_name" "${subcmds[2]}"
 		local version_string="$REPLY"
 
 		printf '%s\n' "Uninstalling $version_string"
@@ -74,8 +73,7 @@ main.woof() {
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
-		# TODO: make uninstall only show installed things
-		helper.get_version_string "$module_name" "${subcmds[2]}"
+		helper.get_installed_version_string "$module_name" "${subcmds[2]}"
 		local version_string="$REPLY"
 
 		printf '%s\n' "Setting version '$version_string' as global version"
