@@ -20,8 +20,9 @@ Woof plans to support at least 15+ languages from the getgo. See the full list i
 
 ## Current Support
 
-- Linux (later Darwin, FreeBSD)
+- Linux (later Darwin, FreeBSD, Solaris, OpenBSD)
 - amd64 (later x86, armv7l, aarch64)
+- Bash (later Zsh, etc.)
 
 ## Example (hypothetical)
 
@@ -54,12 +55,15 @@ Use [Basalt](https://github.com/hyperupcall/basalt), a Bash package manager, to 
 basalt global add hyperupcall/woof
 ```
 
-## Prerequisites (for now)
+## Prerequisites
+
+These are the _only_ external utilities required. (TODO: make `clear`, `tput` optional)
 
 - cURL
 - `sort -V`
 - tput
 - stty
 - clear
-- perl (somewhat optional)
 - uname
+-
+- perl (somewhat optional)

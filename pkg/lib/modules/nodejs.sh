@@ -47,8 +47,8 @@ nodejs.matrix() {
 					osx-arm64-tar) platform_uri='darwin-arm64' ;;
 				esac
 
-				# Ex. v0.8.6|linux|x86  https://nodejs.org/download/release/v0.8.6/node-v0.8.6-linux-x86.tar.gz|(Released 2012-08-06)
-				printf '%s\n' "$version_string|$normalized_platform  https://nodejs.org/download/release/$version_string/node-$version_string-$platform_uri.tar.gz|(Released $release_date)"
+				# Ex. v0.8.6|linux|x86  https://nodejs.org/download/release/v0.8.6/node-v0.8.6-linux-x86.tar.gz  (Released 2012-08-06)
+				printf '%s\n' "$version_string|$normalized_platform  https://nodejs.org/download/release/$version_string/node-$version_string-$platform_uri.tar.gz  (Released $release_date)"
 			done; unset platform
 		fi; unset regex
 	done <<< "$json"; unset line
@@ -58,12 +58,11 @@ nodejs.install() {
 	local url="$1"
 	local version="$2"
 
-	echo "$url"
-	mutil.ensure mutil.fetch -o file.tar.gz "$url"
+	mutil.ensure curl -fsSo file.tar.gz "$url"
 	mkdir -p 'dir'
 	mutil.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
 
 	REPLY_DIR='./dir'
-	REPLY_BINS=('./bin')
+	REPLY_BINS=('./bin' './fakebin')
 	REPLY_MANS=('./share/man/man1')
 }

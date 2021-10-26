@@ -15,6 +15,7 @@ Woof aims to support the following languages / package managers / programs
 - [nave](https://github.com/isaacs/nave)
 - [nodist](https://github.com/nullivex/nodist)
 - [nodenv](https://github.com/nodenv/nodenv)
+- [nodebrew](https://github.com/hokaccha/nodebrew)
 
 Supports `.node-version`, and `.nvmrc`
 

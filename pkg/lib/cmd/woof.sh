@@ -51,11 +51,26 @@ main.woof() {
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
+		# TODO: make uninstall only show installed things
 		helper.get_version_string "$module_name" "${subcmds[2]}"
 		local version_string="$REPLY"
 
 		printf '%s\n' "Uninstalling $version_string"
 		woof-uninstall "$module_name" "$version_string"
+		;;
+	current)
+
+		;;
+	set-global)
+		helper.get_module_name "${subcmds[1]}"
+		local module_name="$REPLY"
+
+		# TODO: make uninstall only show installed things
+		helper.get_version_string "$module_name" "${subcmds[2]}"
+		local version_string="$REPLY"
+
+		printf '%s\n' "Setting version '$version_string' as global version"
+		woof-set-global "$module_name" "$version_string"
 		;;
 	*)
 		print.die "Action '$action_name' not recognized"

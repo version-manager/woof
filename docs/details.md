@@ -2,7 +2,7 @@
 
 ## Approach
 
-There are two main approaches: using shis
+There are two main approaches: using shims and not.
 
 ## Installing
 

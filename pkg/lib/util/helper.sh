@@ -79,48 +79,6 @@ helper.get_version_string() {
 	REPLY="$version_string"
 }
 
-helper.get_current_system_attributes() {
-	unset REPLY{1,2}; REPLY1= REPLY2=
-	local kernel= hardware=
-
-	if ! kernel="$(uname -s)"; then
-		die "Could not 'uname -s'"
-	fi
-
-	if ! hardware="$(uname -m)"; then
-		die "Could not 'uname -m'"
-	fi
-
-	local kernel_pretty= hardware_pretty=
-
-	# linux|darwin|freebsd
-	case "$kernel" in
-		Linux)
-			;;
-		Darwin)
-			;;
-		FreeBSD)
-			;;
-	esac
-	kernel_pretty='linux'
-
-	# amd64|x86|armv7l|aarch64
-	case "$hardware" in
-		x86)
-			;;
-		ia64)
-			;;
-		amd64|x86_64)
-			;;
-		sparc64)
-			;;
-	esac
-	hardware_pretty='amd64'
-
-	REPLY1="$kernel_pretty"
-	REPLY2="$hardware_pretty"
-}
-
 # @description For a particular module, prompt the user for the version
 # they want to perform the operation on. Write the selected version to a
 # file (to be the initial value if invoked again), and set REPLY with the
@@ -149,17 +107,15 @@ helper.select_version() {
 	local -a ui_keys=()
 	local -A ui_table=()
 
-	helper.get_current_system_attributes
+	util.uname_system
 	local current_kernel="$REPLY1"
 	local current_architecture="$REPLY2"
 
 	for key in "${matrix_key_variable[@]}"; do
 		local value="${matrix_table_variable["$key"]}"
 
-		local old_ifs="$IFS"; IFS='|'
 		local version_string= kernel= architecture=
-		read -r version_string kernel architecture <<< "$key"
-		IFS="$old_ifs"
+		IFS='|' read -r version_string kernel architecture <<< "$key"
 
 		if [ "$current_kernel" = "$kernel" ] && [ "$current_architecture" = "$architecture" ]; then
 				ui_keys+=("$version_string")

@@ -58,26 +58,29 @@ util.run_function() {
 }
 
 util.get_matrix_value_from_key() {
-	unset REPLY; REPLY=
+	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
-	local version_string="$2"
+	local real_version="$2"
 
 	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
 	if [ ! -f "$matrix_file" ]; then
 		print.fatal "File '$matrix_file' does not exist, but was expected to"
 	fi
 
-	while IFS=' ' read -r key value; do
-		local old_ifs="$IFS"; IFS='|'
-		local version= kernel= architecture=
-		read -r version kernel architecture <<< "$key"
-		IFS="$old_ifs"
+	util.uname_system
+	local real_kernel="$REPLY1"
+	local real_arch="$REPLY2"
 
-		if [ "$version_string" = "$version" ]; then
-			REPLY="$value"
+	while IFS=' ' read -r key url comment; do
+		local version= kernel= arch=
+		IFS='|' read -r version kernel arch <<< "$key"
+
+		if [ "$real_version" = "$version" ] && [ "$real_kernel" = "$kernel" ] && [ "$real_arch" = "$arch" ]; then
+			REPLY1="$url"
+			REPLY2="$comment"
 			return 0
 		fi
-	done < "$matrix_file"; unset key value
+	done < "$matrix_file"; unset key url comment
 
 	return 1
 }
@@ -104,21 +107,59 @@ util.key_to_index() {
 	fi
 }
 
+util.uname_system() {
+	unset REPLY{1,2}; REPLY1= REPLY2=
+	local kernel= hardware=
+
+	if ! kernel="$(uname -s)"; then
+		die "Could not 'uname -s'"
+	fi
+
+	if ! hardware="$(uname -m)"; then
+		die "Could not 'uname -m'"
+	fi
+
+	local kernel_pretty= hardware_pretty=
+
+	# linux|darwin|freebsd
+	case "$kernel" in
+		Linux)
+			;;
+		Darwin)
+			;;
+		FreeBSD)
+			;;
+	esac
+	kernel_pretty='linux'
+
+	# amd64|x86|armv7l|aarch64
+	case "$hardware" in
+		x86)
+			;;
+		ia64)
+			;;
+		amd64|x86_64)
+			;;
+		sparc64)
+			;;
+	esac
+	hardware_pretty='amd64'
+
+	REPLY1="$kernel_pretty"
+	REPLY2="$hardware_pretty"
+}
+
 util.show_help() {
-	cat <<-"EOF"
-	Usage:
-	  woof --list [--all](TODO)
-	  woof <action> <module> [version] # TODO (brackets)
+	# TODO (module brackets)
+	printf '%s\n' "Usage:
+	  woof <action> [module] [version]
 
 	Actions: (TODO)
+	  init
 	  install
 	  uninstall
-	  list
 	  current
-	  where
-	  which
 	  set-shell
 	  set-local
-	  set-global
-	EOF
+	  set-global"
 }

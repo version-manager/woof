@@ -5,20 +5,18 @@ woof-install() {
 	local version_string="$2"
 
 	local workspace_dir="$WOOF_DATA_HOME/workspace-$module_name"
-	local dest_dir="$WOOF_DATA_HOME/installs/$module_name/$version_string"
+	local install_dir="$WOOF_DATA_HOME/installs/$module_name/$version_string"
 
-	if [ -d "$dest_dir" ]; then
+	if [ -d "$install_dir" ]; then
 		print.die "Version '$version_string' is already installed for module '$module_name'"
 	fi
-
-	mkdir -p "$workspace_dir" "${dest_dir%/*}"
+	rm -rf "$workspace_dir"
+	mkdir -p "$workspace_dir" "${install_dir%/*}"
 
 	util.get_matrix_value_from_key "$module_name" "$version_string"
-	local old_ifs="$IFS"; IFS='|'
-	local url= notes=
-	read -r url notes <<< "$REPLY"
-	IFS="$old_ifs"
+	local url="$REPLY1"
 
+	# Execute '<module>.install'
 	local old_pwd="$PWD"
 	mutil.ensure cd -- "$workspace_dir"
 	unset REPLY_DIR REPLY_BINS REPLY_MANS
@@ -26,30 +24,31 @@ woof-install() {
 	declare -ag REPLY_BINS=() REPLY_MANS=()
 	if "$module_name.install" "$url" "${version_string/#v}"; then
 		if err.exists; then
+			rm -rf "$workspace_dir"
 			print.error "$ERR"
 			exit "$ERRCODE"
 		fi
 	else
+		rm -rf "$workspace_dir"
 		print.die "Unexpected error while calling '$module_name.install'"
 	fi
 	mutil.ensure cd -- "$old_pwd"
 
-
-	if ! mv "$workspace_dir/$REPLY_DIR" "$dest_dir"; then
-		print.die "Could not move extracted contents to '$dest_dir'"
+	# Move extracted contents to 'installs' directory
+	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir"; then
+		rm -rf "$workspace_dir"
+		print.die "Could not move extracted contents to '$install_dir'"
 	fi
 
-	if ((${#REPLY_BINS[@]} > 0)); then
-		mkdir -p "$WOOF_DATA_HOME/symlinks-global/bin"
+	# Save information about bin, man, etc. pages later
+	local install_dir_data="$WOOF_DATA_HOME/installs/$module_name/$version_string-data.txt"
+	local old_ifs="$IFS"; IFS=':'
+	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
+mans=${REPLY_MANS[*]}" > "$install_dir_data"; then
+		rm -rf "$workspace_dir" "$install_dir" "$install_dir_data"
+		print.die "Could not write to '$install_dir_data'"
 	fi
-
-	for reply_bin in "${REPLY_BINS[@]}"; do
-		for bin_file in "$dest_dir/$reply_bin"/*; do
-			if ! ln -sf "$bin_file" "$WOOF_DATA_HOME/symlinks-global/bin"; then
-				print.die "Link failed"
-			fi
-		done; unset bin_file
-	done; unset reply_bin
+	IFS="$old_ifs"
 
 	rm -rf "$workspace_dir"
 }
