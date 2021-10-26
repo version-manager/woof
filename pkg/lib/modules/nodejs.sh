@@ -63,6 +63,6 @@ nodejs.install() {
 	mutil.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
 
 	REPLY_DIR='./dir'
-	REPLY_BINS=('./bin' './fakebin')
+	REPLY_BINS=('./bin')
 	REPLY_MANS=('./share/man/man1')
 }

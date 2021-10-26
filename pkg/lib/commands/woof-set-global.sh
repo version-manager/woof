@@ -22,15 +22,19 @@ woof-set-global() {
 	fi
 
 	for reply_bin in "${bin_files[@]}"; do
-		for bin_file in "$install_dir/$reply_bin"/*; do
-			if [ ! -x "$bin_file" ]; then
-				print.warn "File '$bin_file' is in a bin directory, but is not marked as executable"
-				continue
-			fi
+		if [ -d "$install_dir/$reply_bin" ]; then
+			for bin_file in "$install_dir/$reply_bin"/*; do
+				if [ ! -x "$bin_file" ]; then
+					print.warn "File '$bin_file' is in a bin directory, but is not marked as executable"
+					continue
+				fi
 
-			if ! ln -sf "$bin_file" "$WOOF_DATA_HOME/symlinks-global/bin"; then
-				print.warn "Link failed. Continuing execution"
-			fi
-		done; unset bin_file
+				if ! ln -sf "$bin_file" "$WOOF_DATA_HOME/symlinks-global/bin"; then
+					print.warn "Link failed. Continuing execution"
+				fi
+			done; unset bin_file
+		else
+			print.warn "Directory '$reply_bin' does not exist for module '$module_name'"
+		fi
 	done; unset reply_bin
 }
