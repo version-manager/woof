@@ -64,6 +64,12 @@ main.woof() {
 	current)
 
 		;;
+	list)
+		helper.get_module_name "${subcmds[1]}"
+		local module_name="$REPLY"
+
+		woof-list "$module_name"
+		;;
 	set-global)
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
