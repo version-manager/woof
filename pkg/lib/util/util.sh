@@ -57,7 +57,7 @@ util.run_function() {
 	fi
 }
 
-util.get_module_value_from_key() {
+util.get_matrix_value_from_key() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 	local version_string="$2"

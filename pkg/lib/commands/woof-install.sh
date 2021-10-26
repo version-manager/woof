@@ -13,7 +13,7 @@ woof-install() {
 
 	mkdir -p "$workspace_dir" "${dest_dir%/*}"
 
-	util.get_module_value_from_key "$module_name" "$version_string"
+	util.get_matrix_value_from_key "$module_name" "$version_string"
 	local old_ifs="$IFS"; IFS='|'
 	local url= notes=
 	read -r url notes <<< "$REPLY"

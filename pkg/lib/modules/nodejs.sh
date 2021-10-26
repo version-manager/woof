@@ -58,6 +58,7 @@ nodejs.install() {
 	local url="$1"
 	local version="$2"
 
+	echo "$url"
 	mutil.ensure mutil.fetch -o file.tar.gz "$url"
 	mkdir -p 'dir'
 	mutil.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1

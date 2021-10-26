@@ -39,20 +39,22 @@ main.woof() {
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
-		helper.get_version_string "${subcmds[2]}"
+		helper.create_version_matrix "$module_name"
+
+		helper.get_version_string "$module_name" "${subcmds[2]}"
 		local version_string="$REPLY"
 
-		printf '%s\n' "Chosen: $version_string"
-		return
+		printf '%s\n' "Installing $version_string"
 		woof-install "$module_name" "$version_string"
 		;;
 	uninstall)
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
-		helper.get_version_string "${subcmds[2]}"
+		helper.get_version_string "$module_name" "${subcmds[2]}"
 		local version_string="$REPLY"
 
+		printf '%s\n' "Uninstalling $version_string"
 		woof-uninstall "$module_name" "$version_string"
 		;;
 	*)

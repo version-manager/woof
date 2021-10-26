@@ -7,7 +7,7 @@ description = 'The version manager to end all version managers'
 
 [run]
 dependencies = ['https://github.com/hyperupcall/bats-common-utils.git@21a733ea8a1cc65a44e0bdcf4fcb4a34e695391f', 'https://github.com/hyperupcall/bash-error.git@v0.1.1']
-sourceDirs = ['pkg/lib/util']
+sourceDirs = ['pkg/lib/commands', 'pkg/lib/util']
 builtinDirs = []
 binDirs = ['./bin']
 completionDirs = []
