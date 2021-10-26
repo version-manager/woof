@@ -35,6 +35,9 @@ main.woof() {
 	fi
 
 	case "$action_name" in
+	init)
+		woof-init
+		;;
 	install)
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
