@@ -3,6 +3,9 @@
 woof-list() {
 	local module_name="$1"
 
+	# TODO: coreutils
+	shopt -s nullglob
+
 	local -a versions=("$WOOF_DATA_HOME/installs/$module_name"/*/)
 	versions=("${versions[@]%/}")
 	versions=("${versions[@]##*/}")
