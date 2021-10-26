@@ -1,6 +1,8 @@
 # shellcheck shell=bash
 
 main.woof() {
+	core.init
+
 	# TODO
 	set +e # ex. shift
 	set -o pipefail
