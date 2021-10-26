@@ -24,6 +24,11 @@ Woof plans to support at least 15+ languages from the getgo. See the full list i
 - amd64 (later x86, armv7l, aarch64)
 - Bash (later Zsh, etc.)
 
+## `v0.1.0` Demo
+
+[![asciicast](https://asciinema.org/a/xyPdMOWAkMwGRb3bSQpcCzTTE.svg)](https://asciinema.org/a/xyPdMOWAkMwGRb3bSQpcCzTTE)
+
+
 ## Example (hypothetical)
 
 ```sh
