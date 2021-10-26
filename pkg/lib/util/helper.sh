@@ -5,7 +5,17 @@ helper.get_module_name() {
 	local module_name="$1"
 
 	if [ -z "$module_name" ]; then
-		print.die "No module was given"
+		local -a all_modules_arr=("$BASALT_PACKAGE_DIR/pkg/lib/modules"/*.sh)
+		all_modules_arr=("${all_modules_arr[@]##*/}")
+		all_modules_arr=("${all_modules_arr[@]%.sh}")
+
+		local -A all_modules_obj=()
+		for m in "${all_modules[@]}"; do
+			all_modules_obj["$m"]=
+		done; unset m
+
+		tty.multiselect "$current_choice" all_modules_arr all_modules_obj
+		module_name="$REPLY"
 	fi
 
 	local plugin_file="$BASALT_PACKAGE_DIR/pkg/lib/modules/$module_name.sh"

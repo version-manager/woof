@@ -150,16 +150,16 @@ util.uname_system() {
 }
 
 util.show_help() {
-	# TODO (module brackets)
 	printf '%s\n' "Usage:
-	  woof <action> [module] [version]
+  woof init <shell>
+  woof <action> [module] [version]
 
-	Actions: (TODO)
-	  init
-	  install
-	  uninstall
-	  current
-	  set-shell
-	  set-local
-	  set-global"
+Actions: (TODO)
+  install
+  uninstall
+  list
+  current
+  set-shell
+  set-local
+  set-global"
 }
