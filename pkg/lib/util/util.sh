@@ -123,27 +123,20 @@ util.uname_system() {
 
 	# linux|darwin|freebsd
 	case "$kernel" in
-		Linux)
-			;;
-		Darwin)
-			;;
-		FreeBSD)
-			;;
+		Linux) kernel_pretty='linux' ;;
+		Darwin) kernel_pretty='darwin' ;;
+		FreeBSD) kernel_pretty='freebsd' ;;
+		*) print.die "Kernel '$kernel' unsupported. Please create a bug report if this is a mistake" ;;
 	esac
-	kernel_pretty='linux'
 
 	# amd64|x86|armv7l|aarch64
 	case "$hardware" in
-		x86)
-			;;
-		ia64)
-			;;
-		amd64|x86_64)
-			;;
-		sparc64)
-			;;
+		i686|x86) hardware_pretty='x86' ;;
+		amd64|x86_64) hardware_pretty='amd64' ;;
+		armv7l) hardware_pretty='armv7l' ;;
+		aarch64) hardware_pretty='aarch64' ;;
+		*) print.die "Hardware '$hardware' unsupported. Please create a bug report if this is a mistake" ;;
 	esac
-	hardware_pretty='amd64'
 
 	REPLY1="$kernel_pretty"
 	REPLY2="$hardware_pretty"
