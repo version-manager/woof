@@ -45,9 +45,9 @@ woof-install() {
 	printf '%s\n' "Installing $version_string"
 	local old_pwd="$PWD"
 	m.ensure cd -- "$workspace_dir"
-	unset REPLY_DIR REPLY_BINS REPLY_MANS
+	unset -v REPLY_DIR REPLY_BINS REPLY_MANS REPLY_BASH_COMPLETIONS REPLY_ZSH_COMPLETIONS REPLY_FISH_COMPLETIONS
 	declare -g REPLY_DIR=
-	declare -ag REPLY_BINS=() REPLY_MANS=()
+	declare -ag REPLY_BINS=() REPLY_MANS=() REPLY_BASH_COMPLETIONS=() REPLY_ZSH_COMPLETIONS=() REPLY_FISH_COMPLETIONS=()
 	if "$module_name.install" "$url" "${version_string/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"

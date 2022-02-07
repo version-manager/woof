@@ -9,9 +9,10 @@ woof-list() {
 	versions=("${versions[@]%/}")
 	versions=("${versions[@]##*/}")
 
+	local version=
 	for version in "${versions[@]}"; do
 		printf '%s\n' "$version"
-	done; unset version
+	done; unset -v version
 
 	core.shopt_pop
 }

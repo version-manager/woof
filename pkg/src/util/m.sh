@@ -7,7 +7,7 @@ m.ensure() {
 }
 
 m.fetch() {
-	m.ensure curl -fsS "$@"
+	m.ensure curl -fsSL "$@"
 }
 
 # TODO: implement logging

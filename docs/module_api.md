@@ -36,6 +36,13 @@ Architecture is one of
 - `$3` os
 - `$4` arch
 
+- `REPLY_DIR=`
+- `REPLY_BINS=()`
+- `REPLY_MANS=()`
+- `REPLY_BASH_COMPLETIONS=()`
+- `REPLY_ZSH_COMPLETIONS=()`
+- `REPLY_FISH_COMPLETIONS=()`
+
 ```txt
 ...
 v1.17.6|linux|amd64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz

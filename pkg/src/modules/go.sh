@@ -4,7 +4,7 @@ go.matrix() {
 	local go_url='https://go.dev/dl'
 
 	local text=
-	if ! text="$(m.fetch -L "$go_url")"; then
+	if ! text="$(m.fetch "$go_url")"; then
 		print.die "Could not fetch '$go_url'"
 	fi
 
