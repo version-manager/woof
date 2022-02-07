@@ -2,7 +2,7 @@
 
 go.list() {
 	local -a versions=()
-	util.versions_from_git 'versions' 'https://github.com/golang/go' 'refs/tags/go'
+	mutil.git_tag_to_versions_array 'versions' 'https://github.com/golang/go' 'refs/tags/go'
 	versions=("${versions[@]/#/v}")
 
 	tty.multiselect 0 "${versions[@]}"

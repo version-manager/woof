@@ -2,7 +2,7 @@
 
 elixir.list() {
 	local -a versions=()
-	util.versions_from_git 'versions' 'https://github.com/elixir-lang/elixir' 'refs/tags/v'
+	mutil.git_tag_to_versions_array 'versions' 'https://github.com/elixir-lang/elixir' 'refs/tags/v'
 	versions=("${versions[@]/#/v}")
 
 	tty.multiselect 0 "${versions[@]}"

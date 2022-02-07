@@ -6,7 +6,7 @@
 # peachpie
 php.list() {
 	local -a versions=()
-	util.versions_from_git 'versions' 'https://github.com/php/php-src' 'refs/tags/php-'
+	mutil.git_tag_to_versions_array 'versions' 'https://github.com/php/php-src' 'refs/tags/php-'
 	versions=("${versions[@]/#/v}")
 
 	tty.multiselect 0 "${versions[@]}"

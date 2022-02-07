@@ -2,7 +2,7 @@
 
 crystal.list() {
 	local -a versions=()
-	util.versions_from_git 'versions' 'https://github.com/crystal-lang/crystal' 'refs/tags/'
+	mutil.git_tag_to_versions_array 'versions' 'https://github.com/crystal-lang/crystal' 'refs/tags/'
 	util.array_filter_out 'versions' '*ruby*'
 	versions=("${versions[@]/#/v}")
 

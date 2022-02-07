@@ -10,7 +10,7 @@ ruby.list() {
 	case "$variant" in
 	ruby)
 		local -a versions=()
-		util.versions_from_git 'versions' 'https://github.com/ruby/ruby' 'refs/tags/v'
+		mutil.git_tag_to_versions_array 'versions' 'https://github.com/ruby/ruby' 'refs/tags/v'
 		versions=("${versions[@]/#/v}")
 		;;
 	jruby)
@@ -29,12 +29,12 @@ ruby.list() {
 		;;
 	mruby)
 		local -a versions=()
-		util.versions_from_git 'versions' 'https://github.com/mruby/mruby' 'refs/tags/'
+		mutil.git_tag_to_versions_array 'versions' 'https://github.com/mruby/mruby' 'refs/tags/'
 		versions=("${versions[@]/#/v}")
 		;;
 	truffleruby)
 		local -a versions=()
-		util.versions_from_git 'versions' 'https://github.com/oracle/truffleruby' 'refs/tags/'
+		mutil.git_tag_to_versions_array 'versions' 'https://github.com/oracle/truffleruby' 'refs/tags/'
 		;;
 	*)
 		echo 'no param passed'

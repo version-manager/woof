@@ -10,17 +10,17 @@ python.list() {
 	case "$variant" in
 		cpython)
 			local -a versions=()
-			util.versions_from_git 'versions' 'https://github.com/python/cpython' 'refs/tags/v'
+			mutil.git_tag_to_versions_array 'versions' 'https://github.com/python/cpython' 'refs/tags/v'
 			versions=("${versions[@]/#/v}")
 			;;
 		nuitka)
 			local -a versions=()
-			util.versions_from_git 'versions' 'https://github.com/Nuitka/Nuitka' 'refs/tags/'
+			mutil.git_tag_to_versions_array 'versions' 'https://github.com/Nuitka/Nuitka' 'refs/tags/'
 			versions=("${versions[@]/#/v}")
 			;;
 		ironpython2)
 			local -a versions=()
-			util.versions_from_git 'versions' 'https://github.com/IronLanguages/ironpython2' 'refs/tags/ipy-'
+			mutil.git_tag_to_versions_array 'versions' 'https://github.com/IronLanguages/ironpython2' 'refs/tags/ipy-'
 			versions=("${versions[@]/#/v}")
 			;;
 		*)

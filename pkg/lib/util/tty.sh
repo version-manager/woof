@@ -97,7 +97,7 @@ tty.private.print_list() {
 	# cursor to home
 	printf '\033[%d;%dH' 0 0 # tput cup 0 0
 
-	local str= prefix=
+	local i= str= prefix=
 	for ((i=start; i<end; i++)); do
 		if ((i != start)); then
 			# cursor down one line
@@ -145,7 +145,7 @@ tty.multiselect() {
 
 	if ! util.key_to_index "$select_keys_variable_name" "$old_version"; then
 		tty.fullscreen_deinit
-		print.fatal 'Key not found in array' # TODO: error message
+		print.fatal "Key not '$old_version' not found in array '$select_keys_variable_name'"
 	fi
 	old_version_index="$REPLY"
 	new_version_index="$old_version_index"

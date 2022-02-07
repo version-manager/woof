@@ -10,21 +10,6 @@ util.init() {
 	}
 }
 
-util.versions_from_git() {
-	local variable_name="$1"
-	local url="$2"
-	local prefix="$3"
-
-	local -n variable="$variable_name"
-	local prefix_length="${#prefix}"
-	while read -r _sha1 refspec; do
-		if [ "${refspec:0:$prefix_length}" = "$prefix" ]; then
-			variable+=("${refspec:$prefix_length}")
-		fi
-	done < <(git ls-remote --refs --tags "$url")
-	unset _sha1 refspec
-}
-
 util.array_filter_out() {
 	local array_name="$1"
 	local pattern="$2"

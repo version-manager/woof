@@ -54,6 +54,10 @@ helper.create_version_matrix() {
 			print.die "A fatal error occured while running '$module_name.matrix'"
 		fi
 
+		if [ -z "$matrix_string" ]; then
+			print.die "Function '$module_name.matrix' must output a well-formed matrix of variable names. Nothing was sent"
+		fi
+
 		if ! printf '%s' "$matrix_string" > "$matrix_file"; then
 			rm -f "$matrix_file"
 			print.die "Could not write to '$matrix_file'"
