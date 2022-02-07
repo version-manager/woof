@@ -45,7 +45,7 @@ woof-install() {
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_MANS=()
 	if "$module_name.install" "$url" "${version_string/#v}"; then
-		if err.exists; then
+		if core.err_exists; then
 			rm -rf "$workspace_dir"
 			print.error "$ERR"
 			exit "$ERRCODE"

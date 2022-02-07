@@ -154,7 +154,7 @@ helper.create_version_matrix() {
 	if [ "$use_cache" = no ]; then
 		local matrix_string=
 		if matrix_string="$(util.run_function "$module_name.matrix")"; then
-			if err.exists; then
+			if core.err_exists; then
 				print.error "$ERR"
 				exit "$ERRCODE"
 			fi

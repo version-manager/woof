@@ -3,7 +3,7 @@
 nodejs.matrix() {
 	local json=
 	if ! json="$(m.fetch https://nodejs.org/download/release/index.json)"; then
-		err.set "Could not fetch 'https://nodejs.org/download/release/index.json'"
+		core.err_set "Could not fetch 'https://nodejs.org/download/release/index.json'"
 		return
 	fi
 

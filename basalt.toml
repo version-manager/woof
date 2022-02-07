@@ -6,7 +6,7 @@ authors = ['Edwin Kofler <edwin@kofler.dev>']
 description = 'The version manager to end all version managers'
 
 [run]
-dependencies = ['https://github.com/hyperupcall/bats-common-utils.git@21a733ea8a1cc65a44e0bdcf4fcb4a34e695391f', 'https://github.com/hyperupcall/bash-error.git@v0.1.1', 'https://github.com/hyperupcall/bash-core.git@v0.1.1']
+dependencies = ['https://github.com/hyperupcall/bats-all@v4.3.0', 'https://github.com/hyperupcall/bash-core@v0.2.0']
 sourceDirs = ['pkg/src/commands', 'pkg/src/util']
 builtinDirs = []
 binDirs = ['pkg/bin']
