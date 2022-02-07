@@ -52,7 +52,17 @@ helper.determine_version_string() {
 			fi
 		done < "$matrix_file"; unset version os arch url comment
 
-		helper.select_version "$module_name" 'matrix_key' 'matrix_table'
+		local -a ui_keys=()
+		local -A ui_table=()
+		local key=
+		for key in "${matrix_key[@]}"; do
+			local value="${matrix_table["$key"]}"
+
+			ui_keys+=("$key")
+			ui_table["$key"]="$value"
+		done; unset key
+
+		tty.multiselect "$current_choice" ui_keys ui_table
 		version_string="$REPLY"
 	fi
 
@@ -173,40 +183,4 @@ helper.create_version_matrix() {
 
 		unset matrix_string
 	fi
-}
-
-
-# @description For a particular module, prompt the user for the version
-# they want to perform the operation on. Write the selected version to a
-# file (to be the initial value if invoked again), and set REPLY with the
-# value
-helper.select_version() {
-	unset REPLY; REPLY=
-	local module_name="$1"
-	local matrix_keys_variable_name="$2"
-	local matrix_table_variable_name="$3"
-
-	local -n matrix_key_variable="$matrix_keys_variable_name"
-	local -n matrix_table_variable="$matrix_table_variable_name"
-
-	util.get_current_choice "$module_name"
-	local current_choice=$REPLY
-
-	# Similar to 'matrix_key' and 'matrix_key', except this is shown
-	# directly to the user in a multiselect screen
-	local -a ui_keys=()
-	local -A ui_table=()
-
-	local key=
-	for key in "${matrix_key_variable[@]}"; do
-		local value="${matrix_table_variable["$key"]}"
-
-		ui_keys+=("$key")
-		ui_table["$key"]="$value"
-	done; unset key
-
-	tty.multiselect "$current_choice" ui_keys ui_table
-	local selected_version="$REPLY"
-
-	REPLY="$selected_version"
 }

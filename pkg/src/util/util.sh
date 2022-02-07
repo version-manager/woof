@@ -42,11 +42,9 @@ util.run_function() {
 	fi
 }
 
-# TODO: pass in real_os, real_os for optimization
-util.get_matrix_value_from_key() {
+util.get_matrix_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
-	local real_version="$2"
 
 	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
 	if [ ! -f "$matrix_file" ]; then
@@ -59,7 +57,7 @@ util.get_matrix_value_from_key() {
 
 	local version= os= arch= url= comment=
 	while IFS='|' read -r version os arch url comment; do
-		if util.is_on_platform "$os" "$arch"; then
+		if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			REPLY1=$url
 			REPLY2=$comment
 			return 0
@@ -82,7 +80,7 @@ util.key_to_index() {
 			index=$i
 			break
 		fi
-	done; unset i
+	done; unset -v i
 
 	if ((index == -1)); then
 		return 1
@@ -140,20 +138,6 @@ util.get_current_choice() {
 	fi
 
 	REPLY=$current_choice
-}
-util.is_on_platform() {
-	local os="$1"
-	local arch="$2"
-
-	util.uname_system
-	real_os=$REPLY1
-	real_arch=$REPLY2
-
-	if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
-		return 0
-	fi
-
-	return 1
 }
 
 util.show_help() {
