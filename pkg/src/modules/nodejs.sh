@@ -8,6 +8,7 @@ nodejs.matrix() {
 	fi
 
 	# Assumes every line contains a single Json object
+	local line=
 	while IFS= read -r line; do
 		if [ "${line::1}" != '{' ]; then
 			continue
@@ -29,7 +30,7 @@ nodejs.matrix() {
 
 			for platform in "${platforms[@]}"; do
 				local normalized_platform=
-				case "$platform" in
+				case $platform in
 					linux-x86) normalized_platform='linux|x86' ;;
 					linux-x64) normalized_platform='linux|amd64' ;;
 					linux-armv7l) normalized_platform='linux|armv7l' ;;
@@ -47,8 +48,8 @@ nodejs.matrix() {
 					osx-arm64-tar) platform_uri='darwin-arm64' ;;
 				esac
 
-				# Ex. v0.8.6|linux|x86  https://nodejs.org/download/release/v0.8.6/node-v0.8.6-linux-x86.tar.gz  (Released 2012-08-06)
-				printf '%s\n' "$version_string|$normalized_platform  https://nodejs.org/download/release/$version_string/node-$version_string-$platform_uri.tar.gz  (Released $release_date)"
+				# Ex. v0.8.6|linux|x86|https://nodejs.org/download/release/v0.8.6/node-v0.8.6-linux-x86.tar.gz|(Released 2012-08-06)
+				printf '%s\n' "$version_string|$normalized_platform|https://nodejs.org/download/release/$version_string/node-$version_string-$platform_uri.tar.gz|(Released $release_date)"
 			done; unset platform
 		fi; unset regex
 	done <<< "$json"; unset line

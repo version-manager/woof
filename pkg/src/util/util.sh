@@ -42,6 +42,7 @@ util.run_function() {
 	fi
 }
 
+# TODO: pass in real_os, real_os for optimization
 util.get_matrix_value_from_key() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
@@ -53,19 +54,17 @@ util.get_matrix_value_from_key() {
 	fi
 
 	util.uname_system
-	local real_kernel="$REPLY1"
+	local real_os="$REPLY1"
 	local real_arch="$REPLY2"
 
-	while IFS=' ' read -r key url comment; do
-		local version= kernel= arch=
-		IFS='|' read -r version kernel arch <<< "$key"
-
-		if [ "$real_version" = "$version" ] && [ "$real_kernel" = "$kernel" ] && [ "$real_arch" = "$arch" ]; then
-			REPLY1="$url"
-			REPLY2="$comment"
+	local version= os= arch= url= comment=
+	while IFS='|' read -r version os arch url comment; do
+		if util.is_on_platform "$os" "$arch"; then
+			REPLY1=$url
+			REPLY2=$comment
 			return 0
 		fi
-	done < "$matrix_file"; unset key url comment
+	done < "$matrix_file"; unset version os arch url comment
 
 	return 1
 }
@@ -125,6 +124,21 @@ util.uname_system() {
 
 	REPLY1="$kernel_pretty"
 	REPLY2="$hardware_pretty"
+}
+
+util.is_on_platform() {
+	local os="$1"
+	local arch="$2"
+
+	util.uname_system
+	real_os=$REPLY1
+	real_arch=$REPLY2
+
+	if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		return 0
+	fi
+
+	return 1
 }
 
 util.show_help() {

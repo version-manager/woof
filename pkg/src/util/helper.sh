@@ -27,17 +27,18 @@ helper.get_module_name() {
 		print.die "Could not successfully source module '$module_name'"
 	fi
 
-	REPLY="$module_name"
+	REPLY=$module_name
 }
 
 # @description For a given module, construct a matrix of all versions for all
-# platforms (kernel and architecture). Each key looks like 'v0.8.6|linux|x86'
-# while each value looks like 'https://nodejs.org/download/release/v0.8.6/
-# node-v0.8.6-linux-x86.tar.gz|(Released 2012-08-06)'
+# platforms (kernel and architecture)
 helper.create_version_matrix() {
 	local module_name="$1"
 
 	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+	if [ ! -d "$WOOF_DATA_HOME/cached" ]; then
+		mkdir -p "$WOOF_DATA_HOME/cached"
+	fi
 	local use_cache=no
 	if [ -f "$matrix_file" ]; then
 		use_cache=yes
@@ -73,24 +74,38 @@ helper.get_version_string() {
 	local version_string="$2"
 
 	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+	util.uname_system
+	local real_os="$REPLY1"
+	local real_arch="$REPLY2"
+
 	if [ -z "$version_string" ]; then
 		local -a matrix_key=()
 		local -A matrix_table=()
 
-		while IFS=' ' read -r key value; do
-			matrix_key+=("$key")
-			matrix_table["$key"]="$value"
-		done < "$matrix_file"; unset key value
+		local version= os= arch= url= comment=
+		while IFS='|' read -r version os arch url comment; do
+			if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+				matrix_key+=("$version")
+				matrix_table["$version"]="$url $comment"
+			fi
+		done < "$matrix_file"; unset version os arch url comment
 
 		helper.select_version "$module_name" 'matrix_key' 'matrix_table'
 		version_string="$REPLY"
 	fi
 
-	if ! util.get_matrix_value_from_key "$module_name" "$version_string"; then
-		print.die "Version '$version_string' is not valid for module '$module_name'"
+	local is_valid_string='yes'
+	while IFS='|' read -r version os arch url comment; do
+		if [ "$version_string" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+			is_valid_string='yes'
+		fi
+	done < "$matrix_file"; unset version os arch url comment
+
+	if [ "$is_valid_string" != yes ]; then
+		print.die "Version '$version_string' is not valid for module '$module_name' on this architecture"
 	fi
 
-	REPLY="$version_string"
+	REPLY=$version_string
 }
 
 # @description Get the installed version string, if one was not already specified
@@ -155,22 +170,12 @@ helper.select_version() {
 	local -a ui_keys=()
 	local -A ui_table=()
 
-	util.uname_system
-	local current_kernel="$REPLY1"
-	local current_architecture="$REPLY2"
-
+	local key=
 	for key in "${matrix_key_variable[@]}"; do
 		local value="${matrix_table_variable["$key"]}"
 
-		local version_string= kernel= architecture=
-		IFS='|' read -r version_string kernel architecture <<< "$key"
-
-		if [ "$current_kernel" = "$kernel" ] && [ "$current_architecture" = "$architecture" ]; then
-				ui_keys+=("$version_string")
-				ui_table["$version_string"]="$value"
-		fi
-
-		unset version_string kernel architecture
+		ui_keys+=("$key")
+		ui_table["$key"]="$value"
 	done; unset key
 
 	tty.multiselect "$current_choice" ui_keys ui_table

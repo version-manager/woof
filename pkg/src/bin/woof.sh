@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # Credit to yoctu for this
-do_trace() {
+trap_err() {
 	local err=$?
 
 	printf '%s\n' "Error in ${BASH_SOURCE[1]}:${BASH_LINENO[0]}. '${BASH_COMMAND}' exited with status $err"
@@ -20,7 +20,7 @@ do_trace() {
 main.woof() {
 	core.init
 
-	trap do_trace ERR EXIT
+	trap trap_err ERR
 
 	global_stty_saved=
 	global_tty_height=
@@ -56,16 +56,13 @@ main.woof() {
 		woof-init
 		;;
 	install)
+		woof-install "${subcmds[1]}" "${subcmds[2]}"
+		;;
+	debug)
 		helper.get_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
-		helper.create_version_matrix "$module_name"
-
-		helper.get_version_string "$module_name" "${subcmds[2]}"
-		local version_string="$REPLY"
-
-		printf '%s\n' "Installing $version_string"
-		woof-install "$module_name" "$version_string"
+		util.run_function "$module_name.matrix"
 		;;
 	uninstall)
 		helper.get_module_name "${subcmds[1]}"
