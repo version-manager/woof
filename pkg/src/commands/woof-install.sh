@@ -32,7 +32,7 @@ woof-install() {
 
 	# Preparation actions
 	rm -rf "$workspace_dir"
-	mkdir -p "$workspace_dir" "${install_dir%/*}"
+	mkdir -p "$workspace_dir" "$install_dir"
 
 	util.get_matrix_value_from_key "$module_name" "$version_string"
 	local url="$REPLY1"
@@ -57,18 +57,17 @@ woof-install() {
 	m.ensure cd -- "$old_pwd"
 
 	# Move extracted contents to 'installs' directory
-	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir"; then
+	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/files"; then
 		rm -rf "$workspace_dir"
-		print.die "Could not move extracted contents to '$install_dir'"
+		print.die "Could not move extracted contents to '$install_dir/files'"
 	fi
 
 	# Save information about bin, man, etc. pages later
-	local install_dir_data="$WOOF_DATA_HOME/installs/$module_name/$version_string-data.txt"
 	local old_ifs="$IFS"; IFS=':'
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
-mans=${REPLY_MANS[*]}" > "$install_dir_data"; then
-		rm -rf "$workspace_dir" "$install_dir" "$install_dir_data"
-		print.die "Could not write to '$install_dir_data'"
+mans=${REPLY_MANS[*]}" > "$install_dir/data.txt"; then
+		rm -rf "$workspace_dir" "$install_dir"
+		print.die "Could not write to '$install_dir/data.txt'"
 	fi
 	IFS="$old_ifs"
 

@@ -15,11 +15,9 @@ woof-uninstall() {
 	unset -v possible_version_string
 
 	local install_dir="$WOOF_DATA_HOME/installs/$module_name/$version_string"
-	local install_dir_data="$WOOF_DATA_HOME/installs/$module_name/$version_string-data.txt"
 
 	# Do uninstall
 	printf '%s\n' "Uninstalling $module_name"
-	rm -f "$install_dir_data"
 	if [ -e "$install_dir" ]; then
 		rm -rf "$install_dir"
 		print.info "Removed version '$version_string' for module '$module_name'"

@@ -5,7 +5,6 @@ woof-set-global() {
 	local version_string="$2"
 
 	local install_dir="$WOOF_DATA_HOME/installs/$module_name/$version_string"
-	local install_dir_data="$WOOF_DATA_HOME/installs/$module_name/$version_string-data.txt"
 
 	local -a bin_files=()
 	local -a man_files=()
@@ -15,15 +14,15 @@ woof-set-global() {
 		elif [ "$key" = 'mans' ]; then
 			IFS=':' read -ra man_files <<< "$value"
 		fi
-	done < "$install_dir_data"
+	done < "$install_dir/data.txt"
 
 	if ((${#bin_files[@]} > 0)); then
 		mkdir -p "$WOOF_DATA_HOME/symlinks-global/bin"
 	fi
 
 	for reply_bin in "${bin_files[@]}"; do
-		if [ -d "$install_dir/$reply_bin" ]; then
-			for bin_file in "$install_dir/$reply_bin"/*; do
+		if [ -d "$install_dir/files/$reply_bin" ]; then
+			for bin_file in "$install_dir/files/$reply_bin"/*; do
 				if [ ! -x "$bin_file" ]; then
 					print.warn "File '$bin_file' is in a bin directory, but is not marked as executable"
 					continue
