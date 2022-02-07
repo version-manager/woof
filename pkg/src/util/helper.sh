@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-helper.get_module_name() {
+helper.determine_module_name() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
@@ -68,7 +68,7 @@ helper.create_version_matrix() {
 	fi
 }
 
-helper.get_version_string() {
+helper.determine_version_string() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 	local version_string="$2"

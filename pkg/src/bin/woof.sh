@@ -59,13 +59,13 @@ main.woof() {
 		woof-install "${subcmds[1]}" "${subcmds[2]}"
 		;;
 	debug)
-		helper.get_module_name "${subcmds[1]}"
+		helper.determine_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
 		util.run_function "$module_name.matrix"
 		;;
 	uninstall)
-		helper.get_module_name "${subcmds[1]}"
+		helper.determine_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
 		helper.get_installed_version_string "$module_name" "${subcmds[2]}"
@@ -78,13 +78,13 @@ main.woof() {
 
 		;;
 	list)
-		helper.get_module_name "${subcmds[1]}"
+		helper.determine_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
 		woof-list "$module_name"
 		;;
 	set-global)
-		helper.get_module_name "${subcmds[1]}"
+		helper.determine_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
 		helper.get_installed_version_string "$module_name" "${subcmds[2]}"

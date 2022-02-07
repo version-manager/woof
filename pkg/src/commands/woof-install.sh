@@ -4,13 +4,12 @@ woof-install() {
 	local possible_module_name="$1"
 	local possible_version_string="$2"
 
-	helper.get_module_name "$possible_module_name"
+	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
 
 	helper.create_version_matrix "$module_name"
 
-	helper.get_version_string "$module_name" "$possible_version_string"
-	echo donee
+	helper.determine_version_string "$module_name" "$possible_version_string"
 	local version_string="$REPLY"
 
 	unset -v possible_module_name
