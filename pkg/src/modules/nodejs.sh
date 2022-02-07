@@ -2,7 +2,7 @@
 
 nodejs.matrix() {
 	local json=
-	if ! json="$(mutil.fetch https://nodejs.org/download/release/index.json)"; then
+	if ! json="$(m.fetch https://nodejs.org/download/release/index.json)"; then
 		err.set "Could not fetch 'https://nodejs.org/download/release/index.json'"
 		return
 	fi
@@ -38,7 +38,7 @@ nodejs.matrix() {
 					osx-x32-tar) normalized_platform='darwin|x86' ;;
 					osx-x64-tar) normalized_platform='darwin|amd64' ;;
 					osx-arm64-tar) normalized_platform='darwin|arm64' ;;
-					*) mutil.log "nodejs: $version_string: $platform: Not supported"; continue ;;
+					*) m.log "nodejs: $version_string: $platform: Not supported"; continue ;;
 				esac
 
 				local platform_uri="$platform"
@@ -59,9 +59,9 @@ nodejs.install() {
 	local url="$1"
 	local version="$2"
 
-	mutil.ensure curl -fsSo file.tar.gz "$url"
+	m.ensure curl -fsSo file.tar.gz "$url"
 	mkdir -p 'dir'
-	mutil.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
+	m.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

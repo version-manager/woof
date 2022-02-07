@@ -1,23 +1,23 @@
 # shellcheck shell=bash
 
-mutil.ensure() {
+m.ensure() {
 	if ! "$@"; then
 		print.die "Command '$*' failed"
 	fi
 }
 
-mutil.fetch() {
+m.fetch() {
 	if curl -fsS "$@"; then :; else
 		return $?
 	fi
 }
 
 # TODO: implement logging
-mutil.log() {
+m.log() {
 	printf '%s\n' "$1" >/dev/null
 }
 
-mutil.git_tag_to_versions_array() {
+m.git_tag_to_versions_array() {
 	local array_variable_name="$1"
 	local url="$2"
 	local prefix="$3"

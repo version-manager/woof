@@ -2,7 +2,7 @@
 
 deno.list() {
 	local -a versions=()
-	mutil.git_tag_to_versions_array 'versions' 'https://github.com/denoland/deno' 'refs/tags/v'
+	m.git_tag_to_versions_array 'versions' 'https://github.com/denoland/deno' 'refs/tags/v'
 	versions=("${versions[@]/#/v}")
 
 	tty.multiselect 0 "${versions[@]}"

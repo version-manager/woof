@@ -8,7 +8,7 @@ There are two main approaches: using shims and not.
 
 The installation steps for installing any particular version of any particular module are standardized.
 
-Functions in modules should call `err.set` and `return` on error. Although the function `mutil.ensure` is provided, try to use the former functions instead
+Functions in modules should call `err.set` and `return` on error. Although the function `m.ensure` is provided, try to use the former functions instead
 
 ### 1. Get version if one isn't already supplied
 

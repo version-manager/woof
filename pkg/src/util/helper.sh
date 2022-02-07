@@ -92,7 +92,7 @@ helper.determine_installed_module_name() {
 			modules_table["$module"]=
 		done; unset module
 
-		tty.multiselect "" module_list modules_table
+		tty.multiselect '' module_list modules_table
 		REPLY=$REPLY
 	fi
 

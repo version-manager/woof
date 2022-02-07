@@ -40,7 +40,7 @@ woof-install() {
 	# Execute '<module>.install'
 	printf '%s\n' "Installing $version_string"
 	local old_pwd="$PWD"
-	mutil.ensure cd -- "$workspace_dir"
+	m.ensure cd -- "$workspace_dir"
 	unset REPLY_DIR REPLY_BINS REPLY_MANS
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_MANS=()
@@ -54,7 +54,7 @@ woof-install() {
 		rm -rf "$workspace_dir"
 		print.die "Unexpected error while calling '$module_name.install'"
 	fi
-	mutil.ensure cd -- "$old_pwd"
+	m.ensure cd -- "$old_pwd"
 
 	# Move extracted contents to 'installs' directory
 	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir"; then
