@@ -45,6 +45,7 @@ util.run_function() {
 util.get_matrix_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
+	local version_string="$2"
 
 	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
 	if [ ! -f "$matrix_file" ]; then
@@ -57,7 +58,7 @@ util.get_matrix_row() {
 
 	local version= os= arch= url= comment=
 	while IFS='|' read -r version os arch url comment; do
-		if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		if  [ "$version_string" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			REPLY1=$url
 			REPLY2=$comment
 			return 0

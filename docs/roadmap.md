@@ -63,6 +63,8 @@ Supports `.ruby-version` and `rvmrc`
 - [Official](https://github.com/python/cpython)
 - [asdf-python](https://github.com/asdf-vm/asdf-python)
 - [pyenv](https://github.com/pyenv/pyenv)
+- [p](https://github.com/qw3rtman/p)
+- [pvm](https://github.com/DrPandemic/pvm)
 
 # R
 
@@ -278,7 +280,9 @@ Supports `.kubectl_version`
 # Dart
 
 - [Official](https://dart.dev)
+- [asdf-dart](https://github.com/PatOConnor43/asdf-dart)
 - [dvm](https://github.com/cbracken/dvm)
 
 ## opam
+
 ## aria2c, elasticsearch, rlwrap, ninja, ccache, neko, rlwrap, alp, meson, trident, grpcurl, getenvoy, esy, ocaml, other sdkmans, poetry, hhvm, rust all out of scope

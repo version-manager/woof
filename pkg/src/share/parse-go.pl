@@ -34,5 +34,5 @@ while ($text =~ /<td class="filename".+? href="(?<uri>.*?)".+?<td>(?<kind>.*?)<\
 		$version = $+{version};
 	}
 
-	print "$version|$os|$arch|https://go.dev$uri\n";
+	print "v$version|$os|$arch|https://go.dev$uri\n";
 }

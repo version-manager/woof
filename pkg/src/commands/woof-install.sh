@@ -34,6 +34,7 @@ woof-install() {
 	rm -rf "$workspace_dir"
 	mkdir -p "$workspace_dir" "$install_dir"
 
+
 	util.get_matrix_row "$module_name" "$version_string"
 	local url="$REPLY1"
 
