@@ -1,11 +1,25 @@
 # shellcheck shell=bash
 
-go.list() {
-	local -a versions=()
-	m.git_tag_to_versions_array 'versions' 'https://github.com/golang/go' 'refs/tags/go'
-	versions=("${versions[@]/#/v}")
+go.matrix() {
+	local go_url='https://go.dev/dl'
 
-	tty.multiselect 0 "${versions[@]}"
-	local selected_version="$REPLY"
-	tty.fullscreen_deinit
+	local text=
+	if ! text="$(m.fetch -L "$go_url")"; then
+		print.die "Could not fetch '$go_url'"
+	fi
+
+	perl "$BASALT_PACKAGE_DIR/pkg/src/share/parse-go.pl" <<< "$text"
+}
+
+go.install() {
+	local url="$1"
+	local version="$2"
+
+	m.fetch -Lo file.tar.gz "$url"
+	mkdir -p 'dir'
+	m.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
+
+	REPLY_DIR='./dir'
+	REPLY_BINS=('./bin')
+	REPLY_MANS=()
 }

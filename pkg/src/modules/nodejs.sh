@@ -1,9 +1,11 @@
 # shellcheck shell=bash
 
 nodejs.matrix() {
+	local nodejs_url='https://nodejs.org/download/release/index.json'
+
 	local json=
-	if ! json="$(m.fetch https://nodejs.org/download/release/index.json)"; then
-		core.err_set "Could not fetch 'https://nodejs.org/download/release/index.json'"
+	if ! json="$(m.fetch "$nodejs_url")"; then
+		core.err_set "Could not fetch '$nodejs_url'"
 		return
 	fi
 

@@ -7,9 +7,7 @@ m.ensure() {
 }
 
 m.fetch() {
-	if curl -fsS "$@"; then :; else
-		return $?
-	fi
+	m.ensure curl -fsS "$@"
 }
 
 # TODO: implement logging

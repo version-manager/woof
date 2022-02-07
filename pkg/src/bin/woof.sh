@@ -20,7 +20,7 @@ trap_err() {
 main.woof() {
 	core.init
 
-	trap trap_err ERR
+	trap trap_err ERR EXIT # TODO
 
 	global_stty_saved=
 	global_tty_height=

@@ -37,6 +37,10 @@ woof-install() {
 	util.get_matrix_row "$module_name" "$version_string"
 	local url="$REPLY1"
 
+	util.uname_system
+	local os="$REPLY1"
+	local arch="$REPLY2"
+
 	# Execute '<module>.install'
 	printf '%s\n' "Installing $version_string"
 	local old_pwd="$PWD"
@@ -44,7 +48,7 @@ woof-install() {
 	unset REPLY_DIR REPLY_BINS REPLY_MANS
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_MANS=()
-	if "$module_name.install" "$url" "${version_string/#v}"; then
+	if "$module_name.install" "$url" "${version_string/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"
 			print.error "$ERR"

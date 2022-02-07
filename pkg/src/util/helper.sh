@@ -41,26 +41,19 @@ helper.determine_version_string() {
 	local real_arch="$REPLY2"
 
 	if [ -z "$version_string" ]; then
-		local -a matrix_key=()
-		local -A matrix_table=()
+		local -a ui_keys=()
+		local -A ui_table=()
 
 		local version= os= arch= url= comment=
 		while IFS='|' read -r version os arch url comment; do
 			if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
-				matrix_key+=("$version")
-				matrix_table["$version"]="$url $comment"
+				ui_keys+=("$version")
+				ui_table["$version"]="$url $comment"
 			fi
 		done < "$matrix_file"; unset version os arch url comment
 
-		local -a ui_keys=()
-		local -A ui_table=()
-		local key=
-		for key in "${matrix_key[@]}"; do
-			local value="${matrix_table["$key"]}"
-
-			ui_keys+=("$key")
-			ui_table["$key"]="$value"
-		done; unset key
+		util.get_current_choice "$module_name"
+		local current_choice="$REPLY"
 
 		tty.multiselect "$current_choice" ui_keys ui_table
 		version_string="$REPLY"
@@ -85,7 +78,7 @@ helper.determine_installed_module_name() {
 	local module_name="$1"
 
 	if [ -z "$module_name" ]; then
-		core.shopt_push nullglob
+		core.shopt_push -s nullglob
 		local -a module_list=("$WOOF_DATA_HOME/installs"/*/)
 		core.shopt_pop
 
@@ -102,7 +95,7 @@ helper.determine_installed_module_name() {
 			modules_table["$module"]=
 		done; unset module
 
-		tty.multiselect '' module_list modules_table
+		tty.multiselect 0 module_list modules_table
 		REPLY=$REPLY
 	fi
 
@@ -118,7 +111,7 @@ helper.determine_installed_version_string() {
 
 
 	if [ -z "$version_string" ]; then
-		core.shopt_push nullglob
+		core.shopt_push -s nullglob
 		local -a versions_list=("$WOOF_DATA_HOME/installs/$module_name"/*/)
 		core.shopt_pop
 
@@ -136,7 +129,7 @@ helper.determine_installed_version_string() {
 		done; unset version
 
 		util.get_current_choice "$module_name"
-		local current_choice=$REPLY
+		local current_choice="$REPLY"
 
 		tty.multiselect "$current_choice" versions_list versions_table
 		version_string="$REPLY"
