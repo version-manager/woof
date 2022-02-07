@@ -20,9 +20,7 @@ do_trace() {
 main.woof() {
 	core.init
 
-	# TODO
-	set +e # ex. shift
-	set -o pipefail
+	trap do_trace ERR EXIT
 
 	global_stty_saved=
 	global_tty_height=
