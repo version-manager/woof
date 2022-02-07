@@ -23,7 +23,7 @@ nim.matrix() {
 		elif ((read_i == 0)); then
 			((read_i--))
 			if [[ $line =~ \<a\ href=\"(.+?)\" ]]; then
-				printf '%s\n' "v$version|$os|x86|https://nim-lang.org/${BASH_REMATCH[1]}|"
+				printf '%s\n' "v$version|$os|x86|https://nim-lang.org/${BASH_REMATCH[1]}"
 			fi
 			continue
 		fi

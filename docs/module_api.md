@@ -1,14 +1,27 @@
 # Module API
 
-## `<module>.matrix`
+Implementations of version controlling a particular language are defined in a module. This page documents the API contract
 
-Creates a version matrix that looks like
+## `<module>.matrix()`
+
+Prints a version matrix to standard output
+
+The structure is the following. The comment is optional
 
 ```txt
-<version>|<operating system>|<architecture>|<url>|<release date>
+<version>|<os>|<arch>|<url>|<comment>
 ```
 
-Currently, operating system is one of
+Here are some examples
+
+```txt
+v1.17.6|linux|amd64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
+v15.9.0|linux|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|(Released 2021-02-18)
+v1.2.14|linux|amd64|https://nim-lang.org//download/nim-1.2.14-linux_x64.tar.xz
+v2.9.3|linux|armv7|https://storage.googleapis.com/dart-archive/channels/stable/release/2.16.0/sdk/dartsdk-linux-arm-release.zip
+```
+
+Currently, operating system must be one of
 
 - `linux`
 - `freebsd`
@@ -17,7 +30,7 @@ Currently, operating system is one of
 
 - `aix` (nodejs)
 
-Architecture is one of
+Architecture must be one of
 
 - `amd64`
 - `x86`
@@ -29,12 +42,20 @@ Architecture is one of
 - `ppc64le` (go, nodejs)
 - `s390x` (go, nodejs)
 
-## `<module>install`
+The operating system and architecture _must_ be normalized
+
+## `<module>.install()`
+
+Downloads and extracts a particular version of a module and sets variables for installation
+
+The following positional parameters are set
 
 - `$1`: url
-- `$2`: version (without v)
+- `$2`: version (does not contain `v` prefix)
 - `$3` os
 - `$4` arch
+
+Set the following variables for installation to complete successfully. `REPLY_DIR` is necessary while `REPLY_BINS` is obviously strongly recommended
 
 - `REPLY_DIR=`
 - `REPLY_BINS=()`
@@ -42,13 +63,3 @@ Architecture is one of
 - `REPLY_BASH_COMPLETIONS=()`
 - `REPLY_ZSH_COMPLETIONS=()`
 - `REPLY_FISH_COMPLETIONS=()`
-
-```txt
-...
-v1.17.6|linux|amd64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
-v15.9.0|linux|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|(Released 2021-02-18)
-v15.9.0|darwin|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-darwin-x64.tar.gz|(Released 2021-02-18)
-v15.8.0|linux|arm64|https://nodejs.org/download/release/v15.8.0/node-v15.8.0-linux-arm64.tar.gz|(Released 2021-02-02)
-v15.8.0|linux|armv7l|https://nodejs.org/download/release/v15.8.0/node-v15.8.0-linux-armv7l.tar.gz|(Released 2021-02-02)
-...
-```

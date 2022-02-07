@@ -21,5 +21,4 @@ go.install() {
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
-	REPLY_MANS=()
 }
