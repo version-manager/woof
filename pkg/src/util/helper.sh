@@ -5,7 +5,7 @@ helper.get_module_name() {
 	local module_name="$1"
 
 	if [ -z "$module_name" ]; then
-		local -a all_modules_arr=("$BASALT_PACKAGE_DIR/pkg/lib/modules"/*.sh)
+		local -a all_modules_arr=("$BASALT_PACKAGE_DIR/pkg/src/modules"/*.sh)
 		all_modules_arr=("${all_modules_arr[@]##*/}")
 		all_modules_arr=("${all_modules_arr[@]%.sh}")
 
@@ -18,7 +18,7 @@ helper.get_module_name() {
 		module_name="$REPLY"
 	fi
 
-	local plugin_file="$BASALT_PACKAGE_DIR/pkg/lib/modules/$module_name.sh"
+	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/modules/$module_name.sh"
 	if [ ! -f "$plugin_file" ]; then
 		print.die "Module '$module_name' not found"
 	fi
