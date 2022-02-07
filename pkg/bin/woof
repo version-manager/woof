@@ -4,5 +4,5 @@ eval "$(basalt-package-init)"
 basalt.package-init
 basalt.package-load
 
-source "$BASALT_PACKAGE_DIR/pkg/lib/cmd/woof.sh"
+source "$BASALT_PACKAGE_DIR/pkg/lib/bin/woof.sh"
 main.woof "$@"
