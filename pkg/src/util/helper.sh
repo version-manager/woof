@@ -93,7 +93,11 @@ helper.determine_installed_module_name() {
 		done; unset module
 
 		tty.multiselect "" module_list modules_table
-		version_string="$REPLY"
+		REPLY=$REPLY
+	fi
+
+	if [ ! -d "$WOOF_DATA_HOME/installs/$module_name" ]; then
+		print.die "No versions of module '$module_name' are installed"
 	fi
 }
 
