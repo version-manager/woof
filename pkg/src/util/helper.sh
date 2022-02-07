@@ -75,9 +75,9 @@ helper.determine_installed_module_name() {
 	local module_name="$1"
 
 	if [ -z "$module_name" ]; then
-		shopt -s nullglob
+		core.shopt_push nullglob
 		local -a module_list=("$WOOF_DATA_HOME/installs"/*/)
-		shopt -u nullglob
+		core.shopt_pop
 
 		if (( ${#module_list[@]} == 0 )); then
 			print.die "Cannot uninstall as no modules are installed"
@@ -108,9 +108,9 @@ helper.determine_installed_version_string() {
 
 
 	if [ -z "$version_string" ]; then
-		shopt -s nullglob
+		core.shopt_push nullglob
 		local -a versions_list=("$WOOF_DATA_HOME/installs/$module_name"/*/)
-		shopt -u nullglob
+		core.shopt_pop
 
 		if (( ${#versions_list[@]} == 0 )); then
 			print.die "Cannot uninstall as no versions of module '$module_name' are installed"
