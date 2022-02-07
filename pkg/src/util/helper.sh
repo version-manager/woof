@@ -30,44 +30,6 @@ helper.determine_module_name() {
 	REPLY=$module_name
 }
 
-# @description For a given module, construct a matrix of all versions for all
-# platforms (kernel and architecture)
-helper.create_version_matrix() {
-	local module_name="$1"
-
-	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
-	if [ ! -d "$WOOF_DATA_HOME/cached" ]; then
-		mkdir -p "$WOOF_DATA_HOME/cached"
-	fi
-	local use_cache=no
-	if [ -f "$matrix_file" ]; then
-		use_cache=yes
-	fi
-
-	if [ "$use_cache" = no ]; then
-		local matrix_string=
-		if matrix_string="$(util.run_function "$module_name.matrix")"; then
-			if err.exists; then
-				print.error "$ERR"
-				exit "$ERRCODE"
-			fi
-		else
-			print.die "A fatal error occured while running '$module_name.matrix'"
-		fi
-
-		if [ -z "$matrix_string" ]; then
-			print.die "Function '$module_name.matrix' must output a well-formed matrix of variable names. Nothing was sent"
-		fi
-
-		if ! printf '%s' "$matrix_string" > "$matrix_file"; then
-			rm -f "$matrix_file"
-			print.die "Could not write to '$matrix_file'"
-		fi
-
-		unset matrix_string
-	fi
-}
-
 helper.determine_version_string() {
 	unset REPLY; REPLY=
 	local module_name="$1"
@@ -108,39 +70,107 @@ helper.determine_version_string() {
 	REPLY=$version_string
 }
 
+helper.determine_installed_module_name() {
+	unset REPLY; REPLY=
+	local module_name="$1"
+
+	if [ -z "$module_name" ]; then
+		shopt -s nullglob
+		local -a module_list=("$WOOF_DATA_HOME/installs"/*/)
+		shopt -u nullglob
+
+		if (( ${#module_list[@]} == 0 )); then
+			print.die "Cannot uninstall as no modules are installed"
+		fi
+
+		module_list=("${module_list[@]%/}")
+		module_list=("${module_list[@]##*/}")
+
+		local -A modules_table=()
+		local module=
+		for module in "${module_list[@]}"; do
+			modules_table["$module"]=
+		done; unset module
+
+		tty.multiselect "" module_list modules_table
+		version_string="$REPLY"
+	fi
+}
+
 # @description Get the installed version string, if one was not already specified
-helper.get_installed_version_string() {
+helper.determine_installed_version_string() {
 	local module_name="$1"
 	local version_string="$2"
 
+
 	if [ -z "$version_string" ]; then
+		shopt -s nullglob
 		local -a versions_list=("$WOOF_DATA_HOME/installs/$module_name"/*/)
+		shopt -u nullglob
+
+		if (( ${#versions_list[@]} == 0 )); then
+			print.die "Cannot uninstall as no versions of module '$module_name' are installed"
+		fi
+
 		versions_list=("${versions_list[@]%/}")
 		versions_list=("${versions_list[@]##*/}")
 
 		local -A versions_table=()
-		for v in "${versions_list[@]}"; do
-			versions_table["$v"]=
-		done; unset v
+		local version=
+		for version in "${versions_list[@]}"; do
+			versions_table["$version"]=
+		done; unset version
 
-		# Current choice (WET)
-		local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
-		local current_choice=
-		if [ -r "$current_choice_file" ]; then
-			if ! current_choice="$(<"$current_choice_file")"; then
-				print.die "Could not read from '$current_choice_file'"
-			fi
-			rm -f "$current_choice_file"
-		fi
+		util.get_current_choice "$module_name"
+		local current_choice=$REPLY
 
 		tty.multiselect "$current_choice" versions_list versions_table
 		version_string="$REPLY"
 	fi
 
-	if ! util.get_matrix_value_from_key "$module_name" "$version_string"; then
+	if [ ! -d "$WOOF_DATA_HOME/installs/$module_name/$version_string" ]; then
 		print.die "Version '$version_string' is not valid for module '$module_name'"
 	fi
 }
+
+# @description For a given module, construct a matrix of all versions for all
+# platforms (kernel and architecture). This calls the "<module>.matrix" function
+helper.create_version_matrix() {
+	local module_name="$1"
+
+	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+	if [ ! -d "$WOOF_DATA_HOME/cached" ]; then
+		mkdir -p "$WOOF_DATA_HOME/cached"
+	fi
+	local use_cache=no
+	if [ -f "$matrix_file" ]; then
+		use_cache=yes
+	fi
+
+	if [ "$use_cache" = no ]; then
+		local matrix_string=
+		if matrix_string="$(util.run_function "$module_name.matrix")"; then
+			if err.exists; then
+				print.error "$ERR"
+				exit "$ERRCODE"
+			fi
+		else
+			print.die "A fatal error occured while running '$module_name.matrix'"
+		fi
+
+		if [ -z "$matrix_string" ]; then
+			print.die "Function '$module_name.matrix' must output a well-formed matrix of variable names. Nothing was sent"
+		fi
+
+		if ! printf '%s' "$matrix_string" > "$matrix_file"; then
+			rm -f "$matrix_file"
+			print.die "Could not write to '$matrix_file'"
+		fi
+
+		unset matrix_string
+	fi
+}
+
 
 # @description For a particular module, prompt the user for the version
 # they want to perform the operation on. Write the selected version to a
@@ -155,15 +185,8 @@ helper.select_version() {
 	local -n matrix_key_variable="$matrix_keys_variable_name"
 	local -n matrix_table_variable="$matrix_table_variable_name"
 
-	# Current choice (WET)
-	local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
-	local current_choice=
-	if [ -r "$current_choice_file" ]; then
-		if ! current_choice="$(<"$current_choice_file")"; then
-			print.die "Could not read from '$current_choice_file'"
-		fi
-		rm -f "$current_choice_file"
-	fi
+	util.get_current_choice "$module_name"
+	local current_choice=$REPLY
 
 	# Similar to 'matrix_key' and 'matrix_key', except this is shown
 	# directly to the user in a multiselect screen
@@ -180,12 +203,6 @@ helper.select_version() {
 
 	tty.multiselect "$current_choice" ui_keys ui_table
 	local selected_version="$REPLY"
-
-	mkdir -p "${current_choice_file%/*}"
-	if ! printf '%s\n' "$selected_version" > "$current_choice_file"; then
-		rm -f "$current_choice_file"
-		print.die "Could not write to '$current_choice_file'"
-	fi
 
 	REPLY="$selected_version"
 }

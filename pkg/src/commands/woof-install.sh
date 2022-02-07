@@ -15,14 +15,22 @@ woof-install() {
 	unset -v possible_module_name
 	unset -v possible_version_string
 
-	printf '%s\n' "Installing $version_string"
-
 	local workspace_dir="$WOOF_DATA_HOME/workspace-$module_name"
 	local install_dir="$WOOF_DATA_HOME/installs/$module_name/$version_string"
+	local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
 
+	# If already installed
 	if [ -d "$install_dir" ]; then
-		print.die "Version '$version_string' is already installed for module '$module_name'"
+		mkdir -p "${current_choice_file%/*}"
+		if ! printf '%s\n' "$selected_version" > "$current_choice_file"; then
+			rm -f "$current_choice_file"
+			print.die "Could not write to '$current_choice_file'"
+		fi
+
+		print.die "Version '$version_string' is already installed for module '$module_name'. Setting as default"
 	fi
+
+	# Preparation actions
 	rm -rf "$workspace_dir"
 	mkdir -p "$workspace_dir" "${install_dir%/*}"
 
@@ -30,6 +38,7 @@ woof-install() {
 	local url="$REPLY1"
 
 	# Execute '<module>.install'
+	printf '%s\n' "Installing $version_string"
 	local old_pwd="$PWD"
 	mutil.ensure cd -- "$workspace_dir"
 	unset REPLY_DIR REPLY_BINS REPLY_MANS

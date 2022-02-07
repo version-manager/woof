@@ -126,6 +126,21 @@ util.uname_system() {
 	REPLY2="$hardware_pretty"
 }
 
+util.get_current_choice() {
+	unset REPLY; REPLY=
+	local module_name="$1"
+
+	local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
+
+	local current_choice=
+	if [ -f "$current_choice_file" ]; then
+		if ! current_choice="$(<"$current_choice_file")"; then
+			print.die "Could not read from '$current_choice_file'"
+		fi
+	fi
+
+	REPLY=$current_choice
+}
 util.is_on_platform() {
 	local os="$1"
 	local arch="$2"

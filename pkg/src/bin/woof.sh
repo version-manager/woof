@@ -58,22 +58,16 @@ main.woof() {
 	install)
 		woof-install "${subcmds[1]}" "${subcmds[2]}"
 		;;
+	uninstall)
+		woof-uninstall "${subcmds[1]}" "${subcmds[2]}"
+		;;
 	debug)
 		helper.determine_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
 		util.run_function "$module_name.matrix"
 		;;
-	uninstall)
-		helper.determine_module_name "${subcmds[1]}"
-		local module_name="$REPLY"
 
-		helper.get_installed_version_string "$module_name" "${subcmds[2]}"
-		local version_string="$REPLY"
-
-		printf '%s\n' "Uninstalling $version_string"
-		woof-uninstall "$module_name" "$version_string"
-		;;
 	current)
 
 		;;
@@ -87,7 +81,7 @@ main.woof() {
 		helper.determine_module_name "${subcmds[1]}"
 		local module_name="$REPLY"
 
-		helper.get_installed_version_string "$module_name" "${subcmds[2]}"
+		helper.determine_installed_version_string "$module_name" "${subcmds[2]}"
 		local version_string="$REPLY"
 
 		printf '%s\n' "Setting version '$version_string' as global version"
