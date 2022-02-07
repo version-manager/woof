@@ -15,7 +15,7 @@ crystal.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -Lo file.tar.gz "$url"
+	m.fetch -o file.tar.gz "$url"
 	mkdir -p 'dir'
 	m.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
 
