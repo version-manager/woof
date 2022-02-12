@@ -4,6 +4,14 @@
 
 There are two main approaches: using shims and not.
 
+## Shims
+
+In essence, the shim layer is an indirection layer that facilities opening the proper verison of node, dependent on the current context. The current context can include the current tty/pty, the value for 'global' version for a particular shell lanaguage, etc. I don't like shims, primarily because they incur an extra execution of the shell (usually `dash`, but it can be `bash`). This has an extra startup cost, and would influence things like benchmark compilation times. It also feels dirty to me
+
+## No shims
+
+Here, distinction between versions is usually done through symlinks and a hash map of the current tty/pty and the current version
+
 ## Installing
 
 The installation steps for installing any particular version of any particular module are standardized.

@@ -8,7 +8,7 @@ tty.fullscreen_init() {
 	tput sc # save cursor position
 	tput smcup 2>/dev/null # save screen contents
 
-	clear
+	printf '\033[3J' # clear
 	read -r global_tty_height global_tty_width < <(stty size)
 }
 

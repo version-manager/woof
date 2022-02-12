@@ -44,6 +44,12 @@ These are the _only_ external utilities required
 - sort (GNUism -V)
 - tput
 - stty
-- clear
 - uname
-- perl (somewhat optional)
+
+- The Go module depends on Perl
+- The Crystal module depends on Python
+
+## Roadmap
+
+- Java
+- Python, C#, php, c, c++, R, obj-c, swift, ruby, Bash Requires autobuild

@@ -2,7 +2,7 @@
 
 Woof aims to support the following languages / package managers / programs
 
-## NodeJS
+## NodeJS ✔
 
 - [Official](https://github.com/nodejs/node)
 - [asdf-node](https://github.com/asdf-vm/asdf-node)
@@ -19,7 +19,7 @@ Woof aims to support the following languages / package managers / programs
 
 Supports `.node-version`, and `.nvmrc`
 
-# Deno
+# Deno ✔
 
 - [Official](https://github.com/denoland/deno)
 - [asdf-deno](https://github.com/asdf-community/asdf-deno)
@@ -28,7 +28,7 @@ Supports `.node-version`, and `.nvmrc`
 
 Supports `.dvmrc`
 
-# Go
+# Go ✔
 
 - [Official](https://github.com/google/go-github)
 - [asdf-golang](https://github.com/kennyp/asdf-golang)
@@ -79,7 +79,7 @@ Supports `.ruby-version` and `rvmrc`
 - [asdf-julia](https://github.com/rkyleg/asdf-julia)
 - [juliavm](https://github.com/pmargreff/juliavm)
 
-# Swiftenv
+# Swift
 
 - [Official](https://github.com/apple/swift)
 - [swiftenv](https://github.com/kylef/swiftenv)
@@ -108,7 +108,7 @@ Supports `.ruby-version` and `rvmrc`
 
 # boundary, consul, nomad, packer, sentinel, serf, terraform, vault, waypoint
 
-## crystal
+## crystal ✔
 
 - [Official](https://github.com/crystal-lang/crystal)
 - [asdf-crystal](https://github.com/asdf-community/asdf-crystal)
@@ -165,7 +165,7 @@ Supports `.kubectl_version`
 - [Official](https://github.com/oracle/graal)
 - [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)
 
-## Nim
+## Nim ✔
 
 - [Official](https://github.com/nim-lang/Nim)
 - [asdf-nim](https://github.com/asdf-community/asdf-nim)
@@ -277,12 +277,12 @@ Supports `.kubectl_version`
 - [tfenfv](https://github.com/tfutils/tfenv)
 - [terraenv](https://github.com/aaratn/terraenv)
 
-# Dart
+# Dart ✔
 
 - [Official](https://dart.dev)
 - [asdf-dart](https://github.com/PatOConnor43/asdf-dart)
 - [dvm](https://github.com/cbracken/dvm)
 
-## opam
+## opam, fortran, lua
 
-## aria2c, elasticsearch, rlwrap, ninja, ccache, neko, rlwrap, alp, meson, trident, grpcurl, getenvoy, esy, ocaml, other sdkmans, poetry, hhvm, rust all out of scope
+## aria2c, elasticsearch, rlwrap, ninja, ccache, neko, rlwrap, alp, meson, trident, grpcurl, getenvoy, esy, ocaml, other sdkmans, poetry, typescript, hhvm, rust all out of scope
