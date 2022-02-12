@@ -1,6 +1,17 @@
 # shellcheck shell=bash
 
 woof-set-global() {
+	local possible_module_name="$1"
+	local possible_version_string="$2"
+
+	helper.determine_module_name "$possible_module_name"
+	local module_name="$REPLY"
+
+	helper.determine_installed_version_string "$module_name" "$possible_version_string"
+	local version_string="$REPLY"
+
+	printf '%s\n' "Setting version '$version_string' as global version"
+
 	local module_name="$1"
 	local version_string="$2"
 
