@@ -147,11 +147,12 @@ util.show_help() {
   woof <action> [module] [version]
 
 Actions: (TODO)
+  init
   install
   uninstall
-  list
-  current
-  set-shell
-  set-local
-  set-global"
+  get-version
+  set-version
+  debug
+  list [--installed] [--all]
+"
 }

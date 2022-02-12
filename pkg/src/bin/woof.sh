@@ -31,55 +31,39 @@ main.woof() {
 	WOOF_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/woof"
 	WOOF_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}/woof"
 
-	local subcmds=()
+	local arg=
 	for arg; do case "$arg" in
-		--help|-h)
-			util.show_help
-			exit
-			;;
-		-*)
-			print.die "Flag '$arg' not recognized"
-			;;
-		*)
-			subcmds+=("$arg")
-			;;
-	esac done; unset arg
+	--help|-h)
+		util.show_help
+		exit
+		;;
+	-*)
+		print.die "Flag '$arg' not recognized"
+		;;
+	*)
+		break
+		;;
+	esac done; unset -v arg
 
 	# Get action name
-	local action_name="${subcmds[0]}"
+	local action_name="$1"
 	if [ -z "$action_name" ]; then
 		util.show_help
 		print.die "No action was given"
 	fi
-	subcmds=("${subcmds[@]:1:${#subcmds[@]}}")
+	if ! shift; then
+		print.die 'Failed to shift'
+	fi
 
 	case "$action_name" in
-	init)
-		woof-init
-		;;
-	install)
-		woof-install "${subcmds[@]}"
-		;;
-	uninstall)
-		woof-uninstall "${subcmds[@]}"
-		;;
-	get-version)
-		print.die 'Not implemented'
-		;;
-	set-version)
-		print.die 'Not implemented'
-		;;
-	debug)
-		woof-debug "${subcmds[@]}"
-		;;
-	list)
-		woof-list "${subcmds[@]}"
-		;;
-	set-global)
-		woof-set-global "${subcmds[@]}"
-		;;
-	*)
-		print.die "Subcommand '$action_name' not recognized"
-		;;
+		init) woof-init ;;
+		install) woof-install "$@" ;;
+		uninstall) woof-uninstall "$@" ;;
+		get-version) print.die 'Not implemented' ;;
+		set-version) print.die 'Not implemented' ;;
+		debug) woof-debug "$@" ;;
+		list) woof-list "$@" ;;
+		set-global) woof-set-global "$@" ;;
+		*) print.die "Subcommand '$action_name' not recognized" ;;
 	esac
 }
