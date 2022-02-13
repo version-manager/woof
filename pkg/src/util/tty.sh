@@ -87,7 +87,10 @@ tty.private.forwards_all() {
 }
 
 tty.private.print_list() {
-	local index="$1"; shift
+	local index="$1"
+	if ! shift; then
+		print.die 'Failed to shift'
+	fi
 
 	# index represents the center (ex. 17)
 
