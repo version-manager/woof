@@ -1,4 +1,5 @@
 [package]
+type = 'bash'
 name = 'woof'
 slug = 'woof'
 version = '0.1.0'
