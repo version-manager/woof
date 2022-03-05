@@ -1,28 +1,7 @@
 # shellcheck shell=bash
 
-# Credit to yoctu for this
-trap_err() {
-	local err=$?
-	if [ "$err" -eq 0 ]; then
-		return
-	fi
-
-	printf '%s\n' "Error in ${BASH_SOURCE[1]}:${BASH_LINENO[0]}. '${BASH_COMMAND}' exited with status $err"
-
-	printf '%s\n' "Call stack:"
-	for ((i=1;i<${#FUNCNAME[@]}-1;i++)); do
-		printf '%s\n' " $i: ${BASH_SOURCE[$i+1]}:${BASH_LINENO[$i]} ${FUNCNAME[$i]}(...)"
-	done
-
-	printf '%s\n' "Exiting with status ${err}"
-	exit $err
-}
-
 main.woof() {
 	core.init
-
-	trap trap_err ERR EXIT # TODO
-
 	global_stty_saved=
 	global_tty_height=
 	global_tty_width=

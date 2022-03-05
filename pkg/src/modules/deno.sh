@@ -1,17 +1,7 @@
 # shellcheck shell=bash
 
 deno.matrix() {
-	local -a versions=()
-	m.git_tag_to_versions_array 'versions' 'https://github.com/denoland/deno' 'refs/tags/v'
-	versions=("${versions[@]/#/v}")
-
-	local version=
-	for version in "${versions[@]}"; do
-		# TODO:  This prints too many options
-		printf '%s\n' "$version|darwin|amd64|https://dl.deno.land/release/$version/deno-x86_64-apple-darwin.zip"
-		printf '%s\n' "$version|linux|amd64|https://dl.deno.land/release/$version/deno-x86_64-unknown-linux-gnu.zip"
-		printf '%s\n' "$version|windows|amd64|https://dl.deno.land/release/$version/deno-x86_64-pc-windows-msvc.zip"
-	done; unset -v version
+	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/parse-deno.ts"
 }
 
 deno.install() {

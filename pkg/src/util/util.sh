@@ -143,16 +143,17 @@ util.get_current_choice() {
 
 util.show_help() {
 	printf '%s\n' "Usage:
-  woof init <shell>
-  woof <action> [module] [version]
+   woof init <shell>
+   woof <action> [module] [version]
 
 Actions: (TODO)
-  init
-  install
-  uninstall
-  get-version
-  set-version
-  debug
-  list [--installed] [--all]
+   init
+   install
+   uninstall
+   get-version
+   set-version
+   list [--installed] [--all]
+   sync-version-list
+   debug
 "
 }

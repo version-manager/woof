@@ -1,14 +1,7 @@
 # shellcheck shell=bash
 
 go.matrix() {
-	local go_url='https://go.dev/dl'
-
-	local text=
-	if ! text="$(m.fetch "$go_url")"; then
-		print.die "Could not fetch '$go_url'"
-	fi
-
-	perl "$BASALT_PACKAGE_DIR/pkg/src/share/parse-go.pl" <<< "$text"
+	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/parse-go.ts"
 }
 
 go.install() {

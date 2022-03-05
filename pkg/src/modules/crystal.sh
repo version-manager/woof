@@ -1,14 +1,7 @@
 # shellcheck shell=bash
 
 crystal.matrix() {
-	local crystal_url='https://api.github.com/repos/crystal-lang/crystal/releases'
-
-	local text=
-	if ! text="$(m.fetch "$crystal_url")"; then
-		print.die "Could not fetch '$crystal_url'"
-	fi
-
-	python3 "$BASALT_PACKAGE_DIR/pkg/src/share/parse-crystal.py" <<< "$text"
+	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/parse-crystal.ts"
 }
 
 crystal.install() {

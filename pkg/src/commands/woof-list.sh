@@ -54,12 +54,6 @@ woof-list() {
 		done < "$matrix_file" | sort -V
 		unset version os arch url comment
 
-		while IFS= read -r line; do
-
-
-			printf '%s\n' "${line%%|*}"
-		done < "$matrix_file" | sort -V
-
 		unset -v line
 	fi
 }

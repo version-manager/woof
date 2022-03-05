@@ -53,3 +53,6 @@ These are the _only_ external utilities required
 
 - Java
 - Python, C#, php, c, c++, R, obj-c, swift, ruby, Bash Requires autobuild
+- Have way to work with language variants and download variants (implementations of python, ruby and multiple downloads for same os/arch combo)
+  - Overhaul selection menu
+- Get shell init to work
