@@ -3,6 +3,8 @@ if (import.meta.main) {
 }
 
 async function parseDeno() {
+	const token = Deno.env.get('GITHUB_TOKEN')
+
 	for (let page = 1; page < 100; ++page) {
 		let res: Response
 		let json: any

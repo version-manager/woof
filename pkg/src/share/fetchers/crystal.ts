@@ -1,12 +1,28 @@
+import { die, getGithubReleases } from './util/util.ts'
+
 if (import.meta.main) {
 	await parseCrystal()
 }
 
 async function parseCrystal() {
-	const res = await fetch(
+	const token = Deno.env.get('GITHUB_TOKEN')
+	let url = new URL(
 		'https://api.github.com/repos/crystal-lang/crystal/releases'
 	)
-	const json = await res.json()
+
+	const json = await getGithubReleases(url, {
+		headers: {
+			Authorization: `token ${token}`,
+		},
+	})
+
+	console.info(json)
+
+	return
+
+	if (!Array.isArray(json)) {
+		die('Expected array')
+	}
 
 	for (const release of json) {
 		let version: string = release.name || release.tag_name

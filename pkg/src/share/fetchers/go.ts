@@ -2,39 +2,6 @@ if (import.meta.main) {
 	await parseGo()
 }
 
-async function getText(url: string): Promise<string> {
-	try {
-		const res = await fetch(url, {
-			headers: {
-				Authorization: `token ${token}`,
-			},
-		})
-
-		if (!res.ok) {
-			console.error(res)
-			Deno.exit(1)
-		}
-
-		let text
-		let json = await res.text()
-		// try {
-		// 	text = await res.json()
-		// } else {
-		// 	text = await res.text()
-		// }
-
-		if (typeof json !== 'string') {
-			console.error('Not string')
-			Deno.exit(1)
-		}
-
-		return json
-	} catch (err) {
-		console.error(err)
-		Deno.exit(1)
-	}
-}
-
 async function parseGo() {
 	const url = 'https://go.dev/dl'
 	const text = await getText(url)
