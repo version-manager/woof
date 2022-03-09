@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 nim.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/parse-nim.sh"
+	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/nim.sh"
 }
 
 nim.install() {

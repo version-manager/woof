@@ -1,3 +1,5 @@
+import { die, getText } from './util/util.ts'
+
 if (import.meta.main) {
 	await parseGo()
 }

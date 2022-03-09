@@ -1,18 +1,21 @@
-const haskellUrl = 'https://downloads.haskell.org/~ghc'
-const res = await fetch(haskellUrl)
-const text = await res.text()
+import { die, getText } from './util/util.ts'
 
-const promises = []
-for (const match of text.matchAll(/<a href="(.*?)"/gu)) {
-	const version = match[1].slice(0, -1)
-
-	let int = parseInt(version[0], 10)
-	if (Number.isNaN(int)) {
-		continue
-	}
-
-	promises.push(fetch(`https://downloads.haskell.org/~ghc/${version}`))
+if (import.meta.main) {
+	await parseHaskell()
 }
 
-const result = await promises[0]()
-
+async function parseHaskell() {
+	// TODO: SKIP because Stack
+	// const url = 'https://downloads.haskell.org/~ghc'
+	// const text = await getText(url)
+	// const promises = []
+	// for (const match of text.matchAll(/<a href="(.*?)"/gu)) {
+	// 	const version = match[1].slice(0, -1)
+	// 	let int = parseInt(version[0], 10)
+	// 	if (Number.isNaN(int)) {
+	// 		continue
+	// 	}
+	// 	promises.push(fetch(`${url}/${version}`))
+	// }
+	// const result = await promises[0]()
+}

@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 crystal.matrix() {
-	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/parse-crystal.ts"
+	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/crystal.ts"
 }
 
 crystal.install() {

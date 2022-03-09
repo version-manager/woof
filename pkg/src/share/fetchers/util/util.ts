@@ -105,24 +105,15 @@ export async function getGithubReleases(
 	let releases: GitHubRelease[] = []
 
 	let json
-	let i = 0
+	let i = 1
 	do {
 		const url = `https://api.github.com/repos/${repo}/releases?per_page=100&page=${i}`
 		const data = await getData(url, headers)
-		const json = await data.json()
-
-		console.info(Array.isArray(json), json.length)
+		json = await data.json()
 
 		releases = releases.concat(json)
 		i = i + 1
-
-		// console.info(
-		// 	json.length,
-		// 	Array.isArray(json) && (json as Array<unknown>).length !== 0
-		// )
-	} while (i < 4)
-
-	// } while (Array.isArray(json) && (json as Array<unknown>).length !== 0)
+	} while (Array.isArray(json) && (json as Array<unknown>).length !== 0)
 
 	return releases
 }
@@ -130,10 +121,10 @@ export async function getGithubReleases(
 export async function getText(
 	url: fetchURL,
 	headers?: fetchHeaders
-): Promise<Record<string, unknown>> {
+): Promise<string> {
 	const data = await getData(url, headers)
-	const json = await data.json()
-	return json
+	const text = await data.text()
+	return text
 }
 
 async function getData(

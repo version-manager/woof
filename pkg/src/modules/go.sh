@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 go.matrix() {
-	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/parse-go.ts"
+	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/go.ts"
 }
 
 go.install() {

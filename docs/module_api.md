@@ -9,16 +9,16 @@ Prints a version matrix to standard output
 The structure is the following. The comment is optional
 
 ```txt
-<version>|<os>|<arch>|<url>|<comment>
+<variant>|<version>|<os>|<arch>|<url>|<comment>
 ```
 
 Here are some examples
 
 ```txt
-v1.17.6|linux|amd64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
-v15.9.0|linux|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|(Released 2021-02-18)
-v1.2.14|linux|amd64|https://nim-lang.org//download/nim-1.2.14-linux_x64.tar.xz
-v2.9.3|linux|armv7|https://storage.googleapis.com/dart-archive/channels/stable/release/2.16.0/sdk/dartsdk-linux-arm-release.zip
+Go|v1.17.6|linux|amd64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
+NodeJS|v15.9.0|linux|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|(Released 2021-02-18)
+Nim|v1.2.14|linux|amd64|https://nim-lang.org//download/nim-1.2.14-linux_x64.tar.xz
+Dart|v2.9.3|linux|armv7|https://storage.googleapis.com/dart-archive/channels/stable/release/2.16.0/sdk/dartsdk-linux-arm-release.zip
 ```
 
 Currently, operating system must be one of
@@ -29,6 +29,7 @@ Currently, operating system must be one of
 - `windows`
 
 - `aix` (nodejs)
+- `solaris` / `sunOS` (hashicorp, nodejs)
 
 Architecture must be one of
 

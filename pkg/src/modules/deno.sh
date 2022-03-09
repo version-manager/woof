@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 deno.matrix() {
-	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/parse-deno.ts"
+	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/deno.ts"
 }
 
 deno.install() {

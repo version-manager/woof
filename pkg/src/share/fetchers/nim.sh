@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+source "${0%/*}/util/util.sh"
 
 parseNim() {
 	local nim_url='https://nim-lang.org/install.html'
@@ -41,4 +42,6 @@ parseNim() {
 	done <<< "$text"
 }
 
-parseNim
+if isMain; then
+	parseNim "$@"
+fi

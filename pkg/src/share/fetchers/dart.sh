@@ -1,7 +1,5 @@
 # shellcheck shell=bash
-
-# TODO: determine if being sourced
-
+source "${0%/*}/util/util.sh"
 
 parseDart() {
 	local dart_url='https://storage.googleapis.com/storage/v1/b/dart-archive/o?prefix=channels/stable/release/&delimiter=/'
@@ -30,4 +28,6 @@ parseDart() {
 	done <<< "$text"
 }
 
-parseDart
+if isMain; then
+	parseDart "$@"
+fi

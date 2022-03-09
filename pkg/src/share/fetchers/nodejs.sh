@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+source "${0%/*}/util/util.sh"
 
 parseNodejs() {
 	local nodejs_url='https://nodejs.org/download/release/index.json'
@@ -52,4 +53,7 @@ parseNodejs() {
 	done <<< "$json"
 }
 
-parseNodejs
+
+if isMain; then
+	parseNodejs "$@"
+fi
