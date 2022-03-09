@@ -4,55 +4,57 @@ The version manager to end all version managers
 
 STATUS: IN DEVELOPMENT
 
-Woof plans to support at least 15+ languages from the getgo. See the full list in [roadmap](./docs/roadmap.md)
-
 ## Why?
 
-- Different projects on your development machine require different versions of $language
-- Your OS's package manager doesn't contain latest version of $language
-- Want an OS independent way to install and switch between $language (`apt`, `pacman`, `update-alternatives`, `archlinux-java`)
-- Don't want to use superuser privileges to install language
-- Don't want to install a million different version managers for different languages
-- Need to quickly switch between different versions (i.g. performance testing)
-- If the [Nix](https://nixos.org)/[Guix](https://guix.gnu.org/en/download) solution is overkill for you and you neither want to use [asdf](https://github.com/asdf-vm/asdf) nor [sdkman](https://github.com/sdkman/sdkman-cli)
-- If you agree containers are overkill for this particular solution
-- For my fellow polyglots
+- Your OS's package manager doesn't contain the latest (or multiple) $language versions
+  - And/or you don't trust random APT repositories, AUR packages, etc.
+- You want an OS independent way to install and switch between $language versions
+  - And/or if you don't want to remember how to use `update-alternatives`, `archlinux-java`, etc.
+- You are tired of installing and configuration version managers for every single language
+- You believe any of the following is overkill, slow, bloated, or is poorly coded
+  - [Nix](https://nixos.org)
+  - [Guix](https://guix.gnu.org/en/download)
+  - [asdf](https://github.com/asdf-vm/asdf)
+  - [sdkman](https://github.com/sdkman/sdkman-cli)
+  - Containers
+
+## Features
+
+- Optionally configurationless
+- Can install any language with pure Bash
+- Clean Bash code (uses builtins and Bash facilities over external utilities)
+
+## Use Cases
+
+- Different projects that use $language have different version requirements
+- Performance testing
+- Rootless installations
 
 ## Current Support
 
-- Linux (later Darwin, FreeBSD, Solaris, OpenBSD)
+Woof plans to support many tens of languages. Currently, there is limited support for NodeJS, Deno, Go, Crystal, Nim, Dart, and the Hashicorp suite of tools. See the full list in [roadmap](./docs/roadmap.md). Furthermore, the following platforms are supported
+
+- Linux (later Darwin, FreeBSD)
 - amd64 (later x86, armv7l, aarch64)
-- Bash (later Zsh, etc.)
+- Bash (later Zsh, Ksh, Fish, etc.)
 
-Compatible in many ways with [asdf](https://asdf-vm.com/manage/configuration.html#tool-versions) and other popular version managers like `rvm` and `nvm`
-
-## Installation
-
-NOTE: Woof is currently non-functional with respect to how its advertised
-
-Use [Basalt](https://github.com/hyperupcall/basalt), a Bash package manager, to install this project globally
-
-```sh
-basalt global add hyperupcall/woof
-```
+We attempt to be reasonably compatible with all existing tools. For example, it will read asdf's [.tool-versions](https://asdf-vm.com/manage/configuration.html#tool-versions), nvm's [.nvmrc](https://github.com/nvm-sh/nvm#nvmrc) and read things from popular version managers like `rvm` and `pyenv`
 
 ## Prerequisites
 
 These are the _only_ external utilities required
 
 - cURL
-- sort (GNUism -V)
-- tput
+- sort (GNUism -V) (TODO: phase out)
+- tput (TODO: phase out)
 - stty
 - uname
+- POSIX `mv`, `cat`, `cp`, etc.
 
-- The Go module depends on Perl
-- The Crystal module depends on Python
+## Installation
 
-## Roadmap
+Use [Basalt](https://github.com/hyperupcall/basalt), a Bash package manager, to install this project globally
 
-- Java
-- Python, C#, php, c, c++, R, obj-c, swift, ruby, Bash Requires autobuild
-- Have way to work with language variants and download variants (implementations of python, ruby and multiple downloads for same os/arch combo)
-  - Overhaul selection menu
-- Get shell init to work
+```sh
+basalt global add hyperupcall/woof
+```

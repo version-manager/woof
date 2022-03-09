@@ -29,6 +29,8 @@ Currently, operating system must be one of
 - `windows`
 
 - `aix` (nodejs)
+- `openbsd` (hashicorp)
+- `netbsd` (hashicorp)
 - `solaris` / `sunOS` (hashicorp, nodejs)
 
 Architecture must be one of

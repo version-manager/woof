@@ -104,6 +104,10 @@ kubectl: Not yet supports `.kubectl_version`
 - fortran
 - lua
 - Dasel
+- C
+- C++
+- Objective-C?
+- Bash
 
 ## Out of Scope
 
