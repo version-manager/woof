@@ -11,23 +11,25 @@ There are three levels of support:
 
 ## Buildless Programming Languages
 
-| Item    | Current Support | Official Download                                   | Replaces                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| ------- | --------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| NodeJS  | Testing         | [Official](https://github.com/nodejs/node)          | [asdf-node](https://github.com/asdf-vm/asdf-node), [n](https://github.com/tj/n), [nvm](https://github.com/nvm-sh/nvm), [nvm.fish](https://github.com/jorgebucaran/nvm.fish), [nvmw](https://github.com/hakobera/nvmw), [avn](https://github.com/wbyoung/avn), [fnm](https://github.com/Schniz/fnm), [nave](https://github.com/isaacs/nave), [nodist](https://github.com/nullivex/nodist), [nodenv](https://github.com/nodenv/nodenv), [nodebrew](https://github.com/hokaccha/nodebrew) |
-| Deno    | Testing         | [Official](https://github.com/denoland/deno)        | [asdf-deno](https://github.com/asdf-community/asdf-deno), [justjavac/dvm](https://github.com/justjavac/dvm), [ghosind/dvm](https://github.com/ghosind/dvm)                                                                                                                                                                                                                                                                                                                             |
-| Go      | Testing         | [Official](https://github.com/google/go-github)     | [asdf-golang](https://github.com/kennyp/asdf-golang), [gvm](https://github.com/moovweb/gvm), [stefanmaric/g](https://github.com/stefanmaric/g), [voidint/g](https://github.com/voidint/g), [goenv](https://github.com/syndbg/goenv), [goup](https://github.com/owenthereal/goup), [oo](https://github.com/hit9/oo)                                                                                                                                                                     |
-| Ruby    | None            | [Official](https://github.com/ruby/ruby)            | [asdf-ruby](https://github.com/asdf-vm/asdf-ruby), [rvm](https://rvm.io), [rbenv](https://github.com/rbenv/rbenv), [chruby](https://github.com/postmodern/chruby), [frum](https://github.com/TaKO8Ki/frum)                                                                                                                                                                                                                                                                             |
-| Crystal | Testing         | [Official](https://github.com/crystal-lang/crystal) | [asdf-crystal](https://github.com/asdf-community/asdf-crystal), [crenv](https://github.com/crenv/crenv)                                                                                                                                                                                                                                                                                                                                                                                |
-| Nim     | Testing         | [Official](https://github.com/nim-lang/Nim)         | [asdf-nim](https://github.com/asdf-community/asdf-nim), [choosenim](https://github.com/dom96/choosenim)                                                                                                                                                                                                                                                                                                                                                                                |
-| Dart    | Testing         | [Official](https://dart.dev)                        | [asdf-dart](https://github.com/PatOConnor43/asdf-dart), [dvm](https://github.com/cbracken/dvm)                                                                                                                                                                                                                                                                                                                                                                                         |
+| Language | Current Support | Official Download                                   | Replaces                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| -------- | --------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NodeJS   | Testing         | [Official](https://github.com/nodejs/node)          | [asdf-node](https://github.com/asdf-vm/asdf-node), [n](https://github.com/tj/n), [nvm](https://github.com/nvm-sh/nvm), [nvm.fish](https://github.com/jorgebucaran/nvm.fish), [nvmw](https://github.com/hakobera/nvmw), [avn](https://github.com/wbyoung/avn), [fnm](https://github.com/Schniz/fnm), [nave](https://github.com/isaacs/nave), [nodist](https://github.com/nullivex/nodist), [nodenv](https://github.com/nodenv/nodenv), [nodebrew](https://github.com/hokaccha/nodebrew) |
+| Deno     | Testing         | [Official](https://github.com/denoland/deno)        | [asdf-deno](https://github.com/asdf-community/asdf-deno), [justjavac/dvm](https://github.com/justjavac/dvm), [ghosind/dvm](https://github.com/ghosind/dvm)                                                                                                                                                                                                                                                                                                                             |
+| Go       | Testing         | [Official](https://github.com/google/go-github)     | [asdf-golang](https://github.com/kennyp/asdf-golang), [gvm](https://github.com/moovweb/gvm), [stefanmaric/g](https://github.com/stefanmaric/g), [voidint/g](https://github.com/voidint/g), [goenv](https://github.com/syndbg/goenv), [goup](https://github.com/owenthereal/goup), [oo](https://github.com/hit9/oo)                                                                                                                                                                     |
+| Crystal  | Testing         | [Official](https://github.com/crystal-lang/crystal) | [asdf-crystal](https://github.com/asdf-community/asdf-crystal), [crenv](https://github.com/crenv/crenv)                                                                                                                                                                                                                                                                                                                                                                                |
+| Nim      | Testing         | [Official](https://github.com/nim-lang/Nim)         | [asdf-nim](https://github.com/asdf-community/asdf-nim), [choosenim](https://github.com/dom96/choosenim)                                                                                                                                                                                                                                                                                                                                                                                |
+| Dart     | Testing         | [Official](https://dart.dev)                        | [asdf-dart](https://github.com/PatOConnor43/asdf-dart), [dvm](https://github.com/cbracken/dvm)                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ## Buildfull Programming Languages
 
-| Item   | Current Support | Official Download                             | Replaces                                                                                                                                                                                                  |
-| ------ | --------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PHP    | None            | [Official](https://github.com/php/php-src)    | [asdf-php](https://github.com/asdf-community/asdf-php), [phpenv](https://github.com/phpenv/phpenv), [phpbrew](https://github.com/phpbrew/phpbrew), [php-version](https://github.com/wilmoore/php-version) |
-| Python | None            | [Official](https://github.com/python/cpython) | [asdf-python](https://github.com/asdf-vm/asdf-python), [pyenv](https://github.com/pyenv/pyenv), [p](https://github.com/qw3rtman/p), [pvm](https://github.com/DrPandemic/pvm)                              |
-| Swift  | None            | [Official](https://github.com/apple/swift)    | [asdf-swift](https://github.com/fcrespo82/asdf-swift), [swiftenv](https://github.com/kylef/swiftenv)                                                                                                      |
+This requires a modification to the module API, support for patches
+
+| Language | Current Support | Official Download                             | Replaces                                                                                                                                                                                                   |
+| -------- | --------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PHP      | None            | [Official](https://github.com/php/php-src)    | [asdf-php](https://github.com/asdf-community/asdf-php), [phpenv](https://github.com/phpenv/phpenv), [phpbrew](https://github.com/phpbrew/phpbrew), [php-version](https://github.com/wilmoore/php-version)  |
+| Python   | None            | [Official](https://github.com/python/cpython) | [asdf-python](https://github.com/asdf-vm/asdf-python), [pyenv](https://github.com/pyenv/pyenv), [p](https://github.com/qw3rtman/p), [pvm](https://github.com/DrPandemic/pvm)                               |
+| Swift    | None            | [Official](https://github.com/apple/swift)    | [asdf-swift](https://github.com/fcrespo82/asdf-swift), [swiftenv](https://github.com/kylef/swiftenv)                                                                                                       |
+| Ruby     | None            | [Official](https://github.com/ruby/ruby)      | [asdf-ruby](https://github.com/asdf-vm/asdf-ruby), [rvm](https://rvm.io), [rbenv](https://github.com/rbenv/rbenv), [chruby](https://github.com/postmodern/chruby), [frum](https://github.com/TaKO8Ki/frum) |
 
 ## Hashicorp
 
@@ -51,194 +53,59 @@ Deno: Not yet Supports `.dvmrc`
 
 Ruby: Not yet supports `.ruby-version` and `rvmrc`
 
-## R
-
-- [Official](https://www.r-project.org)
-- [asdf-r](https://github.com/asdf-community/asdf-R)
-- [renv](https://github.com/rstudio/renv)
-- [Renv](https://github.com/viking/Renv)
-
-## Julia
-
-- [Official](https://github.com/JuliaLang/julia)
-- [asdf-julia](https://github.com/rkyleg/asdf-julia)
-- [juliavm](https://github.com/pmargreff/juliavm)
-
-## Java
-
-- [Official](https://github.com/openjdk/jdk)
-- [asdf-java](https://github.com/halcyon/asdf-java)
-- [jenv.be](https://www.jenv.be)
-- [sdkman](https://sdkman.io)
-- [jenv](https://github.com/linux-china/jenv)
-- [jabba](https://github.com/shyiko/jabba)
-
-### erlang
-
-- [Official](https://github.com/erlang/otp)
-- [asdf-erlang](https://github.com/asdf-vm/asdf-erlang)
-- [kerl](https://github.com/kerl/kerl)
-
-### Elixir
-
-- [Official](https://github.com/elixir-lang/elixir)
-- [asdf-elixir](https://github.com/asdf-vm/asdf-elixir)
-- [exenv](https://github.com/exenv/exenv)
-- [kiex](https://github.com/taylor/kiex)
-
-### kubectl
-
-- [Official](https://github.com/kubernetes/kubectl)
-- [asdf-kubectl](https://github.com/asdf-community/asdf-kubectl)
-- [kubenvz](https://github.com/nutellinoit/kubenvz)
-
-Supports `.kubectl_version`
-
-### haskell
-
-- [Official](https://github.com/ghc/ghc)
-- [asdf-haskell](https://github.com/asdf-community/asdf-haskell)
-
-## gleam
-
-- [Official](https://github.com/gleam-lang/gleam)
-- [asdf-gleam](https://github.com/asdf-community/asdf-gleam)
-
-## kotlin
-
-- [Official](https://github.com/JetBrains/kotlin)
-- [asdf-kotlin](https://github.com/asdf-community/asdf-kotlin)
-- [kotlin-sdkman](https://sdkman.io/sdks#kotlin)
-
-## Elm
-
-- [Official](https://github.com/elm/compiler)
-- [asdf-elm](https://github.com/asdf-community/asdf-elm)
-
-## Haxe
-
-- [asdf-haxe](https://github.com/asdf-community/asdf-haxe)
-- [jasononeil/hvm](https://github.com/jasononeil/hvm)
-- [dpeek/hvm](https://github.com/dpeek/hvm)
-
-## Scala
-
-- [Official](https://github.com/lampepfl/dotty)
-- [asdf-scala](https://github.com/sylph01/asdf-scala)
-- [sdkman-scala](https://sdkman.io/sdks#scala)
-
-## Racket
-
-- [Official](https://github.com/racket/racket)
-- [asdf-racket](https://github.com/asdf-community/asdf-racket)
-
-## GraalVM
-
-- [Official](https://github.com/oracle/graal)
-- [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)
-
-## Clojure
-
-- [Official](https://github.com/clojure/clojure)
-- [clojure](https://github.com/asdf-community/asdf-clojure)
-
-## lfe
-
-## sml
-
-- [Official](https://smlnj.org)
-- [asdf-sml](https://github.com/asdf-community/asdf-sml)
-
-## Dotty
-
-- [Official](https://github.com/lampepfl/dotty)
-- [asdf-dotty](https://github.com/asdf-community/asdf-dotty)
-- [dvm](https://github.com/d-ogxwx/dvm)
-
-## Neko
-
-- [Official](https://github.com/HaxeFoundation/neko)
-- [asdf-neko](https://github.com/asdf-community/asdf-neko)
-
-## mlton
-
-- [Official](https://github.com/MLton/mlton)
-- [asdf-mlton](https://github.com/asdf-community/asdf-mlton)
-
-## Groovy
-
-- [Official](https://github.com/apache/groovy)
-- [asdf-groovy](https://github.com/weibemoura/asdf-groovy)
-- [sdkman-groovy](https://sdkman.io/sdks#groovy)
-
-## Peco
-
-- [Official](https://github.com/peco/peco)
-- [asdf-peco](https://github.com/asdf-community/asdf-peco)
-
-## Lean
-
-- [Official](https://github.com/leanprover/lean4)
-- [asdf-lean](https://github.com/asdf-community/asdf-lean)
-
-## Zig
-
-- [Official](https://github.com/ziglang/zig)
-- [asdf-zig](https://github.com/cheetah/asdf-zig)
-
-## idris
-
-- [Official](https://www.idris-lang.org)
-- [adsf-idris](https://github.com/asdf-community/asdf-idris)
-
-## idris2
-
-- [Official](https://github.com/idris-lang/Idris2)
-- [asdf-idris2](https://github.com/asdf-community/asdf-idris2)
-
-## Please
-
-- [Official](https://github.com/thought-machine/please)
-- [asdf-please](https://github.com/asdf-community/asdf-please)
-
-## fstar
-
-- [Official](https://github.com/FStarLang/FStar)
-- [asdf-fstar](https://github.com/asdf-community/asdf-fstar)
-
-## flutter
-
-- [fvm](https://github.com/befovy/fvm)
-
-## scheme
-
-## Yarn
-
-- [yarn](https://github.com/tophat/yvm)
-
-## Cue
-
-- [cue-lang](https://github.com/cue-lang/cue)
-- [asdf-cue](https://github.com/asdf-community/asdf-cue)
-
-## ChezScheme
-
-- [ChezScheme](https://github.com/asdf-community/asdf-chezscheme)
-
-## Dasel
-
-## Arkade
-
-- [Official](https://github.com/alexellis/arkade)
-
-## Solidity
-
-- [Solidity](https://github.com/ethereum/solidity)
-- [svm](https://github.com/web3j/svm)
+## To sort
+
+| Runtime  | Current Support | Official Download                                        | Replaces                                                                                                                                                                                              |
+| -------- | --------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R        | None            | [Official](https://www.r-project.org)                    | [asdf-r](https://github.com/asdf-community/asdf-R), [renv](https://github.com/rstudio/renv), [Renv](https://github.com/viking/Renv)                                                                   |
+| Julia    | None            | [Official](https://github.com/JuliaLang/julia)           | [asdf-julia](https://github.com/rkyleg/asdf-julia), [juliavm](https://github.com/pmargreff/juliavm)                                                                                                   |
+| Java     | None            | [Official](https://github.com/openjdk/jdk)               | [asdf-java](https://github.com/halcyon/asdf-java), [jenv.be](https://www.jenv.be), [sdkman](https://sdkman.io), [jenv](https://github.com/linux-china/jenv), [jabba](https://github.com/shyiko/jabba) |
+| erlang   | None            | [Official](https://github.com/erlang/otp)                | [asdf-erlang](https://github.com/asdf-vm/asdf-erlang)                                                                                                                                                 |
+| Elixir   | None            | [Official](https://github.com/elixir-lang/elixir)        | [asdf-elixir](https://github.com/asdf-vm/asdf-elixir), [exenv](https://github.com/exenv/exenv), [kiex](https://github.com/taylor/kiex)                                                                |
+| kubectl  | None            | [Official](https://github.com/kubernetes/kubectl)        | [asdf-kubectl](https://github.com/asdf-community/asdf-kubectl), [kubenvz](https://github.com/nutellinoit/kubenvz), [kerl](https://github.com/kerl/kerl)                                               |
+| Haskell  | None            | [Official](https://github.com/ghc/ghc)                   | [asdf-haskell](https://github.com/asdf-community/asdf-haskell)                                                                                                                                        |
+| gleam    | None            | [Official](https://github.com/gleam-lang/gleam)          | [asdf-gleam](https://github.com/asdf-community/asdf-gleam)                                                                                                                                            |
+| kotlin   | None            | [Official](https://github.com/JetBrains/kotlin)          | [asdf-kotlin](https://github.com/asdf-community/asdf-kotlin), [kotlin-sdkman](https://sdkman.io/sdks#kotlin)                                                                                          |
+| Elm      | None            | [Official](https://github.com/elm/compiler)              | [asdf-elm](https://github.com/asdf-community/asdf-elm)                                                                                                                                                |
+| Haxe     | None            | [Official](https://haxe.org/download)                    | [asdf-haxe](https://github.com/asdf-community/asdf-haxe), [jasononeil/hvm](https://github.com/jasononeil/hvm), [dpeek/hvm](https://github.com/dpeek/hvm)                                              |
+| Scala    | None            | [Official](https://github.com/lampepfl/dotty)            | [asdf-scala](https://github.com/sylph01/asdf-scala), [sdkman-scala](https://sdkman.io/sdks#scala)                                                                                                     |
+| Racket   | None            | [Official](https://github.com/racket/racket)             | [asdf-racket](https://github.com/asdf-community/asdf-racket)                                                                                                                                          |
+| GraalVM  | None            | [Official](https://github.com/oracle/graal)              | [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)                                                                                                                                        |
+| Clojure  | None            | [Official](https://github.com/clojure/clojure)           | [clojure](https://github.com/asdf-community/asdf-clojure)                                                                                                                                             |
+| sml      | None            | [Official](https://smlnj.org)                            | [asdf-sml](https://github.com/asdf-community/asdf-sml)                                                                                                                                                |
+| Dotty    | None            | [Official](https://github.com/lampepfl/dotty)            | [asdf-dotty](https://github.com/asdf-community/asdf-dotty), [dvm](https://github.com/d-ogxwx/dvm)                                                                                                     |
+| Neko     | None            | [Official](https://github.com/HaxeFoundation/neko)       | [asdf-neko](https://github.com/asdf-community/asdf-neko)                                                                                                                                              |
+| mlton    | None            | [Official](https://github.com/MLton/mlton)               | [asdf-mlton](https://github.com/asdf-community/asdf-mlton)                                                                                                                                            |
+| Groovy   | None            | [Official](https://github.com/apache/groovy)             | [asdf-groovy](https://github.com/weibemoura/asdf-groovy), [sdkman-groovy](https://sdkman.io/sdks#groovy)                                                                                              |
+| Peco     | None            | [Official](https://github.com/peco/peco)                 | [asdf-peco](https://github.com/asdf-community/asdf-peco)                                                                                                                                              |
+| Lean     | None            | [Official](https://github.com/leanprover/lean4)          | [asdf-lean](https://github.com/asdf-community/asdf-lean)                                                                                                                                              |
+| Zig      | None            | [Official](https://github.com/ziglang/zig)               | [asdf-zig](https://github.com/cheetah/asdf-zig)                                                                                                                                                       |
+| idris    | None            | [Official](https://www.idris-lang.org)                   | [adsf-idris](https://github.com/asdf-community/asdf-idris)                                                                                                                                            |
+| idris2   | None            | [Official](https://github.com/idris-lang/Idris2)         | [asdf-idris2](https://github.com/asdf-community/asdf-idris2)                                                                                                                                          |
+| Please   | None            | [Official](https://github.com/thought-machine/please)    | [asdf-please](https://github.com/asdf-community/asdf-please)                                                                                                                                          |
+| fstar    | None            | [Official](https://github.com/FStarLang/FStar)           | [asdf-fstar](https://github.com/asdf-community/asdf-fstar)                                                                                                                                            |
+| Solidity | None            | [Solidity](https://github.com/ethereum/solidity)         | [asdf-solidity](https://github.com/refillic/asdf-solidity), [svm](https://github.com/web3j/svm)                                                                                                       |
+| Flutter  | None            | [Official](https://docs.flutter.dev/get-started/install) | [asdf-flutter](https://github.com/oae/asdf-flutter), [fvm](https://github.com/befovy/fvm)                                                                                                             |
+| Cue      | None            | [Official](https://cuelang.org)                          | [asdf-cue](https://github.com/asdf-community/asdf-cue),[cue-lang](https://github.com/cue-lang/cue)                                                                                                    |
+| LFE      | None            | [Official](https://lfe.io)                               | [asdf-lfe](https://github.com/asdf-community/asdf-lfe)                                                                                                                                                |
+| Yarn     | None            | [yarn](https://github.com/tophat/yvm)                    | [asdf-yarn](https://github.com/twuni/asdf-yarn), [YVM](https://github.com/tophat/yvm)                                                                                                                 |
+
+### Nuances
+
+kubectl: Not yet supports `.kubectl_version`
+
+## Misc
 
 - [esy](https://github.com/esy/esy)
+- [ChezScheme](https://github.com/asdf-community/asdf-chezscheme)
+- [Arkade](https://github.com/alexellis/arkade)
 - [sdkman](https://sdkman.io)
+- opam
+- fortran
+- lua
+- Dasel
 
-## opam, fortran, lua
+## Out of Scope
 
-## elasticsearch, ninja, neko, alp, meson, trident, ocaml, other sdkmans, poetry, typescript, hhvm, rust all out of scope
+- Rust because `rustup` is actually good
+- elasticsearch, ninja, neko, meson, trident, ocaml, other, poetry, typescript, hhvm all out of scope
