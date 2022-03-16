@@ -5,9 +5,7 @@ if (import.meta.main) {
 }
 
 async function parseTerraform() {
-	const releases = await getGithubReleases('hashicorp/terraform', {
-		Authorization: `token ${await getToken()}`,
-	})
+	const releases = await getGithubReleases('hashicorp/terraform')
 
 	for (const release of releases) {
 		if (!release.name) {
@@ -24,8 +22,8 @@ async function parseTerraform() {
 			['solaris', ['amd64']],
 		]) {
 			for (const arch of arches) {
-				const download_url = `https://releases.hashicorp.com/terraform/${version}/terraform_${version}_${os}_${arch}.zip`
-				console.info(`Boundary|${version}|${os}|${arch}|${download_url}`)
+				const downloadUrl = `https://releases.hashicorp.com/terraform/${version}/terraform_${version}_${os}_${arch}.zip`
+				console.info(`Boundary|${version}|${os}|${arch}|${downloadUrl}`)
 			}
 		}
 	}

@@ -5,9 +5,7 @@ if (import.meta.main) {
 }
 
 async function parsePacker() {
-	const releases = await getGithubReleases('hashicorp/packer', {
-		Authorization: `token ${await getToken()}`,
-	})
+	const releases = await getGithubReleases('hashicorp/packer')
 
 	for (const release of releases) {
 		if (!release.name) {
@@ -24,8 +22,8 @@ async function parsePacker() {
 			['solaris', ['amd64']],
 		]) {
 			for (const arch of arches) {
-				const download_url = `https://releases.hashicorp.com/packer/${version}/packer_${version}_${os}_${arch}.zip`
-				console.info(`Packer|${version}|${os}|${arch}|${download_url}`)
+				const downloadUrl = `https://releases.hashicorp.com/packer/${version}/packer_${version}_${os}_${arch}.zip`
+				console.info(`Packer|${version}|${os}|${arch}|${downloadUrl}`)
 			}
 		}
 	}

@@ -23,7 +23,7 @@ async function parseCrystal() {
 			const asset_name: string = asset.name
 			const download_count = asset.download_count
 			const created_at: string = asset.created_at
-			const download_url: string = asset.browser_download_url
+			const downloadUrl: string = asset.browser_downloadUrl
 			const result =
 				/^crystal[_-](.+?)-1[_-](?:(?<os>.+?)-)?(?<arch>.+?)\./u.exec(
 					asset_name
@@ -44,7 +44,7 @@ async function parseCrystal() {
 				continue
 			}
 			console.info(
-				`Crystal|v${version}|${os}|${arch}|${download_url}|${created_at}#${download_count}`
+				`Crystal|v${version}|${os}|${arch}|${downloadUrl}|${created_at}#${download_count}`
 			)
 		}
 	}

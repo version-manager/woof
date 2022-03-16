@@ -5,7 +5,7 @@ Woof aims to support the following languages / package managers / programs
 There are three levels of support:
 
 - None
-- Experimental (currently there is a fetcher/module, but hasn't been tested a lot)
+- Experimental (currently there is a fetcher and/or module, but hasn't been tested a lot)
 - Testing (works for the most common platforms, arches, and versions, but probably bugs on more esoteric combinations)
 - Complete (fully complete with tests)
 
@@ -19,6 +19,9 @@ There are three levels of support:
 | Crystal  | Testing         | [Official](https://github.com/crystal-lang/crystal) | [asdf-crystal](https://github.com/asdf-community/asdf-crystal), [crenv](https://github.com/crenv/crenv)                                                                                                                                                                                                                                                                                                                                                                                |
 | Nim      | Testing         | [Official](https://github.com/nim-lang/Nim)         | [asdf-nim](https://github.com/asdf-community/asdf-nim), [choosenim](https://github.com/dom96/choosenim)                                                                                                                                                                                                                                                                                                                                                                                |
 | Dart     | Testing         | [Official](https://dart.dev)                        | [asdf-dart](https://github.com/PatOConnor43/asdf-dart), [dvm](https://github.com/cbracken/dvm)                                                                                                                                                                                                                                                                                                                                                                                         |
+| Zig      | Experimental    | [Official](https://github.com/ziglang/zig)          | [asdf-zig](https://github.com/cheetah/asdf-zig)                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Haxe     | Experimental    | [Official](https://haxe.org/download)               | [asdf-haxe](https://github.com/asdf-community/asdf-haxe), [jasononeil/hvm](https://github.com/jasononeil/hvm), [dpeek/hvm](https://github.com/dpeek/hvm)                                                                                                                                                                                                                                                                                                                               |
+| Elm      | Experimental    | [Official](https://github.com/elm/compiler)         | [asdf-elm](https://github.com/asdf-community/asdf-elm)                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 ## Buildfull Programming Languages
 
@@ -39,7 +42,7 @@ This requires a modification to the module API, support for patches
 | Consul    | Experimental    | [Official](https://www.consul.io/downloads)          | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
 | Nomad     | Experimental    | [Official](https://www.nomad.io/downloads)           | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
 | Packer    | Experimental    | [Official](https://www.packer.io/downloads)          | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
-| Serf      | None            | [Official](https://www.serf.io/downloads.html)       | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
+| Serf      | Experimental    | [Official](https://www.serf.io/downloads.html)       | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
 | Terraform | Experimental    | [Official](https://www.terraform.io/downloads)       | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp), [tfenfv](https://github.com/tfutils/tfenv), [terraenv](https://github.com/aaratn/terraenv) |
 | Vagrant   | Experimental    | [Official](https://www.vagrant.io/downloads)         | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
 | Vault     | Experimental    | [Official](https://www.vaultproject.io/downloads)    | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
@@ -49,9 +52,9 @@ This requires a modification to the module API, support for patches
 
 Node: Not yet `.node-version`, and `.nvmrc`
 
-Deno: Not yet Supports `.dvmrc`
+Deno: Not yet `.dvmrc`
 
-Ruby: Not yet supports `.ruby-version` and `rvmrc`
+Ruby: Not yet `.ruby-version` and `.rvmrc`
 
 ## To sort
 
@@ -66,8 +69,6 @@ Ruby: Not yet supports `.ruby-version` and `rvmrc`
 | Haskell  | None            | [Official](https://github.com/ghc/ghc)                   | [asdf-haskell](https://github.com/asdf-community/asdf-haskell)                                                                                                                                        |
 | gleam    | None            | [Official](https://github.com/gleam-lang/gleam)          | [asdf-gleam](https://github.com/asdf-community/asdf-gleam)                                                                                                                                            |
 | kotlin   | None            | [Official](https://github.com/JetBrains/kotlin)          | [asdf-kotlin](https://github.com/asdf-community/asdf-kotlin), [kotlin-sdkman](https://sdkman.io/sdks#kotlin)                                                                                          |
-| Elm      | None            | [Official](https://github.com/elm/compiler)              | [asdf-elm](https://github.com/asdf-community/asdf-elm)                                                                                                                                                |
-| Haxe     | None            | [Official](https://haxe.org/download)                    | [asdf-haxe](https://github.com/asdf-community/asdf-haxe), [jasononeil/hvm](https://github.com/jasononeil/hvm), [dpeek/hvm](https://github.com/dpeek/hvm)                                              |
 | Scala    | None            | [Official](https://github.com/lampepfl/dotty)            | [asdf-scala](https://github.com/sylph01/asdf-scala), [sdkman-scala](https://sdkman.io/sdks#scala)                                                                                                     |
 | Racket   | None            | [Official](https://github.com/racket/racket)             | [asdf-racket](https://github.com/asdf-community/asdf-racket)                                                                                                                                          |
 | GraalVM  | None            | [Official](https://github.com/oracle/graal)              | [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)                                                                                                                                        |
@@ -79,7 +80,6 @@ Ruby: Not yet supports `.ruby-version` and `rvmrc`
 | Groovy   | None            | [Official](https://github.com/apache/groovy)             | [asdf-groovy](https://github.com/weibemoura/asdf-groovy), [sdkman-groovy](https://sdkman.io/sdks#groovy)                                                                                              |
 | Peco     | None            | [Official](https://github.com/peco/peco)                 | [asdf-peco](https://github.com/asdf-community/asdf-peco)                                                                                                                                              |
 | Lean     | None            | [Official](https://github.com/leanprover/lean4)          | [asdf-lean](https://github.com/asdf-community/asdf-lean)                                                                                                                                              |
-| Zig      | None            | [Official](https://github.com/ziglang/zig)               | [asdf-zig](https://github.com/cheetah/asdf-zig)                                                                                                                                                       |
 | idris    | None            | [Official](https://www.idris-lang.org)                   | [adsf-idris](https://github.com/asdf-community/asdf-idris)                                                                                                                                            |
 | idris2   | None            | [Official](https://github.com/idris-lang/Idris2)         | [asdf-idris2](https://github.com/asdf-community/asdf-idris2)                                                                                                                                          |
 | Please   | None            | [Official](https://github.com/thought-machine/please)    | [asdf-please](https://github.com/asdf-community/asdf-please)                                                                                                                                          |

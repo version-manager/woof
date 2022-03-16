@@ -44,6 +44,7 @@ Architecture must be one of
 - `ppc64` (nodejs)
 - `ppc64le` (go, nodejs)
 - `s390x` (go, nodejs)
+- `riscv64` (zig)
 
 The operating system and architecture _must_ be normalized
 

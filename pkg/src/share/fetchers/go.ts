@@ -23,7 +23,7 @@ async function parseGo() {
 			continue
 		}
 
-		const download_url = url.slice(0, -3) + asset_name
+		const downloadUrl = url.slice(0, -3) + asset_name
 
 		let os = result?.groups?.os
 		if (!os) {
@@ -49,6 +49,6 @@ async function parseGo() {
 			arch = 'armv6'
 		}
 
-		console.info(`Go|v${version}|${os}|${arch}|${download_url}`)
+		console.info(`Go|v${version}|${os}|${arch}|${downloadUrl}`)
 	}
 }

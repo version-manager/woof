@@ -6,9 +6,7 @@ if (import.meta.main) {
 
 async function parseNomad() {
 	const product = 'nomad'
-	const releases = await getGithubReleases(`hashicorp/${product}`, {
-		Authorization: `token ${await getToken()}`,
-	})
+	const releases = await getGithubReleases(`hashicorp/${product}`)
 
 	for (const release of releases) {
 		if (!release.name) {
@@ -22,8 +20,8 @@ async function parseNomad() {
 			['linux', ['386', 'amd64', 'arm', 'arm64']],
 		]) {
 			for (const arch of arches) {
-				const download_url = `https://releases.hashicorp.com/${product}/${version}/${product}_${version}_${os}_${arch}.zip`
-				console.info(`Nomad|${version}|${os}|${arch}|${download_url}`)
+				const downloadUrl = `https://releases.hashicorp.com/${product}/${version}/${product}_${version}_${os}_${arch}.zip`
+				console.info(`Nomad|${version}|${os}|${arch}|${downloadUrl}`)
 			}
 		}
 	}

@@ -5,9 +5,7 @@ if (import.meta.main) {
 }
 
 async function parseVault() {
-	const releases = await getGithubReleases('hashicorp/vault', {
-		Authorization: `token ${await getToken()}`,
-	})
+	const releases = await getGithubReleases('hashicorp/vault')
 
 	for (const release of releases) {
 		if (!release.name) {
@@ -25,8 +23,8 @@ async function parseVault() {
 			['solaris', ['amd64']],
 		]) {
 			for (const arch of arches) {
-				const download_url = `https://releases.hashicorp.com/vault/${version}/vault_${version}_${os}_${arch}.zip`
-				console.info(`Vault|${version}|${os}|${arch}|${download_url}`)
+				const downloadUrl = `https://releases.hashicorp.com/vault/${version}/vault_${version}_${os}_${arch}.zip`
+				console.info(`Vault|${version}|${os}|${arch}|${downloadUrl}`)
 			}
 		}
 	}

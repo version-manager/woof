@@ -1,0 +1,27 @@
+{
+	"id": 19030,
+	"name": "nim",
+	"name_pretty": "Nim",
+	"versions": [
+		{
+			"version": "0.1.0",
+			"supported_platforms": [
+				{
+					"os": "freebsd",
+					"arch": "x86_64"
+				},
+				{
+					"os": "macos",
+					"arch": "x86_64"
+				},
+				{
+					"os": "macos",
+					"arch": "aarch64"
+				}
+			],
+			"vendor": {
+				"eol": "date"
+			}
+		}
+	]
+}

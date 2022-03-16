@@ -1,13 +1,11 @@
-import { die, getToken, getGithubReleases } from './util/util.ts'
+import { die, getGithubReleases } from './util/util.ts'
 
 if (import.meta.main) {
 	await parseBoundary()
 }
 
 async function parseBoundary() {
-	const releases = await getGithubReleases('hashicorp/boundary', {
-		Authorization: `token ${await getToken()}`,
-	})
+	const releases = await getGithubReleases('hashicorp/boundary')
 
 	for (const release of releases) {
 		if (!release.name) {
@@ -24,8 +22,8 @@ async function parseBoundary() {
 			['solaris', ['amd64']],
 		]) {
 			for (const arch of arches) {
-				const download_url = `https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${os}_${arch}.zip`
-				console.info(`Boundary|${version}|${os}|${arch}|${download_url}`)
+				const downloadUrl = `https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${os}_${arch}.zip`
+				console.info(`Boundary|${version}|${os}|${arch}|${downloadUrl}`)
 			}
 		}
 	}

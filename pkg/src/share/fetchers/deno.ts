@@ -24,7 +24,7 @@ async function parseDeno() {
 			const asset_name: string = asset.name
 			const download_count = asset.download_count
 			const created_at: string = asset.created_at
-			const download_url: string = asset.browser_download_url
+			const downloadUrl: string = asset.browser_downloadUrl
 			let result: RegExpExecArray | null
 			if (
 				version.startsWith('v0.') &&
@@ -54,7 +54,7 @@ async function parseDeno() {
 			}
 
 			console.info(
-				`Deno|${version}|${os}|${arch}|${download_url}|${created_at}#${download_count}`
+				`Deno|${version}|${os}|${arch}|${downloadUrl}|${created_at}#${download_count}`
 			)
 		}
 	}

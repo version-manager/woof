@@ -5,9 +5,7 @@ if (import.meta.main) {
 }
 
 async function parseWaypoint() {
-	const releases = await getGithubReleases('hashicorp/waypoint', {
-		Authorization: `token ${await getToken()}`,
-	})
+	const releases = await getGithubReleases('hashicorp/waypoint')
 
 	for (const release of releases) {
 		if (!release.name) {
@@ -21,8 +19,8 @@ async function parseWaypoint() {
 			['linux', ['386', 'amd64', 'arm', 'arm64']],
 		]) {
 			for (const arch of arches) {
-				const download_url = `https://releases.hashicorp.com/waypoint/${version}/waypoint_${version}_${os}_${arch}.zip`
-				console.info(`Waypoint|${version}|${os}|${arch}|${download_url}`)
+				const downloadUrl = `https://releases.hashicorp.com/waypoint/${version}/waypoint_${version}_${os}_${arch}.zip`
+				console.info(`Waypoint|${version}|${os}|${arch}|${downloadUrl}`)
 			}
 		}
 	}
