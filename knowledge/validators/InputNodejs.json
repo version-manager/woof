@@ -1,0 +1,53 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"required": ["version", "date", "files", "v8", "lts", "security"],
+		"properties": {
+			"version": {
+				"type": "string"
+			},
+			"date": {
+				"type": "string"
+			},
+			"files": {
+				"type": "array",
+				"items": {
+					"type": "string"
+				}
+			},
+			"npm": {
+				"type": "string"
+			},
+			"v8": {
+				"type": "string"
+			},
+			"uv": {
+				"type": "string"
+			},
+			"zlib": {
+				"type": "string"
+			},
+			"openssl": {
+				"type": "string"
+			},
+			"modules": {
+				"type": "string"
+			},
+			"lts": {
+				"oneOf": [
+					{
+						"type": "boolean"
+					},
+					{
+						"type": "string"
+					}
+				]
+			},
+			"security": {
+				"type": "boolean"
+			}
+		}
+	}
+}

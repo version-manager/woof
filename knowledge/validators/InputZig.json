@@ -1,0 +1,46 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "object",
+	"patternProperties": {
+		"^master$": {
+			"$ref": "#/definitions/ReleaseInfo"
+		},
+		"^.*?\\..*$": {
+			"$ref": "#/definitions/ReleaseInfo"
+		}
+	},
+	"definitions": {
+		"ReleaseInfo": {
+			"type": "object",
+			"patternProperties": {
+				"^version$": {
+					"type": "string"
+				},
+				"^date$": {
+					"type": "string"
+				},
+				"^docs$": {
+					"type": "string"
+				},
+				"^stdDocs$": {
+					"type": "string"
+				},
+				"^.*?-.*$": {
+					"type": "object",
+					"properties": {
+						"additionalProperties": false,
+						"tarball": {
+							"type": "string"
+						},
+						"shasum": {
+							"type": "string"
+						},
+						"size": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		}
+	}
+}

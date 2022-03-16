@@ -1,7 +1,13 @@
 # shellcheck shell=bash
 
-task.knowledge() {
-	cd ./knowledge/language-releases
+task.knowledge:() {
+	cd ./knowledge
+
+	ajv validate -s ./validators/inputNodejs.json -d ./input/NodejsExample.json
+	ajv validate -s ./validators/InputZig.json -d ./input/ZigExample.json
+
+	json2ts --input ./validators/InputNodejs.json --output ./types/InputNodejs.d.ts
+	json2ts --input ./validators/InputZig.json --output ./types/InputZig.d.ts
 
 	deno run --allow-env --allow-net --allow-read --alow-write ./main.ts
 }

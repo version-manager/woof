@@ -1,0 +1,45 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "object",
+	"properties": {
+		"name_id": {
+			"type": "string"
+		},
+		"name_pretty": {
+			"type": "string"
+		},
+		"releases": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"version": {
+						"type": "string"
+					},
+					"platforms": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							"arch": {
+								"type": "string"
+							},
+							"os": {
+								"type": "string"
+							},
+							"download_url": {
+								"type": "string"
+							},
+							"download_sha256sum": {
+								"type": "string"
+							},
+							"download_size": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
