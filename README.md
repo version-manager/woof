@@ -16,7 +16,7 @@ STATUS: IN DEVELOPMENT
   - [Guix](https://guix.gnu.org/en/download)
   - [asdf](https://github.com/asdf-vm/asdf)
   - [sdkman](https://github.com/sdkman/sdkman-cli)
-  - Containers
+  - [Docker](https://www.docker.com) (or containers in general)
 
 ## Features
 

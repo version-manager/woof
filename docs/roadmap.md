@@ -107,7 +107,7 @@ kubectl: Not yet supports `.kubectl_version`
 - C
 - C++
 - Objective-C?
-- Bash
+- Bash~
 
 ## Out of Scope
 

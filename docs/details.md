@@ -2,28 +2,20 @@
 
 ## Approach
 
-There are two main approaches: using shims and not.
+When creating version managers, there are two approaches: shims and symlinks
 
-## Shims
+### Shims
 
-In essence, the shim layer is an indirection layer that facilities opening the proper verison of node, dependent on the current context. The current context can include the current tty/pty, the value for 'global' version for a particular shell lanaguage, etc. I don't like shims, primarily because they incur an extra execution of the shell (usually `dash`, but it can be `bash`). This has an extra startup cost, and would influence things like benchmark compilation times. It also feels dirty to me
+In essence, the shim layer is an indirection layer that facilities executing the proper version. This is usually implemented with some sort of shell script. The version is derived from the current context, which can include the current tty/pty, current directory, or global version. I don't like shims, primarily because they incur a time penalty; that is, the startup initialization of a shell. This would influence things like benchmarks. This approach also feels dirty to me.
 
-## No shims
+### Symlinks
 
-Here, distinction between versions is usually done through symlinks and a hash map of the current tty/pty and the current version
+There is no startup penalty for symlinks, unlike shims. The tradeoff is that it is harder to implement when accounting for the current context. Mainly, extra code needs to be evaluated during the initialization of interactive shells (or just the primary login shell).
 
 ## Installing
 
-The installation steps for installing any particular version of any particular module are standardized.
+The installation steps for installing any particular version of any particular module are streamlined.
 
-Functions in modules should call `err.set` and `return` on error. Although the function `m.ensure` is provided, try to use the former functions instead
+Unlike similar projects (`asdf`), all plugins (we call them modules) are installed by default. Only the most popular modules are shown by default as not to overwhelm the user.
 
-### 1. Get version if one isn't already supplied
-
-If a version isn't already supplied on the command line, prompt the user for one. To get the list of all versions for a particular module, the `<module>.matrix` function is called. That function outputs to standard output the format. This is automatically cached for later (at `$XDG_STATE_HOME/woof/cached/<module>-matrix.txt`). Note that the version numbers in this matrix should _always_ begin with `v`
-
-### 2. Install the particular version
-
-Of the specified module, install the specified version. A temporary workspace is created in `$XDG_STATE_HOME/woof/workspace-<module>` to download and extract the content (which is automatically deleted after). In that directory, `<module>.install` is called
-
-After being called, the directory specified by `REPLY_DIR` is moved to its final destination at `$XDG_STATE_HOME/woof/installs/<module>/<vesrion>`
+Not only that, but all code is ran under the same shell context (with the exception of _fetchers_, (of which, many are written for Deno in TypeScript)). Similarly, this contrasts previous approaches since extraneous subshells are minimized to reduce unnecessary performance penalties (especially on platforms like Cygwin, etc.). This also means there is more code reuse between modules
