@@ -5,7 +5,8 @@ if (import.meta.main) {
 }
 
 async function parseConsul() {
-	const releases = await getGithubReleases('hashicorp/consul')
+	const product = 'consol'
+	const releases = await getGithubReleases(`hashicorp/${product}`)
 
 	for (const release of releases) {
 		if (!release.name) {
@@ -21,7 +22,7 @@ async function parseConsul() {
 			['solaris', ['amd64']],
 		]) {
 			for (const arch of arches) {
-				const downloadUrl = `https://releases.hashicorp.com/consul/${version}/consul_${version}_${os}_${arch}.zip`
+				const downloadUrl = `https://releases.hashicorp.com/${product}/${version}/${product}_${version}_${os}_${arch}.zip`
 				console.info(`Consul|${version}|${os}|${arch}|${downloadUrl}`)
 			}
 		}

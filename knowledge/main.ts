@@ -5,7 +5,7 @@ import * as util from './util/util.ts'
 
 const doTransformJson = async (
 	url: string,
-	transformFn: (any) => any,
+	transformFn: (arg0: any) => any,
 	outputFile: string
 ) => {
 	const inputJson = await util.getJson(url)
