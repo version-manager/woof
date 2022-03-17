@@ -13,7 +13,7 @@ export interface OutputSchema {
     platforms: {
       arch: "amd64" | "x86" | "arm64" | "armv7l" | "armv6" | "ppc64" | "ppc64le" | "s390x" | "riscv64";
       os: "linux" | "freebsd" | "openbsd" | "netbsd" | "aix" | "solaris" | "darwin" | "windows";
-      download_url?: string;
+      download_url: string;
       download_sha256sum?: string;
       download_size?: string;
     }[];

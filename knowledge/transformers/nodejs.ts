@@ -1,7 +1,7 @@
 import * as util from '../util/util.ts'
-import type { OutputSchema } from '../types/OutputSchema.d.ts'
+import type { OutputSchema } from '../types/Output.generated.d.ts'
 
-export function transformNodejs(inputJson: any) {
+export function transformNodejs(mirror: string, inputJson: any) {
 	const outputJson: OutputSchema = {
 		name_id: 'nodejs',
 		name_pretty: 'NodeJS',
@@ -90,11 +90,10 @@ export function transformNodejs(inputJson: any) {
 				case 'sunos-x86':
 					continue
 				default:
-					console.log('exiting', file)
+					console.log('exitingggg', file)
 					Deno.exit(1)
 			}
 
-			const mirror = 'https://nodejs.org'
 			platforms.push({
 				arch,
 				os,

@@ -1,4 +1,4 @@
-import type { OutputSchema } from '../types/OutputSchema.d.ts'
+import type { OutputSchema } from '../types/Output.generated.d.ts'
 
 type InputSchema = {
 	[key: string]: {
@@ -16,7 +16,8 @@ type InputSchema = {
 	}
 }
 
-export function transformZig(inputJson: InputSchema) {
+// TODO: mirror not used
+export function transformZig(mirror: string, inputJson: InputSchema) {
 	const outputJson: OutputSchema = {
 		name_id: 'zig',
 		name_pretty: 'Zig',
@@ -79,7 +80,7 @@ export function transformZig(inputJson: InputSchema) {
 				case 'aarch64-windows':
 					continue
 				default:
-					console.log('error', platformName)
+					console.log('erroruu', platformName)
 					Deno.exit(1) // EXIT
 			}
 
@@ -100,20 +101,3 @@ export function transformZig(inputJson: InputSchema) {
 
 	return outputJson
 }
-
-// const releases = await getJson<ZigReleases>(`${mirror}/download/index.json`)
-
-// 	for (const [version, versionInfo] of Object.entries(releases)) {
-// 		for (const [os, arches] of [
-// 			['darwin', ['x84_64', 'aarch64']],
-// 			['linux', ['i386', 'x86_64', 'armv7a', 'aarch64', 'riscv64']],
-// 			['freebsd', ['x86_64']],
-// 		]) {
-// 			for (const arch of arches) {
-// 				if (versionInfo?.[`${arch}-${os}`]) {
-// 					const downloadUrl = `${mirror}/download/${version}/zig-${os}-${arch}-${version}.tar.xz`
-// 					console.info(`Zig|${version}|${os}|${arch}|${downloadUrl}`)
-// 				}
-// 			}
-// 		}
-// 	}

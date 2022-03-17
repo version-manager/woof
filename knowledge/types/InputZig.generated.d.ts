@@ -5,14 +5,14 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface InputZig {
+export interface InputZigSchema {
   [k: string]: unknown;
 }
 /**
- * This interface was referenced by `InputZig`'s JSON-Schema definition
+ * This interface was referenced by `InputZigSchema`'s JSON-Schema definition
  * via the `patternProperty` "^master$".
  *
- * This interface was referenced by `InputZig`'s JSON-Schema definition
+ * This interface was referenced by `InputZigSchema`'s JSON-Schema definition
  * via the `patternProperty` "^.*?\..*$".
  */
 export interface ReleaseInfo {

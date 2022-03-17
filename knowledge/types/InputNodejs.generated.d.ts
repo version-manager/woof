@@ -5,7 +5,7 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type InputNodejs = {
+export type InputNodejsSchema = {
   version: string;
   date: string;
   files: string[];

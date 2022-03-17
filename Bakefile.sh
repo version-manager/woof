@@ -1,14 +1,17 @@
 # shellcheck shell=bash
 
-task.knowledge:() {
+task.knowledge() {
 	cd ./knowledge
 
-	ajv validate -s ./validators/InputNodejs.json -d ./input/NodejsExample.json
-	ajv validate -s ./validators/InputZig.json -d ./input/ZigExample.json
+	# validate
+	for file_name in InputNodejs InputZig; do
+		ajv validate -s "./validators/$file_name.schema.json" -d "./validators/$file_name.example.json"
+	done
 
-	json2ts --input ./validators/InputNodejs.json --output ./types/InputNodejs.d.ts
-	json2ts --input ./validators/InputZig.json --output ./types/InputZig.d.ts
-	json2ts --input ./validators/OutputSchema.json --output ./types/OutputSchema.d.ts
+	# json to typescript types
+	for file_name in InputNodejs InputZig Output; do
+		json2ts --input "./validators/$file_name.schema.json" --output "./types/$file_name.generated.d.ts"
+	done
 
 	deno run --allow-env --allow-net --allow-read --allow-write ./main.ts
 }
