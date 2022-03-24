@@ -2,18 +2,15 @@
 
 task.knowledge() {
 	cd ./knowledge
+	./knowledge "$@"
 
-	# validate
-	for file_name in InputNodejs InputZig; do
-		ajv validate -s "./validators/$file_name.schema.json" -d "./validators/$file_name.example.json"
-	done
+	
 
 	# json to typescript types
 	for file_name in InputNodejs InputZig Output; do
 		json2ts --input "./validators/$file_name.schema.json" --output "./types/$file_name.generated.d.ts"
 	done
 
-	deno run --allow-env --allow-net --allow-read --allow-write ./main.ts
 }
 
 task.generate() {

@@ -94,7 +94,9 @@ export async function getToken(): Promise<string> {
 		return await Deno.readTextFile(tokenFile)
 	} catch {
 		// TODO
-		die('Please create a token file at .local/state/woof/token')
+		die(
+			'Please create a token file at .local/state/woof/token (https://github.com/settings/tokens)'
+		)
 	}
 }
 
