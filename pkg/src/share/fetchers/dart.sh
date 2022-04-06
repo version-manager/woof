@@ -1,7 +1,9 @@
 # shellcheck shell=bash
 source "${0%/*}/util/util.sh"
 
-parseDart() {
+# FIXME deprecate
+
+parse_dart() {
 	local dart_url='https://storage.googleapis.com/storage/v1/b/dart-archive/o?prefix=channels/stable/release/&delimiter=/'
 	local channel_prefix='https://storage.googleapis.com/dart-archive/channels'
 
@@ -29,5 +31,5 @@ parseDart() {
 }
 
 if isMain; then
-	parseDart "$@"
+	parse_dart "$@"
 fi
