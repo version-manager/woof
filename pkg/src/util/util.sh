@@ -1,10 +1,7 @@
 # shellcheck shell=bash
 
 util.init() {
-	trap tty.fullscreen_init SIGCONT
-	trap 'tty.fullscreen_deinit; exit' EXIT SIGHUP SIGABRT SIGINT SIGQUIT SIGTERM SIGTSTP
-
-	trap trap.sigwinch SIGWINCH
+	core.trap_add 'trap.sigwinch' 'SIGWINCH'
 	trap.sigwinch() {
 		read -r global_tty_height global_tty_width < <(stty size)
 	}
@@ -21,10 +18,10 @@ util.array_filter_out() {
 		if [[ ${array[i]} != $pattern ]]; then
 			new_array+=("${array[i]}")
 		fi
-	done; unset i
+	done; unset -v i
 
 	array=("${new_array[@]}")
-	unset new_array
+	unset -v new_array
 }
 
 util.run_function() {
@@ -137,7 +134,7 @@ util.get_module_data() {
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
-	
+
 	local data_file="$install_dir/$version_string/data.txt"
 	local key= values=
 	while IFS='=' read -r key values; do

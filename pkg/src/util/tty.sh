@@ -1,27 +1,22 @@
 # shellcheck shell=bash
 
-# TODO: tput optional
+# shellcheck disable=SC2059
 tty.fullscreen_init() {
-	global_stty_saved=$(stty --save)
 	stty -echo
-	tput civis 2>/dev/null # cursor to invisible
-	tput sc # save cursor position
-	tput smcup 2>/dev/null # save screen contents
-
-	printf '\033[3J' # clear
+	term.cursor_hide; printf "$REPLY"
+	term.cursor_savepos; printf "$REPLY"
+	term.screen_save; printf "$REPLY"
+	
+	term.erase_saved_lines; printf "$REPLY"
 	read -r global_tty_height global_tty_width < <(stty size)
 }
 
+# shellcheck disable=SC2059
 tty.fullscreen_deinit() {
-	tput rmcup 2>/dev/null # restore screen contents
-	tput rc # restore cursor position
-	tput cnorm 2>/dev/null # cursor to normal
-	if [ -z "$global_stty_saved" ]; then
-		stty sane
-		print.warn "Variable 'global_stty_saved' is empty. Falling back to 'stty sane'"
-	else
-		stty "$global_stty_saved"
-	fi
+	term.screen_restore; printf "$REPLY"
+	term.cursor_restorepos; printf "$REPLY"
+	term.cursor_show; printf "$REPLY"
+	stty echo
 }
 
 # backwards
@@ -97,14 +92,12 @@ tty.private.print_list() {
 	local start=$((index - (global_tty_height / 2)))
 	local end=$((start + global_tty_height))
 
-	# cursor to home
-	printf '\033[%d;%dH' 0 0 # tput cup 0 0
-
+	term.cursor_to 0 0; printf "$REPLY"
+	
 	local i= str= prefix=
 	for ((i=start; i<end; i++)); do
 		if ((i != start)); then
-			# cursor down one line
-			printf '\e[1B' # tput cud1
+			term.cursor_down 1; printf "$REPLY"
 		fi
 
 		if ((index+1 == i)); then
@@ -120,7 +113,8 @@ tty.private.print_list() {
 			str="${prefix}\033[1;30m~\033[0m"
 		fi
 
-		printf '\r\e[0K' # printf '\r'; tput el
+		printf '\r'
+		term.erase_line_end; printf "$REPLY"
 		# shellcheck disable=SC2059
 		printf "$str"
 	done; unset i
@@ -155,8 +149,18 @@ tty.multiselect() {
 	old_version_index="$REPLY"
 	new_version_index="$old_version_index"
 
-	# TODO: properly deinit on errors etc.
+	# TODO: # trap 'tty.fullscreen_deinit; exit' EXIT SIGHUP SIGABRT SIGINT SIGQUIT SIGTERM SIGTSTP
+	trap.sigint_tty() {
+		tty.fullscreen_deinit
+	}
+	core.trap_add 'trap.sigint_tty' 'EXIT'
+	trap.sigcont_tty() {
+		tty.fullscreen_init
+	}
+	core.trap_add 'trap.sigcont_tty' 'SIGCONT'
+	
 	tty.fullscreen_init
+
 	tty.private.print_list "$new_version_index" "${select_keys_variable[@]}"
 	while :; do
 		if ! read -rsN1 key; then
@@ -228,8 +232,10 @@ tty.multiselect() {
 
 		tty.private.print_list "$new_version_index" "${select_keys_variable[@]}"
 	done
-	unset key
+	unset -v key
 	tty.fullscreen_deinit
+	core.trap_remove 'trap.sigint_tty' 'EXIT'
+	core.trap_remove 'trap.sigcont_tty' 'SIGCONT'
 
 	REPLY="${select_keys_variable[$new_version_index]}"
 }
