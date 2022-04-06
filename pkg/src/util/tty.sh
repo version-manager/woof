@@ -2,7 +2,7 @@
 
 # TODO: tput optional
 tty.fullscreen_init() {
-	global_stty_saved="$(stty --save)"
+	global_stty_saved=$(stty --save)
 	stty -echo
 	tput civis 2>/dev/null # cursor to invisible
 	tput sc # save cursor position

@@ -24,8 +24,11 @@ woof-list() {
 	local module_name="$REPLY"
 
 	if [ "$flag_installed" = 'yes' ]; then
+		var.get_module_install_dir "$module_name"
+		local install_dir="$REPLY"
+
 		core.shopt_push -s nullglob
-		local -a versions=("$WOOF_DATA_HOME/installs/$module_name"/*/)
+		local -a versions=("$install_dir"/*/)
 		core.shopt_pop
 		versions=("${versions[@]%/}")
 		versions=("${versions[@]##*/}")
@@ -41,7 +44,9 @@ woof-list() {
 		local real_os="$REPLY1"
 		local real_arch="$REPLY2"
 
-		local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+		var.get_cached_matrix_file "$module_name"
+		local matrix_file="$REPLY"
+
 		local line=
 		while IFS='|' read -r version os arch url comment; do
 			if [ "$flag_all" == 'yes' ]; then

@@ -35,7 +35,9 @@ helper.determine_version_string() {
 	local module_name="$1"
 	local version_string="$2"
 
-	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+	var.get_cached_matrix_file "$module_name"
+	local matrix_file="$REPLY"
+
 	util.uname_system
 	local real_os="$REPLY1"
 	local real_arch="$REPLY2"
@@ -77,9 +79,12 @@ helper.determine_installed_module_name() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+
 	if [ -z "$module_name" ]; then
 		core.shopt_push -s nullglob
-		local -a module_list=("$WOOF_DATA_HOME/installs"/*/)
+		local -a module_list=("${install_dir%/*}"/*/)
 		core.shopt_pop
 
 		if (( ${#module_list[@]} == 0 )); then
@@ -99,7 +104,7 @@ helper.determine_installed_module_name() {
 		REPLY=$REPLY
 	fi
 
-	if [ ! -d "$WOOF_DATA_HOME/installs/$module_name" ]; then
+	if [ ! -d "$install_dir" ]; then
 		print.die "No versions of module '$module_name' are installed"
 	fi
 }
@@ -109,10 +114,12 @@ helper.determine_installed_version_string() {
 	local module_name="$1"
 	local version_string="$2"
 
-
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+	
 	if [ -z "$version_string" ]; then
 		core.shopt_push -s nullglob
-		local -a versions_list=("$WOOF_DATA_HOME/installs/$module_name"/*/)
+		local -a versions_list=("$install_dir"/*/)
 		core.shopt_pop
 
 		if (( ${#versions_list[@]} == 0 )); then
@@ -135,7 +142,7 @@ helper.determine_installed_version_string() {
 		version_string="$REPLY"
 	fi
 
-	if [ ! -d "$WOOF_DATA_HOME/installs/$module_name/$version_string" ]; then
+	if [ ! -d "$install_dir/$version_string" ]; then
 		print.die "Version '$version_string' is not valid for module '$module_name'"
 	fi
 }
@@ -145,9 +152,11 @@ helper.determine_installed_version_string() {
 helper.create_version_matrix() {
 	local module_name="$1"
 
-	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
-	if [ ! -d "$WOOF_DATA_HOME/cached" ]; then
-		mkdir -p "$WOOF_DATA_HOME/cached"
+	var.get_cached_matrix_file "$module_name"
+	local matrix_file="$REPLY"
+
+	if [ ! -d "${matrix_file%/*}" ]; then
+		mkdir -p "${matrix_file%/*}"
 	fi
 	local use_cache=no
 	if [ -f "$matrix_file" ]; then
@@ -176,4 +185,48 @@ helper.create_version_matrix() {
 
 		unset matrix_string
 	fi
+}
+
+helper.do_all_symlinks() {
+	local module_name="$1"
+	local version_string="$2"
+
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+
+	var.get_symlink_dir 'global' 'bin'
+	local global_bin_dir="$REPLY"
+	
+	util.get_module_data "$module_name" "$version_string" 'bins'
+	local -a bin_dirs=("${REPLIES[@]}")
+
+	util.get_module_data "$module_name" "$version_string" 'bins'
+	local -a man_dirs=("${REPLIES[@]}") # FIXME
+
+	if [ ! -d "$global_bin_dir" ]; then
+		mkdir -p "$global_bin_dir"
+	fi
+
+	local bin_dir=
+	for bin_dir in "${bin_dirs[@]}"; do
+		if [ -d "$install_dir/$version_string/files/$bin_dir" ]; then
+			local bin_file
+			for bin_file in "$install_dir/$version_string/files/$bin_dir"/*; do
+				if [ -d "$bin_file" ]; then
+					continue
+				fi
+
+				if [ ! -x "$bin_file" ]; then
+					print.warn "File '$bin_file' is in a bin directory, but is not marked as executable"
+					continue
+				fi
+
+				if ! ln -sf "$bin_file" "$global_bin_dir/${bin_file##*/}"; then
+					print.warn "Link failed. Skipping"
+				fi
+			done; unset -v bin_file
+		else
+			print.warn "Directory '$bin_dir' does not exist for module '$module_name'"
+		fi
+	done; unset -v bin_dir
 }

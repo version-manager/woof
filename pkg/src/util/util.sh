@@ -47,7 +47,9 @@ util.get_matrix_row() {
 	local module_name="$1"
 	local version_string="$2"
 
-	local matrix_file="$WOOF_DATA_HOME/cached/$module_name-matrix.txt"
+	var.get_cached_matrix_file "$module_name"
+	local matrix_file="$REPLY"
+
 	if [ ! -f "$matrix_file" ]; then
 		print.fatal "File '$matrix_file' does not exist, but was expected to"
 	fi
@@ -125,11 +127,35 @@ util.uname_system() {
 	REPLY2="$hardware_pretty"
 }
 
+util.get_module_data() {
+	unset -v REPLIES
+	declare -g REPLIES=()
+	
+	local module_name="$1"
+	local version_string="$2"
+	local specified_key="$3"
+
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+	
+	local data_file="$install_dir/$version_string/data.txt"
+	local key= values=
+	while IFS='=' read -r key values; do
+		IFS=':' read -ra values <<< "$values"
+
+		if [ "$specified_key" = "$key" ]; then
+			REPLIES=("${values[@]}")
+			return
+		fi
+	done < "$data_file"; unset -v key values
+}
+
 util.get_current_choice() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
-	local current_choice_file="$WOOF_STATE_HOME/current-choice/$module_name"
+	var.get_global_choice_dir "$module_name"
+	local current_choice_file="$REPLY"
 
 	local current_choice=
 	if [ -f "$current_choice_file" ]; then

@@ -28,18 +28,19 @@ main.woof() {
 	local action_name="$1"
 	if [ -z "$action_name" ]; then
 		util.show_help
-		print.die "No action was given"
+		print.die 'No action was given'
 	fi
 	if ! shift; then
 		print.die 'Failed to shift'
 	fi
 
 	case "$action_name" in
-		init) woof-init ;;
+		t) helper.do_all_symlinks "$@" ;; # TODO
+		init) woof-init "$@";;
 		install) woof-install "$@" ;;
 		uninstall) woof-uninstall "$@" ;;
-		get-version) print.die 'Not implemented' ;;
-		set-version) print.die 'Not implemented' ;;
+		get-version) woof-get-version "$@" ;;
+		set-version) woof-set-version "$@" ;;
 		debug) woof-debug "$@" ;;
 		list) woof-list "$@" ;;
 		set-global) woof-set-global "$@" ;;
