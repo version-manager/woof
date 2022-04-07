@@ -1,7 +1,8 @@
 # shellcheck shell=bash
 
 go.matrix() {
-	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/go.ts"
+	util.fetch 'https://go.dev/dl' \
+		| perl "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/go.pl"
 }
 
 go.install() {
