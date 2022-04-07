@@ -22,6 +22,7 @@
 				elif $m.os == "win" or $m.os == "pc-windows-msvc" then
 					empty
 				else
+					# TODO: do not fail, only output to stderr
 					"Error: Unknown os: \($m.os)\n" | halt_error
 				end
 			),

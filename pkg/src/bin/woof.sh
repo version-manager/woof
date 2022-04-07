@@ -9,6 +9,13 @@ main.woof() {
 	WOOF_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/woof"
 	WOOF_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/woof"
 	WOOF_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}/woof"
+	
+	if [ -f "$WOOF_STATE_HOME/token" ]; then
+		if ! GITHUB_TOKEN=$(<"$WOOF_STATE_HOME/token"); then
+			print.die "Failed to read token file"
+		fi
+		export GITHUB_TOKEN
+	fi
 
 	local arg=
 	for arg; do case "$arg" in

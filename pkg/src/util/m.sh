@@ -47,8 +47,7 @@ m.get_github_release() {
 			elif ((exit_code == 29)); then # '29' is not taken by curl
 				has_more_pages=0
 			else
-				# TODO
-				print.die "Unusual exit"
+				print.die "Failed to execute curl or jq"
 			fi
 		fi
 	done

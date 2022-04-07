@@ -1,12 +1,5 @@
 # shellcheck shell=bash
 
-util.init() {
-	core.trap_add 'trap.sigwinch' 'SIGWINCH'
-	trap.sigwinch() {
-		read -r global_tty_height global_tty_width < <(stty size)
-	}
-}
-
 util.array_filter_out() {
 	local array_name="$1"
 	local pattern="$2"
