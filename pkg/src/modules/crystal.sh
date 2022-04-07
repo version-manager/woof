@@ -1,7 +1,8 @@
 # shellcheck shell=bash
 
 crystal.matrix() {
-	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/crystal.ts"
+	m.get_github_release 'crystal-lang/crystal' \
+		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/crystal.jq"
 }
 
 crystal.install() {

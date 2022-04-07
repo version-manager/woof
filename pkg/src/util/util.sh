@@ -145,6 +145,7 @@ util.get_current_choice() {
 	local module_name="$1"
 
 	var.get_global_choice_dir "$module_name"
+	# var.get_symlink_dir 'global' 'choice'
 	local current_choice_file="$REPLY"
 
 	local current_choice=
@@ -162,14 +163,13 @@ util.show_help() {
    woof init <shell>
    woof <action> [module] [version]
 
-Actions: (TODO)
-   init
+Actions:
+   init <shell>
    install
    uninstall
    get-version
    set-version
    list [--installed] [--all]
-   sync-version-list
    debug
 "
 }

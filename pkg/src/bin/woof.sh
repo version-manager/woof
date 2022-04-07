@@ -41,8 +41,7 @@ main.woof() {
 		print.die 'Failed to shift'
 	fi
 
-	case "$action_name" in
-		t) helper.do_all_symlinks "$@" ;; # TODO
+	case $action_name in
 		init) woof-init "$@";;
 		install) woof-install "$@" ;;
 		uninstall) woof-uninstall "$@" ;;
@@ -50,7 +49,6 @@ main.woof() {
 		set-version) woof-set-version "$@" ;;
 		debug) woof-debug "$@" ;;
 		list) woof-list "$@" ;;
-		set-global) woof-set-global "$@" ;;
 		*) print.die "Subcommand '$action_name' not recognized" ;;
 	esac
 }
