@@ -5,7 +5,7 @@ parse_nodejs() {
 	local nodejs_url='https://nodejs.org/download/release/index.json'
 
 	local json=
-	if ! json="$(curl -fsSL "$nodejs_url")"; then
+	if ! json=$(curl -fsSL "$nodejs_url"); then
 		core.err_set "Could not fetch '$nodejs_url'"
 		return
 	fi
@@ -53,6 +53,6 @@ parse_nodejs() {
 	done <<< "$json"
 }
 
-if isMain; then
+if is_main; then
 	parse_nodejs "$@"
 fi

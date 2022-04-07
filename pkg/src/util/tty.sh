@@ -94,6 +94,7 @@ tty.private.print_list() {
 
 	term.cursor_to 0 0; printf "$REPLY"
 	
+	# shellcheck disable=SC1007
 	local i= str= prefix=
 	for ((i=start; i<end; i++)); do
 		if ((i != start)); then

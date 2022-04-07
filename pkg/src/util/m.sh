@@ -29,3 +29,27 @@ m.git_tag_to_versions_array() {
 	done < <(git ls-remote --refs --tags "$url")
 	unset _sha1 refspec
 }
+
+m.get_github_release() {
+	local repo="$1"
+	
+	local -i has_more_pages=2 i=1
+	for ((i=1; has_more_pages==2; ++i)); do
+		local url="https://api.github.com/repos/$repo/releases?per_page=100&page=$i"
+		
+		if curl -sSfL -H "Authorization: token $GITHUB_TOKEN" "$url" \
+			| jq 'if length == 0 then "" else . end | if . == "" then halt_error(29) else . end'
+		then :; else
+			local exit_code=$?
+
+			if ((exit_code == 0)); then
+				continue
+			elif ((exit_code == 29)); then # '29' is not taken by curl
+				has_more_pages=0
+			else
+				# TODO
+				print.die "Unusual exit"
+			fi
+		fi
+	done
+}

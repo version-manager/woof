@@ -2,17 +2,17 @@
 source "${0%/*}/util/util.sh"
 
 parse_deno() {
-	local nodejs_url='https://nodejs.org/download/release/index.json'
+	# cat releases.json | jq 'type == "array" and length > 1'
+	util.get_github_release 'denoland/deno' \
+		| jq '.[] | .name // .tag_name | .'
 
-	local json=
-	if ! json="$(curl -fsSL "$nodejs_url")"; then
-		core.err_set "Could not fetch '$nodejs_url'"
-		return
-	fi
-
+	# local json=
+	# if ! json=$(util.get_github_release 'denoland/deno'); then
+	# 	core.err_set "Could not fetch '$'"
+	# 	return
+	# fi
 }
 
-
-if isMain; then
+if is_main; then
 	parse_deno "$@"
 fi

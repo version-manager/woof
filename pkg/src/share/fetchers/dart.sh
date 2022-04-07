@@ -30,6 +30,6 @@ parse_dart() {
 	done <<< "$text"
 }
 
-if isMain; then
+if is_main; then
 	parse_dart "$@"
 fi

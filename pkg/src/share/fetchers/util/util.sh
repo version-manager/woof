@@ -3,12 +3,13 @@
 die() {
 	local msg="$1"
 
-	printf '%s\n' "Error: $1. Exiting"
+	printf '%s\n' "Error: $msg. Exiting"
 	exit 1
 }
 
-isMain() {
+is_main() { # FIXME
 	if [ "${BASH_SOURCE[0]}" != "${0}" ]; then :; else
 		return $?
 	fi
 }
+

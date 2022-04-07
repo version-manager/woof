@@ -1,7 +1,8 @@
 # shellcheck shell=bash
 
 deno.matrix() {
-	deno run --allow-net "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/deno.ts"
+	m.get_github_release 'denoland/deno' \
+		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/deno.jq"
 }
 
 deno.install() {

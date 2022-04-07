@@ -5,7 +5,7 @@ parse_nim() {
 	local nim_url='https://nim-lang.org/install.html'
 
 	local text=
-	if ! text="$(curl -fsSL "$nim_url")"; then
+	if ! text=$(curl -fsSL "$nim_url"); then
 		print.die "Could not fetch '$nim_url'" # TODO: function no exist
 	fi
 
@@ -42,6 +42,6 @@ parse_nim() {
 	done <<< "$text"
 }
 
-if isMain; then
+if is_main; then
 	parse_nim "$@"
 fi
