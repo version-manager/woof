@@ -30,7 +30,7 @@ m.git_tag_to_versions_array() {
 	unset _sha1 refspec
 }
 
-m.get_github_release() {
+m.fetch_github_release() {
 	local repo="$1"
 	
 	local -i has_more_pages=2 i=1

@@ -29,7 +29,7 @@
 					"Error: Unknown arch: \($m.arch)\n" | halt_error
 				end
 			),
-			url: .url,
+			url: .browser_download_url,
 			created_at,
 			download_count
 		}

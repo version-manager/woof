@@ -42,14 +42,12 @@ We attempt to be reasonably compatible with all existing tools. For example, it 
 
 ## Prerequisites
 
-These are the _only_ external utilities required
+External utilities are _only_ used due to necessity or efficiency. The following are used
 
 - cURL
+- jq
+- POSIX `mv`, `cat`, `cp`, `uname`, `stty`, `sed`, etc.
 - sort (GNUism -V) (TODO: phase out)
-- tput (TODO: phase out)
-- stty
-- uname
-- POSIX `mv`, `cat`, `cp`, etc.
 
 ## Installation
 

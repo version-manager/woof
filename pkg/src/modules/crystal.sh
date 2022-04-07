@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 crystal.matrix() {
-	m.get_github_release 'crystal-lang/crystal' \
+	m.fetch_github_release 'crystal-lang/crystal' \
 		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/crystal.jq"
 }
 

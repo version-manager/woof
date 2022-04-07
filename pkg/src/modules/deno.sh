@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 deno.matrix() {
-	m.get_github_release 'denoland/deno' \
+	m.fetch_github_release 'denoland/deno' \
 		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/deno.jq"
 }
 
