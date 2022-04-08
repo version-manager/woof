@@ -1,5 +1,32 @@
 # Roadmap
 
+There are three dimensions of support for each runtime
+
+- Shell
+  - Completions
+  - Shell init
+- Operating System
+- Architecture
+
+## Shell
+
+- Bash (WIP)
+- Zsh
+- Ksh
+- Fish
+- Elvish
+- Oil
+
+## Operating System
+
+See the [Module API]('./module_api.md)
+
+## Architecture
+
+See the [Module API]('./module_api.md)
+
+## Languages
+
 Woof aims to support the following languages / package managers / programs
 
 There are three levels of support:
@@ -8,14 +35,7 @@ There are three levels of support:
 - Dogfooding (it works on my machine)
 - Complete (works everywhere with supporting test suite)
 
-## Shells
-
-Support shells
-
-- Bash (WIP)
-- Zsh, Ksh, Fish, Elvish, Oil
-
-## Buildless Programming Languages
+### Buildless Programming Languages
 
 | Language | Current Support | Official Download                                     | Replaces                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | -------- | --------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -42,7 +62,7 @@ Support shells
 | mlton    | None            | [Official](https://github.com/MLton/mlton)            | [asdf-mlton](https://github.com/asdf-community/asdf-mlton)                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Ninja    | None            | [Official](https://github.com/ninja-build/ninja)      | [asdf-ninja](https://github.com/asdf-community/asdf-ninja)                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
-## Hashicorp
+### Hashicorp
 
 | Item      | Current Support | Official Download                                    | Replaces                                                                                                                                                       |
 | --------- | --------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -56,7 +76,7 @@ Support shells
 | Vault     | None            | [Official](https://www.vaultproject.io/downloads)    | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
 | Waypoint  | None            | [Official](https://www.waypointproject.io/downloads) | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                             |
 
-## Buildfull Programming Languages
+### Buildfull Programming Languages
 
 This requires a modification to the module API, support for patches
 
@@ -71,7 +91,7 @@ This requires a modification to the module API, support for patches
 | Meson    | None            | [Official](https://github.com/mesonbuild/meson)   | [asdf-meson](https://github.com/asdf-community/asdf-meson)                                                                                                                                                 |
 | HHVM     | None            | [Official](https://docs.hhvm.com/hack)            |                                                                                                                                                                                                            |
 
-## To sort
+### To sort
 
 | Runtime | Current Support | Official Download                                        | Replaces                                                                                                                                                                                              |
 | ------- | --------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -90,14 +110,14 @@ This requires a modification to the module API, support for patches
 | idris2  | None            | [Official](https://github.com/idris-lang/Idris2)         | [asdf-idris2](https://github.com/asdf-community/asdf-idris2)                                                                                                                                          |
 | Flutter | None            | [Official](https://docs.flutter.dev/get-started/install) | [asdf-flutter](https://github.com/oae/asdf-flutter), [fvm](https://github.com/befovy/fvm)                                                                                                             |
 
-### Nuances
+#### Nuances
 
 kubectl: Not yet `.kubectl_version`
 Node: Not yet `.node-version`, and `.nvmrc`
 Deno: Not yet `.dvmrc`
 Ruby: Not yet `.ruby-version` and `.rvmrc`
 
-## Misc
+### Misc
 
 - fortran
 - lua
@@ -109,6 +129,6 @@ Ruby: Not yet `.ruby-version` and `.rvmrc`
 - Bash
 - OPAM / OCAML
 
-## Out of Scope
+### Out of Scope
 
 - Rust because `rustup` is actually good

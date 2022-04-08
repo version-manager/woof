@@ -265,6 +265,10 @@ helper.install_module_version() {
 		print.die 'Failed to cd'
 	fi
 
+	if [ -z "$REPLY_DIR" ]; then
+		print.die "Variable '\$REPLY_DIR' must be set at the end of <module>.install"
+	fi
+
 	# Move extracted contents to 'installs' directory
 	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$version_string/files"; then
 		rm -rf "$workspace_dir"

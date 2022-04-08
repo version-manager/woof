@@ -1,39 +1,37 @@
 # Module API
 
-Implementations of version controlling a particular language are defined in a module. This page documents the API contract
+Use the Module API to implement a version manager for a particular language. In this repository, the modules are located in `./pkg/src/modules`
 
 ## `<module>.matrix()`
 
-Prints a version matrix to standard output
-
-The structure is the following. The comment is optional
+Prints a version matrix to standard output. Each line of standard output looks like:
 
 ```txt
-<variant>|<version>|<os>|<arch>|<url>|<comment>
+<variant>|<version>|<os>|<arch>|<url>[|<comment>]
 ```
 
-Here are some examples
+For example,
 
 ```txt
 Go|v1.17.6|linux|amd64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
-NodeJS|v15.9.0|linux|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|(Released 2021-02-18)
-Nim|v1.2.14|linux|amd64|https://nim-lang.org//download/nim-1.2.14-linux_x64.tar.xz
-Dart|v2.9.3|linux|armv7|https://storage.googleapis.com/dart-archive/channels/stable/release/2.16.0/sdk/dartsdk-linux-arm-release.zip
+NodeJS|v15.9.0|linux|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|2021-02-18
 ```
 
-Currently, operating system must be one of
+To debug this function, use the `woof tool debug-matrix <module>` command
+
+Operating system must be one of:
 
 - `linux`
 - `freebsd`
 - `darwin`
 - `windows`
 
-- `aix` (nodejs)
-- `openbsd` (hashicorp)
-- `netbsd` (hashicorp)
-- `solaris` / `sunOS` (hashicorp, nodejs)
+- `aix`
+- `openbsd`
+- `netbsd`
+- `solaris` / `sunOS`
 
-Architecture must be one of
+Architecture must be one of:
 
 - `amd64`
 - `x86`
@@ -46,23 +44,21 @@ Architecture must be one of
 - `s390x` (go, nodejs)
 - `riscv64` (zig)
 
-The operating system and architecture _must_ be normalized
-
 ## `<module>.install()`
 
-Downloads and extracts a particular version of a module and sets variables for installation
-
-The following positional parameters are set
+Downloads and extracts a particular version of a language. The following positional parameters are set:
 
 - `$1`: url
 - `$2`: version (does not contain `v` prefix)
-- `$3` os
-- `$4` arch
+- `$3`: os
+- `$4`: arch
 
-Set the following variables for installation to complete successfully. `REPLY_DIR` is necessary while `REPLY_BINS` is obviously strongly recommended
+Set the following variables for installation to complete successfully. `REPLY_DIR` is the only requried variable
 
 - `REPLY_DIR=`
 - `REPLY_BINS=()`
+- `REPLY_INCLUDES=()`
+- `REPLY_LIBS=()`
 - `REPLY_MANS=()`
 - `REPLY_BASH_COMPLETIONS=()`
 - `REPLY_ZSH_COMPLETIONS=()`
