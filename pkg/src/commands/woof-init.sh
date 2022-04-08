@@ -11,7 +11,7 @@ woof-init() {
 		print.die 'Shell not supported'
 	fi
 
-	var.get_global_path_dir
+	var.get_symlink_dir 'global' 'bin'
 	shell.path_prepend "$REPLY"
 }
 

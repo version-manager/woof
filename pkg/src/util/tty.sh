@@ -118,14 +118,14 @@ tty.private.print_list() {
 		term.erase_line_end; printf "$REPLY"
 		# shellcheck disable=SC2059
 		printf "$str"
-	done; unset i
+	done; unset -v i
 }
 
 tty.multiselect() {
 	unset REPLY; REPLY=
-	local old_version="$1"; shift
-	local select_keys_variable_name="$1"; shift
-	local select_table_variable_name="$1"; shift
+	local old_version="$1"; if ! shift; then print.die 'Failed shift'; fi
+	local select_keys_variable_name="$1"; if ! shift; then print.die 'Failed shift'; fi
+	local select_table_variable_name="$1"; if ! shift; then print.die 'Failed shift'; fi
 
 	local -n select_keys_variable="$select_keys_variable_name"
 	local -n select_table_variable="$select_table_variable_name"

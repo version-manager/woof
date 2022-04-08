@@ -7,7 +7,7 @@ woof-set-version() {
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
 
-	helper.determine_installed_version_string "$module_name" "$possible_version_string"
+	helper.determine_version_string_installed "$module_name" "$possible_version_string"
 	local version_string="$REPLY"
 
 	# Write version choice
@@ -22,6 +22,6 @@ woof-set-version() {
 	print.info "Set version '$version_string' as global version"
 
 	# Resymlink
-	helper.do_all_symlinks "$module_name" "$version_string"
+	helper.symlink_after_install "$module_name" "$version_string"
 	print.info "Did symlinks for version '$version_string'"
 }

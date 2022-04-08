@@ -45,7 +45,7 @@ We attempt to be reasonably compatible with all existing tools. For example, it 
 External utilities are _only_ used due to necessity or efficiency. The following are used
 
 - cURL
-- jq
+- jq 1.6
 - POSIX `mv`, `cat`, `cp`, `uname`, `stty`, `sed`, etc.
 - sort (GNUism -V) (TODO: phase out)
 

@@ -1,20 +1,14 @@
 # shellcheck shell=bash
 
-util.array_filter_out() {
-	local array_name="$1"
-	local pattern="$2"
+util.assert_not_empty() {
+	local variable_name=
+	for variable_name; do
+		local -n __variable="$variable_name"
 
-	local -n array="$array_name"
-	local new_array=("${array[@]}")
-	for ((i=0; i<${#array[@]}; i++)); do
-		# shellcheck disable=SC2053
-		if [[ ${array[i]} != $pattern ]]; then
-			new_array+=("${array[i]}")
+		if [ -z "$__variable" ]; then
+			print.die "Failed because variable '$variable_name' is empty"
 		fi
-	done; unset -v i
-
-	array=("${new_array[@]}")
-	unset -v new_array
+	done; unset -v variable_name
 }
 
 util.run_function() {
@@ -36,6 +30,8 @@ util.get_matrix_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
 	local version_string="$2"
+	local real_os="$3"
+	local real_arch="$4"
 
 	var.get_cached_matrix_file "$module_name"
 	local matrix_file="$REPLY"
@@ -44,18 +40,24 @@ util.get_matrix_row() {
 		print.fatal "File '$matrix_file' does not exist, but was expected to"
 	fi
 
-	util.uname_system
-	local real_os="$REPLY1"
-	local real_arch="$REPLY2"
-
-	local version= os= arch= url= comment=
-	while IFS='|' read -r version os arch url comment; do
+	if [ -z "$real_os" ] || [ -z "$real_arch" ]; then
+		util.uname_system
+		real_os="$REPLY1"
+		real_arch="$REPLY2"
+	fi
+	
+	local variant= version= os= arch= url= comment=
+	while IFS='|' read -r variant version os arch url comment; do
 		if  [ "$version_string" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			REPLY1=$url
 			REPLY2=$comment
 			return 0
 		fi
-	done < "$matrix_file"; unset version os arch url comment
+	done < "$matrix_file"; unset -v variant version os arch url comment
+
+	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
+		print.die "Faield to find corresponding row"
+	fi
 
 	return 1
 }
@@ -144,9 +146,8 @@ util.get_current_choice() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
-	var.get_global_choice_dir "$module_name"
-	# var.get_symlink_dir 'global' 'choice'
-	local current_choice_file="$REPLY"
+	var.get_symlink_dir 'global' 'choice'
+	local current_choice_file="$REPLY/$module_name"
 
 	local current_choice=
 	if [ -f "$current_choice_file" ]; then
@@ -156,6 +157,22 @@ util.get_current_choice() {
 	fi
 
 	REPLY=$current_choice
+}
+
+util.set_current_choice() {
+	unset REPLY; REPLY=
+	local module_name="$1"
+	local current_choice="$2"
+
+	var.get_symlink_dir 'global' 'choice'
+	local current_choice_file="$REPLY/$module_name"
+
+	mkdir -p "${current_choice_file%/*}"
+	if ! printf '%s\n' "$version_string" > "$current_choice_file"; then
+		rm -f "$current_choice_file"
+		print.die "Could not write to '$current_choice_file'"
+	fi
+
 }
 
 util.show_help() {

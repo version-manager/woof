@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 woof-list() {
-	local flag_installed='no'
+	local flag_available='no'
 	local arg=
 	for arg; do case $arg in
-	--installed)
-		flag_installed='yes'
+	--available)
+		flag_available='yes'
 		;;
 	--all)
 		flag_all='yes'
@@ -23,7 +23,28 @@ woof-list() {
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
 
-	if [ "$flag_installed" = 'yes' ]; then
+	if [ "$flag_available" = 'yes' ]; then
+		helper.create_version_matrix "$module_name"
+
+		util.uname_system
+		local real_os="$REPLY1"
+		local real_arch="$REPLY2"
+
+		var.get_cached_matrix_file "$module_name"
+		local matrix_file="$REPLY"
+
+		local variant= version= os= arch= url= comment=
+		while IFS='|' read -r variant version os arch url comment; do
+			if [ "$flag_all" == 'yes' ]; then
+				printf '%s\n' "$version"
+			else
+				if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+					printf '%s\n' "$version"
+				fi
+			fi
+		done < "$matrix_file" | sort -V
+		unset -v variant version os arch url comment
+	else
 		var.get_module_install_dir "$module_name"
 		local install_dir="$REPLY"
 
@@ -37,28 +58,5 @@ woof-list() {
 		for version in "${versions[@]}"; do
 			printf '%s\n' "$version"
 		done; unset -v version
-	else
-		helper.create_version_matrix "$module_name"
-
-		util.uname_system
-		local real_os="$REPLY1"
-		local real_arch="$REPLY2"
-
-		var.get_cached_matrix_file "$module_name"
-		local matrix_file="$REPLY"
-
-		local line=
-		while IFS='|' read -r version os arch url comment; do
-			if [ "$flag_all" == 'yes' ]; then
-				printf '%s\n' "$version"
-			else
-				if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
-					printf '%s\n' "$version"
-				fi
-			fi
-		done < "$matrix_file" | sort -V
-		unset version os arch url comment
-
-		unset -v line
 	fi
 }

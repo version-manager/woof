@@ -35,7 +35,9 @@
 				end
 			),
 			arch: (
-				if $m.arch == "i386" or $m.arch == "x86_64" then
+				if $m.arch == "i386" then
+					"x86"
+				elif $m.arch == "x86_64" then
 					"amd64"
 				elif $m.arch == "aarch64" then
 					"arm64"
@@ -51,4 +53,4 @@
 			),
 			url: .value.tarball
 		}
-	| "\(.variant)|\(.version)|\(.os)|\(.arch)|\(.url)" | tostring
+	| "\(.variant)|v\(.version)|\(.os)|\(.arch)|\(.url)" | tostring

@@ -2,14 +2,11 @@
 
 use strict;
 use warnings;
-use feature qw(switch);
-no warnings qw(experimental::smartmatch);
 
 my $text = do { local $/; <STDIN> };
 while ( $text =~
 /<td class="filename".+? href="(?<uri>.*?)".+?<td>(?<kind>.*?)<\/td>.+?<td>(?<os>.*?)<\/td>.+?<td>(?<arch>.*?)<\/td>.+?<tt>(?<checksum>.*?)<\/tt>/gsm
-  )
-{
+) {
     if ( $+{kind} eq 'Installer' or $+{kind} eq 'Source' ) {
         next;
     }
@@ -54,5 +51,5 @@ while ( $text =~
         $version = $+{version};
     }
 
-    print "v$version|$os|$arch|https://go.dev$uri\n";
+    print "Go|v$version|$os|$arch|https://go.dev$uri\n";
 }

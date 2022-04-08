@@ -30,6 +30,42 @@ helper.determine_module_name() {
 	REPLY=$module_name
 }
 
+helper.determine_module_name_installed() {
+	unset REPLY; REPLY=
+	local module_name="$1"
+	
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+
+	if [ -z "$module_name" ]; then
+		core.shopt_push -s nullglob
+		local -a module_list=("$install_dir"/*/)
+		core.shopt_pop
+
+		if (( ${#module_list[@]} == 0 )); then
+			print.die "Cannot uninstall as no modules are installed"
+		fi
+
+		module_list=("${module_list[@]%/}")
+		module_list=("${module_list[@]##*/}")
+		
+		local -A modules_table=()
+		local module=
+		for module in "${module_list[@]}"; do
+			modules_table["$module"]=
+		done; unset module
+
+		tty.multiselect 0 module_list modules_table
+		module_name=$REPLY
+	fi	
+
+	if [ ! -d "$install_dir" ]; then
+		print.die "No versions of module '$module_name' are installed"
+	fi
+
+	REPLY=$module_name
+}
+
 helper.determine_version_string() {
 	unset REPLY; REPLY=
 	local module_name="$1"
@@ -46,13 +82,19 @@ helper.determine_version_string() {
 		local -a ui_keys=()
 		local -A ui_table=()
 
+		local match_found='no'
 		local version= os= arch= url= comment=
-		while IFS='|' read -r version os arch url comment; do
+		while IFS='|' read -r variant version os arch url comment; do
 			if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+				match_found='yes'
 				ui_keys+=("$version")
 				ui_table["$version"]="$url $comment"
 			fi
 		done < "$matrix_file"; unset version os arch url comment
+
+		if [ "$match_found" != 'yes' ]; then
+			print.die "Could not find any matching versions for the current os/arch"
+		fi
 
 		util.get_current_choice "$module_name"
 		local current_choice="$REPLY"
@@ -62,11 +104,12 @@ helper.determine_version_string() {
 	fi
 
 	local is_valid_string='yes'
-	while IFS='|' read -r version os arch url comment; do
+	local variant= version= os= arch= url= comment=
+	while IFS='|' read -r variant version os arch url comment; do
 		if [ "$version_string" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			is_valid_string='yes'
 		fi
-	done < "$matrix_file"; unset version os arch url comment
+	done < "$matrix_file"; unset variant version os arch url comment
 
 	if [ "$is_valid_string" != yes ]; then
 		print.die "Version '$version_string' is not valid for module '$module_name' on this architecture"
@@ -75,42 +118,8 @@ helper.determine_version_string() {
 	REPLY=$version_string
 }
 
-helper.determine_installed_module_name() {
-	unset REPLY; REPLY=
-	local module_name="$1"
-
-	var.get_module_install_dir "$module_name"
-	local install_dir="$REPLY"
-
-	if [ -z "$module_name" ]; then
-		core.shopt_push -s nullglob
-		local -a module_list=("${install_dir%/*}"/*/)
-		core.shopt_pop
-
-		if (( ${#module_list[@]} == 0 )); then
-			print.die "Cannot uninstall as no modules are installed"
-		fi
-
-		module_list=("${module_list[@]%/}")
-		module_list=("${module_list[@]##*/}")
-
-		local -A modules_table=()
-		local module=
-		for module in "${module_list[@]}"; do
-			modules_table["$module"]=
-		done; unset module
-
-		tty.multiselect 0 module_list modules_table
-		REPLY=$REPLY
-	fi
-
-	if [ ! -d "$install_dir" ]; then
-		print.die "No versions of module '$module_name' are installed"
-	fi
-}
-
 # @description Get the installed version string, if one was not already specified
-helper.determine_installed_version_string() {
+helper.determine_version_string_installed() {
 	local module_name="$1"
 	local version_string="$2"
 
@@ -148,7 +157,8 @@ helper.determine_installed_version_string() {
 }
 
 # @description For a given module, construct a matrix of all versions for all
-# platforms (kernel and architecture). This calls the "<module>.matrix" function
+# platforms (kernel and architecture). This eventually calls the "<module>.matrix"
+# function and properly deals with caching
 helper.create_version_matrix() {
 	local module_name="$1"
 
@@ -165,7 +175,7 @@ helper.create_version_matrix() {
 
 	if [ "$use_cache" = no ]; then
 		local matrix_string=
-		if matrix_string="$(util.run_function "$module_name.matrix")"; then
+		if matrix_string=$(util.run_function "$module_name.matrix"); then
 			if core.err_exists; then
 				print.error "$ERR"
 				exit "$ERRCODE"
@@ -187,7 +197,114 @@ helper.create_version_matrix() {
 	fi
 }
 
-helper.do_all_symlinks() {
+helper.install_module_version() {
+	local flag_interactive=
+	if [ "$1" = '--interactive' ]; then
+		flag_interactive='yes'
+		if ! shift; then print.die 'Failed to shift'; fi
+	fi
+	local module_name="$1"
+	local version_string="$2"
+
+	local workspace_dir="$WOOF_DATA_HOME/workspace-$module_name"
+
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+
+	# If there is an interactive flag, then we are debugging the installation
+	# process. In this case, make the workspace and install directory someplace
+	# totally different
+	local interactive_dir=
+	if [ "$flag_interactive" = 'yes' ]; then
+		if ! interactive_dir="$(mktemp -d)/woof-interactive-$RANDOM"; then
+			print.die 'Failed to mktmp'
+		fi
+		workspace_dir="$interactive_dir/workspace_dir"
+		install_dir="$interactive_dir/install_dir"
+	fi
+
+	# If already installed
+	if [ -d "$install_dir/$version_string/done" ]; then
+		print.die "Version '$version_string' is already installed for module '$module_name'"
+	fi
+
+	# Preparation actions
+	rm -rf "$workspace_dir" "${install_dir:?}/$version_string"
+	mkdir -p "$workspace_dir" "$install_dir/$version_string"
+
+	util.uname_system
+	local os="$REPLY1"
+	local arch="$REPLY2"
+
+	# Determine correct binary for current system
+	util.get_matrix_row "$module_name" "$version_string" "$os" "$arch"
+	local url="$REPLY1"
+
+	# Execute '<module>.install'
+	printf '%s\n' "Installing $version_string"
+	local old_pwd="$PWD"
+	if ! cd -- "$workspace_dir"; then
+		print.die 'Failed to cd'
+	fi
+	unset -v REPLY_DIR
+	unset -v REPLY_{BINS,INCLUDES,LIBS,MANS} REPLY_{BASH,ZSH,FISH}_COMPLETIONS
+	declare -g REPLY_DIR=
+	declare -ag REPLY_BINS=() REPLY_INCLUDES=() REPLY_LIBS=() REPLY_MANS=() REPLY_BASH_COMPLETIONS=() \
+		REPLY_ZSH_COMPLETIONS=() REPLY_FISH_COMPLETIONS=()
+	if util.run_function "$module_name.install" "$url" "${version_string/#v}" "$os" "$arch"; then
+		if core.err_exists; then
+			rm -rf "$workspace_dir"
+			print.error "$ERR"
+			exit "$ERRCODE"
+		fi
+	else
+		rm -rf "$workspace_dir"
+		print.die "Unexpected error while calling '$module_name.install'"
+	fi
+	if ! cd -- "$old_pwd"; then
+		print.die 'Failed to cd'
+	fi
+
+	# Move extracted contents to 'installs' directory
+	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$version_string/files"; then
+		rm -rf "$workspace_dir"
+		print.die "Could not move extracted contents to '$install_dir/$version_string/files'"
+	fi
+
+	# Save information about bin, man, etc. pages later
+	local old_ifs="$IFS"; IFS=':'
+	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
+mans=${REPLY_MANS[*]}" > "$install_dir/$version_string/data.txt"; then
+		rm -rf "$workspace_dir" "${install_dir:?}/$version_string"
+		print.die "Could not write to '$install_dir/$version_string/data.txt'"
+	fi
+	IFS="$old_ifs"
+
+	if [ "$flag_interactive" = 'yes' ]; then
+		print.info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
+		if (
+			if ! cd -- "$install_dir/$version_string"; then
+				print.die 'Failed to cd'
+			fi
+			bash
+		); then :; else
+			local exit_code=$?
+
+			rm -rf "$interactive_dir"
+			exit $exit_code
+		fi
+
+		rm -rf "$interactive_dir"
+	fi
+
+	rm -rf "$workspace_dir"
+	touch "$install_dir/$version_string/done"
+
+	# Set the current choice to the just-installed version
+	util.set_current_choice "$module_name" "$version_string"
+}
+
+helper.symlink_after_install() {
 	local module_name="$1"
 	local version_string="$2"
 

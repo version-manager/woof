@@ -47,8 +47,8 @@ main.woof() {
 		uninstall) woof-uninstall "$@" ;;
 		get-version) woof-get-version "$@" ;;
 		set-version) woof-set-version "$@" ;;
-		debug) woof-debug "$@" ;;
 		list) woof-list "$@" ;;
+		tool) woof-tool "$@" ;;
 		*) print.die "Subcommand '$action_name' not recognized" ;;
 	esac
 }
