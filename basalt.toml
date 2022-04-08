@@ -2,7 +2,7 @@
 type = 'bash'
 name = 'woof'
 slug = 'woof'
-version = '0.1.0'
+version = '0.2.0'
 authors = ['Edwin Kofler <edwin@kofler.dev>']
 description = 'The version manager to end all version managers'
 
