@@ -8,6 +8,13 @@ There are three levels of support:
 - Dogfooding (it works on my machine)
 - Complete (works everywhere with supporting test suite)
 
+## Shells
+
+Support shells
+
+- Bash (WIP)
+- Zsh, Ksh, Fish, Elvish, Oil
+
 ## Buildless Programming Languages
 
 | Language | Current Support | Official Download                                     | Replaces                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
