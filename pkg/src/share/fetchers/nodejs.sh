@@ -47,7 +47,7 @@ parse_nodejs() {
 					continue
 				fi
 
-				printf '%s\n' "$version_string|$normalized_platform|https://nodejs.org/download/release/$version_string/node-$version_string-$platform.tar.gz|$release_date"
+				printf '%s\n' "NodeJS|$version_string|$normalized_platform|https://nodejs.org/download/release/$version_string/node-$version_string-$platform.tar.gz|$release_date"
 			done
 		fi
 	done <<< "$json"
