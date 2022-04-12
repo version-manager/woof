@@ -29,7 +29,7 @@ Operating system must be one of:
 - `aix`
 - `openbsd`
 - `netbsd`
-- `solaris` / `sunOS`
+- `solaris` (`sunOS`)
 
 Architecture must be one of:
 

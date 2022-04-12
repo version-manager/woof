@@ -1,0 +1,17 @@
+# shellcheck shell=bash
+
+boundary.matrix() {
+	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'boundary'
+}
+
+boundary.install() {
+	local url="$1"
+	local version="$2"
+
+	m.fetch -o './boundary.zip' "$url"
+	mkdir -p './dir/bin'
+	m.ensure unzip -qq './boundary.zip' -d './dir/bin'
+
+	REPLY_DIR='./dir'
+	REPLY_BINS=('./bin')
+}
