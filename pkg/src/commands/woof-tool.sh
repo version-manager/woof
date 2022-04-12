@@ -2,6 +2,10 @@
 
 woof-tool() {
 	local subcmd="$1"
+	if [ -z "$subcmd" ]; then
+		util.show_help
+		print.die 'Expected subcommand'
+	fi
 	if ! shift; then
 		print.die 'Failed to shift'
 	fi
