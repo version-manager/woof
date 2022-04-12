@@ -2,7 +2,7 @@
 
 julia.matrix() {
 	m.fetch 'https://julialang-s3.julialang.org/bin/versions.json' \
-		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/julia.jq"
+		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/julia.jq"
 }
 
 julia.install() {

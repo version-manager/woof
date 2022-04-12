@@ -1,3 +1,5 @@
+import "util" as f;
+
 .[]
 	| (.tag_name | rtrimstr("v")) as $version
 	| .assets[]
@@ -14,8 +16,7 @@
 				elif $m.os == "freebsd" then
 					"freebsd"
 				else
-					# TODO: do not fail, only output to stderr
-					"Error: Unknown os: \($m.os) \(.name)\n" | halt_error
+					f::print_error("Unknown os: \($m.os) (context: \(.name))")
 				end
 			),
 			arch: (
@@ -26,7 +27,7 @@
 				elif $m.arch == "x86_64-bundled" or $m.arch == "universal" then
 					empty
 				else
-					"Error: Unknown arch: \($m.arch)\n" | halt_error
+					f::print_error("Unknown arch: \($m.arch) (context: \(.name))")
 				end
 			),
 			url: .browser_download_url,

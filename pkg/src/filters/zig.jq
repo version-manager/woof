@@ -1,3 +1,5 @@
+import "util" as f;
+
 .
 	| to_entries
 	| .[]
@@ -30,8 +32,7 @@
 				elif $m.os == "windows" then
 					empty
 				else
-					# TODO: do not fail, only output to stderr
-					"Error: Unknown os: \($m.os)\n" | halt_error
+					f::print_error("Unknown os: \($m.os) (context: \(.name))")
 				end
 			),
 			arch: (

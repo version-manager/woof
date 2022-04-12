@@ -67,6 +67,6 @@ parse_hashicorp() {
 	done <<< "$html"; unset -v line
 }
 
-if is_main; then
+if f.is_main; then
 	parse_hashicorp "$@"
 fi

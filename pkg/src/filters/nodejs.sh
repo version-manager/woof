@@ -53,6 +53,6 @@ parse_nodejs() {
 	done <<< "$json"
 }
 
-if is_main; then
+if f.is_main; then
 	parse_nodejs "$@"
 fi

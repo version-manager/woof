@@ -1,3 +1,5 @@
+import "util" as f;
+
 .
 	| to_entries
 	| .[]
@@ -24,8 +26,7 @@
 				elif .os == "winnt" then
 					empty
 				else
-					# TODO: do not fail, only output to stderr
-					"Error: Unknown os: \(.os)\n" | halt_error
+					f::print_error("Unknown os: \($m.os) (context: \(.name))")
 				end
 			),
 			arch: (
@@ -40,7 +41,7 @@
 				elif .arch == "powerpc64le" then
 					"ppc64le"
 				else
-					"Error: Unknown arch: \(.arch)\n" | halt_error
+					f::print_error("Unknown arch: \($m.arch) (context: \(.name))")
 				end
 			),
 			url,

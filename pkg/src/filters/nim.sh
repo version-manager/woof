@@ -6,7 +6,7 @@ parse_nim() {
 
 	local text=
 	if ! text=$(curl -fsSL "$nim_url"); then
-		print.die "Could not fetch '$nim_url'" # TODO: function no exist
+		f.die "Could not fetch '$nim_url'"
 	fi
 
 	local os='windows'
@@ -42,6 +42,6 @@ parse_nim() {
 	done <<< "$text"
 }
 
-if is_main; then
+if f.is_main; then
 	parse_nim "$@"
 fi

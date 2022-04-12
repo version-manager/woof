@@ -39,6 +39,6 @@ macos arm64 arm64'
 	fi
 }
 
-if is_main; then
+if f.is_main; then
 	parse_dart "$@"
 fi

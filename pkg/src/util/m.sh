@@ -38,7 +38,7 @@ m.fetch_github_release() {
 		local url="https://api.github.com/repos/$repo/releases?per_page=100&page=$i"
 		
 		if m.fetch -H "Authorization: token $GITHUB_TOKEN" "$url" \
-			| jq 'if length == 0 then "" else . end | if . == "" then halt_error(29) else . end'
+			| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" 'if length == 0 then "" else . end | if . == "" then halt_error(29) else . end'
 		then :; else
 			local exit_code=$?
 

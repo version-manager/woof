@@ -1,3 +1,5 @@
+import "util" as f;
+
 .[]
 	| .tag_name as $version
 	| .assets[]
@@ -14,8 +16,7 @@
 				elif $m.os == "windows" then
 					empty
 				else
-					# TODO: do not fail, only output to stderr
-					"Error: Unknown os: \($m.os) \(.name)\n" | halt_error
+					f::print_error("Unknown os: \($m.os) (context: \(.name))")
 				end
 			),
 			arch: (
@@ -28,7 +29,7 @@
 				elif $m.arch == "armv6" then
 					"armv6"
 				else
-					"Error: Unknown arch: \($m.arch)\n" | halt_error
+					f::print_error("Unknown arch: \($m.arch) (context: \(.name))")
 				end
 			),
 			url: .browser_download_url,

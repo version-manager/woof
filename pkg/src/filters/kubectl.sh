@@ -13,6 +13,6 @@ parse_kubectl() {
 	done < <(git ls-remote --tags --refs 'https://github.com/kubernetes/kubectl')
 }
 
-if is_main; then
+if f.is_main; then
 	parse_kubectl "$@"
 fi

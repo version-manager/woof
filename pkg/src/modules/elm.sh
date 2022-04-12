@@ -2,7 +2,7 @@
 
 elm.matrix() {
 	m.fetch_github_release 'elm/compiler' \
-		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/elm.jq"
+		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/elm.jq"
 }
 
 elm.install() {

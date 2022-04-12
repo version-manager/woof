@@ -26,7 +26,7 @@ while ( $text =~
         next;
     } else {
         # TODO do not die
-        # die "Unaccounted for os: $os";
+        die "Unaccounted for os: $os";
     }
 
     if ($arch eq 'x86-64') {

@@ -1,3 +1,5 @@
+import "util" as f;
+
 .[]
 	| .tag_name as $version
 	| (($version | split("."))[0] | ltrimstr("v") | tonumber) as $version_major
@@ -22,15 +24,13 @@
 				elif $m.os == "win" or $m.os == "pc-windows-msvc" then
 					empty
 				else
-					# TODO: do not fail, only output to stderr
-					"Error: Unknown os: \($m.os)\n" | halt_error
-				end
+					f::print_error("Unknown os: \($m.os) (context: \(.name))")				end
 			),
 			arch: (
 				if $m.arch == "x64" or $m.arch == "x86_64" then
 					"amd64"
 				else
-					"Error: Unknown arch: \($m.arch)\n" | halt_error
+					f::print_error("Unknown arch: \($m.arch) (context: \(.name))")
 				end
 			),
 			url: .browser_download_url,
