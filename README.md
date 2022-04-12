@@ -27,7 +27,7 @@ I didn't like existing solutions such as [asdf](https://github.com/asdf-vm/asdf)
 
 ## Current Support
 
-Woof already supports 10 languages on `x86_64`. For more details, see the [roadmap](./docs/roadmap.md)
+Woof already supports 12 languages/runtimes/programs on `x86_64`. For more details, see the [roadmap](./docs/roadmap.md)
 
 We attempt to be reasonably compatible with all existing tools. For example, it will read asdf's [.tool-versions](https://asdf-vm.com/manage/configuration.html#tool-versions), nvm's [.nvmrc](https://github.com/nvm-sh/nvm#nvmrc) and read things from popular version managers like `rvm` and `pyenv`
 
