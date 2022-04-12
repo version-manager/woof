@@ -2,7 +2,7 @@
 
 go.matrix() {
 	m.fetch 'https://go.dev/dl' \
-		| perl "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/go.pl"
+		| perl "$BASALT_PACKAGE_DIR/pkg/src/filters/go.pl"
 }
 
 go.install() {

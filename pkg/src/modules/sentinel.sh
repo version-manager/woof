@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 sentinel.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'sentinel'
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'sentinel'
 }
 
 sentinel.install() {

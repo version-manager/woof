@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 terraform.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'terraform'
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'terraform'
 }
 
 terraform.install() {

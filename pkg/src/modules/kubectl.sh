@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 kubectl.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/kubectl.sh"
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/kubectl.sh"
 }
 
 kubectl.install() {

@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 vagrant.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'vagrant'
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'vagrant'
 }
 
 vagrant.install() {

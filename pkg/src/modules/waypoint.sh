@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 waypoint.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'waypoint'
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'waypoint'
 }
 
 waypoint.install() {

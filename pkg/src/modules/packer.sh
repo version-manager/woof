@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 packer.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'packer'
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'packer'
 }
 
 packer.install() {

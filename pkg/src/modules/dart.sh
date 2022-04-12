@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 dart.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/dart.sh"
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/dart.sh"
 }
 
 dart.install() {

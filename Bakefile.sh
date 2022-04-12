@@ -17,10 +17,10 @@ task.generate() {
 	local import_file='./pkg/src/share/imports.ts'
 
 	> "$import_file"
-	for file in ./pkg/src/share/fetchers/*.ts; do
+	for file in ./pkg/src/filters/*.ts; do
 		local file_name=${file##*/}; file_name=${file_name%.*}
 
-		printf '%s\n' "import { parse${file_name^} } from \"./fetchers/$file_name\"" >> "$import_file"
+		printf '%s\n' "import { parse${file_name^} } from \"./filters/$file_name\"" >> "$import_file"
 	done
 
 	# deno run --allow-net --allow-env ./pkg/src/share/parse-crystal.ts > ./output/Crystal.txt

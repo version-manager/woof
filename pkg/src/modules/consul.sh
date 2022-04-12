@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 consul.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'consul'
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'consul'
 }
 
 consul.install() {

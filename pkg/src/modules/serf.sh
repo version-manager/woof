@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 serf.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/hashicorp.sh" 'serf'
+	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'serf'
 }
 
 serf.install() {

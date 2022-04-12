@@ -2,7 +2,7 @@
 
 zig.matrix() {
 	m.fetch 'https://ziglang.org/download/index.json' \
-		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/share/fetchers/zig.jq"
+		| jq -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/zig.jq"
 }
 
 zig.install() {
