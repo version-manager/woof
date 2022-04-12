@@ -8,6 +8,7 @@ parse_dart() {
 
 	local prefix="https://storage.googleapis.com/dart-archive/channels"
 	local regex="^refs/tags/[[:digit:]]+\\.[[:digit:]]+\\.[[:digit:]]+$"
+	local _hash= tag_name=
 	while read -ru3 _hash tag_name; do
 		if [[ $tag_name =~ $regex ]]; then
 			tag_name=${tag_name#refs/tags/}

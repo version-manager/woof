@@ -187,6 +187,6 @@ Actions:
    get-version
    set-version
    list [--installed] [--all]
-   debug
+   tool <debug-matrix|debug-install|clear-matrix-cache> [... args]
 "
 }
