@@ -1,11 +1,14 @@
-package util
+package util;
 
-# TODO
 sub f_die {
-	f_print_error();
-	exit(1);
+	my $msg = $ARGV[0];
+
+	f_print_err("$msg");
+	exit 1;
 }
 
 sub f_print_error {
-	printf();
+	my $msg = $ARGV[0];
+
+	print STDERR "$msg";
 }

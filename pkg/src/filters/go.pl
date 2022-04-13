@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
-
 use strict;
 use warnings;
+
+# FIXME no warnings printed in 'else' blocks
 
 my $text = do { local $/; <STDIN> };
 while ( $text =~
@@ -11,7 +12,7 @@ while ( $text =~
         next;
     }
 
-    my $uri      = $+{uri};
+    my $uri = $+{uri};
     my $checksum = $+{checksum};
     my $os = $+{os};
     my $arch = $+{arch};
@@ -25,8 +26,8 @@ while ( $text =~
     } elsif ($os eq 'Windows') {
         next;
     } else {
-        # TODO do not die
-        die "Unaccounted for os: $os";
+        next;
+        # die "Unaccounted for os: $os";
     }
 
     if ($arch eq 'x86-64') {
@@ -42,7 +43,7 @@ while ( $text =~
     } elsif ($arch eq 's390x') {
         $arch = 's390x';
     } else {
-        # TODO do not die(as above), print warning
+        next;
         # print "Unaccounted for arch: $arch";
     }
 

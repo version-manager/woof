@@ -6,6 +6,8 @@ Woof is the version manager to end all version managers.
 
 Akin to [asdf](https://github.com/asdf-vm/asdf) and [sdkman](https://sdkman.io), Woof is a multi-tool version manager. That is, it manages the installation of multiple versions for a particular tool.
 
+Woof is also a lighter-weight and more direct alternative to [Nix](https://nixos.org), [Guix](https://guix.gnu.org/en/download), and [Docker](https://www.docker.com) in some aspects
+
 Woof supports many popular languages out of the box - see the [Roadmap](./docs/roadmap) for more details
 
 ## Concepts

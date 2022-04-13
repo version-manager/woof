@@ -115,6 +115,7 @@ This requires a modification to the Module API
 - `.node-version`, and `.nvmrc`
 - `.dvmrc`
 - `.ruby-version` and `.rvmrc`
+- `.tool-versions`
 
 ### Misc
 

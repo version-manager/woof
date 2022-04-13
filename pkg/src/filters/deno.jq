@@ -4,7 +4,8 @@ import "util" as f;
 	| .tag_name as $version
 	| (($version | split("."))[0] | ltrimstr("v") | tonumber) as $version_major
 	| (($version | split("."))[1] | tonumber) as $version_minor
-		# The patch release may include the rc (i.g. '-rc3'). We remove that
+		# The patch release may include the rc (i.g. '-rc3'). We remove that just
+		# so $version_patch can be a number. Release candidates are still downloadable
 	| (($version[0:$version | rindex("-")] | split("."))[2] | tonumber) as $version_patch 
 	| .assets[] 
 	| (if $version_major == 0 and $version_minor == 35 and $version_patch == 0

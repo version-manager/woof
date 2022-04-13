@@ -10,10 +10,8 @@ STATUS: IN DEVELOPMENT
   - And/or you don't trust random / less maintained APT repositories, AUR packages, etc.
 - You want an OS independent way to install and switch between `$language` versions
   - And/or if you don't want to remember / forget how to use `update-alternatives`, `archlinux-java`, etc.
-- You are tired of installing and configuration version managers for every single language
+- You are tired of installing and configuration version managers (or version manager plugins) for every single language
   - And/or you think each version manager comes with its own class of bugs / bad dx, etc.
-
-I didn't like existing solutions such as [asdf](https://github.com/asdf-vm/asdf) or [sdkman](https://github.com/sdkman/sdkman-cli). asdf was too buggy and I disliked the coding style and architecture. sdkman is better but it felt too bloated, complex, and Java-centric. Other solutions like [Nix](https://nixos.org), [Guix](https://guix.gnu.org/en/download), and [Docker](https://www.docker.com) solve the solutions in some way, but aren't optimal
 
 ## Features
 
@@ -38,7 +36,7 @@ External utilities are _only_ used due to necessity or efficiency. The following
 - cURL
 - jq 1.6
 - POSIX `mv`, `cat`, `cp`, `uname`, `stty`, `sed`, etc.
-- sort (GNUism -V) (TODO: phase out)
+- sort (TODO: phase out -V GNUism)
 
 ## Installation
 
