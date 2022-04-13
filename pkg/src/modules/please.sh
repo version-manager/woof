@@ -2,7 +2,7 @@
 
 please.matrix() {
 	m.fetch_github_release 'thought-machine/please' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/please.jq"
+		| m.run_jq 'please'
 }
 
 please.install() {

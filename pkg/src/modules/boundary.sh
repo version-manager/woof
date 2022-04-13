@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 boundary.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'boundary'
+	m.run_bash 'hashicorp' 'boundary'
 }
 
 boundary.install() {

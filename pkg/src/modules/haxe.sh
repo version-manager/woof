@@ -2,7 +2,7 @@
 
 haxe.matrix() {
 	m.fetch_github_release 'HaxeFoundation/haxe' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/haxe.jq"
+		| m.run_jq 'haxe'
 }
 
 haxe.install() {

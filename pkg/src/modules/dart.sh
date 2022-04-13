@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 dart.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/dart.sh"
+	m.run_bash 'dart'
 }
 
 dart.install() {

@@ -2,7 +2,7 @@
 
 crystal.matrix() {
 	m.fetch_github_release 'crystal-lang/crystal' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/crystal.jq"
+		| m.run_jq 'crystal'
 }
 
 crystal.install() {

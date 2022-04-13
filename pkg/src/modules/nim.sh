@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 nim.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/nim.sh"
+	m.run_bash 'nim'
 }
 
 nim.install() {

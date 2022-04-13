@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 nodejs.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/nodejs.sh"
+	m.run_bash 'nodejs'
 }
 
 nodejs.install() {

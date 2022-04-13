@@ -2,7 +2,7 @@
 
 deno.matrix() {
 	m.fetch_github_release 'denoland/deno' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/deno.jq"
+		| m.run_jq 'deno'
 }
 
 deno.install() {

@@ -2,7 +2,7 @@
 
 gh.matrix() {
 	m.fetch_github_release 'cli/cli' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/gh.jq"
+		| m.run_jq 'gh'
 }
 
 gh.install() {

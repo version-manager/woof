@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 vault.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'vault'
+	m.run_bash 'hashicorp' 'vault'
 }
 
 vault.install() {

@@ -2,7 +2,7 @@
 
 gleam.matrix() {
 	m.fetch_github_release 'gleam-lang/gleam' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/gleam.jq"
+		| m.run_jq 'gleam'
 }
 
 gleam.install() {

@@ -2,7 +2,7 @@
 
 neko.matrix() {
 	m.fetch_github_release 'HaxeFoundation/neko' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/neko.jq"
+		| m.run_jq 'neko'
 }
 
 neko.install() {

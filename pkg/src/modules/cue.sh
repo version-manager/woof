@@ -2,7 +2,7 @@
 
 cue.matrix() {
 	m.fetch_github_release 'cue-lang/cue' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/cue.jq"
+		| m.run_jq 'cue'
 }
 
 cue.install() {

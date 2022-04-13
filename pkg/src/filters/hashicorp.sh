@@ -17,7 +17,6 @@ parse_hashicorp() {
 	local line=
 	while IFS= read -r line; do
 		if [[ $line =~ $regex ]]; then
-		echo $line
 			local version_path="${BASH_REMATCH[1]}"
 			
 			local url="$prefix/$version_path"

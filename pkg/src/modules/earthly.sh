@@ -2,7 +2,7 @@
 
 earthly.matrix() {
 	m.fetch_github_release 'earthly/earthly' \
-		| jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/earthly.jq"
+		| m.run_jq 'earthly'
 }
 
 earthly.install() {

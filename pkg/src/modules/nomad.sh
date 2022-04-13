@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 nomad.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'nomad'
+	m.run_bash 'hashicorp' 'nomad'
 }
 
 nomad.install() {

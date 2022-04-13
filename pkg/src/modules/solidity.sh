@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 solidity.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/solidity.sh"
+	m.run_bash 'solidity'
 }
 
 solidity.install() {

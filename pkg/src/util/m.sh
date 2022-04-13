@@ -10,6 +10,34 @@ m.fetch() {
 	m.ensure curl -fsSL "$@"
 }
 
+m.run_bash() {
+	local file="$1"
+	
+	# Ex. 'm.run_bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" "consul"'
+	if [[ ${file::1} == '/' ]]; then
+		bash "$@"
+	# Ex. 'm.run_bash "hashicorp" "consul"'
+	elif [[ $file =~ ^[[:alpha:]]+$ ]]; then
+		bash "$BASALT_PACKAGE_DIR/pkg/src/filters/$file.sh" "${@:2}"
+	else
+		bash "$@"
+	fi
+}
+
+m.run_jq() {
+	local file="$1"
+	
+	# Ex. 'm.run_jq "$BASALT_PACKAGE_DIR/pkg/src/filters/crystal.jq"'
+	if [[ ${file::1} == '/' ]]; then
+		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$@"
+	# Ex. 'm.run_jq "crystal"'
+	elif [[ $file =~ ^[[:alpha:]]+$ ]]; then
+		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/$file.jq" "${@:2}"
+	else
+		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" "$@"
+	fi
+}
+
 # TODO: implement logging
 m.log() {
 	printf '%s\n' "$1" >/dev/null

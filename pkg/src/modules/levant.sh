@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 levant.matrix() {
-	bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" 'levant'
+	m.run_bash 'hashicorp' 'levant'
 }
 
 levant.install() {
