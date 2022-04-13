@@ -27,7 +27,7 @@ See the [Module API]('./module_api.md)
 
 ## Languages
 
-Woof aims to support the following languages / package managers / programs
+Woof aims to support the following languages / programs
 
 There are three levels of support:
 
@@ -35,7 +35,7 @@ There are three levels of support:
 - Dogfooding (it works on my machine)
 - Complete (works everywhere with supporting test suite)
 
-### Buildless Programming Languages
+### Buildless
 
 | Language            | Current Support | Official Download                                         | Replaces                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | ------------------- | --------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -75,9 +75,9 @@ There are three levels of support:
 | Hashicorp Vault     | Dogfooding      | [Official](https://www.vaultproject.io/downloads)         | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | Hashicorp Waypoint  | Dogfooding      | [Official](https://www.waypointproject.io/downloads)      | [asdf-hashicorp](https://github.com/asdf-community/asdf-hashicorp)                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-### Buildfull Programming Languages
+### Buildfull
 
-This requires a modification to the module API, support for patches
+This requires a modification to the Module API
 
 | Language | Current Support | Official Download                                 | Replaces                                                                                                                                                                                                   |
 | -------- | --------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -111,10 +111,10 @@ This requires a modification to the module API, support for patches
 
 #### Nuances
 
-kubectl: Not yet `.kubectl_version`
-Node: Not yet `.node-version`, and `.nvmrc`
-Deno: Not yet `.dvmrc`
-Ruby: Not yet `.ruby-version` and `.rvmrc`
+- `.kubectl_version`
+- `.node-version`, and `.nvmrc`
+- `.dvmrc`
+- `.ruby-version` and `.rvmrc`
 
 ### Misc
 
