@@ -58,6 +58,14 @@ m.git_tag_to_versions_array() {
 	unset _sha1 refspec
 }
 
+m.fetch_github_tags() {
+	local prefix="$1"
+	
+	local {_,refspec}=
+	while read -r _ refspec; do
+		printf '%s\n' "${refspec#refs/tags/}"
+	done < <(git ls-remote --refs --tags "https://github.com/$prefix")
+}
 m.fetch_github_release() {
 	local repo="$1"
 	
