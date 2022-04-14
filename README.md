@@ -25,7 +25,7 @@ STATUS: IN DEVELOPMENT
 
 ## Current Support
 
-Woof already supports 29 languages/programs on at least `x86_64`. For more details, see the [roadmap](./docs/roadmap.md)
+Woof already supports 34 languages/programs on at least `x86_64`. For more details, see the [roadmap](./docs/roadmap.md)
 
 We attempt to be reasonably compatible with all existing tools. For example, it will read asdf's [.tool-versions](https://asdf-vm.com/manage/configuration.html#tool-versions), nvm's [.nvmrc](https://github.com/nvm-sh/nvm#nvmrc) and read things from popular version managers like `rvm` and `pyenv`
 

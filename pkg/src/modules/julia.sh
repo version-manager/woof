@@ -10,7 +10,7 @@ julia.install() {
 	local version="$2"
 
 	m.fetch -o './julia.tar.gz' "$url"
-	m.ensure tar xaf './julia.tar.gz'
+	m.ensure tar xf './julia.tar.gz'
 	m.ensure mv ./*/ './dir'
 
 	REPLY_DIR='./dir'
