@@ -7,7 +7,7 @@ woof-install() {
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
 	unset -v possible_module_name
-
+	
 	helper.create_version_matrix "$module_name"
 
 	helper.determine_version_string "$module_name" "$possible_version_string"

@@ -162,6 +162,8 @@ helper.determine_version_string_installed() {
 helper.create_version_matrix() {
 	local module_name="$1"
 
+	print.info 'Constructing version matrix'
+
 	var.get_cached_matrix_file "$module_name"
 	local matrix_file="$REPLY"
 
@@ -241,7 +243,7 @@ helper.install_module_version() {
 	local url="$REPLY1"
 
 	# Execute '<module>.install'
-	printf '%s\n' "Installing $version_string"
+	print.info "Downloading and installing $module_name $version_string"
 	local old_pwd="$PWD"
 	if ! cd -- "$workspace_dir"; then
 		print.die 'Failed to cd'
