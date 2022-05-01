@@ -10,13 +10,13 @@ woof-set-version() {
 	helper.determine_version_string_installed "$module_name" "$possible_version_string"
 	local version_string="$REPLY"
 
-	# Write version choice
-	var.get_symlink_dir 'global' 'choice'
-	local global_choice_dir="$REPLY"
-	if [ -d "$global_choice_dir" ]; then
-		mkdir -p "$global_choice_dir"
+	# Write version selection
+	var.get_symlink_dir 'global' 'selection'
+	local global_selection_dir="$REPLY"
+	if [ -d "$global_selection_dir" ]; then
+		mkdir -p "$global_selection_dir"
 	fi
-	if ! printf '%s\n' "$version_string" > "$global_choice_dir/$module_name"; then
+	if ! printf '%s\n' "$version_string" > "$global_selection_dir/$module_name"; then
 		print.die "Could not write global version"
 	fi
 	print.info "Set version '$version_string' as global version"

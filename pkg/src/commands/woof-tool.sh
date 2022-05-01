@@ -10,7 +10,9 @@ woof-tool() {
 		print.die 'Failed to shift'
 	fi
 
-	if [ "$subcmd" = 'print-dirs' ]; then
+	if [ "$subcmd" = 'info' ]; then
+		:
+	elif [ "$subcmd" = 'print-dirs' ]; then
 		local var_name=
 		for var_name in WOOF_CONFIG_HOME WOOF_CACHE_HOME WOOF_DATA_HOME WOOF_STATE_HOME; do
 			local -n var_value="$var_name"

@@ -142,35 +142,35 @@ util.get_module_data() {
 	done < "$data_file"; unset -v key values
 }
 
-util.get_current_choice() {
+util.get_current_selection() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
-	var.get_symlink_dir 'global' 'choice'
-	local current_choice_file="$REPLY/$module_name"
+	var.get_symlink_dir 'global' 'selection'
+	local current_selection_file="$REPLY/$module_name"
 
-	local current_choice=
-	if [ -f "$current_choice_file" ]; then
-		if ! current_choice="$(<"$current_choice_file")"; then
-			print.die "Could not read from '$current_choice_file'"
+	local current_selection=
+	if [ -f "$current_selection_file" ]; then
+		if ! current_selection="$(<"$current_selection_file")"; then
+			print.die "Could not read from '$current_selection_file'"
 		fi
 	fi
 
-	REPLY=$current_choice
+	REPLY=$current_selection
 }
 
-util.set_current_choice() {
+util.set_current_selection() {
 	unset REPLY; REPLY=
 	local module_name="$1"
-	local current_choice="$2"
+	local current_selection="$2"
 
-	var.get_symlink_dir 'global' 'choice'
-	local current_choice_file="$REPLY/$module_name"
+	var.get_symlink_dir 'global' 'selection'
+	local current_selection_file="$REPLY/$module_name"
 
-	mkdir -p "${current_choice_file%/*}"
-	if ! printf '%s\n' "$version_string" > "$current_choice_file"; then
-		rm -f "$current_choice_file"
-		print.die "Could not write to '$current_choice_file'"
+	mkdir -p "${current_selection_file%/*}"
+	if ! printf '%s\n' "$version_string" > "$current_selection_file"; then
+		rm -f "$current_selection_file"
+		print.die "Could not write to '$current_selection_file'"
 	fi
 
 }
