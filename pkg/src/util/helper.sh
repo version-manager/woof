@@ -208,7 +208,7 @@ helper.install_module_version() {
 	local module_name="$1"
 	local version_string="$2"
 
-	local workspace_dir="$WOOF_DATA_HOME/workspace-$module_name"
+	local workspace_dir="$WOOF_STATE_HOME/workspace-$module_name"
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"

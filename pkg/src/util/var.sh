@@ -2,7 +2,7 @@
 
 var.get_cached_matrix_file() {
 	unset -v REPLY
-	REPLY="$WOOF_STATE_HOME/cached/$1-matrix.txt"
+	REPLY="$WOOF_CACHE_HOME/matrices/$1.txt"
 }
 
 var.get_module_install_dir() {

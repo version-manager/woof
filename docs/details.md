@@ -1,5 +1,13 @@
 # Details
 
+## Things
+
+Current version can be determined by
+
+- Global version (default)
+- Per-project
+- Per tty/pty
+
 ## Approach
 
 When creating version managers, there are two approaches: shims and symlinks
