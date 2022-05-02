@@ -16,3 +16,8 @@ nodejs.install() {
 	REPLY_BINS=('./bin')
 	REPLY_MANS=('./share/man/man1')
 }
+
+nodejs.version_from_dir() {
+	# TODO
+	:
+}

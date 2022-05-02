@@ -22,6 +22,8 @@ woof-list() {
 
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
+	unset -v possible_module_name
+
 
 	if [ "$flag_available" = 'yes' ]; then
 		helper.create_version_matrix "$module_name"

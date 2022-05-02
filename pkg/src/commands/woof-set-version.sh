@@ -6,12 +6,14 @@ woof-set-version() {
 
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
+	unset -v possible_module_name
 
 	helper.determine_version_string_installed "$module_name" "$possible_version_string"
 	local version_string="$REPLY"
+	unset -v possible_version_string
 
 	# Write version selection
-	var.get_symlink_dir 'global' 'selection'
+	var.get_dir 'global' 'selection'
 	local global_selection_dir="$REPLY"
 	if [ -d "$global_selection_dir" ]; then
 		mkdir -p "$global_selection_dir"

@@ -11,7 +11,28 @@ woof-tool() {
 	fi
 
 	if [ "$subcmd" = 'info' ]; then
-		:
+		local possible_module_name="$1"
+
+		helper.determine_module_name "$possible_module_name"
+		local module_name="$REPLY"
+		unset -v possible_module_name
+		
+		var.get_dir 'global' 'selection'
+		local global_selection_dir="$REPLY"
+
+		printf '%s\n' '------ GLOBAL ------'
+		if [ -f "$global_selection_dir/$module_name" ]; then
+			printf '%s\n' "Version: $(<"$global_selection_dir/$module_name")"
+		else
+			printf '%s\n' "Version: (no global)"
+		fi
+		printf '\n'
+
+		printf '%s\n' '------ DIRECTORY ------'
+		m.toolversions_get_versions "$module_name"
+		m.toolversions_get_first_valid_version "$module_name"
+		printf '%s\n' "Version: ${version:-(no directory)}"
+
 	elif [ "$subcmd" = 'print-dirs' ]; then
 		local var_name=
 		for var_name in WOOF_CONFIG_HOME WOOF_CACHE_HOME WOOF_DATA_HOME WOOF_STATE_HOME; do
@@ -63,6 +84,9 @@ woof-tool() {
 			print.info "Removing matrix cache for '$module_name'"
 			rm -f "$matrix_file"
 		fi
+	elif [ "$subcmd" = 'cd-override' ]; then
+		printf '%s\n' 'cd override'
+		helper.toolversions_set_versions_in_accordance
 	else
 		print.die "Subcommand '$subcmd' is not valid"
 	fi

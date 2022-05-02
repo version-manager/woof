@@ -11,8 +11,9 @@ woof-init() {
 		print.die 'Shell not supported'
 	fi
 
-	var.get_symlink_dir 'global' 'bin'
+	var.get_dir 'global' 'bin'
 	shell.path_prepend "$REPLY"
+	woof_override_cd
 }
 
 shell.variable_assignment() {
@@ -125,6 +126,28 @@ shell.source() {
 		;;
 	sh)
 		printf '%s\n' ". \"$dir/$file.sh\""
+		;;
+	esac
+}
+
+woof_override_cd() {
+	case $shell in
+	fish)
+		cat<<-"EOF"
+		function cd
+		  woof tool cd-override
+		  builtin cd "$@"
+		end
+		EOF
+		;;
+	zsh|ksh|bash|sh)
+		cat<<-"EOF"
+		cd() {
+		  woof tool cd-override
+		  builtin cd "$@"
+		}
+		EOF
+		printf '%s\n' "fpath=(\"$dir\" \$fpath)"
 		;;
 	esac
 }

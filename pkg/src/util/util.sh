@@ -70,7 +70,7 @@ util.key_to_index() {
 	local key="$2"
 
 	local -i index=-1
-	for ((i=0; i<${#array_name[@]}; i++)); do
+	for ((i=0; i<${#array_name[@]}; ++i)); do
 		if [ "${array_name[$i]}" = "$key" ]; then
 			index=$i
 			break
@@ -146,7 +146,7 @@ util.get_current_selection() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
-	var.get_symlink_dir 'global' 'selection'
+	var.get_dir 'global' 'selection'
 	local current_selection_file="$REPLY/$module_name"
 
 	local current_selection=
@@ -164,7 +164,7 @@ util.set_current_selection() {
 	local module_name="$1"
 	local current_selection="$2"
 
-	var.get_symlink_dir 'global' 'selection'
+	var.get_dir 'global' 'selection'
 	local current_selection_file="$REPLY/$module_name"
 
 	mkdir -p "${current_selection_file%/*}"
@@ -172,7 +172,39 @@ util.set_current_selection() {
 		rm -f "$current_selection_file"
 		print.die "Could not write to '$current_selection_file'"
 	fi
+}
 
+util.is_module_version_installed() {
+	unset -v REPLY; REPLY=
+	local module_name="$1"
+	local version_string="$2"
+
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+
+	if [ -d "$install_dir/$version_string/done" ]; then
+		return $?
+	else
+		return $?
+	fi
+}
+
+util.toolversions_get_path() {
+	local toolversions_file='.tool-versions'
+	local toolversions_path=
+	if ! toolversions_path=$(
+		while [ ! -f "$toolversions_file" ] && [ "$PWD" != / ]; do
+			if ! cd ..; then
+				exit 1
+			fi
+		done
+		if [ "$PWD" = / ]; then
+			exit
+		fi
+		printf '%s' "$PWD/$toolversions_file"
+	); then
+		print.die "Could not find '$toolversions_file'"
+	fi
 }
 
 util.show_help() {

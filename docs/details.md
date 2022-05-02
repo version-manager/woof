@@ -5,7 +5,7 @@
 Current version can be determined by
 
 - Global version (default)
-- Per-project
+- Per-directory
 - Per tty/pty
 
 ## Approach

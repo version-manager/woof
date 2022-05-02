@@ -5,9 +5,9 @@ woof-get-version() {
 
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
+	unset -v possible_module_name
 
-	# Get version selection
-	var.get_symlink_dir 'global' 'selection'
+	var.get_dir 'global' 'selection'
 	local global_selection_dir="$REPLY"
 
 	if [ ! -f "$global_selection_dir/$module_name" ]; then

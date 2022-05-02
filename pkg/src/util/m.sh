@@ -66,6 +66,7 @@ m.fetch_github_tags() {
 		printf '%s\n' "${refspec#refs/tags/}"
 	done < <(git ls-remote --refs --tags "https://github.com/$prefix")
 }
+
 m.fetch_github_release() {
 	local repo="$1"
 	
@@ -87,4 +88,17 @@ m.fetch_github_release() {
 			fi
 		fi
 	done
+}
+
+m.toolversions_get_versions() {
+	if helper.toolversions_get_versions "$@"; then :; else
+		return $?
+	fi
+
+}
+
+m.toolversions_get_first_valid_version() {
+	if helper.toolversions_get_first_valid_version "$@"; then :; else
+		return $?
+	fi
 }
