@@ -164,10 +164,10 @@ helper.symlink_after_install() {
 	local global_bin_dir="$REPLY"
 	
 	util.get_module_data "$module_name" "$version_string" 'bins'
-	local -a bin_dirs=("${REPLIES[@]}")
+	local -a bin_dirs=("${REPLY[@]}")
 
-	util.get_module_data "$module_name" "$version_string" 'bins'
-	local -a man_dirs=("${REPLIES[@]}") # FIXME
+	util.get_module_data "$module_name" "$version_string" 'mans'
+	local -a man_dirs=("${REPLY[@]}") # FIXME
 
 	if [ ! -d "$global_bin_dir" ]; then
 		mkdir -p "$global_bin_dir"

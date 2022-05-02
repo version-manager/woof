@@ -120,8 +120,8 @@ util.uname_system() {
 }
 
 util.get_module_data() {
-	unset -v REPLIES
-	declare -g REPLIES=()
+	unset -v REPLY
+	declare -g REPLY=()
 	
 	local module_name="$1"
 	local version_string="$2"
@@ -136,7 +136,7 @@ util.get_module_data() {
 		IFS=':' read -ra values <<< "$values"
 
 		if [ "$specified_key" = "$key" ]; then
-			REPLIES=("${values[@]}")
+			REPLY=("${values[@]}")
 			return
 		fi
 	done < "$data_file"; unset -v key values
