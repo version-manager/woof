@@ -38,7 +38,7 @@ m.unpack() {
 	if ! shift; then core.panic "Failed to shift"; fi
 	if ! shift; then core.panic "Failed to shift"; fi
 
-	if [[ "$cmd" != @(tar) ]]; then
+	if [[ "$cmd" != @(gzip) ]]; then
 		core.panic "m.unpack: Unrecognized command: $cmd"
 	fi
 
