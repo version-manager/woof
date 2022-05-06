@@ -11,11 +11,11 @@ import "util" as f;
 			os: $m.os,
 			arch: (
 				if $m.arch == "amd64" then
-					"amd64"
+					"x86_64"
 				elif $m.arch == "arm64" then
 					"arm64"
 				elif $m.arch == null then
-					"amd64" # FIXME possible bug
+					"x86_64" # FIXME possible bug
 				else
 					f::print_error("Unknown arch: \($m.arch) (context: \(.name))")
 				end

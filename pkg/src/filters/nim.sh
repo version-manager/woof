@@ -18,7 +18,7 @@ parse_nim() {
 		if ((read_i == 1)); then
 			((read_i--))
 			if [[ $line =~ \<a\ href=\"(.+?)\" ]]; then
-				printf '%s\n' "Nim|v$version|$os|amd64|https://nim-lang.org${BASH_REMATCH[1]}"
+				printf '%s\n' "Nim|v$version|$os|x86_64|https://nim-lang.org${BASH_REMATCH[1]}"
 			fi
 			continue
 		elif ((read_i == 0)); then

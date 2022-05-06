@@ -31,9 +31,9 @@ import "util" as f;
 			),
 			arch: (
 				if .arch == "x86_64" then
-					"amd64"
-				elif .arch == "i686" then
 					"x86_64"
+				elif .arch == "i686" then
+					"x86"
 				elif .arch == "aarch64" then
 					"arm64"
 				elif .arch == "armv7l" then

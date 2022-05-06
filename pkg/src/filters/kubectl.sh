@@ -8,7 +8,7 @@ parse_kubectl() {
 		if [[ $tag_name =~ $regex ]]; then
 			tag_name=${BASH_REMATCH[1]}
 			local url="https://dl.k8s.io/release/v$tag_name/bin/linux/amd64/kubectl"
-			printf '%s\n' "kubectl|$tag_name|linux|amd64|$url"
+			printf '%s\n' "kubectl|$tag_name|linux|x86_64|$url"
 		fi
 	done < <(git ls-remote --tags --refs 'https://github.com/kubernetes/kubectl')
 }

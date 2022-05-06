@@ -5,7 +5,7 @@ python.matrix() {
 
 	local version=
 	while read -r version; do
-		printf '%s\n' "CPython|$version|linux|amd64|$prefix/ftp/python/${version#v}/Python-${version#v}.tar.xz"
+		printf '%s\n' "CPython|$version|linux|x86_64|$prefix/ftp/python/${version#v}/Python-${version#v}.tar.xz"
 	done < <(m.fetch_github_tags 'python/cpython')
 }
 

@@ -23,7 +23,7 @@ import "util" as f;
 				if $m.arch == "i686" then
 					"x86"
 				elif $m.arch == "x86_64" or $m.arch == "x86-64" then
-					"amd64"
+					"x86_64"
 				elif $m.arch == "x86_64-bundled" or $m.arch == "universal" then
 					empty
 				else

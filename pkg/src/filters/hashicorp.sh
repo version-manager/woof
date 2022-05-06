@@ -49,7 +49,7 @@ parse_hashicorp() {
 
 					case $version_arch in
 						x86_64)
-							version_arch='amd64' ;;
+							version_arch='x86_64' ;;
 						amd64|arm64|ppc64le|s390x) : ;;
 						# boundary: armelv5|armhfv6
 						# nomad: arm{5,6,7}|amd64-lxc

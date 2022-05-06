@@ -13,8 +13,8 @@ Prints a version matrix to standard output. Each line of standard output looks l
 For example,
 
 ```txt
-Go|v1.17.6|linux|amd64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
-NodeJS|v15.9.0|linux|amd64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|2021-02-18
+Go|v1.17.6|linux|x86_64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
+NodeJS|v15.9.0|linux|x86_64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|2021-02-18
 ```
 
 To debug this function, use the `woof tool debug-matrix <module>` command
@@ -33,7 +33,7 @@ Operating system must be one of:
 
 Architecture must be one of:
 
-- `amd64`
+- `x86_64`
 - `x86`
 - `arm64`
 - `armv7l`

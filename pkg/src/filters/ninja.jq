@@ -19,7 +19,7 @@ import "util" as f;
 				f::print_error("Unknown os: \($m.os) (context: \(.name))")
 			end
 		),
-		arch: "amd64",
+		arch: "x86_64",
 		url: .browser_download_url,
 		created_at,
 		download_count

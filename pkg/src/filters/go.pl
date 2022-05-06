@@ -31,7 +31,7 @@ while ( $text =~
     }
 
     if ($arch eq 'x86-64') {
-        $arch = 'amd64';
+        $arch = 'x86_64';
     } elsif ($arch eq 'x86') {
         $arch = 'x86';
     } elsif ($arch eq 'ARM64') {

@@ -35,11 +35,11 @@ parse_nodejs() {
 				local normalized_platform=
 				case $platform in
 					linux-x86) normalized_platform='linux|x86' ;;
-					linux-x64) normalized_platform='linux|amd64' ;;
+					linux-x64) normalized_platform='linux|x86_64' ;;
 					linux-armv7l) normalized_platform='linux|armv7l' ;;
 					linux-arm64) normalized_platform='linux|arm64' ;;
 					osx-x32-tar) normalized_platform='darwin|x86' ;;
-					osx-x64-tar) normalized_platform='darwin|amd64' ;;
+					osx-x64-tar) normalized_platform='darwin|x86_64' ;;
 					osx-arm64-tar) normalized_platform='darwin|arm64' ;;
 				esac
 

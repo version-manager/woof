@@ -29,7 +29,7 @@ import "util" as f;
 			),
 			arch: (
 				if $m.arch == "x64" or $m.arch == "x86_64" then
-					"amd64"
+					"x86_64"
 				else
 					f::print_error("Unknown arch: \($m.arch) (context: \(.name))")
 				end

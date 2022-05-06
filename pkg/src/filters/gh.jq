@@ -23,7 +23,7 @@ import "util" as f;
 				if $m.arch == "386" then
 					"x86"
 				elif $m.arch == "amd64" then
-					"amd64"
+					"x86_64"
 				elif $m.arch == "arm64" then
 					"arm64"
 				elif $m.arch == "armv6" then

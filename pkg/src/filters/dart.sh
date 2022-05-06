@@ -24,10 +24,10 @@ parse_dart() {
 				if curl -sqfL -o /dev/null --head "$url"; then
 					printf '%s\n' "Dart|$tag_name|$os|$normalized_arch|$url"
 				fi
-			done <<< 'linux x64 amd64
+			done <<< 'linux x64 x86_64
 linux ia32 x86
 linux arm64 arm64
-macos x64 amd64
+macos x64 x86_64
 macos arm64 arm64'
 			if [ -t 0 ]; then
 				printf ' %s' "$tag_name" >/dev/tty

@@ -17,10 +17,10 @@ import "util" as f;
 			end
 		),
 		arch: (
-			if $m.arch == "amd64" or $m.arch == "arm64" then
-				$m.arch
-			elif $m.arch == "386" then
+			if $m.arch == "amd64" then
 				"x86_64"
+			elif $m.arch == "386" then
+				"x86"
 			elif $m.arch == "arm" or $m.arch == "arm64" then
 				empty
 			else

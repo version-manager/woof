@@ -20,9 +20,9 @@ import "util" as f;
 			),
 		arch: (
 				if $m.os == "linux32" then
-					"x86_64"
+					"x86"
 				else
-					"amd64"
+					"x86_64"
 				end
 			) ,
 		url: .browser_download_url,

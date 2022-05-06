@@ -69,7 +69,7 @@ woof-tool() {
 		unset -v possible_version_string
 
 		helper.install_module_version --interactive "$module_name" "$version_string"
-	elif [ "$subcmd" = 'cache-clear-matrix' ]; then
+	elif [ "$subcmd" = 'clear-version-table' ]; then
 		local module_name="$1"
 
 		var.get_cached_matrix_file "$module_name"

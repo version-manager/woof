@@ -61,6 +61,7 @@ util.get_matrix_row() {
 	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
 		print.error "Failed to find corresponding row in version table"
 		print.hint "Does the version begin with 'v'? (Example: v18.0.0)"
+		print.hint "Try running 'woof tool clear-version-table $module_name'"
 		exit 1
 	fi
 
@@ -111,10 +112,10 @@ util.uname_system() {
 		*) print.die "Kernel '$kernel' unsupported. Please create a bug report if this is a mistake" ;;
 	esac
 
-	# amd64|x86|armv7l|aarch64
+	# x86_64|x86|armv7l|aarch64
 	case "$hardware" in
 		i686|x86) hardware_pretty='x86' ;;
-		amd64|x86_64) hardware_pretty='amd64' ;;
+		amd64|x86_64) hardware_pretty='x86_64' ;;
 		armv7l) hardware_pretty='armv7l' ;;
 		aarch64) hardware_pretty='aarch64' ;;
 		*) print.die "Hardware '$hardware' unsupported. Please create a bug report if this is a mistake" ;;

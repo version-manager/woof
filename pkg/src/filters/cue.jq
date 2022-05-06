@@ -20,7 +20,7 @@ import "util" as f;
 			),
 			arch: (
 				if $m.arch == "x86_64" or $m.arch == "amd64" then
-					"amd64"
+					"x86_64"
 				elif $m.arch == "arm64" then
 					"arm64"
 				else
