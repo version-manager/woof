@@ -1,13 +1,40 @@
 # shellcheck shell=bash
 
 m.ensure() {
-	if ! "$@"; then
-		print.die "Command '$*' failed"
+	if "$@"; then :; else
+		print.die "Command '$*' failed (code $?)"
 	fi
 }
 
 m.fetch() {
+	print.info 'Fetching' "$url"
 	m.ensure curl -fsSL "$@"
+}
+
+m.rmln() {
+	local target="$1"
+	local link="$2"
+
+	m.ensure rm -rf "$link" 
+	m.ensure ln -sf "$target" "$link"
+}
+
+m.unpack() {
+	local cmd="$1"
+	local file="$2"
+
+	if ! shift; then
+		print.die "Failed to shift"
+	fi
+	if ! shift; then
+		print.die "Failed to shift"
+	fi
+	if [ "$cmd" = 'tar' ]; then
+		print.info 'Unpacking' "$PWD/$file"
+		m.ensure tar xf "$@" "$file"
+	else
+		print.die "m.unpack: Unrecognized argument: $cmd"
+	fi
 }
 
 m.run_bash() {
@@ -38,9 +65,8 @@ m.run_jq() {
 	fi
 }
 
-# TODO: implement logging
 m.log() {
-	printf '%s\n' "$1" >/dev/null
+	printf '%s\n' "$1"
 }
 
 m.git_tag_to_versions_array() {

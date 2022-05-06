@@ -147,7 +147,6 @@ woof_override_cd() {
 		  builtin cd "$@"
 		}
 		EOF
-		printf '%s\n' "fpath=(\"$dir\" \$fpath)"
 		;;
 	esac
 }

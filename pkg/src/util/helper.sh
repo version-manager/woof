@@ -6,10 +6,11 @@
 helper.create_version_matrix() {
 	local module_name="$1"
 
-	print.info 'Constructing version matrix'
-
 	var.get_cached_matrix_file "$module_name"
 	local matrix_file="$REPLY"
+
+	print.info 'Constructing version matrix'
+	print.debug "Matrix file: $matrix_file"
 
 	if [ ! -d "${matrix_file%/*}" ]; then
 		mkdir -p "${matrix_file%/*}"
@@ -57,13 +58,16 @@ helper.install_module_version() {
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
 
+	var.get_module_common_dir "$module_name"
+	local common_dir="$REPLY"
+
 	# If there is an interactive flag, then we are debugging the installation
 	# process. In this case, make the workspace and install directory someplace
 	# totally different
 	local interactive_dir=
 	if [ "$flag_interactive" = 'yes' ]; then
 		if ! interactive_dir="$(mktemp -d)/woof-interactive-$RANDOM"; then
-			print.die 'Failed to mktmp'
+			print.die 'Failed to mktemp'
 		fi
 		workspace_dir="$interactive_dir/workspace_dir"
 		install_dir="$interactive_dir/install_dir"
@@ -86,17 +90,18 @@ helper.install_module_version() {
 	local url="$REPLY1"
 
 	# Execute '<module>.install'
-	print.info "Downloading and installing $module_name $version_string"
 	local old_pwd="$PWD"
 	if ! cd -- "$workspace_dir"; then
 		print.die 'Failed to cd'
 	fi
+	print.debug "Working directory changed to: $PWD"
+
 	unset -v REPLY_DIR
 	unset -v REPLY_{BINS,INCLUDES,LIBS,MANS} REPLY_{BASH,ZSH,FISH}_COMPLETIONS
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_INCLUDES=() REPLY_LIBS=() REPLY_MANS=() REPLY_BASH_COMPLETIONS=() \
 		REPLY_ZSH_COMPLETIONS=() REPLY_FISH_COMPLETIONS=()
-	if util.run_function "$module_name.install" "$url" "${version_string/#v}" "$os" "$arch"; then
+	if WOOF_MODULE_COMMON_DIR="$common_dir" util.run_function "$module_name.install" "$url" "${version_string/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"
 			print.error "$ERR"

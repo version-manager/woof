@@ -8,9 +8,15 @@ nodejs.install() {
 	local url="$1"
 	local version="$2"
 
-	m.ensure curl -fsSo file.tar.gz "$url"
+	m.fetch -o './file.tar.gz' "$url"
+	m.unpack 'tar' './file.tar.gz'
 	mkdir -p 'dir'
-	m.ensure tar xaf file.tar.gz -C 'dir' --strip-components=1
+	m.ensure mv ./*/* './dir'
+
+	mkdir -p "$WOOF_MODULE_COMMON_DIR/node_modules"
+	m.ensure rm -rf "$WOOF_MODULE_COMMON_DIR/node_modules"/{corepack,npm}
+	m.ensure cp -r "$PWD/dir/lib/node_modules"/{corepack,npm} "$WOOF_MODULE_COMMON_DIR/node_modules"
+	m.rmln "$WOOF_MODULE_COMMON_DIR/node_modules" "$PWD/dir/lib/node_modules" 
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

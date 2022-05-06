@@ -13,12 +13,15 @@ util.assert_not_empty() {
 
 util.run_function() {
 	local function_name="$1"
-	if ! shift; then :; fi
+	if ! shift; then 
+		print.die 'Failed to shift'
+	fi
 
 	if ! declare -f "$function_name" >/dev/null 2>&1; then
 		print.die "Function '$function_name' not defined"
 	fi
 
+	print.info 'Executing' "$function_name()"
 	if "$function_name" "$@"; then
 		return $?
 	else

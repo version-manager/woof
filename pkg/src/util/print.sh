@@ -36,6 +36,16 @@ print.info() {
 	if [[ -v NO_COLOR || $TERM = dumb ]]; then
 		printf "%s\n" "Info: $1"
 	else
-		printf "\033[0;34m%s\033[0m %s\n" 'Info:' "$1"
+		if [ -n "$2" ]; then
+			printf "\033[0;34m%10s\033[0m: %s\n" "$1" "$2"
+		else
+			printf "\033[0;34m%10s\033[0m: %s\n" 'Info' "$1"
+		fi
+	fi
+}
+
+print.debug() {
+	if [[ -v DEBUG ]]; then
+		printf '%s\n' "Debug: $1"
 	fi
 }
