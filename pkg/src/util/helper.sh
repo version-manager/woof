@@ -86,7 +86,9 @@ helper.install_module_version() {
 	local arch="$REPLY2"
 
 	# Determine correct binary for current system
-	util.get_matrix_row "$module_name" "$version_string" "$os" "$arch"
+	if util.get_matrix_row "$module_name" "$version_string" "$os" "$arch"; then :; else
+		exit $?
+	fi
 	local url="$REPLY1"
 
 	# Execute '<module>.install'
@@ -154,8 +156,10 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$version_string/data.txt"; then
 	rm -rf "$workspace_dir"
 	touch "$install_dir/$version_string/done"
 
+	print.info 'Installed' "$version_string"
+
 	# Set the current selection to the just-installed version
-	util.set_current_selection "$module_name" "$version_string"
+	util.set_global_selection "$module_name" "$version_string"
 }
 
 helper.symlink_after_install() {

@@ -14,7 +14,7 @@ helper.determine_module_name() {
 			all_modules_obj["$m"]=
 		done; unset m
 
-		tty.multiselect "$current_selection" all_modules_arr all_modules_obj
+		tty.multiselect "$global_selection" all_modules_arr all_modules_obj
 		module_name="$REPLY"
 	fi
 
@@ -96,10 +96,10 @@ helper.determine_version_string() {
 			print.die "Could not find any matching versions for the current os/arch"
 		fi
 
-		util.get_current_selection "$module_name"
-		local current_selection="$REPLY"
+		util.get_global_selection "$module_name"
+		local global_selection="$REPLY"
 
-		tty.multiselect "$current_selection" ui_keys ui_table
+		tty.multiselect "$global_selection" ui_keys ui_table
 		version_string="$REPLY"
 	fi
 
@@ -144,10 +144,10 @@ helper.determine_version_string_installed() {
 			versions_table["$version"]=
 		done; unset version
 
-		util.get_current_selection "$module_name"
-		local current_selection="$REPLY"
+		util.get_global_selection "$module_name"
+		local global_selection="$REPLY"
 
-		tty.multiselect "$current_selection" versions_list versions_table
+		tty.multiselect "$global_selection" versions_list versions_table
 		version_string="$REPLY"
 	fi
 

@@ -44,6 +44,10 @@ print.info() {
 	fi
 }
 
+print.hint() {
+	printf '%s\n' "  -> $1"
+}
+
 print.debug() {
 	if [[ -v DEBUG ]]; then
 		printf '%s\n' "Debug: $1"

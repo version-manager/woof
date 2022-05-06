@@ -6,22 +6,22 @@ util.assert_not_empty() {
 		local -n __variable="$variable_name"
 
 		if [ -z "$__variable" ]; then
-			print.die "Failed because variable '$variable_name' is empty"
+			print.panic "Failed because variable '$variable_name' is empty"
 		fi
 	done; unset -v variable_name
 }
 
 util.run_function() {
 	local function_name="$1"
-	if ! shift; then 
-		print.die 'Failed to shift'
+	if ! shift; then
+		print.panic 'Failed to shift'
 	fi
 
 	if ! declare -f "$function_name" >/dev/null 2>&1; then
-		print.die "Function '$function_name' not defined"
+		print.panic "Function '$function_name' not defined"
 	fi
 
-	print.info 'Executing' "$function_name()"
+	print.debug 'Executing' "$function_name()"
 	if "$function_name" "$@"; then
 		return $?
 	else
@@ -59,7 +59,9 @@ util.get_matrix_row() {
 	done < "$matrix_file"; unset -v variant version os arch url comment
 
 	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
-		print.die "Faield to find corresponding row"
+		print.error "Failed to find corresponding row in version table"
+		print.hint "Does the version begin with 'v'? (Example: v18.0.0)"
+		exit 1
 	fi
 
 	return 1
@@ -145,35 +147,36 @@ util.get_module_data() {
 	done < "$data_file"; unset -v key values
 }
 
-util.get_current_selection() {
+util.get_global_selection() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
 	var.get_dir 'global' 'selection'
-	local current_selection_file="$REPLY/$module_name"
+	local global_selection_file="$REPLY/$module_name"
 
-	local current_selection=
-	if [ -f "$current_selection_file" ]; then
-		if ! current_selection="$(<"$current_selection_file")"; then
-			print.die "Could not read from '$current_selection_file'"
+	local global_selection=
+	if [ -f "$global_selection_file" ]; then
+		if ! global_selection=$(<"$global_selection_file"); then
+			print.die "Could not read from '$global_selection_file'"
 		fi
 	fi
 
-	REPLY=$current_selection
+	REPLY=$global_selection
 }
 
-util.set_current_selection() {
+util.set_global_selection() {
 	unset REPLY; REPLY=
 	local module_name="$1"
-	local current_selection="$2"
+	local global_selection="$2"
 
 	var.get_dir 'global' 'selection'
-	local current_selection_file="$REPLY/$module_name"
+	local global_selection_file="$REPLY/$module_name"
 
-	mkdir -p "${current_selection_file%/*}"
-	if ! printf '%s\n' "$version_string" > "$current_selection_file"; then
-		rm -f "$current_selection_file"
-		print.die "Could not write to '$current_selection_file'"
+	print.info "Setting $global_selection as global default for $module_name"
+	mkdir -p "${global_selection_file%/*}"
+	if ! printf '%s\n' "$version_string" > "$global_selection_file"; then
+		rm -f "$global_selection_file"
+		print.die "Could not write to '$global_selection_file'"
 	fi
 }
 
@@ -193,6 +196,8 @@ util.is_module_version_installed() {
 }
 
 util.toolversions_get_path() {
+	unset -v REPLY; REPLY=
+
 	local toolversions_file='.tool-versions'
 	local toolversions_path=
 	if ! toolversions_path=$(
@@ -208,6 +213,7 @@ util.toolversions_get_path() {
 	); then
 		print.die "Could not find '$toolversions_file'"
 	fi
+	REPLY=$toolversions_path
 }
 
 util.show_help() {
