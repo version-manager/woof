@@ -19,6 +19,15 @@ tty.fullscreen_deinit() {
 	stty echo
 }
 
+tty.all_save() {
+	term.cursor_savepos; printf "$REPLY"
+	term.screen_save; printf "$REPLY"
+}
+tty.all_restore() {
+	term.screen_restore; printf "$REPLY"
+	term.cursor_restorepos; printf "$REPLY"
+}
+
 # backwards
 tty.private.backwards_all() {
 	new_version_index=0

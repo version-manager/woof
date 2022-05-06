@@ -8,7 +8,20 @@ m.ensure() {
 
 m.fetch() {
 	print.info 'Fetching' "$url"
-	m.ensure curl -fsSL "$@"
+
+	# --progress-bar goes to standard error
+	if [ -t 2 ]; then
+		# TODO: Alternate screen should have same contents as current screen to prevent jarding
+		# core.trap_add 'tty.all_restore' INT
+		# tty.all_save
+		# print.info 'Fetching' "$url"
+		m.ensure curl -fSL --progress-bar "$@"
+		# tty.all_restore
+		# core.trap_remove 'tty.all_restore' INT
+	else
+		m.ensure curl -fsSL "$@"
+	fi
+	
 }
 
 m.rmln() {
@@ -22,18 +35,20 @@ m.rmln() {
 m.unpack() {
 	local cmd="$1"
 	local file="$2"
+	if ! shift; then core.panic "Failed to shift"; fi
+	if ! shift; then core.panic "Failed to shift"; fi
 
-	if ! shift; then
-		print.die "Failed to shift"
+	if [[ "$cmd" != @(tar) ]]; then
+		core.panic "m.unpack: Unrecognized command: $cmd"
 	fi
-	if ! shift; then
-		print.die "Failed to shift"
-	fi
-	if [ "$cmd" = 'tar' ]; then
-		print.info 'Unpacking' "$PWD/$file"
-		m.ensure tar xf "$@" "$file"
+
+	print.info 'Unpacking' "$PWD/$file"
+	if command -v pv &>/dev/null; then
+		pv "$file"
 	else
-		print.die "m.unpack: Unrecognized argument: $cmd"
+		cat "$file"
+	fi | if [ "$cmd" = 'gzip' ]; then
+		m.ensure tar xzf - "$@"
 	fi
 }
 

@@ -37,6 +37,7 @@ External utilities are _only_ used due to necessity or efficiency. The following
 - jq 1.6
 - POSIX `mv`, `cat`, `cp`, `uname`, `stty`, `sed`, etc.
 - sort (TODO: phase out -V GNUism)
+- Optional: `pv`
 
 ## Installation
 
