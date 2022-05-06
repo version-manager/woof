@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-kubectl.matrix() {
+kubectl.table() {
 	m.run_bash 'kubectl'
 }
 

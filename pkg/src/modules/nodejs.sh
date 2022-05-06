@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-nodejs.matrix() {
+nodejs.table() {
 	m.run_bash 'nodejs'
 }
 
@@ -9,7 +9,7 @@ nodejs.install() {
 	local version="$2"
 
 	m.fetch -o './file.tar.gz' "$url"
-	m.unpack 'gzip' './file.tar.gz'
+	m.unpack 'gzfip' './file.tar.gz'
 	mkdir -p 'dir'
 	m.ensure mv ./*/* './dir'
 

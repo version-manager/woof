@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-ninja.matrix() {
+ninja.table() {
 	m.fetch_github_release 'ninja-build/ninja' \
 		| m.run_jq 'ninja'
 }

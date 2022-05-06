@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-sentinel.matrix() {
+sentinel.table() {
 	m.run_bash 'hashicorp' 'sentinel'
 }
 

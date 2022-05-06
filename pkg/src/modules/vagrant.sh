@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-vagrant.matrix() {
+vagrant.table() {
 	m.run_bash 'hashicorp' 'vagrant'
 }
 

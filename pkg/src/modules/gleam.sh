@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-gleam.matrix() {
+gleam.table() {
 	m.fetch_github_release 'gleam-lang/gleam' \
 		| m.run_jq 'gleam'
 }

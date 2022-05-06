@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-boundary.matrix() {
+boundary.table() {
 	m.run_bash 'hashicorp' 'boundary'
 }
 

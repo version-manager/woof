@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-deno.matrix() {
+deno.table() {
 	m.fetch_github_release 'denoland/deno' \
 		| m.run_jq 'deno'
 }

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-gh.matrix() {
+gh.table() {
 	m.fetch_github_release 'cli/cli' \
 		| m.run_jq 'gh'
 }

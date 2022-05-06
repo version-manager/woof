@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-peco.matrix() {
+peco.table() {
 	m.fetch_github_release 'peco/peco' \
 		| m.run_jq 'peco'
 }

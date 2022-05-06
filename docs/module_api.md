@@ -2,9 +2,9 @@
 
 Use the Module API to implement a version manager for a particular language. In this repository, the modules are located in `./pkg/src/modules`
 
-## `<module>.matrix()`
+## `<module>.table()`
 
-Prints a version matrix to standard output. Each line of standard output looks like:
+Prints a version table to standard output. Each line of standard output looks like:
 
 ```txt
 <variant>|<version>|<os>|<arch>|<url>[|<comment>]
@@ -17,7 +17,7 @@ Go|v1.17.6|linux|x86_64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
 NodeJS|v15.9.0|linux|x86_64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|2021-02-18
 ```
 
-To debug this function, use the `woof tool debug-matrix <module>` command
+To debug this function, use the `woof tool debug-table <module>` command
 
 Operating system must be one of:
 

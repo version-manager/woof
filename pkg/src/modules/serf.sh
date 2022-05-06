@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-serf.matrix() {
+serf.table() {
 	m.run_bash 'hashicorp' 'serf'
 }
 

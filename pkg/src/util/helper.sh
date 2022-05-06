@@ -1,46 +1,46 @@
 # shellcheck shell=bash
 
-# @description For a given module, construct a matrix of all versions for all
-# platforms (kernel and architecture). This eventually calls the "<module>.matrix"
+# @description For a given module, construct a table of all versions for all
+# platforms (kernel and architecture). This eventually calls the "<module>.table"
 # function and properly deals with caching
-helper.create_version_matrix() {
+helper.create_version_table() {
 	local module_name="$1"
 
-	var.get_cached_matrix_file "$module_name"
-	local matrix_file="$REPLY"
+	var.get_cached_table_file "$module_name"
+	local table_file="$REPLY"
 
-	print.info 'Constructing version matrix'
-	print.debug "Matrix file: $matrix_file"
+	print.info 'Constructing version table'
+	print.debug "Table file: $table_file"
 
-	if [ ! -d "${matrix_file%/*}" ]; then
-		mkdir -p "${matrix_file%/*}"
+	if [ ! -d "${table_file%/*}" ]; then
+		mkdir -p "${table_file%/*}"
 	fi
 	local use_cache=no
-	if [ -f "$matrix_file" ]; then
+	if [ -f "$table_file" ]; then
 		use_cache=yes
 	fi
 
 	if [ "$use_cache" = no ]; then
-		local matrix_string=
-		if matrix_string=$(util.run_function "$module_name.matrix"); then
+		local table_string=
+		if table_string=$(util.run_function "$module_name.table"); then
 			if core.err_exists; then
 				print.error "$ERR"
 				exit "$ERRCODE"
 			fi
 		else
-			print.die "A fatal error occured while running '$module_name.matrix'"
+			print.die "A fatal error occured while running '$module_name.table'"
 		fi
 
-		if [ -z "$matrix_string" ]; then
-			print.die "Function '$module_name.matrix' must output a well-formed matrix of variable names. Nothing was sent"
+		if [ -z "$table_string" ]; then
+			print.die "Function '$module_name.table' must output a well-formed table of variable names. Nothing was sent"
 		fi
 
-		if ! printf '%s' "$matrix_string" > "$matrix_file"; then
-			rm -f "$matrix_file"
-			print.die "Could not write to '$matrix_file'"
+		if ! printf '%s' "$table_string" > "$table_file"; then
+			rm -f "$table_file"
+			print.die "Could not write to '$table_file'"
 		fi
 
-		unset matrix_string
+		unset table_string
 	fi
 }
 
@@ -86,7 +86,7 @@ helper.install_module_version() {
 	local arch="$REPLY2"
 
 	# Determine correct binary for current system
-	if util.get_matrix_row "$module_name" "$version_string" "$os" "$arch"; then :; else
+	if util.get_table_row "$module_name" "$version_string" "$os" "$arch"; then :; else
 		exit $?
 	fi
 	local url="$REPLY1"

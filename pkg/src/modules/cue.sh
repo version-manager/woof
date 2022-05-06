@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-cue.matrix() {
+cue.table() {
 	m.fetch_github_release 'cue-lang/cue' \
 		| m.run_jq 'cue'
 }

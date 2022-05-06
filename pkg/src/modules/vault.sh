@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-vault.matrix() {
+vault.table() {
 	m.run_bash 'hashicorp' 'vault'
 }
 

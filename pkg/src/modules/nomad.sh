@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-nomad.matrix() {
+nomad.table() {
 	m.run_bash 'hashicorp' 'nomad'
 }
 

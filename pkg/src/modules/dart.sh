@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-dart.matrix() {
+dart.table() {
 	m.run_bash 'dart'
 }
 

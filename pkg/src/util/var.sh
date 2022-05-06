@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-var.get_cached_matrix_file() {
+var.get_cached_table_file() {
 	unset -v REPLY
 	REPLY="$WOOF_CACHE_HOME/matrices/$1.txt"
 }

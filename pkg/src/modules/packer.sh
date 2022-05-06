@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-packer.matrix() {
+packer.table() {
 	m.run_bash 'hashicorp' 'packer'
 }
 

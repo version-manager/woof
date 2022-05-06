@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-nim.matrix() {
+nim.table() {
 	m.run_bash 'nim'
 }
 

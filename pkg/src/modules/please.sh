@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-please.matrix() {
+please.table() {
 	m.fetch_github_release 'thought-machine/please' \
 		| m.run_jq 'please'
 }

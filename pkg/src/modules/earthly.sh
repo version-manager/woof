@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-earthly.matrix() {
+earthly.table() {
 	m.fetch_github_release 'earthly/earthly' \
 		| m.run_jq 'earthly'
 }

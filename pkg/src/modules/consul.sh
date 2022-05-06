@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-consul.matrix() {
+consul.table() {
 	m.run_bash 'hashicorp' 'consul'
 }
 

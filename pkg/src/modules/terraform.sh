@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-terraform.matrix() {
+terraform.table() {
 	m.run_bash 'hashicorp' 'terraform'
 }
 

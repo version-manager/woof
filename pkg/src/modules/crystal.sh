@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-crystal.matrix() {
+crystal.table() {
 	m.fetch_github_release 'crystal-lang/crystal' \
 		| m.run_jq 'crystal'
 }

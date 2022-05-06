@@ -71,8 +71,8 @@ helper.determine_version_string() {
 	local module_name="$1"
 	local version_string="$2"
 
-	var.get_cached_matrix_file "$module_name"
-	local matrix_file="$REPLY"
+	var.get_cached_table_file "$module_name"
+	local table_file="$REPLY"
 
 	util.uname_system
 	local real_os="$REPLY1"
@@ -90,7 +90,7 @@ helper.determine_version_string() {
 				ui_keys+=("$version")
 				ui_table["$version"]="$url $comment"
 			fi
-		done < "$matrix_file"; unset version os arch url comment
+		done < "$table_file"; unset version os arch url comment
 
 		if [ "$match_found" != 'yes' ]; then
 			print.die "Could not find any matching versions for the current os/arch"
@@ -109,7 +109,7 @@ helper.determine_version_string() {
 		if [ "$version_string" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			is_valid_string='yes'
 		fi
-	done < "$matrix_file"; unset variant version os arch url comment
+	done < "$table_file"; unset variant version os arch url comment
 
 	if [ "$is_valid_string" != yes ]; then
 		print.die "Version '$version_string' is not valid for module '$module_name' on this architecture"

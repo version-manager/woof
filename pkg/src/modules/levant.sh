@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-levant.matrix() {
+levant.table() {
 	m.run_bash 'hashicorp' 'levant'
 }
 

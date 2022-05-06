@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-python.matrix() {
+python.table() {
 	local prefix='https://www.python.org'
 
 	local version=

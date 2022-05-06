@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-fstar.matrix() {
+fstar.table() {
 	m.fetch_github_release 'FStarLang/FStar' \
 		| m.run_jq 'fstar'
 }

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-lean.matrix() {
+lean.table() {
 	m.fetch_github_release 'leanprover/lean4' \
 		| m.run_jq 'lean'
 }

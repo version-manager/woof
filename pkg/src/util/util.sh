@@ -29,18 +29,18 @@ util.run_function() {
 	fi
 }
 
-util.get_matrix_row() {
+util.get_table_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
 	local version_string="$2"
 	local real_os="$3"
 	local real_arch="$4"
 
-	var.get_cached_matrix_file "$module_name"
-	local matrix_file="$REPLY"
+	var.get_cached_table_file "$module_name"
+	local table_file="$REPLY"
 
-	if [ ! -f "$matrix_file" ]; then
-		print.fatal "File '$matrix_file' does not exist, but was expected to"
+	if [ ! -f "$table_file" ]; then
+		print.fatal "File '$table_file' does not exist, but was expected to"
 	fi
 
 	if [ -z "$real_os" ] || [ -z "$real_arch" ]; then
@@ -56,7 +56,7 @@ util.get_matrix_row() {
 			REPLY2=$comment
 			return 0
 		fi
-	done < "$matrix_file"; unset -v variant version os arch url comment
+	done < "$table_file"; unset -v variant version os arch url comment
 
 	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
 		print.error "Failed to find corresponding row in version table"
@@ -229,6 +229,6 @@ Actions:
    get-version
    set-version
    list [--installed] [--all]
-   tool <debug-matrix|debug-install|clear-matrix-cache> [... args]
+   tool <debug-table|debug-install|clear-table-cache> [... args]
 "
 }

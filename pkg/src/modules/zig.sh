@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-zig.matrix() {
+zig.table() {
 	m.fetch 'https://ziglang.org/download/index.json' \
 		| m.run_jq 'zig'
 }

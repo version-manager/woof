@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-solidity.matrix() {
+solidity.table() {
 	m.run_bash 'solidity'
 }
 

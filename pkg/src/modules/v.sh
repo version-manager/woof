@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-v.matrix() {
+v.table() {
 	m.fetch_github_release 'vlang/v' \
 		| m.run_jq 'v'
 }

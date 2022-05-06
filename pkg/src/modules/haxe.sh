@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-haxe.matrix() {
+haxe.table() {
 	m.fetch_github_release 'HaxeFoundation/haxe' \
 		| m.run_jq 'haxe'
 }

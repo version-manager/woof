@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-go.matrix() {
+go.table() {
 	m.fetch 'https://go.dev/dl' \
 		| perl "$BASALT_PACKAGE_DIR/pkg/src/filters/go.pl"
 }

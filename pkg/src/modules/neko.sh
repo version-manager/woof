@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-neko.matrix() {
+neko.table() {
 	m.fetch_github_release 'HaxeFoundation/neko' \
 		| m.run_jq 'neko'
 }

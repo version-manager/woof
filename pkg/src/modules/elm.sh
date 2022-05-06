@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-elm.matrix() {
+elm.table() {
 	m.fetch_github_release 'elm/compiler' \
 		| m.run_jq 'elm'
 }

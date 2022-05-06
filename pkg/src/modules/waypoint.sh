@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-waypoint.matrix() {
+waypoint.table() {
 	m.run_bash 'hashicorp' 'waypoint'
 }
 

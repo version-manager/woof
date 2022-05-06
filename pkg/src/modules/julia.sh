@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-julia.matrix() {
+julia.table() {
 	m.fetch 'https://julialang-s3.julialang.org/bin/versions.json' \
 		| m.run_jq 'julia'
 }

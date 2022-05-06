@@ -46,14 +46,14 @@ woof-tool() {
 			fi
 			printf '\n'
 		done; unset -v var_name
-	elif [ "$subcmd" = 'debug-matrix' ]; then
+	elif [ "$subcmd" = 'debug-table' ]; then
 		local possible_module_name="$1"
 
 		helper.determine_module_name "$possible_module_name"
 		local module_name="$REPLY"
 		unset -v possible_module_name
 
-		util.run_function "$module_name.matrix"
+		util.run_function "$module_name.table"
 	elif [ "$subcmd" = 'debug-install' ]; then
 		local possible_module_name="$1"
 		local possible_version_string="$2"
@@ -62,7 +62,7 @@ woof-tool() {
 		local module_name="$REPLY"
 		unset -v possible_module_name
 		
-		helper.create_version_matrix "$module_name"
+		helper.create_version_table "$module_name"
 
 		helper.determine_version_string "$module_name" "$possible_version_string"
 		local version_string="$REPLY"
@@ -72,17 +72,17 @@ woof-tool() {
 	elif [ "$subcmd" = 'clear-version-table' ]; then
 		local module_name="$1"
 
-		var.get_cached_matrix_file "$module_name"
-		local matrix_file="$REPLY"
+		var.get_cached_table_file "$module_name"
+		local table_file="$REPLY"
 
 		if [ -z "$module_name" ]; then
-			print.info "Removing all matrix cache"
-			# Since '$module_name' is empty, the basename of '$matrix_file' is
+			print.info "Removing all table cache"
+			# Since '$module_name' is empty, the basename of '$table_file' is
 			# not correct, but that doesn't matter as it is not used here
-			rm -rf "${matrix_file%/*}"
+			rm -rf "${table_file%/*}"
 		else
-			print.info "Removing matrix cache for '$module_name'"
-			rm -f "$matrix_file"
+			print.info "Removing table cache for '$module_name'"
+			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then
 		printf '%s\n' 'cd override'

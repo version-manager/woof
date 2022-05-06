@@ -26,14 +26,14 @@ woof-list() {
 
 
 	if [ "$flag_available" = 'yes' ]; then
-		helper.create_version_matrix "$module_name"
+		helper.create_version_table "$module_name"
 
 		util.uname_system
 		local real_os="$REPLY1"
 		local real_arch="$REPLY2"
 
-		var.get_cached_matrix_file "$module_name"
-		local matrix_file="$REPLY"
+		var.get_cached_table_file "$module_name"
+		local table_file="$REPLY"
 
 		local variant= version= os= arch= url= comment=
 		while IFS='|' read -r variant version os arch url comment; do
@@ -44,7 +44,7 @@ woof-list() {
 					printf '%s\n' "$version"
 				fi
 			fi
-		done < "$matrix_file" | sort -V
+		done < "$table_file" | sort -V
 		unset -v variant version os arch url comment
 	else
 		var.get_module_install_dir "$module_name"
