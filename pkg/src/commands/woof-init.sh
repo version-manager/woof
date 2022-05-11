@@ -14,6 +14,8 @@ woof-init() {
 	var.get_dir 'global' 'bin'
 	shell.path_prepend "$REPLY"
 	woof_override_cd
+	source "$BASALT_PACKAGE_DIR/pkg/src/modules/go.sh"
+	go.env
 }
 
 shell.variable_assignment() {

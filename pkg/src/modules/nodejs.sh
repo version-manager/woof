@@ -32,7 +32,6 @@ nodejs.switch() {
 	# m.ensure ln -sf "$PWD/node_modules" "$install_dir/lib/node_modules"
 }
 
-nodejs.version_from_dir() {
-	# TODO
+nodejs.dir() {
 	:
 }

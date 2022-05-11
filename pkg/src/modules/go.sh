@@ -16,3 +16,22 @@ go.install() {
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
 }
+
+go.switch() {
+	local install_dir="$1"
+	local module_version="$2"
+
+	go install -v 'golang.org/x/tools/gopls@latest'
+	go install -v 'golang.org/x/tools/cmd/goimports@latest'
+	go install -v 'github.com/ramya-rao-a/go-outline@latest'
+	go install -v 'github.com/stamblerre/gocode@latest'
+}
+
+go.env() {
+	var.get_dir 'global' 'common'
+	local global_common_dir="$REPLY"
+
+	# TODO make into m.<>
+	shell.variable_assignment 'GOROOT' "$global_common_dir/goroot"
+	shell.variable_export 'GOROOT'
+}
