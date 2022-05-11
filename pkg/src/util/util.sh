@@ -32,7 +32,7 @@ util.run_function() {
 util.get_table_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
-	local version_string="$2"
+	local module_version="$2"
 	local real_os="$3"
 	local real_arch="$4"
 
@@ -51,7 +51,7 @@ util.get_table_row() {
 	
 	local variant= version= os= arch= url= comment=
 	while IFS='|' read -r variant version os arch url comment; do
-		if  [ "$version_string" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		if  [ "$module_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			REPLY1=$url
 			REPLY2=$comment
 			return 0
@@ -130,13 +130,13 @@ util.get_module_data() {
 	declare -g REPLY=()
 	
 	local module_name="$1"
-	local version_string="$2"
+	local module_version="$2"
 	local specified_key="$3"
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
 
-	local data_file="$install_dir/$version_string/data.txt"
+	local data_file="$install_dir/$module_version/data.txt"
 	local key= values=
 	while IFS='=' read -r key values; do
 		IFS=':' read -ra values <<< "$values"
@@ -175,7 +175,7 @@ util.set_global_selection() {
 
 	print.info "Setting $global_selection as global default for $module_name"
 	mkdir -p "${global_selection_file%/*}"
-	if ! printf '%s\n' "$version_string" > "$global_selection_file"; then
+	if ! printf '%s\n' "$module_version" > "$global_selection_file"; then
 		rm -f "$global_selection_file"
 		print.die "Could not write to '$global_selection_file'"
 	fi
@@ -184,12 +184,12 @@ util.set_global_selection() {
 util.is_module_version_installed() {
 	unset -v REPLY; REPLY=
 	local module_name="$1"
-	local version_string="$2"
+	local module_version="$2"
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
 
-	if [ -d "$install_dir/$version_string/done" ]; then
+	if [ -d "$install_dir/$module_version/done" ]; then
 		return $?
 	else
 		return $?

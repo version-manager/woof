@@ -2,15 +2,15 @@
 
 woof-set-version() {
 	local possible_module_name="$1"
-	local possible_version_string="$2"
+	local possible_module_version="$2"
 
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
 	unset -v possible_module_name
 
-	helper.determine_version_string_installed "$module_name" "$possible_version_string"
-	local version_string="$REPLY"
-	unset -v possible_version_string
+	helper.determine_module_version_installed "$module_name" "$possible_module_version"
+	local module_version="$REPLY"
+	unset -v possible_module_version
 
 	# Write version selection
 	var.get_dir 'global' 'selection'
@@ -18,12 +18,12 @@ woof-set-version() {
 	if [ -d "$global_selection_dir" ]; then
 		mkdir -p "$global_selection_dir"
 	fi
-	if ! printf '%s\n' "$version_string" > "$global_selection_dir/$module_name"; then
+	if ! printf '%s\n' "$module_version" > "$global_selection_dir/$module_name"; then
 		print.die "Could not write global version"
 	fi
-	print.info "Set version '$version_string' as global version"
+	print.info "Set version '$module_version' as global version"
 
 	# Resymlink
-	helper.symlink_after_install "$module_name" "$version_string"
-	print.info "Did symlinks for version '$version_string'"
+	helper.symlink_after_install "$module_name" "$module_version"
+	print.info "Did symlinks for version '$module_version'"
 }

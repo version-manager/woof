@@ -58,12 +58,12 @@ helper.toolversions_set_versions_in_accordance() {
 		util.toolversions_foreach 'line'
 
 		helper.toolversions_get_first_valid_version "$EACH_MODULE_NAME" "${EACH_MODULE_VERSIONS[@]}"
-		local version_string="$REPLY"
-		if [ -n "$version_string" ]; then
-			printf '%s\n' "Should switch to $EACH_MODULE_NAME version $version_string"
+		local module_version="$REPLY"
+		if [ -n "$module_version" ]; then
+			printf '%s\n' "Should switch to $EACH_MODULE_NAME version $module_version"
 		else
-			version_string=${EACH_MODULE_VERSIONS[0]}
-			printf '%s\n' "Should install and switch to $EACH_MODULE_NAME version $version_string"
+			module_version=${EACH_MODULE_VERSIONS[0]}
+			printf '%s\n' "Should install and switch to $EACH_MODULE_NAME version $module_version"
 		fi
 	done < "$toolversions_path"; unset -v line
 	util.toolversions_foreach

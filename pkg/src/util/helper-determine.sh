@@ -66,10 +66,10 @@ helper.determine_module_name_installed() {
 	REPLY=$module_name
 }
 
-helper.determine_version_string() {
+helper.determine_module_version() {
 	unset REPLY; REPLY=
 	local module_name="$1"
-	local version_string="$2"
+	local module_version="$2"
 
 	var.get_cached_table_file "$module_name"
 	local table_file="$REPLY"
@@ -78,7 +78,7 @@ helper.determine_version_string() {
 	local real_os="$REPLY1"
 	local real_arch="$REPLY2"
 
-	if [ -z "$version_string" ]; then
+	if [ -z "$module_version" ]; then
 		local -a ui_keys=()
 		local -A ui_table=()
 
@@ -100,33 +100,33 @@ helper.determine_version_string() {
 		local global_selection="$REPLY"
 
 		tty.multiselect "$global_selection" ui_keys ui_table
-		version_string="$REPLY"
+		module_version="$REPLY"
 	fi
 
 	local is_valid_string='yes'
 	local variant= version= os= arch= url= comment=
 	while IFS='|' read -r variant version os arch url comment; do
-		if [ "$version_string" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		if [ "$module_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			is_valid_string='yes'
 		fi
 	done < "$table_file"; unset variant version os arch url comment
 
 	if [ "$is_valid_string" != yes ]; then
-		print.die "Version '$version_string' is not valid for module '$module_name' on this architecture"
+		print.die "Version '$module_version' is not valid for module '$module_name' on this architecture"
 	fi
 
-	REPLY=$version_string
+	REPLY=$module_version
 }
 
 # @description Get the installed version string, if one was not already specified
-helper.determine_version_string_installed() {
+helper.determine_module_version_installed() {
 	local module_name="$1"
-	local version_string="$2"
+	local module_version="$2"
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
 	
-	if [ -z "$version_string" ]; then
+	if [ -z "$module_version" ]; then
 		core.shopt_push -s nullglob
 		local -a versions_list=("$install_dir"/*/)
 		core.shopt_pop
@@ -148,10 +148,10 @@ helper.determine_version_string_installed() {
 		local global_selection="$REPLY"
 
 		tty.multiselect "$global_selection" versions_list versions_table
-		version_string="$REPLY"
+		module_version="$REPLY"
 	fi
 
-	if [ ! -d "$install_dir/$version_string" ]; then
-		print.die "Version '$version_string' is not valid for module '$module_name'"
+	if [ ! -d "$install_dir/$module_version" ]; then
+		print.die "Version '$module_version' is not valid for module '$module_name'"
 	fi
 }

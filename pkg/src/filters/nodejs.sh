@@ -19,11 +19,11 @@ parse_nodejs() {
 
 		local regex="\"version\"[\t ]*:[\t ]*\"(v[0-9|.]+)\"[ \t]*,[\t ]*\"date\"[\t ]*:[\t ]*\"([0-9-]+)\"[\t ]*,[ \t]*\"files\"[ \t]*:[ \t]*\[(.*?)\]"
 		if [[ $line =~ $regex ]]; then
-			local version_string="${BASH_REMATCH[1]}"
+			local module_version="${BASH_REMATCH[1]}"
 			local release_date="${BASH_REMATCH[2]}"
 			local platforms_arrstring="${BASH_REMATCH[3]}"
 
-			if [ -z "$version_string" ] || [ -z "$release_date" ] || [ -z "$platforms_arrstring" ]; then
+			if [ -z "$module_version" ] || [ -z "$release_date" ] || [ -z "$platforms_arrstring" ]; then
 				continue
 			fi
 
@@ -47,7 +47,7 @@ parse_nodejs() {
 					continue
 				fi
 
-				printf '%s\n' "NodeJS|$version_string|$normalized_platform|https://nodejs.org/download/release/$version_string/node-$version_string-$platform.tar.gz|$release_date"
+				printf '%s\n' "NodeJS|$module_version|$normalized_platform|https://nodejs.org/download/release/$module_version/node-$module_version-$platform.tar.gz|$release_date"
 			done
 		fi
 	done <<< "$json"
