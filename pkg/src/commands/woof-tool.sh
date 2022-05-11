@@ -10,7 +10,22 @@ woof-tool() {
 		print.die 'Failed to shift'
 	fi
 
-	if [ "$subcmd" = 'info' ]; then
+	if [ "$subcmd" = 'resymlink' ]; then
+		local possible_module_name="$1"
+		local possible_module_version="$2"
+
+		helper.determine_module_name "$possible_module_name"
+		local module_name="$REPLY"
+		unset -v possible_module_name
+		
+		helper.create_version_table "$module_name"
+
+		helper.determine_module_version "$module_name" "$possible_module_version"
+		local module_version="$REPLY"
+		unset -v possible_module_version
+
+		helper.symlink_after_install "$module_name" "$module_version"
+	elif [ "$subcmd" = 'info' ]; then
 		local possible_module_name="$1"
 
 		helper.determine_module_name "$possible_module_name"
@@ -35,7 +50,7 @@ woof-tool() {
 
 	elif [ "$subcmd" = 'print-dirs' ]; then
 		local var_name=
-		for var_name in WOOF_CONFIG_HOME WOOF_CACHE_HOME WOOF_DATA_HOME WOOF_STATE_HOME; do
+		for var_name in $WOOF_VARS; do
 			local -n var_value="$var_name"
 		
 			printf '%s\n' "---------- $var_name ----------"
@@ -46,6 +61,7 @@ woof-tool() {
 			fi
 			printf '\n'
 		done; unset -v var_name
+		unset -vn var_value
 	elif [ "$subcmd" = 'debug-table' ]; then
 		local possible_module_name="$1"
 

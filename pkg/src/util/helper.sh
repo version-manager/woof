@@ -9,7 +9,7 @@ helper.create_version_table() {
 	var.get_module_table_file "$module_name"
 	local table_file="$REPLY"
 
-	print.info 'Constructing version table'
+	print.info 'Gathering versions'
 	print.debug "Table file: $table_file"
 
 	if [ ! -d "${table_file%/*}" ]; then

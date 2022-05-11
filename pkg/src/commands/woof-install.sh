@@ -15,7 +15,11 @@ woof-install() {
 	unset -v possible_module_version
 
 	helper.install_module_version "$module_name" "$module_version"
+	util.get_global_selection
+	local global_selection="$REPLY"
+	if [ -z "$global_selection" ]; then
+		util.set_global_selection "$module_name" "$module_version"
+	fi
 	helper.switch_to_version "$module_name" "$module_version"
-	util.set_global_selection "$module_name" "$module_version"
 	helper.symlink_after_install "$module_name" "$module_version"
 }

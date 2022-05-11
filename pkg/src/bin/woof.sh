@@ -10,7 +10,8 @@ main.woof() {
 	: "${WOOF_CACHE_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/woof}"
 	: "${WOOF_DATA_HOME:=${XDG_DATA_HOME:-$HOME/.local/share}/woof}"
 	: "${WOOF_STATE_HOME:=${XDG_STATE_HOME:-$HOME/.local/state}/woof}"
-	
+	WOOF_VARS='WOOF_CONFIG_HOME WOOF_CACHE_HOME WOOF_DATA_HOME WOOF_STATE_HOME'
+
 	if [ -f "$WOOF_DATA_HOME/token" ]; then
 		if ! GITHUB_TOKEN=$(<"$WOOF_DATA_HOME/token"); then
 			print.die "Failed to read token file"

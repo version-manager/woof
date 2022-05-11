@@ -1,43 +1,5 @@
 # shellcheck shell=bash
 
-util.assert_not_empty() {
-	local variable_name=
-	for variable_name; do
-		local -n __variable="$variable_name"
-
-		if [ -z "$__variable" ]; then
-			core.panic "Failed because variable '$variable_name' is empty"
-		fi
-	done; unset -v variable_name
-}
-
-util.run_function() {
-	local flag_optional='no'
-	if [ "$1" = '--optional' ]; then
-		flag_optional='yes'
-		if ! shift; then
-			core.panic 'Failed to shift'
-		fi
-	fi
-	local function_name="$1"
-	if ! shift; then
-		core.panic 'Failed to shift'
-	fi
-
-	if declare -f "$function_name" &>/dev/null; then
-		print.debug 'Executing' "$function_name()"
-		if "$function_name" "$@"; then
-			return $?
-		else
-			return $?
-		fi
-	else
-		if [ "$flag_optional" = 'no' ]; then
-			core.panic "Function '$function_name' not defined"
-		fi
-	fi
-}
-
 util.get_table_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
 	local module_name="$1"
@@ -77,6 +39,32 @@ util.get_table_row() {
 	return 1
 }
 
+util.run_function() {
+	local flag_optional='no'
+	if [ "$1" = '--optional' ]; then
+		flag_optional='yes'
+		if ! shift; then
+			core.panic 'Failed to shift'
+		fi
+	fi
+	local function_name="$1"
+	if ! shift; then
+		core.panic 'Failed to shift'
+	fi
+
+	if declare -f "$function_name" &>/dev/null; then
+		print.debug 'Executing' "$function_name()"
+		if "$function_name" "$@"; then
+			return $?
+		else
+			return $?
+		fi
+	else
+		if [ "$flag_optional" = 'no' ]; then
+			core.panic "Function '$function_name' not defined"
+		fi
+	fi
+}
 
 util.key_to_index() {
 	unset REPLY; REPLY=
@@ -177,12 +165,11 @@ util.get_global_selection() {
 util.set_global_selection() {
 	unset REPLY; REPLY=
 	local module_name="$1"
-	local global_selection="$2"
+	local module_version="$2"
 
 	var.get_dir 'global' 'selection'
 	local global_selection_file="$REPLY/$module_name"
-
-	print.info "Setting $global_selection as global default for $module_name"
+	print.info "Setting $module_version as global default for $module_name"
 	if [ ! -d "${global_selection_file%/*}" ]; then
 		mkdir -p "${global_selection_file%/*}"
 	fi
@@ -207,25 +194,35 @@ util.is_module_version_installed() {
 	fi
 }
 
-util.toolversions_get_path() {
-	unset -v REPLY; REPLY=
+util.assert_not_empty() {
+	local variable_name=
+	for variable_name; do
+		local -n __variable="$variable_name"
 
-	local toolversions_file='.tool-versions'
-	local toolversions_path=
-	if ! toolversions_path=$(
-		while [ ! -f "$toolversions_file" ] && [ "$PWD" != / ]; do
-			if ! cd ..; then
-				exit 1
-			fi
-		done
-		if [ "$PWD" = / ]; then
-			exit
+		if [ -z "$__variable" ]; then
+			core.panic "Failed because variable '$variable_name' is empty"
 		fi
-		printf '%s' "$PWD/$toolversions_file"
-	); then
-		print.die "Could not find '$toolversions_file'"
-	fi
-	REPLY=$toolversions_path
+	done; unset -v variable_name
+}
+
+util.sanitize_path() {
+	unset -v REPLY; REPLY=
+	local path="$1"
+
+	# For now, only do this once (replace '/./' with '/')
+	path=${path/\/.\//\/}
+
+	local woof_var_name=
+	for woof_var_name in $WOOF_VARS; do
+		local -n woof_var="$woof_var_name"
+
+		if [ "${path::${#woof_var}}" = "$woof_var" ]; then
+			path="\$$woof_var_name${path:${#woof_var}}"
+		fi
+	done; unset -v woof_var_name
+	unset -vn woof_var
+
+	REPLY="$path"
 }
 
 util.show_help() {

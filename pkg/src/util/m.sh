@@ -42,7 +42,8 @@ m.unpack() {
 		core.panic "m.unpack: Unrecognized command: $cmd"
 	fi
 
-	print.info 'Unpacking' "$PWD/$file"
+	util.sanitize_path "$PWD/$file"
+	print.info 'Unpacking' "$REPLY"
 	if command -v pv &>/dev/null; then
 		pv "$file"
 	else
