@@ -64,6 +64,4 @@ Set the following variables for installation to complete successfully. `REPLY_DI
 - `REPLY_ZSH_COMPLETIONS=()`
 - `REPLY_FISH_COMPLETIONS=()`
 
-## `WOOF_MODULE_COMMON_DIR`
-
 Persisted state across installs / uninstalls

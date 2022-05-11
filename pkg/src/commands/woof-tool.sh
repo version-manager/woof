@@ -74,7 +74,7 @@ woof-tool() {
 	elif [ "$subcmd" = 'clear-version-table' ]; then
 		local module_name="$1"
 
-		var.get_cached_table_file "$module_name"
+		var.get_module_table_file "$module_name"
 		local table_file="$REPLY"
 
 		if [ -z "$module_name" ]; then

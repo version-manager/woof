@@ -6,26 +6,35 @@ util.assert_not_empty() {
 		local -n __variable="$variable_name"
 
 		if [ -z "$__variable" ]; then
-			print.panic "Failed because variable '$variable_name' is empty"
+			core.panic "Failed because variable '$variable_name' is empty"
 		fi
 	done; unset -v variable_name
 }
 
 util.run_function() {
+	local flag_optional='no'
+	if [ "$1" = '--optional' ]; then
+		flag_optional='yes'
+		if ! shift; then
+			core.panic 'Failed to shift'
+		fi
+	fi
 	local function_name="$1"
 	if ! shift; then
-		print.panic 'Failed to shift'
+		core.panic 'Failed to shift'
 	fi
 
-	if ! declare -f "$function_name" >/dev/null 2>&1; then
-		print.panic "Function '$function_name' not defined"
-	fi
-
-	print.debug 'Executing' "$function_name()"
-	if "$function_name" "$@"; then
-		return $?
+	if declare -f "$function_name" &>/dev/null; then
+		print.debug 'Executing' "$function_name()"
+		if "$function_name" "$@"; then
+			return $?
+		else
+			return $?
+		fi
 	else
-		return $?
+		if [ "$flag_optional" = 'no' ]; then
+			core.panic "Function '$function_name' not defined"
+		fi
 	fi
 }
 
@@ -36,7 +45,7 @@ util.get_table_row() {
 	local real_os="$3"
 	local real_arch="$4"
 
-	var.get_cached_table_file "$module_name"
+	var.get_module_table_file "$module_name"
 	local table_file="$REPLY"
 
 	if [ ! -f "$table_file" ]; then
@@ -174,7 +183,9 @@ util.set_global_selection() {
 	local global_selection_file="$REPLY/$module_name"
 
 	print.info "Setting $global_selection as global default for $module_name"
-	mkdir -p "${global_selection_file%/*}"
+	if [ ! -d "${global_selection_file%/*}" ]; then
+		mkdir -p "${global_selection_file%/*}"
+	fi
 	if ! printf '%s\n' "$module_version" > "$global_selection_file"; then
 		rm -f "$global_selection_file"
 		print.die "Could not write to '$global_selection_file'"

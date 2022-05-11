@@ -6,7 +6,7 @@
 helper.create_version_table() {
 	local module_name="$1"
 
-	var.get_cached_table_file "$module_name"
+	var.get_module_table_file "$module_name"
 	local table_file="$REPLY"
 
 	print.info 'Constructing version table'
@@ -48,18 +48,18 @@ helper.install_module_version() {
 	local flag_interactive=
 	if [ "$1" = '--interactive' ]; then
 		flag_interactive='yes'
-		if ! shift; then print.die 'Failed to shift'; fi
+		if ! shift; then
+			core.panic 'Failed to shift'
+		fi
 	fi
 	local module_name="$1"
 	local module_version="$2"
 
-	local workspace_dir="$WOOF_STATE_HOME/workspace-$module_name"
+	var.get_module_workspace_dir "$module_name"
+	local workspace_dir="$REPLY" 
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
-
-	var.get_module_common_dir "$module_name"
-	local common_dir="$REPLY"
 
 	# If there is an interactive flag, then we are debugging the installation
 	# process. In this case, make the workspace and install directory someplace
@@ -94,7 +94,7 @@ helper.install_module_version() {
 	# Execute '<module>.install'
 	local old_pwd="$PWD"
 	if ! cd -- "$workspace_dir"; then
-		print.die 'Failed to cd'
+		core.panic 'Failed to cd'
 	fi
 	print.debug "Working directory changed to: $PWD"
 
@@ -103,18 +103,17 @@ helper.install_module_version() {
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_INCLUDES=() REPLY_LIBS=() REPLY_MANS=() REPLY_BASH_COMPLETIONS=() \
 		REPLY_ZSH_COMPLETIONS=() REPLY_FISH_COMPLETIONS=()
-	if WOOF_MODULE_COMMON_DIR="$common_dir" util.run_function "$module_name.install" "$url" "${module_version/#v}" "$os" "$arch"; then
+	if util.run_function "$module_name.install" "$url" "${module_version/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"
-			print.error "$ERR"
-			exit "$ERRCODE"
+			core.panic
 		fi
 	else
 		rm -rf "$workspace_dir"
 		print.die "Unexpected error while calling '$module_name.install'"
 	fi
 	if ! cd -- "$old_pwd"; then
-		print.die 'Failed to cd'
+		core.panic 'Failed to cd'
 	fi
 
 	if [ -z "$REPLY_DIR" ]; then
@@ -156,10 +155,40 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 	rm -rf "$workspace_dir"
 	touch "$install_dir/$module_version/done"
 
-	print.info 'Installed' "$module_version"
+	print.info 'Installed' "$module_version"	
+}
 
-	# Set the current selection to the just-installed version
-	util.set_global_selection "$module_name" "$module_version"
+# @description Performs any necessary mucking when switching versions
+helper.switch_to_version() {
+	local module_name="$1"
+	local module_version="$2"
+
+	var.get_dir 'global' 'common'
+	local global_common_dir="$REPLY"
+
+	var.get_module_install_dir "$module_name"
+	local install_dir="$REPLY"
+
+	if [ ! -d "$global_common_dir" ]; then
+		mkdir -p "$global_common_dir"
+	fi
+
+	# Execute '<module>.switch'
+	local old_pwd="$PWD"
+	if ! cd -- "$global_common_dir"; then
+		core.panic 'Failed to cd'
+	fi
+	if util.run_function --optional "$module_name.switch" "$install_dir/$module_version/files" "$module_version"; then
+		if core.err_exists; then
+			core.panic
+		fi
+	else
+		print.die "Unexpected error while calling '$module_name.switch'"
+	fi
+	if ! cd -- "$old_pwd"; then
+		core.panic 'Failed to cd'
+	fi
+	print.info 'Using' "$module_version"	
 }
 
 helper.symlink_after_install() {
