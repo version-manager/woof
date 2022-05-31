@@ -45,7 +45,7 @@ helper.create_version_table() {
 }
 
 helper.install_module_version() {
-	local flag_interactive=
+	local flag_interactive='no'
 	if [ "$1" = '--interactive' ]; then
 		flag_interactive='yes'
 		if ! shift; then
@@ -154,9 +154,13 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 	fi
 
 	rm -rf "$workspace_dir"
-	touch "$install_dir/$module_version/done"
+	if [ "$flag_interactive" = 'no' ]; then
+		: > "$install_dir/$module_version/done"
+		print.info 'Installed' "$module_version"	
+	else
+		print.info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
+	fi
 
-	print.info 'Installed' "$module_version"	
 }
 
 # @description Performs any necessary mucking when switching versions
