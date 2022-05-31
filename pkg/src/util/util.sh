@@ -237,6 +237,7 @@ Actions:
    get-version
    set-version
    list [--installed] [--all]
-   tool <debug-table|debug-install|clear-table-cache> [... args]
+   tool <resymlink|info|print-dirs|cd-override
+      debug-table|debug-install|clear-table-cache> [... args]
 "
 }

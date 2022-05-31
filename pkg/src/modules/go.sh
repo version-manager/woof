@@ -31,7 +31,7 @@ go.env() {
 	var.get_dir 'global' 'common'
 	local global_common_dir="$REPLY"
 
-	# TODO make into m.<>
-	shell.variable_assignment 'GOROOT' "$global_common_dir/goroot"
-	shell.variable_export 'GOROOT'
+	# FIXME make into m.<>
+	# shell.variable_assignment 'GOROOT' "$global_common_dir/goroot"
+	# shell.variable_export 'GOROOT'
 }

@@ -64,22 +64,98 @@ This requires a modification to the Module API
 
 ## To sort
 
-| Runtime | Current Support | Official Download                                        | Replaces                                                                                                                                                                                              |
-| ------- | --------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R       | None            | [Official](https://www.r-project.org)                    | [asdf-r](https://github.com/asdf-community/asdf-R), [renv](https://github.com/rstudio/renv), [Renv](https://github.com/viking/Renv)                                                                   |
-| Java    | None            | [Official](https://github.com/openjdk/jdk)               | [asdf-java](https://github.com/halcyon/asdf-java), [jenv.be](https://www.jenv.be), [sdkman](https://sdkman.io), [jenv](https://github.com/linux-china/jenv), [jabba](https://github.com/shyiko/jabba) |
-| Groovy  | None            | [Official](https://github.com/apache/groovy)             | [asdf-groovy](https://github.com/weibemoura/asdf-groovy), [sdkman-groovy](https://sdkman.io/sdks#groovy)                                                                                              |
-| Scala   | None            | [Official](https://github.com/lampepfl/dotty)            | [asdf-scala](https://github.com/sylph01/asdf-scala), [sdkman-scala](https://sdkman.io/sdks#scala)                                                                                                     |
-| Clojure | None            | [Official](https://github.com/clojure/clojure)           | [clojure](https://github.com/asdf-community/asdf-clojure)                                                                                                                                             |
-| Dotty   | None            | [Official](https://github.com/lampepfl/dotty)            | [asdf-dotty](https://github.com/asdf-community/asdf-dotty), [dvm](https://github.com/d-ogxwx/dvm)                                                                                                     |
-| Kotlin  | None            | [Official](https://github.com/JetBrains/kotlin)          | [asdf-kotlin](https://github.com/asdf-community/asdf-kotlin), [kotlin-sdkman](https://sdkman.io/sdks#kotlin)                                                                                          |
-| GraalVM | None            | [Official](https://github.com/oracle/graal)              | [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)                                                                                                                                        |
-| Haskell | None            | [Official](https://github.com/ghc/ghc)                   | [asdf-haskell](https://github.com/asdf-community/asdf-haskell)                                                                                                                                        |
-| Racket  | None            | [Official](https://github.com/racket/racket)             | [asdf-racket](https://github.com/asdf-community/asdf-racket)                                                                                                                                          |
-| sml     | None            | [Official](https://smlnj.org)                            | [asdf-sml](https://github.com/asdf-community/asdf-sml)                                                                                                                                                |
-| idris   | None            | [Official](https://www.idris-lang.org)                   | [adsf-idris](https://github.com/asdf-community/asdf-idris)                                                                                                                                            |
-| idris2  | None            | [Official](https://github.com/idris-lang/Idris2)         | [asdf-idris2](https://github.com/asdf-community/asdf-idris2)                                                                                                                                          |
-| Flutter | None            | [Official](https://docs.flutter.dev/get-started/install) | [asdf-flutter](https://github.com/oae/asdf-flutter), [fvm](https://github.com/befovy/fvm)                                                                                                             |
+| Runtime    | Current Support | Official Download                                        | Replaces                                                                                                                                                                                              |
+| ---------- | --------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R          | None            | [Official](https://www.r-project.org)                    | [asdf-r](https://github.com/asdf-community/asdf-R), [renv](https://github.com/rstudio/renv), [Renv](https://github.com/viking/Renv)                                                                   |
+| Java       | None            | [Official](https://github.com/openjdk/jdk)               | [asdf-java](https://github.com/halcyon/asdf-java), [jenv.be](https://www.jenv.be), [sdkman](https://sdkman.io), [jenv](https://github.com/linux-china/jenv), [jabba](https://github.com/shyiko/jabba) |
+| Groovy     | None            | [Official](https://github.com/apache/groovy)             | [asdf-groovy](https://github.com/weibemoura/asdf-groovy), [sdkman-groovy](https://sdkman.io/sdks#groovy)                                                                                              |
+| Scala      | None            | [Official](https://github.com/lampepfl/dotty)            | [asdf-scala](https://github.com/sylph01/asdf-scala), [sdkman-scala](https://sdkman.io/sdks#scala)                                                                                                     |
+| Clojure    | None            | [Official](https://github.com/clojure/clojure)           | [clojure](https://github.com/asdf-community/asdf-clojure)                                                                                                                                             |
+| Dotty      | None            | [Official](https://github.com/lampepfl/dotty)            | [asdf-dotty](https://github.com/asdf-community/asdf-dotty), [dvm](https://github.com/d-ogxwx/dvm)                                                                                                     |
+| Kotlin     | None            | [Official](https://github.com/JetBrains/kotlin)          | [asdf-kotlin](https://github.com/asdf-community/asdf-kotlin), [kotlin-sdkman](https://sdkman.io/sdks#kotlin)                                                                                          |
+| GraalVM    | None            | [Official](https://github.com/oracle/graal)              | [asdf-graalvm](https://github.com/asdf-community/asdf-graalvm)                                                                                                                                        |
+| Haskell    | None            | [Official](https://github.com/ghc/ghc)                   | [asdf-haskell](https://github.com/asdf-community/asdf-haskell)                                                                                                                                        |
+| Racket     | None            | [Official](https://github.com/racket/racket)             | [asdf-racket](https://github.com/asdf-community/asdf-racket)                                                                                                                                          |
+| sml        | None            | [Official](https://smlnj.org)                            | [asdf-sml](https://github.com/asdf-community/asdf-sml)                                                                                                                                                |
+| idris      | None            | [Official](https://www.idris-lang.org)                   | [adsf-idris](https://github.com/asdf-community/asdf-idris)                                                                                                                                            |
+| idris2     | None            | [Official](https://github.com/idris-lang/Idris2)         | [asdf-idris2](https://github.com/asdf-community/asdf-idris2)                                                                                                                                          |
+| Flutter    | None            | [Official](https://docs.flutter.dev/get-started/install) | [asdf-flutter](https://github.com/oae/asdf-flutter), [fvm](https://github.com/befovy/fvm)                                                                                                             |
+| ravi       | None            | [Official](https://github.com/dibyendumajumdar/ravi)     |
+| Nelua      | None            | [Official](https://github.com/edubart/nelua-lang)        |
+| Odin       | None            | [Official](https://github.com/odin-lang/Odin)            |
+| tl         | None            | [Official](https://github.com/teal-language/tl)          |
+| MoonScript | None            | [Official](https://github.com/leafo/moonscript)          |
+| Yuescript  | None            | [Official](https://github.com/pigpigyyy/Yuescript)       |
+| LuxLang    | None            | [Official](https://github.com/LuxLang/lux)               |
+| Fennel     | None            | [Official](https://github.com/bakpakin/Fennel)           |
+| Hare       | None            | [Official](https://sr.ht/~sircmpwn/hare)                 |
+| Eno        | None            | [Official](https://eno-lang.org)                         |
+| PureScript | None | [Official](https://www.purescript.org) |
+| Grain | None | [Official](https://github.com/grain-lang/grain) |
+| Wren | None | [Official](https://github.com/wren-lang/wren) |
+| Enso | None | [Official](https://github.com/enso-org/enso) |
+| Haxe | None | [Official](https://github.com/HaxeFoundation/haxe) |
+| Slice | None | [Official](https://github.com/sylefeb/Silice) |
+| Red | None | [Official](https://github.com/red/red) |
+| Carp | None | [Official](https://github.com/carp-lang/Carp) |
+| vyper | None | [Official](https://github.com/vyperlang/vyper) |
+| Mint | None | [Official](https://github.com/mint-lang/mint) |
+| Melody | None | [Official](https://github.com/yoav-lavi/melody) |
+| Coconut | None | [Official](https://github.com/evhub/coconut) |
+| Ballerina | None | [Official](https://github.com/ballerina-platform/ballerina-lang) |
+| Odin | None | [Official](https://github.com/odin-lang/Odin) |
+| MoonScript | None | [Official](https://github.com/leafo/moonscript) |
+| EmojiCode | None | [Official](https://github.com/emojicode/emojicode) |
+| artichoke | None | [Official](https://github.com/artichoke/artichoke) |
+| gluon | None | [Official](https://github.com/gluon-lang/gluon) |
+| ChaiScript | None | [Official](https://github.com/ChaiScript/ChaiScript) |
+| janet | None | [Official](https://github.com/janet-lang/janet) |
+| P | None | [Official](https://github.com/p-org/P) |
+| Tidal | None | [Official](https://github.com/tidalcycles/Tidal) |
+| Peregrine | None | [Official](https://github.com/peregrine-lang/Peregrine) |
+| Flix | None | [Official](https://github.com/flix/flix) |
+| haste-compiler | None | [Official](https://github.com/valderman/haste-compiler) |
+| fetlang | None | [Official](https://github.com/fetlang/fetlang) |
+| pocketlang | None | [Official](https://github.com/ThakeeNathees/pocketlang) |
+| factor | None | [Official](https://github.com/factor/factor) |
+| oh | None | [Official](https://github.com/michaelmacinnis/oh) |
+| cito | None | [Official](https://github.com/pfusik/cito) |
+| mun | None | [Official](https://github.com/mun-lang/mun) |
+| Fo | None | [Official](https://github.com/albrow/fo) |
+| Starlark | None | [Official](https://github.com/google/starlark-go) |
+| lily | None | [Official](https://github.com/FascinatedBox/lily) |
+| curv | None | [Official](https://github.com/curv3d/curv) |
+| Ring | None | [Official](https://github.com/ring-lang/ring) |
+| rescript | None | [Official](https://rescript-lang.org) |
+| reason | None | [Official](https://github.com/reasonml/reason) |
+| wenyan | None | [Official](https://github.com/wenyan-lang/wenyan) |
+| GoPlus | None | [Official](https://github.com/goplus/gop) |
+| Pony | None | [Official](https://github.com/ponylang/ponyc) |
+| alda | None | [Official](https://github.com/alda-lang/alda) |
+| elvish | None | [Official](https://github.com/elves/elvish) |
+| unison | None | [Official](https://github.com/unisonweb/unison) |
+| Gravity | None | [Official](https://github.com/marcobambini/gravity) |
+| gleam | None | [Official](https://github.com/gleam-lang/gleam) |
+| Orca | None | [Official](https://github.com/hundredrabbits/Orca) |
+| Tengo | None | [Official](https://github.com/d5/tengo) |
+| D | None | [Official](https://github.com/dlang/dmd) |
+| ispc | None | [Official](https://github.com/agda/agda) |
+| agda | None | [Official](https://github.com/agda/agda) |
+| Beef | None | [Official](https://github.com/beefytech/Beef) |
+| lamdu | None | [Official](https://github.com/lamdu/lamdu) |
+| wasp | None | [Official](https://github.com/wasp-lang/wasp) |
+| clojerl | None | [Official](https://github.com/clojerl/clojerl) |
+| Snap | None | [Official](https://github.com/jmoenig/Snap) |
+| anko | None | [Official](https://github.com/mattn/anko) |
+| jakt | None | [Official](https://github.com/SerenityOS/jakt) |
+| ngs | None | [Official](https://github.com/ngs-lang/ngs) |
+| slang | None | [Official](https://github.com/kylestetz/slang) |
+| asciidots | None | [Official](https://github.com/aaronjanse/asciidots) |
+| MetaCall | None | [Official](https://github.com/metacall/core) |
+| Rt | None | [Official](https://github.com/rune-rs/rune) |
+| SATySFi | None | [Official](https://github.com/gfngfn/SATySFi) |
+| ng | None | [Official](https://github.com/neugram/ng) |
+| OneLang | None | [Official](https://github.com/onelang/OneLang) |
 
 ### Nuances
 
@@ -100,6 +176,8 @@ This requires a modification to the Module API
 - Objective-C?
 - Bash
 - OPAM / OCAML
+- TypeScript, Less, imba, bhai, (via npm)
+- [wasm](https://github.com/appcypher/awesome-wasm-langs)
 
 ## Out of Scope
 

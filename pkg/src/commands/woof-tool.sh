@@ -85,11 +85,9 @@ woof-tool() {
 		unset -v possible_module_version
 
 		helper.install_module_version --interactive "$module_name" "$module_version"
-	elif [ "$subcmd" = 'show-codenames' ]; then
-		:
-	elif [ "$subcmd" = 'clear-version-table' ]; then
+	elif [ "$subcmd" = 'clear-table-cache' ]; then
 		local module_name="$1"
-
+		
 		var.get_module_table_file "$module_name"
 		local table_file="$REPLY"
 

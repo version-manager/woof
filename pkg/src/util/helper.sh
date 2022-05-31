@@ -138,9 +138,10 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 	if [ "$flag_interactive" = 'yes' ]; then
 		print.info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
 		if (
-			if ! cd -- "$install_dir/$module_version"; then
+			if ! cd -- "$workspace_dir"; then
 				print.die 'Failed to cd'
 			fi
+			printf '%s\n' "Download URL: $url"
 			bash
 		); then :; else
 			local exit_code=$?
