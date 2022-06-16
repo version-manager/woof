@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" /><meta name="author" content="Edwin Kofler" /><link rel="canonical" href="https://hyperupcall.github.io/woof/" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>woof</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Woof";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = "/woof/";
+      </script>
+    
+    <script src="js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> woof
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href=".">Woof</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#concepts">Concepts</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#filters">Filters</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="details/">Details</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="languages/">Languages</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="roadmap/">Roadmap</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Api</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="api/filter/">Filter API</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="api/module/">Module API</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">woof</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" alt="Docs"></a> &raquo;</li><li>Woof</li>
+    <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/hyperupcall/woof/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="woof">Woof</h1>
+<p>Woof is the version manager to end all version managers.</p>
+<h2 id="summary">Summary</h2>
+<p>Akin to <a href="https://github.com/asdf-vm/asdf">asdf</a> and <a href="https://sdkman.io">sdkman</a>, Woof is a multi-tool version manager. That is, it manages the installation of multiple versions for multiple tools simultaneously</p>
+<p>Woof supports many popular languages out of the box - see the <a href="docs/roadmap.md">Roadmap</a> for more details</p>
+<h2 id="concepts">Concepts</h2>
+<p>Woof works so effectively because it is simple. To see implementation details of Woof, see <a href="docs/details.md">this page</a></p>
+<p>There are two main concepts:</p>
+<h3 id="modules">Modules</h3>
+<p>Modules are analogous to asdf or sdkman's <em>plugins</em>. They represent all the version possibilities of a particular tool. Examples of tools that may have a module include NodeJS, Python, and <a href="https://please.build">Please</a>. Variants are also supported - for example, Python may have at least <a href="https://github.com/python/cpython">cpython</a>, <a href="https://github.com/Nuitka/Nuitka">Nuitka</a>, and <a href="https://micropython.org">MicroPython</a> variants.</p>
+<p>To add support for a new language, tool, or program, write a module. Each module is implemented in a single Bash file. Functionalities of a particular module is a simple Bash function. See the <a href="docs/api/module.md">Module API</a> for more details.</p>
+<h3 id="filters">Filters</h3>
+<p>Filters normalize release information for a particular module. For example, it may convert a JSON response from <a href="https://docs.github.com/en/rest/reference/releases">GitHub's Release API</a> or a <a href="https://nodejs.org/download/release/index.json">custom release file</a> to a text format that is easier to parse in Bash.</p>
+<p>Each module must have a filter. Filters are written in either Bash, <a href="https://stedolan.github.io/jq">jq</a>, or Perl. See the <a href="docs/api/filter.md">Filter API</a> for more details)</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="details/" class="btn btn-neutral float-right" title="Details">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>© Edwin Kofler</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/hyperupcall/woof" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+      <span><a href="details/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.3.0
+Build Date UTC : 2022-06-16 23:46:30.318615+00:00
+-->

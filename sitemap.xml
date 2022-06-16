@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://hyperupcall.github.io/woof/</loc>
+         <lastmod>2022-06-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hyperupcall.github.io/woof/details/</loc>
+         <lastmod>2022-06-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hyperupcall.github.io/woof/languages/</loc>
+         <lastmod>2022-06-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hyperupcall.github.io/woof/roadmap/</loc>
+         <lastmod>2022-06-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hyperupcall.github.io/woof/api/filter/</loc>
+         <lastmod>2022-06-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hyperupcall.github.io/woof/api/module/</loc>
+         <lastmod>2022-06-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Edwin Kofler" /><link rel="canonical" href="https://hyperupcall.github.io/woof/details/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Details - woof</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Details";
+        var mkdocs_page_input_path = "details.md";
+        var mkdocs_page_url = "/woof/details/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> woof
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Woof</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Details</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#things">Things</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#approach">Approach</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#shims">Shims</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#symlinks">Symlinks</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installing">Installing</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../languages/">Languages</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../roadmap/">Roadmap</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Api</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/filter/">Filter API</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/module/">Module API</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">woof</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li><li>Details</li>
+    <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/hyperupcall/woof/edit/master/docs/details.md"
+          class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="details">Details</h1>
+<h2 id="things">Things</h2>
+<p>Current version can be determined by</p>
+<ul>
+<li>Global version (default)</li>
+<li>Per-directory</li>
+<li>Per tty/pty</li>
+</ul>
+<h2 id="approach">Approach</h2>
+<p>When creating version managers, there are two approaches: shims and symlinks</p>
+<h3 id="shims">Shims</h3>
+<p>In essence, the shim layer is an indirection layer that facilities executing the proper version. This is usually implemented with some sort of shell script. The version is derived from the current context, which can include the current tty/pty, current directory, or global version. I don't like shims, primarily because they incur a time penalty; that is, the startup initialization of a shell. This would influence things like benchmarks. This approach also feels dirty to me.</p>
+<p>Shims might be required to make features such as (per-tty versions) more reliable</p>
+<h3 id="symlinks">Symlinks</h3>
+<p>There is no startup penalty for symlinks, unlike shims. The tradeoff is that it is harder to implement when accounting for the current context. Mainly, extra code needs to be evaluated during the initialization of interactive shells (or just the primary login shell).</p>
+<h2 id="installing">Installing</h2>
+<p>The installation steps for installing any particular version of any particular module are streamlined.</p>
+<p>Unlike similar projects (<code>asdf</code>), all plugins (we call them modules) are installed by default. Only the most popular modules are shown by default as not to overwhelm the user.</p>
+<p>Not only that, but all code is ran under the same shell context (with the exception of <em>filters</em>, (of which, many are written for Deno in TypeScript)). Similarly, this contrasts previous approaches since extraneous subshells are minimized to reduce unnecessary performance penalties (especially on platforms like Cygwin, etc.). This also means there is more code reuse between modules</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Woof"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../languages/" class="btn btn-neutral float-right" title="Languages">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>© Edwin Kofler</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/hyperupcall/woof" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../languages/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Edwin Kofler" /><link rel="canonical" href="https://hyperupcall.github.io/woof/languages/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Languages - woof</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Languages";
+        var mkdocs_page_input_path = "languages.md";
+        var mkdocs_page_url = "/woof/languages/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> woof
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Woof</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../details/">Details</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Languages</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#buildless">Buildless</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#buildfull">Buildfull</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#to-sort">To sort</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#nuances">Nuances</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#misc">Misc</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#out-of-scope">Out of Scope</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../roadmap/">Roadmap</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Api</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/filter/">Filter API</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../api/module/">Module API</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">woof</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li><li>Languages</li>
+    <li class="wy-breadcrumbs-aside">
+        <a href="https://github.com/hyperupcall/woof/edit/master/docs/languages.md"
+          class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="languages">Languages</h1>
+<p>Woof aims to support the following languages / programs</p>
+<p>There are three levels of support:</p>
+<ul>
+<li>None</li>
+<li>Dogfooding (it works on my machine)</li>
+<li>Complete (works everywhere with supporting test suite)</li>
+</ul>
+<h2 id="buildless">Buildless</h2>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Current Support</th>
+<th>Official Download</th>
+<th>Replaces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NodeJS</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/nodejs/node">Official</a></td>
+<td><a href="https://github.com/asdf-vm/asdf-nodejs">asdf-node</a>, <a href="https://github.com/tj/n">n</a>, <a href="https://github.com/nvm-sh/nvm">nvm</a>, <a href="https://github.com/jorgebucaran/nvm.fish">nvm.fish</a>, <a href="https://github.com/hakobera/nvmw">nvmw</a>, <a href="https://github.com/wbyoung/avn">avn</a>, <a href="https://github.com/Schniz/fnm">fnm</a>, <a href="https://github.com/isaacs/nave">nave</a>, <a href="https://github.com/nullivex/nodist">nodist</a>, <a href="https://github.com/nodenv/nodenv">nodenv</a>, <a href="https://github.com/hokaccha/nodebrew">nodebrew</a></td>
+</tr>
+<tr>
+<td>Deno</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/denoland/deno">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-deno">asdf-deno</a>, <a href="https://github.com/justjavac/dvm">justjavac/dvm</a>, <a href="https://github.com/ghosind/dvm">ghosind/dvm</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/google/go-github">Official</a></td>
+<td><a href="https://github.com/kennyp/asdf-golang">asdf-golang</a>, <a href="https://github.com/moovweb/gvm">gvm</a>, <a href="https://github.com/stefanmaric/g">stefanmaric/g</a>, <a href="https://github.com/voidint/g">voidint/g</a>, <a href="https://github.com/syndbg/goenv">goenv</a>, <a href="https://github.com/owenthereal/goup">goup</a>, <a href="https://github.com/hit9/oo">oo</a></td>
+</tr>
+<tr>
+<td>Crystal</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/crystal-lang/crystal">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-crystal">asdf-crystal</a>, <a href="https://github.com/crenv/crenv">crenv</a></td>
+</tr>
+<tr>
+<td>Nim</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/nim-lang/Nim">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-nim">asdf-nim</a>, <a href="https://github.com/dom96/choosenim">choosenim</a></td>
+</tr>
+<tr>
+<td>Dart</td>
+<td>Dogfooding</td>
+<td><a href="https://dart.dev">Official</a></td>
+<td><a href="https://github.com/PatOConnor43/asdf-dart">asdf-dart</a>, <a href="https://github.com/cbracken/dvm">dvm</a></td>
+</tr>
+<tr>
+<td>Zig</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/ziglang/zig">Official</a></td>
+<td><a href="https://github.com/cheetah/asdf-zig">asdf-zig</a></td>
+</tr>
+<tr>
+<td>Haxe</td>
+<td>Dogfooding</td>
+<td><a href="https://haxe.org/download">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-haxe">asdf-haxe</a>, <a href="https://github.com/jasononeil/hvm">jasononeil/hvm</a>, <a href="https://github.com/dpeek/hvm">dpeek/hvm</a></td>
+</tr>
+<tr>
+<td>Neko</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/HaxeFoundation/neko">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-haxe">asdf-neko</a></td>
+</tr>
+<tr>
+<td>Elm</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/elm/compiler">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-elm">asdf-elm</a></td>
+</tr>
+<tr>
+<td>Julia</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/JuliaLang/julia">Official</a></td>
+<td><a href="https://github.com/rkyleg/asdf-julia">asdf-julia</a>, <a href="https://github.com/pmargreff/juliavm">juliavm</a></td>
+</tr>
+<tr>
+<td>kubectl</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/kubernetes/kubectl">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-kubectl">asdf-kubectl</a>, <a href="https://github.com/nutellinoit/kubenvz">kubenvz</a>, <a href="https://github.com/kerl/kerl">kerl</a></td>
+</tr>
+<tr>
+<td>Cue</td>
+<td>Dogfooding</td>
+<td><a href="https://cuelang.org">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-cue">asdf-cue</a>,<a href="https://github.com/cue-lang/cue">cue-lang</a></td>
+</tr>
+<tr>
+<td>gleam</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/gleam-lang/gleam">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-gleam">asdf-gleam</a></td>
+</tr>
+<tr>
+<td>Solidity</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/ethereum/solidity">Official</a></td>
+<td><a href="https://github.com/refillic/asdf-solidity">asdf-solidity</a>, <a href="https://github.com/web3j/svm">svm</a></td>
+</tr>
+<tr>
+<td>Peco</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/peco/peco">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-peco">asdf-peco</a></td>
+</tr>
+<tr>
+<td>fstar</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/FStarLang/FStar">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-fstar">asdf-fstar</a></td>
+</tr>
+<tr>
+<td>Please</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/thought-machine/please">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-please">asdf-please</a></td>
+</tr>
+<tr>
+<td>Lean</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/leanprover/lean4">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-lean">asdf-lean</a></td>
+</tr>
+<tr>
+<td>Ninja</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/ninja-build/ninja">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-ninja">asdf-ninja</a></td>
+</tr>
+<tr>
+<td>gh</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/cli/cli">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>V</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/vlang/v">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Earthly</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/earthly/earthly">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Hashicorp Boundary</td>
+<td>Dogfooding</td>
+<td><a href="https://www.boundaryproject.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Consul</td>
+<td>Dogfooding</td>
+<td><a href="https://www.consul.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Levant</td>
+<td>Dogfooding</td>
+<td><a href="https://github.com/hashicorp/levant">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Nomad</td>
+<td>Dogfooding</td>
+<td><a href="https://www.nomad.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Packer</td>
+<td>Dogfooding</td>
+<td><a href="https://www.packer.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Sentinel</td>
+<td>Dogfooding</td>
+<td><a href="https://docs.hashicorp.com/sentinel/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Serf</td>
+<td>Dogfooding</td>
+<td><a href="https://www.serf.io/downloads.html">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Terraform</td>
+<td>Dogfooding</td>
+<td><a href="https://www.terraform.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a>, <a href="https://github.com/tfutils/tfenv">tfenfv</a>, <a href="https://github.com/aaratn/terraenv">terraenv</a></td>
+</tr>
+<tr>
+<td>Hashicorp Vagrant</td>
+<td>Dogfooding</td>
+<td><a href="https://www.vagrant.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Vault</td>
+<td>Dogfooding</td>
+<td><a href="https://www.vaultproject.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+<tr>
+<td>Hashicorp Waypoint</td>
+<td>Dogfooding</td>
+<td><a href="https://www.waypointproject.io/downloads">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-hashicorp">asdf-hashicorp</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="buildfull">Buildfull</h2>
+<p>This requires a modification to the Module API</p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Current Support</th>
+<th>Official Download</th>
+<th>Replaces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHP</td>
+<td>None</td>
+<td><a href="https://github.com/php/php-src">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-php">asdf-php</a>, <a href="https://github.com/phpenv/phpenv">phpenv</a>, <a href="https://github.com/phpbrew/phpbrew">phpbrew</a>, <a href="https://github.com/wilmoore/php-version">php-version</a></td>
+</tr>
+<tr>
+<td>Python</td>
+<td>None</td>
+<td><a href="https://github.com/python/cpython">Official</a></td>
+<td><a href="https://github.com/asdf-vm/asdf-python">asdf-python</a>, <a href="https://github.com/pyenv/pyenv">pyenv</a>, <a href="https://github.com/qw3rtman/p">p</a>, <a href="https://github.com/DrPandemic/pvm">pvm</a></td>
+</tr>
+<tr>
+<td>Swift</td>
+<td>None</td>
+<td><a href="https://github.com/apple/swift">Official</a></td>
+<td><a href="https://github.com/fcrespo82/asdf-swift">asdf-swift</a>, <a href="https://github.com/kylef/swiftenv">swiftenv</a></td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>None</td>
+<td><a href="https://github.com/ruby/ruby">Official</a></td>
+<td><a href="https://github.com/asdf-vm/asdf-ruby">asdf-ruby</a>, <a href="https://rvm.io">rvm</a>, <a href="https://github.com/rbenv/rbenv">rbenv</a>, <a href="https://github.com/postmodern/chruby">chruby</a>, <a href="https://github.com/TaKO8Ki/frum">frum</a></td>
+</tr>
+<tr>
+<td>erlang</td>
+<td>None</td>
+<td><a href="https://github.com/erlang/otp">Official</a></td>
+<td><a href="https://github.com/asdf-vm/asdf-erlang">asdf-erlang</a></td>
+</tr>
+<tr>
+<td>Elixir</td>
+<td>None</td>
+<td><a href="https://github.com/elixir-lang/elixir">Official</a></td>
+<td><a href="https://github.com/asdf-vm/asdf-elixir">asdf-elixir</a>, <a href="https://github.com/exenv/exenv">exenv</a>, <a href="https://github.com/taylor/kiex">kiex</a></td>
+</tr>
+<tr>
+<td>Meson</td>
+<td>None</td>
+<td><a href="https://github.com/mesonbuild/meson">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-meson">asdf-meson</a></td>
+</tr>
+<tr>
+<td>HHVM</td>
+<td>None</td>
+<td><a href="https://docs.hhvm.com/hack">Official</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="to-sort">To sort</h2>
+<table>
+<thead>
+<tr>
+<th>Runtime</th>
+<th>Current Support</th>
+<th>Official Download</th>
+<th>Replaces</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R</td>
+<td>None</td>
+<td><a href="https://www.r-project.org">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-R">asdf-r</a>, <a href="https://github.com/rstudio/renv">renv</a>, <a href="https://github.com/viking/Renv">Renv</a></td>
+</tr>
+<tr>
+<td>Java</td>
+<td>None</td>
+<td><a href="https://github.com/openjdk/jdk">Official</a></td>
+<td><a href="https://github.com/halcyon/asdf-java">asdf-java</a>, <a href="https://www.jenv.be">jenv.be</a>, <a href="https://sdkman.io">sdkman</a>, <a href="https://github.com/linux-china/jenv">jenv</a>, <a href="https://github.com/shyiko/jabba">jabba</a></td>
+</tr>
+<tr>
+<td>Groovy</td>
+<td>None</td>
+<td><a href="https://github.com/apache/groovy">Official</a></td>
+<td><a href="https://github.com/weibemoura/asdf-groovy">asdf-groovy</a>, <a href="https://sdkman.io/sdks#groovy">sdkman-groovy</a></td>
+</tr>
+<tr>
+<td>Scala</td>
+<td>None</td>
+<td><a href="https://github.com/lampepfl/dotty">Official</a></td>
+<td><a href="https://github.com/sylph01/asdf-scala">asdf-scala</a>, <a href="https://sdkman.io/sdks#scala">sdkman-scala</a></td>
+</tr>
+<tr>
+<td>Clojure</td>
+<td>None</td>
+<td><a href="https://github.com/clojure/clojure">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-clojure">clojure</a></td>
+</tr>
+<tr>
+<td>Dotty</td>
+<td>None</td>
+<td><a href="https://github.com/lampepfl/dotty">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-dotty">asdf-dotty</a>, <a href="https://github.com/d-ogxwx/dvm">dvm</a></td>
+</tr>
+<tr>
+<td>Kotlin</td>
+<td>None</td>
+<td><a href="https://github.com/JetBrains/kotlin">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-kotlin">asdf-kotlin</a>, <a href="https://sdkman.io/sdks#kotlin">kotlin-sdkman</a></td>
+</tr>
+<tr>
+<td>GraalVM</td>
+<td>None</td>
+<td><a href="https://github.com/oracle/graal">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-graalvm">asdf-graalvm</a></td>
+</tr>
+<tr>
+<td>Haskell</td>
+<td>None</td>
+<td><a href="https://github.com/ghc/ghc">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-haskell">asdf-haskell</a></td>
+</tr>
+<tr>
+<td>Racket</td>
+<td>None</td>
+<td><a href="https://github.com/racket/racket">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-racket">asdf-racket</a></td>
+</tr>
+<tr>
+<td>sml</td>
+<td>None</td>
+<td><a href="https://smlnj.org">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-sml">asdf-sml</a></td>
+</tr>
+<tr>
+<td>idris</td>
+<td>None</td>
+<td><a href="https://www.idris-lang.org">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-idris">adsf-idris</a></td>
+</tr>
+<tr>
+<td>idris2</td>
+<td>None</td>
+<td><a href="https://github.com/idris-lang/Idris2">Official</a></td>
+<td><a href="https://github.com/asdf-community/asdf-idris2">asdf-idris2</a></td>
+</tr>
+<tr>
+<td>Flutter</td>
+<td>None</td>
+<td><a href="https://docs.flutter.dev/get-started/install">Official</a></td>
+<td><a href="https://github.com/oae/asdf-flutter">asdf-flutter</a>, <a href="https://github.com/befovy/fvm">fvm</a></td>
+</tr>
+<tr>
+<td>ravi</td>
+<td>None</td>
+<td><a href="https://github.com/dibyendumajumdar/ravi">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Nelua</td>
+<td>None</td>
+<td><a href="https://github.com/edubart/nelua-lang">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Odin</td>
+<td>None</td>
+<td><a href="https://github.com/odin-lang/Odin">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>tl</td>
+<td>None</td>
+<td><a href="https://github.com/teal-language/tl">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>MoonScript</td>
+<td>None</td>
+<td><a href="https://github.com/leafo/moonscript">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Yuescript</td>
+<td>None</td>
+<td><a href="https://github.com/pigpigyyy/Yuescript">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>LuxLang</td>
+<td>None</td>
+<td><a href="https://github.com/LuxLang/lux">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Fennel</td>
+<td>None</td>
+<td><a href="https://github.com/bakpakin/Fennel">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Hare</td>
+<td>None</td>
+<td><a href="https://sr.ht/~sircmpwn/hare">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Eno</td>
+<td>None</td>
+<td><a href="https://eno-lang.org">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>PureScript</td>
+<td>None</td>
+<td><a href="https://www.purescript.org">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Grain</td>
+<td>None</td>
+<td><a href="https://github.com/grain-lang/grain">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Wren</td>
+<td>None</td>
+<td><a href="https://github.com/wren-lang/wren">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Enso</td>
+<td>None</td>
+<td><a href="https://github.com/enso-org/enso">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Haxe</td>
+<td>None</td>
+<td><a href="https://github.com/HaxeFoundation/haxe">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Slice</td>
+<td>None</td>
+<td><a href="https://github.com/sylefeb/Silice">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Red</td>
+<td>None</td>
+<td><a href="https://github.com/red/red">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Carp</td>
+<td>None</td>
+<td><a href="https://github.com/carp-lang/Carp">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>vyper</td>
+<td>None</td>
+<td><a href="https://github.com/vyperlang/vyper">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Mint</td>
+<td>None</td>
+<td><a href="https://github.com/mint-lang/mint">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Melody</td>
+<td>None</td>
+<td><a href="https://github.com/yoav-lavi/melody">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Coconut</td>
+<td>None</td>
+<td><a href="https://github.com/evhub/coconut">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Ballerina</td>
+<td>None</td>
+<td><a href="https://github.com/ballerina-platform/ballerina-lang">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Odin</td>
+<td>None</td>
+<td><a href="https://github.com/odin-lang/Odin">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>MoonScript</td>
+<td>None</td>
+<td><a href="https://github.com/leafo/moonscript">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>EmojiCode</td>
+<td>None</td>
+<td><a href="https://github.com/emojicode/emojicode">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>artichoke</td>
+<td>None</td>
+<td><a href="https://github.com/artichoke/artichoke">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>gluon</td>
+<td>None</td>
+<td><a href="https://github.com/gluon-lang/gluon">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>ChaiScript</td>
+<td>None</td>
+<td><a href="https://github.com/ChaiScript/ChaiScript">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>janet</td>
+<td>None</td>
+<td><a href="https://github.com/janet-lang/janet">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>P</td>
+<td>None</td>
+<td><a href="https://github.com/p-org/P">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Tidal</td>
+<td>None</td>
+<td><a href="https://github.com/tidalcycles/Tidal">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Peregrine</td>
+<td>None</td>
+<td><a href="https://github.com/peregrine-lang/Peregrine">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Flix</td>
+<td>None</td>
+<td><a href="https://github.com/flix/flix">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>haste-compiler</td>
+<td>None</td>
+<td><a href="https://github.com/valderman/haste-compiler">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>fetlang</td>
+<td>None</td>
+<td><a href="https://github.com/fetlang/fetlang">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>pocketlang</td>
+<td>None</td>
+<td><a href="https://github.com/ThakeeNathees/pocketlang">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>factor</td>
+<td>None</td>
+<td><a href="https://github.com/factor/factor">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>oh</td>
+<td>None</td>
+<td><a href="https://github.com/michaelmacinnis/oh">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>cito</td>
+<td>None</td>
+<td><a href="https://github.com/pfusik/cito">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>mun</td>
+<td>None</td>
+<td><a href="https://github.com/mun-lang/mun">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Fo</td>
+<td>None</td>
+<td><a href="https://github.com/albrow/fo">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Starlark</td>
+<td>None</td>
+<td><a href="https://github.com/google/starlark-go">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>lily</td>
+<td>None</td>
+<td><a href="https://github.com/FascinatedBox/lily">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>curv</td>
+<td>None</td>
+<td><a href="https://github.com/curv3d/curv">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Ring</td>
+<td>None</td>
+<td><a href="https://github.com/ring-lang/ring">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>rescript</td>
+<td>None</td>
+<td><a href="https://rescript-lang.org">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>reason</td>
+<td>None</td>
+<td><a href="https://github.com/reasonml/reason">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>wenyan</td>
+<td>None</td>
+<td><a href="https://github.com/wenyan-lang/wenyan">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>GoPlus</td>
+<td>None</td>
+<td><a href="https://github.com/goplus/gop">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Pony</td>
+<td>None</td>
+<td><a href="https://github.com/ponylang/ponyc">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>alda</td>
+<td>None</td>
+<td><a href="https://github.com/alda-lang/alda">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>elvish</td>
+<td>None</td>
+<td><a href="https://github.com/elves/elvish">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>unison</td>
+<td>None</td>
+<td><a href="https://github.com/unisonweb/unison">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Gravity</td>
+<td>None</td>
+<td><a href="https://github.com/marcobambini/gravity">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>gleam</td>
+<td>None</td>
+<td><a href="https://github.com/gleam-lang/gleam">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Orca</td>
+<td>None</td>
+<td><a href="https://github.com/hundredrabbits/Orca">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Tengo</td>
+<td>None</td>
+<td><a href="https://github.com/d5/tengo">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>D</td>
+<td>None</td>
+<td><a href="https://github.com/dlang/dmd">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>ispc</td>
+<td>None</td>
+<td><a href="https://github.com/agda/agda">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>agda</td>
+<td>None</td>
+<td><a href="https://github.com/agda/agda">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Beef</td>
+<td>None</td>
+<td><a href="https://github.com/beefytech/Beef">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>lamdu</td>
+<td>None</td>
+<td><a href="https://github.com/lamdu/lamdu">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>wasp</td>
+<td>None</td>
+<td><a href="https://github.com/wasp-lang/wasp">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>clojerl</td>
+<td>None</td>
+<td><a href="https://github.com/clojerl/clojerl">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Snap</td>
+<td>None</td>
+<td><a href="https://github.com/jmoenig/Snap">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>anko</td>
+<td>None</td>
+<td><a href="https://github.com/mattn/anko">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>jakt</td>
+<td>None</td>
+<td><a href="https://github.com/SerenityOS/jakt">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>ngs</td>
+<td>None</td>
+<td><a href="https://github.com/ngs-lang/ngs">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>slang</td>
+<td>None</td>
+<td><a href="https://github.com/kylestetz/slang">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>asciidots</td>
+<td>None</td>
+<td><a href="https://github.com/aaronjanse/asciidots">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>MetaCall</td>
+<td>None</td>
+<td><a href="https://github.com/metacall/core">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Rt</td>
+<td>None</td>
+<td><a href="https://github.com/rune-rs/rune">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>SATySFi</td>
+<td>None</td>
+<td><a href="https://github.com/gfngfn/SATySFi">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>ng</td>
+<td>None</td>
+<td><a href="https://github.com/neugram/ng">Official</a></td>
+<td></td>
+</tr>
+<tr>
+<td>OneLang</td>
+<td>None</td>
+<td><a href="https://github.com/onelang/OneLang">Official</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="nuances">Nuances</h3>
+<ul>
+<li><code>.kubectl_version</code></li>
+<li><code>.node-version</code>, and <code>.nvmrc</code></li>
+<li><code>.dvmrc</code></li>
+<li><code>.ruby-version</code> and <code>.rvmrc</code></li>
+<li><code>.tool-versions</code></li>
+</ul>
+<h2 id="misc">Misc</h2>
+<ul>
+<li>fortran</li>
+<li>lua</li>
+<li>Dasel</li>
+<li>C</li>
+<li>C++</li>
+<li>C#</li>
+<li>Objective-C?</li>
+<li>Bash</li>
+<li>OPAM / OCAML</li>
+<li>TypeScript, Less, imba, bhai, (via npm)</li>
+<li><a href="https://github.com/appcypher/awesome-wasm-langs">wasm</a></li>
+</ul>
+<h2 id="out-of-scope">Out of Scope</h2>
+<ul>
+<li>Rust because <code>rustup</code> is actually good</li>
+<li>Codename to version mapping (few languages do this and its easy to forget codenames)</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../details/" class="btn btn-neutral float-left" title="Details"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../roadmap/" class="btn btn-neutral float-right" title="Roadmap">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>© Edwin Kofler</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/hyperupcall/woof" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../details/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../roadmap/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
