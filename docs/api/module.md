@@ -17,7 +17,7 @@ Go|v1.17.6|linux|x86_64|https://go.dev/dl/dl/go1.17.6.linux-amd64.tar.gz
 NodeJS|v15.9.0|linux|x86_64|https://nodejs.org/download/release/v15.9.0/node-v15.9.0-linux-x64.tar.gz|2021-02-18
 ```
 
-To see the exact supported values for `<os>` and `<arch>`, see [roadmap.md](/docs/roadmap.md)
+To see the exact supported values for `<os>` and `<arch>`, see [roadmap.md](../roadmap.md)
 
 ## `<module>.install()`
 
