@@ -104,16 +104,16 @@
 <p>Woof is the version manager to end all version managers.</p>
 <h2 id="summary">Summary</h2>
 <p>Akin to <a href="https://github.com/asdf-vm/asdf">asdf</a> and <a href="https://sdkman.io">sdkman</a>, Woof is a multi-tool version manager. That is, it manages the installation of multiple versions for multiple tools simultaneously</p>
-<p>Woof supports many popular languages out of the box - see the <a href="docs/roadmap.md">Roadmap</a> for more details</p>
+<p>Woof supports many popular languages out of the box - see the <a href=",/roadmap.md">Roadmap</a> for more details</p>
 <h2 id="concepts">Concepts</h2>
-<p>Woof works so effectively because it is simple. To see implementation details of Woof, see <a href="docs/details.md">this page</a></p>
+<p>Woof works so effectively because it is simple. To see implementation details of Woof, see <a href="details/">this page</a></p>
 <p>There are two main concepts:</p>
 <h3 id="modules">Modules</h3>
 <p>Modules are analogous to asdf or sdkman's <em>plugins</em>. They represent all the version possibilities of a particular tool. Examples of tools that may have a module include NodeJS, Python, and <a href="https://please.build">Please</a>. Variants are also supported - for example, Python may have at least <a href="https://github.com/python/cpython">cpython</a>, <a href="https://github.com/Nuitka/Nuitka">Nuitka</a>, and <a href="https://micropython.org">MicroPython</a> variants.</p>
-<p>To add support for a new language, tool, or program, write a module. Each module is implemented in a single Bash file. Functionalities of a particular module is a simple Bash function. See the <a href="docs/api/module.md">Module API</a> for more details.</p>
+<p>To add support for a new language, tool, or program, write a module. Each module is implemented in a single Bash file. Functionalities of a particular module is a simple Bash function. See the <a href="api/module/">Module API</a> for more details.</p>
 <h3 id="filters">Filters</h3>
 <p>Filters normalize release information for a particular module. For example, it may convert a JSON response from <a href="https://docs.github.com/en/rest/reference/releases">GitHub's Release API</a> or a <a href="https://nodejs.org/download/release/index.json">custom release file</a> to a text format that is easier to parse in Bash.</p>
-<p>Each module must have a filter. Filters are written in either Bash, <a href="https://stedolan.github.io/jq">jq</a>, or Perl. See the <a href="docs/api/filter.md">Filter API</a> for more details)</p>
+<p>Each module must have a filter. Filters are written in either Bash, <a href="https://stedolan.github.io/jq">jq</a>, or Perl. See the <a href="api/filter/">Filter API</a> for more details)</p>
               
             </div>
           </div><footer>
@@ -166,5 +166,5 @@
 
 <!--
 MkDocs version : 1.3.0
-Build Date UTC : 2022-06-25 01:13:01.883794+00:00
+Build Date UTC : 2022-06-25 01:16:07.383645+00:00
 -->
