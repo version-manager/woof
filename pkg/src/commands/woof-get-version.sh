@@ -7,12 +7,8 @@ woof-get-version() {
 	local module_name="$REPLY"
 	unset -v possible_module_name
 
-	var.get_dir 'global' 'selection'
-	local global_selection_dir="$REPLY"
+	util.get_current_module_version "$module_name"
+	local version="$REPLY"
 
-	if [ ! -f "$global_selection_dir/$module_name" ]; then
-		print.die "Could not find (global) default for module '$module_name'"
-	fi
-
-	printf '%s\n' "$(<"$global_selection_dir/$module_name")"
+	printf '%s\n' "$REPLY"
 }

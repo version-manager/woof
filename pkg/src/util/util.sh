@@ -194,6 +194,20 @@ util.is_module_version_installed() {
 	fi
 }
 
+util.get_current_module_version() {
+	local module_name="$1"
+
+	var.get_dir 'global' 'selection'
+	local global_selection_dir="$REPLY"
+
+	if [ ! -f "$global_selection_dir/$module_name" ]; then
+		print.die "Could not find (global) default for module '$module_name'"
+	fi
+
+	unset -v REPLY; REPLY= # TODO: make this everywhere
+	REPLY=$(<"$global_selection_dir/$module_name")
+}
+
 util.assert_not_empty() {
 	local variable_name=
 	for variable_name; do
