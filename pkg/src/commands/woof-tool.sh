@@ -4,10 +4,10 @@ woof-tool() {
 	local subcmd="$1"
 	if [ -z "$subcmd" ]; then
 		util.show_help
-		print.die 'Expected subcommand'
+		core.print_die 'Expected subcommand'
 	fi
 	if ! shift; then
-		print.die 'Failed to shift'
+		core.print_die 'Failed to shift'
 	fi
 
 	if [ "$subcmd" = 'resymlink' ]; then
@@ -92,18 +92,18 @@ woof-tool() {
 		local table_file="$REPLY"
 
 		if [ -z "$module_name" ]; then
-			print.info "Removing all table cache"
+			core.print_info "Removing all table cache"
 			# Since '$module_name' is empty, the basename of '$table_file' is
 			# not correct, but that doesn't matter as it is not used here
 			rm -rf "${table_file%/*}"
 		else
-			print.info "Removing table cache for '$module_name'"
+			core.print_info "Removing table cache for '$module_name'"
 			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then
 		printf '%s\n' 'cd override'
 		helper.toolversions_set_versions_in_accordance
 	else
-		print.die "Subcommand '$subcmd' is not valid"
+		core.print_die "Subcommand '$subcmd' is not valid"
 	fi
 }

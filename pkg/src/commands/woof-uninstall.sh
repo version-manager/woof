@@ -19,8 +19,8 @@ woof-uninstall() {
 	printf '%s\n' "Uninstalling $module_name"
 	if [ -e "$install_dir/$module_version" ]; then
 		rm -rf "${install_dir:?}/$module_version"
-		print.info "Removed version '$module_version' for module '$module_name'"
+		core.print_info "Removed version '$module_version' for module '$module_name'"
 	else
-		print.info "Version '$module_version' for module '$module_name' is not installed"
+		core.print_info "Version '$module_version' for module '$module_name' is not installed"
 	fi
 }

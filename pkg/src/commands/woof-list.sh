@@ -11,7 +11,7 @@ woof-list() {
 		flag_all='yes'
 		;;
 	-*)
-		print.die "Flag '$arg' not recognized"
+		core.print_die "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

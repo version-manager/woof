@@ -4,11 +4,11 @@ woof-init() {
 	local shell="$1"
 
 	if [ -z "$shell" ]; then
-		print.die 'Shell not specified'
+		core.print_die 'Shell not specified'
 	fi
 
 	if [[ $shell != @(fish|zsh|ksh|bash|sh) ]]; then
-		print.die 'Shell not supported'
+		core.print_die 'Shell not supported'
 	fi
 
 	var.get_dir 'global' 'bin'

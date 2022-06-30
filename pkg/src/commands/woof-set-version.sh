@@ -19,11 +19,11 @@ woof-set-version() {
 		mkdir -p "$global_selection_dir"
 	fi
 	if ! printf '%s\n' "$module_version" > "$global_selection_dir/$module_name"; then
-		print.die "Could not write global version"
+		core.print_die "Could not write global version"
 	fi
-	print.info "Set version '$module_version' as global version"
+	core.print_info "Set version '$module_version' as global version"
 
 	# Resymlink
 	helper.symlink_after_install "$module_name" "$module_version"
-	print.info "Did symlinks for version '$module_version'"
+	core.print_info "Did symlinks for version '$module_version'"
 }

@@ -11,7 +11,7 @@ util.get_table_row() {
 	local table_file="$REPLY"
 
 	if [ ! -f "$table_file" ]; then
-		print.fatal "File '$table_file' does not exist, but was expected to"
+		core.print_fatal "File '$table_file' does not exist, but was expected to"
 	fi
 
 	if [ -z "$real_os" ] || [ -z "$real_arch" ]; then
@@ -30,9 +30,9 @@ util.get_table_row() {
 	done < "$table_file"; unset -v variant version os arch url comment
 
 	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
-		print.error "Failed to find corresponding row in version table"
-		print.hint "Does the version begin with 'v'? (Example: v18.0.0)"
-		print.hint "Try running 'woof tool clear-version-table $module_name'"
+		core.print_error "Failed to find corresponding row in version table"
+		util.print_hint "Does the version begin with 'v'? (Example: v18.0.0)"
+		util.print_hint "Try running 'woof tool clear-version-table $module_name'"
 		exit 1
 	fi
 
@@ -53,7 +53,7 @@ util.run_function() {
 	fi
 
 	if declare -f "$function_name" &>/dev/null; then
-		print.debug 'Executing' "$function_name()"
+		core.print_debug 'Executing' "$function_name()"
 		if "$function_name" "$@"; then
 			return $?
 		else
@@ -106,7 +106,7 @@ util.uname_system() {
 		Linux) kernel_pretty='linux' ;;
 		Darwin) kernel_pretty='darwin' ;;
 		FreeBSD) kernel_pretty='freebsd' ;;
-		*) print.die "Kernel '$kernel' unsupported. Please create a bug report if this is a mistake" ;;
+		*) core.print_die "Kernel '$kernel' unsupported. Please create a bug report if this is a mistake" ;;
 	esac
 
 	# x86_64|x86|armv7l|aarch64
@@ -115,7 +115,7 @@ util.uname_system() {
 		amd64|x86_64) hardware_pretty='x86_64' ;;
 		armv7l) hardware_pretty='armv7l' ;;
 		aarch64) hardware_pretty='aarch64' ;;
-		*) print.die "Hardware '$hardware' unsupported. Please create a bug report if this is a mistake" ;;
+		*) core.print_die "Hardware '$hardware' unsupported. Please create a bug report if this is a mistake" ;;
 	esac
 
 	REPLY1="$kernel_pretty"
@@ -155,7 +155,7 @@ util.get_global_selection() {
 	local global_selection=
 	if [ -f "$global_selection_file" ]; then
 		if ! global_selection=$(<"$global_selection_file"); then
-			print.die "Could not read from '$global_selection_file'"
+			core.print_die "Could not read from '$global_selection_file'"
 		fi
 	fi
 
@@ -169,13 +169,13 @@ util.set_global_selection() {
 
 	var.get_dir 'global' 'selection'
 	local global_selection_file="$REPLY/$module_name"
-	print.info "Setting $module_version as global default for $module_name"
+	core.print_info "Setting $module_version as global default for $module_name"
 	if [ ! -d "${global_selection_file%/*}" ]; then
 		mkdir -p "${global_selection_file%/*}"
 	fi
 	if ! printf '%s\n' "$module_version" > "$global_selection_file"; then
 		rm -f "$global_selection_file"
-		print.die "Could not write to '$global_selection_file'"
+		core.print_die "Could not write to '$global_selection_file'"
 	fi
 }
 
@@ -201,7 +201,7 @@ util.get_current_module_version() {
 	local global_selection_dir="$REPLY"
 
 	if [ ! -f "$global_selection_dir/$module_name" ]; then
-		print.die "Could not find (global) default for module '$module_name'"
+		core.print_die "Could not find (global) default for module '$module_name'"
 	fi
 
 	unset -v REPLY; REPLY= # TODO: make this everywhere
@@ -237,6 +237,10 @@ util.sanitize_path() {
 	unset -vn woof_var
 
 	REPLY="$path"
+}
+
+util.print_hint() {
+	printf '%s\n' "  -> $1"
 }
 
 util.show_help() {

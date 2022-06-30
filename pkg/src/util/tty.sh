@@ -93,7 +93,7 @@ tty.private.forwards_all() {
 tty.private.print_list() {
 	local index="$1"
 	if ! shift; then
-		print.die 'Failed to shift'
+		core.print_die 'Failed to shift'
 	fi
 
 	# index represents the center (ex. 17)
@@ -132,15 +132,15 @@ tty.private.print_list() {
 
 tty.multiselect() {
 	unset REPLY; REPLY=
-	local old_version="$1"; if ! shift; then print.die 'Failed shift'; fi
-	local select_keys_variable_name="$1"; if ! shift; then print.die 'Failed shift'; fi
-	local select_table_variable_name="$1"; if ! shift; then print.die 'Failed shift'; fi
+	local old_version="$1"; if ! shift; then core.print_die 'Failed shift'; fi
+	local select_keys_variable_name="$1"; if ! shift; then core.print_die 'Failed shift'; fi
+	local select_table_variable_name="$1"; if ! shift; then core.print_die 'Failed shift'; fi
 
 	local -n select_keys_variable="$select_keys_variable_name"
 	local -n select_table_variable="$select_table_variable_name"
 
 	if (( ${#select_keys_variable[@]} == 0)); then
-		print.die "Internal: Array should be greater than 0"
+		core.print_die "Internal: Array should be greater than 0"
 	fi
 
 	if [ -z "$old_version" ]; then
@@ -154,7 +154,7 @@ tty.multiselect() {
 
 	if ! util.key_to_index "$select_keys_variable_name" "$old_version"; then
 		tty.fullscreen_deinit
-		print.fatal "Key not '$old_version' not found in array '$select_keys_variable_name'"
+		core.print_fatal "Key not '$old_version' not found in array '$select_keys_variable_name'"
 	fi
 	old_version_index="$REPLY"
 	new_version_index="$old_version_index"
@@ -174,7 +174,7 @@ tty.multiselect() {
 	tty.private.print_list "$new_version_index" "${select_keys_variable[@]}"
 	while :; do
 		if ! read -rsN1 key; then
-			print.die 'Could not read input'
+			core.print_die 'Could not read input'
 		fi
 
 		case "$key" in

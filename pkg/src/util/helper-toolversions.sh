@@ -24,17 +24,17 @@ helper.toolversions_get_first_valid_version() {
 	unset -v REPLY; REPLY=
 	local module_name="$1"
 	if ! shift; then
-		print.die 'Failed shift'
+		core.print_die 'Failed shift'
 	fi
 
 	local potential_version=
 	for potential_version; do
 		if [[ $potential_version == ref:* ]]; then
-			print.die "Format 'ref:*' not yet supported in toolversions file"
+			core.print_die "Format 'ref:*' not yet supported in toolversions file"
 		elif [[ $potential_version == path:* ]]; then
-			print.die "Format 'path:*' not yet supported in toolversions file"
+			core.print_die "Format 'path:*' not yet supported in toolversions file"
 		elif [[ $potential_version == system ]]; then
-			print.die "Specifying 'system' not yet supported in toolversions file"
+			core.print_die "Specifying 'system' not yet supported in toolversions file"
 		else
 			if util.is_module_version_installed "$module_name"; then
 				REPLY=$potential_version

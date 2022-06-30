@@ -2,19 +2,19 @@
 
 m.ensure() {
 	if "$@"; then :; else
-		print.die "Command '$*' failed (code $?)"
+		core.print_die "Command '$*' failed (code $?)"
 	fi
 }
 
 m.fetch() {
-	print.info 'Fetching' "$url"
+	core.print_info 'Fetching' "$url"
 
 	# --progress-bar goes to standard error
 	if [ -t 2 ]; then
 		# TODO: Alternate screen should have same contents as current screen to prevent jarding
 		# core.trap_add 'tty.all_restore' INT
 		# tty.all_save
-		# print.info 'Fetching' "$url"
+		# core.print_info 'Fetching' "$url"
 		m.ensure curl -fSL --progress-bar "$@"
 		# tty.all_restore
 		# core.trap_remove 'tty.all_restore' INT
@@ -43,7 +43,7 @@ m.unpack() {
 	fi
 
 	util.sanitize_path "$PWD/$file"
-	print.info 'Unpacking' "$REPLY"
+	core.print_info 'Unpacking' "$REPLY"
 	if command -v pv &>/dev/null; then
 		pv "$file"
 	else
@@ -127,7 +127,7 @@ m.fetch_github_release() {
 			elif ((exit_code == 29)); then # '29' is not taken by curl
 				has_more_pages=0
 			else
-				print.die "Failed to execute curl or jq"
+				core.print_die "Failed to execute curl or jq"
 			fi
 		fi
 	done

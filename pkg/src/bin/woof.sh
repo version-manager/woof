@@ -14,7 +14,7 @@ main.woof() {
 
 	if [ -f "$WOOF_DATA_HOME/token" ]; then
 		if ! GITHUB_TOKEN=$(<"$WOOF_DATA_HOME/token"); then
-			print.die "Failed to read token file"
+			core.print_die "Failed to read token file"
 		fi
 		export GITHUB_TOKEN
 	fi
@@ -26,7 +26,7 @@ main.woof() {
 		exit
 		;;
 	-*)
-		print.die "Flag '$arg' not recognized"
+		core.print_die "Flag '$arg' not recognized"
 		;;
 	*)
 		break
@@ -37,10 +37,10 @@ main.woof() {
 	local action_name="$1"
 	if [ -z "$action_name" ]; then
 		util.show_help
-		print.die 'No action was given'
+		core.print_die 'No action was given'
 	fi
 	if ! shift; then
-		print.die 'Failed to shift'
+		core.print_die 'Failed to shift'
 	fi
 
 	case $action_name in
@@ -51,6 +51,6 @@ main.woof() {
 		set-version) woof-set-version "$@" ;;
 		list) woof-list "$@" ;;
 		tool) woof-tool "$@" ;;
-		*) print.die "Subcommand '$action_name' not recognized" ;;
+		*) core.print_die "Subcommand '$action_name' not recognized" ;;
 	esac
 }

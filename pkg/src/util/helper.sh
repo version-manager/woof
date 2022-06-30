@@ -9,8 +9,8 @@ helper.create_version_table() {
 	var.get_module_table_file "$module_name"
 	local table_file="$REPLY"
 
-	print.info 'Gathering versions'
-	print.debug "Table file: $table_file"
+	core.print_info 'Gathering versions'
+	core.print_debug "Table file: $table_file"
 
 	if [ ! -d "${table_file%/*}" ]; then
 		mkdir -p "${table_file%/*}"
@@ -24,20 +24,20 @@ helper.create_version_table() {
 		local table_string=
 		if table_string=$(util.run_function "$module_name.table"); then
 			if core.err_exists; then
-				print.error "$ERR"
+				core.print_error "$ERR"
 				exit "$ERRCODE"
 			fi
 		else
-			print.die "A fatal error occured while running '$module_name.table'"
+			core.print_die "A fatal error occured while running '$module_name.table'"
 		fi
 
 		if [ -z "$table_string" ]; then
-			print.die "Function '$module_name.table' must output a well-formed table of variable names. Nothing was sent"
+			core.print_die "Function '$module_name.table' must output a well-formed table of variable names. Nothing was sent"
 		fi
 
 		if ! printf '%s' "$table_string" > "$table_file"; then
 			rm -f "$table_file"
-			print.die "Could not write to '$table_file'"
+			core.print_die "Could not write to '$table_file'"
 		fi
 
 		unset table_string
@@ -67,14 +67,14 @@ helper.install_module_version() {
 	local interactive_dir=
 	if [ "$flag_interactive" = 'yes' ]; then
 		if ! interactive_dir="$(mktemp -d)/woof-interactive-$RANDOM"; then
-			print.die 'Failed to mktemp'
+			core.print_die 'Failed to mktemp'
 		fi
 		workspace_dir="$interactive_dir/workspace_dir"
 		install_dir="$interactive_dir/install_dir"
 	fi
 
 	if util.is_module_version_installed "$module_name" "$module_version"; then
-		print.die "Version '$module_version' is already installed for module '$module_name'"
+		core.print_die "Version '$module_version' is already installed for module '$module_name'"
 	fi
 
 	# Preparation actions
@@ -96,7 +96,7 @@ helper.install_module_version() {
 	if ! cd -- "$workspace_dir"; then
 		core.panic 'Failed to cd'
 	fi
-	print.debug "Working directory changed to: $PWD"
+	core.print_debug "Working directory changed to: $PWD"
 
 	unset -v REPLY_DIR
 	unset -v REPLY_{BINS,INCLUDES,LIBS,MANS} REPLY_{BASH,ZSH,FISH}_COMPLETIONS
@@ -110,20 +110,20 @@ helper.install_module_version() {
 		fi
 	else
 		rm -rf "$workspace_dir"
-		print.die "Unexpected error while calling '$module_name.install'"
+		core.print_die "Unexpected error while calling '$module_name.install'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
 
 	if [ -z "$REPLY_DIR" ]; then
-		print.die "Variable '\$REPLY_DIR' must be set at the end of <module>.install"
+		core.print_die "Variable '\$REPLY_DIR' must be set at the end of <module>.install"
 	fi
 
 	# Move extracted contents to 'installs' directory
 	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$module_version/files"; then
 		rm -rf "$workspace_dir"
-		print.die "Could not move extracted contents to '$install_dir/$module_version/files'"
+		core.print_die "Could not move extracted contents to '$install_dir/$module_version/files'"
 	fi
 
 	# Save information about bin, man, etc. pages later
@@ -131,15 +131,15 @@ helper.install_module_version() {
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
 mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 		rm -rf "$workspace_dir" "${install_dir:?}/$module_version"
-		print.die "Could not write to '$install_dir/$module_version/data.txt'"
+		core.print_die "Could not write to '$install_dir/$module_version/data.txt'"
 	fi
 	IFS="$old_ifs"
 
 	if [ "$flag_interactive" = 'yes' ]; then
-		print.info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
+		core.print_info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
 		if (
 			if ! cd -- "$workspace_dir"; then
-				print.die 'Failed to cd'
+				core.print_die 'Failed to cd'
 			fi
 			printf '%s\n' "Download URL: $url"
 			bash
@@ -156,9 +156,9 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
 		: > "$install_dir/$module_version/done"
-		print.info 'Installed' "$module_version"	
+		core.print_info 'Installed' "$module_version"	
 	else
-		print.info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
+		core.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
 	fi
 
 }
@@ -188,12 +188,12 @@ helper.switch_to_version() {
 			core.panic
 		fi
 	else
-		print.die "Unexpected error while calling '$module_name.switch'"
+		core.print_die "Unexpected error while calling '$module_name.switch'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
-	print.info 'Using' "$module_version"	
+	core.print_info 'Using' "$module_version"	
 }
 
 helper.symlink_after_install() {
@@ -226,16 +226,16 @@ helper.symlink_after_install() {
 				fi
 
 				if [ ! -x "$bin_file" ]; then
-					print.warn "File '$bin_file' is in a bin directory, but is not marked as executable"
+					core.print_warn "File '$bin_file' is in a bin directory, but is not marked as executable"
 					continue
 				fi
 
 				if ! ln -sf "$bin_file" "$global_bin_dir/${bin_file##*/}"; then
-					print.warn "Link failed. Skipping"
+					core.print_warn "Link failed. Skipping"
 				fi
 			done; unset -v bin_file
 		else
-			print.warn "Directory '$bin_dir' does not exist for module '$module_name'"
+			core.print_warn "Directory '$bin_dir' does not exist for module '$module_name'"
 		fi
 	done; unset -v bin_dir
 }

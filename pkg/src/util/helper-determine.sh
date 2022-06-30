@@ -20,11 +20,11 @@ helper.determine_module_name() {
 
 	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/modules/$module_name.sh"
 	if [ ! -f "$plugin_file" ]; then
-		print.die "Module '$module_name' not found"
+		core.print_die "Module '$module_name' not found"
 	fi
 
 	if ! source "$plugin_file"; then
-		print.die "Could not successfully source module '$module_name'"
+		core.print_die "Could not successfully source module '$module_name'"
 	fi
 
 	REPLY=$module_name
@@ -43,7 +43,7 @@ helper.determine_module_name_installed() {
 		core.shopt_pop
 
 		if (( ${#module_list[@]} == 0 )); then
-			print.die "Cannot uninstall as no modules are installed"
+			core.print_die "Cannot uninstall as no modules are installed"
 		fi
 
 		module_list=("${module_list[@]%/}")
@@ -60,7 +60,7 @@ helper.determine_module_name_installed() {
 	fi	
 
 	if [ ! -d "$install_dir" ]; then
-		print.die "No versions of module '$module_name' are installed"
+		core.print_die "No versions of module '$module_name' are installed"
 	fi
 
 	REPLY=$module_name
@@ -93,7 +93,7 @@ helper.determine_module_version() {
 		done < "$table_file"; unset version os arch url comment
 
 		if [ "$match_found" != 'yes' ]; then
-			print.die "Could not find any matching versions for the current os/arch"
+			core.print_die "Could not find any matching versions for the current os/arch"
 		fi
 
 		util.get_global_selection "$module_name"
@@ -112,7 +112,7 @@ helper.determine_module_version() {
 	done < "$table_file"; unset variant version os arch url comment
 
 	if [ "$is_valid_string" != yes ]; then
-		print.die "Version '$module_version' is not valid for module '$module_name' on this architecture"
+		core.print_die "Version '$module_version' is not valid for module '$module_name' on this architecture"
 	fi
 
 	REPLY=$module_version
@@ -132,7 +132,7 @@ helper.determine_module_version_installed() {
 		core.shopt_pop
 
 		if (( ${#versions_list[@]} == 0 )); then
-			print.die "Cannot uninstall as no versions of module '$module_name' are installed"
+			core.print_die "Cannot uninstall as no versions of module '$module_name' are installed"
 		fi
 
 		versions_list=("${versions_list[@]%/}")
@@ -152,6 +152,6 @@ helper.determine_module_version_installed() {
 	fi
 
 	if [ ! -d "$install_dir/$module_version" ]; then
-		print.die "Version '$module_version' is not valid for module '$module_name'"
+		core.print_die "Version '$module_version' is not valid for module '$module_name'"
 	fi
 }
