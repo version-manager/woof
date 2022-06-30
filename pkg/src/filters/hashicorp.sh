@@ -2,7 +2,6 @@
 source "${0%/*}/util/util.sh"
 
 parse_hashicorp() {
-	echo start
 	local product="$1"
 	local prefix='https://releases.hashicorp.com'
 

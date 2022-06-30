@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
 main.woof() {
-	core.init
 	global_stty_saved=
 	global_tty_height=
 	global_tty_width=

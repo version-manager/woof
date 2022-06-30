@@ -164,6 +164,7 @@ tty.multiselect() {
 		tty.fullscreen_deinit
 	}
 	core.trap_add 'trap.sigint_tty' 'EXIT'
+
 	trap.sigcont_tty() {
 		tty.fullscreen_init
 	}
@@ -244,6 +245,7 @@ tty.multiselect() {
 	done
 	unset -v key
 	tty.fullscreen_deinit
+	
 	core.trap_remove 'trap.sigint_tty' 'EXIT'
 	core.trap_remove 'trap.sigcont_tty' 'SIGCONT'
 

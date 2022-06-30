@@ -1,14 +1,28 @@
 # shellcheck shell=bash
 
 woof-install() {
-	local possible_module_name="$1"
-	local possible_module_version="$2"
+	local flag_no_cache='no'
+	local arg=
+	for arg; do case $arg in
+	--no-cache)
+		flag_no_cache='yes'
+		;;
+	-*)
+		core.print_die "Flag '$arg' not recognized"
+		;;
+	*)
+		subcmds+=("$arg")
+		shift
+	esac done; unset -v arg
+
+	local possible_module_name="${subcmds[0]}"
+	local possible_module_version="${subcmds[1]}"
 
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
 	unset -v possible_module_name
-	
-	helper.create_version_table "$module_name"
+
+	helper.create_version_table "$module_name" "$flag_no_cache"
 
 	helper.determine_module_version "$module_name" "$possible_module_version"
 	local module_version="$REPLY"
@@ -20,6 +34,7 @@ woof-install() {
 	if [ -z "$global_selection" ]; then
 		util.set_global_selection "$module_name" "$module_version"
 	fi
+
 	helper.switch_to_version "$module_name" "$module_version"
 	helper.symlink_after_install "$module_name" "$module_version"
 }

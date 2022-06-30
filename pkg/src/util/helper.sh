@@ -5,6 +5,7 @@
 # function and properly deals with caching
 helper.create_version_table() {
 	local module_name="$1"
+	local flag_no_cache="$2"
 
 	var.get_module_table_file "$module_name"
 	local table_file="$REPLY"
@@ -15,9 +16,12 @@ helper.create_version_table() {
 	if [ ! -d "${table_file%/*}" ]; then
 		mkdir -p "${table_file%/*}"
 	fi
-	local use_cache=no
+
 	if [ -f "$table_file" ]; then
 		use_cache=yes
+	fi
+	if [ "$flag_no_cache" = 'yes' ]; then
+		use_cache=no
 	fi
 
 	if [ "$use_cache" = no ]; then
@@ -193,7 +197,7 @@ helper.switch_to_version() {
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
-	core.print_info 'Using' "$module_version"	
+	core.print_info "Using $module_version"	
 }
 
 helper.symlink_after_install() {

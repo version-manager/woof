@@ -250,7 +250,7 @@ util.show_help() {
 
 Actions:
    init <shell>
-   install
+   install [--no-cache]
    uninstall
    get-version
    set-version
