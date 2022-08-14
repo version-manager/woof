@@ -18,13 +18,13 @@ helper.create_version_table() {
 	fi
 
 	if [ -f "$table_file" ]; then
-		use_cache=yes
+		flag_no_cache=yes
 	fi
 	if [ "$flag_no_cache" = 'yes' ]; then
-		use_cache=no
+		flag_no_cache=no
 	fi
 
-	if [ "$use_cache" = no ]; then
+	if [ "$flag_no_cache" = no ]; then
 		local table_string=
 		if table_string=$(util.run_function "$module_name.table"); then
 			if core.err_exists; then
