@@ -16,6 +16,8 @@ main.woof() {
 			core.print_die "Failed to read token file"
 		fi
 		export GITHUB_TOKEN
+	else
+		core.print_die 'Must have token at $XDG_DATA_HOME/woof/token'
 	fi
 
 	local arg=
