@@ -60,7 +60,7 @@ helper.install_module_version() {
 	local module_version="$2"
 
 	var.get_module_workspace_dir "$module_name"
-	local workspace_dir="$REPLY" 
+	local workspace_dir="$REPLY"
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
@@ -160,7 +160,7 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
 		: > "$install_dir/$module_version/done"
-		core.print_info 'Installed' "$module_version"	
+		core.print_info 'Installed' "$module_version"
 	else
 		core.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
 	fi
@@ -197,7 +197,7 @@ helper.switch_to_version() {
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
-	core.print_info "Using $module_version"	
+	core.print_info "Using $module_version"
 }
 
 helper.symlink_after_install() {
@@ -209,7 +209,7 @@ helper.symlink_after_install() {
 
 	var.get_dir 'global' 'bin'
 	local global_bin_dir="$REPLY"
-	
+
 	util.get_module_data "$module_name" "$module_version" 'bins'
 	local -a bin_dirs=("${REPLY[@]}")
 

@@ -33,7 +33,7 @@ helper.determine_module_name() {
 helper.determine_module_name_installed() {
 	unset REPLY; REPLY=
 	local module_name="$1"
-	
+
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
 
@@ -48,7 +48,7 @@ helper.determine_module_name_installed() {
 
 		module_list=("${module_list[@]%/}")
 		module_list=("${module_list[@]##*/}")
-		
+
 		local -A modules_table=()
 		local module=
 		for module in "${module_list[@]}"; do
@@ -57,7 +57,7 @@ helper.determine_module_name_installed() {
 
 		tty.multiselect 0 module_list modules_table
 		module_name=$REPLY
-	fi	
+	fi
 
 	if [ ! -d "$install_dir" ]; then
 		core.print_die "No versions of module '$module_name' are installed"
@@ -125,7 +125,7 @@ helper.determine_module_version_installed() {
 
 	var.get_module_install_dir "$module_name"
 	local install_dir="$REPLY"
-	
+
 	if [ -z "$module_version" ]; then
 		core.shopt_push -s nullglob
 		local -a versions_list=("$install_dir"/*/)
