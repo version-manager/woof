@@ -2,7 +2,7 @@
 
 var.get_module_table_file() {
 	unset -v REPLY
-	REPLY="$WOOF_CACHE_HOME/matrices/$1.txt"
+	REPLY="$WOOF_CACHE_HOME/tables/$1.txt"
 }
 
 var.get_module_workspace_dir() {
