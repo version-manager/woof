@@ -178,6 +178,7 @@ This requires a modification to the Module API
 - OPAM / OCAML
 - TypeScript, Less, imba, bhai, (via npm)
 - [wasm](https://github.com/appcypher/awesome-wasm-langs)
+- See [hermit packages](https://github.com/cashapp/hermit-packages)
 
 ## Out of Scope
 
