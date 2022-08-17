@@ -154,4 +154,6 @@ helper.determine_module_version_installed() {
 	if [ ! -d "$install_dir/$module_version" ]; then
 		core.print_die "Version '$module_version' is not valid for module '$module_name'"
 	fi
+
+	REPLY="$module_version"
 }
