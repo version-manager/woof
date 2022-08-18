@@ -82,10 +82,6 @@ helper.install_plugin_version() {
 		core.print_die "Version '$plugin_version' is already installed for plugin '$plugin_name'"
 	fi
 
-	# Preparation actions
-	rm -rf "$workspace_dir" "${install_dir:?}/$plugin_version"
-	mkdir -p "$workspace_dir" "$install_dir/$plugin_version"
-
 	util.uname_system
 	local os="$REPLY1"
 	local arch="$REPLY2"
@@ -95,6 +91,10 @@ helper.install_plugin_version() {
 		exit $?
 	fi
 	local url="$REPLY1"
+
+	# Preparation actions
+	rm -rf "$workspace_dir" "${install_dir:?}/$plugin_version"
+	mkdir -p "$workspace_dir" "$install_dir/$plugin_version"
 
 	# Execute '<plugin>.install'
 	local old_pwd="$PWD"
