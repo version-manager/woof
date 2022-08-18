@@ -19,11 +19,11 @@ woof-set-version() {
 		mkdir -p "$global_selection_dir"
 	fi
 	if ! printf '%s\n' "$plugin_version" > "$global_selection_dir/$plugin_name"; then
-		core.print_die "Could not write global version"
+		core.print_die "Failed to write new global version to disk"
 	fi
 	core.print_info "Set version '$plugin_version' as global version"
 
 	# Resymlink
 	helper.symlink_after_install "$plugin_name" "$plugin_version"
-	core.print_info "Did symlinks for version '$plugin_version'"
+	core.print_info "Symlinked version '$plugin_version'"
 }

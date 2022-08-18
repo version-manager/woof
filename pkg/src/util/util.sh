@@ -11,7 +11,7 @@ util.get_table_row() {
 	local table_file="$REPLY"
 
 	if [ ! -f "$table_file" ]; then
-		core.print_fatal "File '$table_file' does not exist, but was expected to"
+		core.print_die "Expected file '$table_file' to exist"
 	fi
 
 	if [ -z "$real_os" ] || [ -z "$real_arch" ]; then
@@ -25,18 +25,15 @@ util.get_table_row() {
 		if  [ "$plugin_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			REPLY1=$url
 			REPLY2=$comment
-			return 0
 		fi
 	done < "$table_file"; unset -v variant version os arch url comment
 
 	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
-		core.print_error "Failed to find corresponding row in version table"
+		core.print_error "Failed to find a version $plugin_version for $plugin_name"
 		util.print_hint "Does the version begin with 'v'? (Example: v18.0.0)"
 		util.print_hint "Try running 'woof tool clear-version-table $plugin_name'"
 		exit 1
 	fi
-
-	return 1
 }
 
 util.run_function() {
@@ -175,7 +172,7 @@ util.set_global_selection() {
 	fi
 	if ! printf '%s\n' "$plugin_version" > "$global_selection_file"; then
 		rm -f "$global_selection_file"
-		core.print_die "Could not write to '$global_selection_file'"
+		core.print_die "Failed to write to '$global_selection_file'"
 	fi
 }
 
@@ -201,7 +198,7 @@ util.get_current_plugin_version() {
 	local global_selection_dir="$REPLY"
 
 	if [ ! -f "$global_selection_dir/$plugin_name" ]; then
-		core.print_die "Could not find (global) default for plugin '$plugin_name'"
+		core.print_die "Failed to find (global) default for plugin '$plugin_name'"
 	fi
 
 	unset -v REPLY; REPLY= # TODO: make this everywhere

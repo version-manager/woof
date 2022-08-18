@@ -154,7 +154,7 @@ tty.multiselect() {
 
 	if ! util.key_to_index "$select_keys_variable_name" "$old_version"; then
 		tty.fullscreen_deinit
-		core.print_fatal "Key not '$old_version' not found in array '$select_keys_variable_name'"
+		core.print_die "Key not '$old_version' not found in array '$select_keys_variable_name'"
 	fi
 	old_version_index="$REPLY"
 	new_version_index="$old_version_index"

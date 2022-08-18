@@ -88,8 +88,6 @@ helper.determine_plugin_version() {
 	var.get_plugin_table_file "$plugin_name"
 	local table_file="$REPLY"
 
-
-
 	if [ -z "$plugin_version" ]; then
 		local -a ui_keys=()
 		local -A ui_table=()

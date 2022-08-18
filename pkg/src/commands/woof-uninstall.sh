@@ -17,10 +17,12 @@ woof-uninstall() {
 
 	# Do uninstall
 	printf '%s\n' "Uninstalling $plugin_name"
-	if [ -e "$install_dir/$plugin_version" ]; then # TODO: redundant because helper.determine_plugin_version_installed
+	# Note that this is a redundant check since it is done by helper.determine_plugin_version_installed(), but we
+	# do it anyways, Just in Case
+	if [ -e "$install_dir/$plugin_version" ]; then
 		rm -rf "${install_dir:?}/$plugin_version"
 		core.print_info "Removed version '$plugin_version' for plugin '$plugin_name'"
 	else
-		core.print_error "Version '$plugin_version' for plugin '$plugin_name' is not installed"
+		core.print_die "Version '$plugin_version' for plugin '$plugin_name' is not installed"
 	fi
 }

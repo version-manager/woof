@@ -33,11 +33,11 @@ helper.create_version_table() {
 				exit "$ERRCODE"
 			fi
 		else
-			core.print_die "A fatal error occured while running '$plugin_name.table'"
+			core.print_die "Failed to run '$plugin_name.table()'"
 		fi
 
 		if [ -z "$table_string" ]; then
-			core.print_die "Function '$plugin_name.table' must output a well-formed table of variable names. Nothing was sent"
+			core.print_die "No versions found for $plugin_name ('$plugin_name.table()' printed nothing)"
 		fi
 
 		if ! printf '%s' "$table_string" > "$table_file"; then
@@ -87,9 +87,7 @@ helper.install_plugin_version() {
 	local arch="$REPLY2"
 
 	# Determine correct binary for current system
-	if util.get_table_row "$plugin_name" "$plugin_version" "$os" "$arch"; then :; else
-		exit $?
-	fi
+	util.get_table_row "$plugin_name" "$plugin_version" "$os" "$arch"
 	local url="$REPLY1"
 
 	# Preparation actions
@@ -136,7 +134,7 @@ helper.install_plugin_version() {
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
 mans=${REPLY_MANS[*]}" > "$install_dir/$plugin_version/data.txt"; then
 		rm -rf "$workspace_dir" "${install_dir:?}/$plugin_version"
-		core.print_die "Could not write to '$install_dir/$plugin_version/data.txt'"
+		core.print_die "Failed to write to '$install_dir/$plugin_version/data.txt'"
 	fi
 	IFS="$old_ifs"
 
@@ -235,7 +233,7 @@ helper.symlink_after_install() {
 				fi
 
 				if ! ln -sf "$bin_file" "$global_bin_dir/${bin_file##*/}"; then
-					core.print_warn "Link failed. Skipping"
+					core.print_warn "Symlink failed. Skipping"
 				fi
 			done; unset -v bin_file
 		else

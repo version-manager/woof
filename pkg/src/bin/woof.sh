@@ -14,11 +14,11 @@ main.woof() {
 	local token_file="$WOOF_DATA_HOME/token"
 	if [ -f "$token_file" ]; then
 		if ! GITHUB_TOKEN=$(<"$token_file"); then
-			core.print_die "Failed to read token file"
+			core.print_die "Failed to read from file '$token_file'"
 		fi
 		export GITHUB_TOKEN
 	else
-		core.print_die "Must have token at $token_file"
+		core.print_die "Must have a file containing your GitHub token at '$token_file'"
 	fi
 	unset -v token_file
 
