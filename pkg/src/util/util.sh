@@ -187,10 +187,10 @@ util.is_plugin_version_installed() {
 	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
-	if [ -d "$install_dir/$plugin_version/done" ]; then
-		return $?
+	if [ -f "$install_dir/$plugin_version/done" ]; then
+		return 0
 	else
-		return $?
+		return 1
 	fi
 }
 
@@ -268,7 +268,7 @@ Subcommands:
     set-version
         Set the current version of a program
 
-    list [--installed] [--all]
+    list [--all] [--no-cache]
         List programs
 
     tool <resymlink|info|print-dirs|cd-override|debug-table|debug-install|

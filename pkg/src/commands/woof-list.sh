@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 woof-list() {
-	local flag_installed='no'
+	local flag_no_cache='no' flag_all='no'
 	local arg=
 	for arg; do case $arg in
-	--installed)
-		flag_installed='yes'
+	--no-cache)
+		flag_no_cache='yes'
 		;;
 	--all)
 		flag_all='yes'
@@ -25,8 +25,8 @@ woof-list() {
 	local plugin_name="$REPLY"
 	unset -v possible_plugin_name
 
-	if [ "$flag_installed" = 'yes' ]; then
-		helper.create_version_table "$plugin_name"
+	if [ "$flag_all" = 'yes' ]; then
+		helper.create_version_table "$plugin_name" "$flag_no_cache"
 
 		util.uname_system
 		local real_os="$REPLY1"
@@ -37,12 +37,8 @@ woof-list() {
 
 		local variant= version= os= arch= url= comment=
 		while IFS='|' read -r variant version os arch url comment; do
-			if [ "$flag_all" == 'yes' ]; then
+			if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 				printf '%s\n' "$version"
-			else
-				if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
-					printf '%s\n' "$version"
-				fi
 			fi
 		done < "$table_file" | util.sort_versions
 		unset -v variant version os arch url comment
