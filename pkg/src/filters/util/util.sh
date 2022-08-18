@@ -9,7 +9,7 @@ f.is_main() {
 f.die() {
 	local msg="$1"
 
-	printf '%s\n' "Error: $msg. Exiting"
+	printf '%s\n' "Error: $msg. Exiting" >&2
 	exit 1
 }
 

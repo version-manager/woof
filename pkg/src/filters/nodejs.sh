@@ -6,7 +6,7 @@ parse_nodejs() {
 
 	local json=
 	if ! json=$(curl -fsSL "$nodejs_url"); then
-		core.err_set "Could not fetch '$nodejs_url'" # TODO cmd not found
+		f.die "Could not fetch '$nodejs_url'"
 		return
 	fi
 

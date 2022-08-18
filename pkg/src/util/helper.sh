@@ -164,7 +164,6 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 	else
 		core.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
 	fi
-
 }
 
 # @description Performs any necessary mucking when switching versions
