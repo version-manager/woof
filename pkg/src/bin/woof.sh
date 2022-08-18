@@ -11,14 +11,16 @@ main.woof() {
 	: "${WOOF_STATE_HOME:=${XDG_STATE_HOME:-$HOME/.local/state}/woof}"
 	WOOF_VARS='WOOF_CONFIG_HOME WOOF_CACHE_HOME WOOF_DATA_HOME WOOF_STATE_HOME'
 
-	if [ -f "$WOOF_DATA_HOME/token" ]; then
-		if ! GITHUB_TOKEN=$(<"$WOOF_DATA_HOME/token"); then
+	local token_file="$WOOF_DATA_HOME/token"
+	if [ -f "$token_file" ]; then
+		if ! GITHUB_TOKEN=$(<"$token_file"); then
 			core.print_die "Failed to read token file"
 		fi
 		export GITHUB_TOKEN
 	else
-		core.print_die 'Must have token at $XDG_DATA_HOME/woof/token'
+		core.print_die "Must have token at $token_file"
 	fi
+	unset -v token_file
 
 	local arg=
 	for arg; do case "$arg" in
