@@ -142,40 +142,6 @@ util.get_plugin_data() {
 	done < "$data_file"; unset -v key values
 }
 
-util.get_global_selection() {
-	unset REPLY; REPLY=
-	local plugin_name="$1"
-
-	var.get_dir 'data-global' 'selection'
-	local global_selection_file="$REPLY/$plugin_name"
-
-	local global_selection=
-	if [ -f "$global_selection_file" ]; then
-		if ! global_selection=$(<"$global_selection_file"); then
-			core.print_die "Could not read from '$global_selection_file'"
-		fi
-	fi
-
-	REPLY=$global_selection
-}
-
-util.set_global_selection() {
-	unset REPLY; REPLY=
-	local plugin_name="$1"
-	local plugin_version="$2"
-
-	var.get_dir 'data-global' 'selection'
-	local global_selection_file="$REPLY/$plugin_name"
-	core.print_info "Setting $plugin_version as global default for $plugin_name"
-	if [ ! -d "${global_selection_file%/*}" ]; then
-		mkdir -p "${global_selection_file%/*}"
-	fi
-	if ! printf '%s\n' "$plugin_version" > "$global_selection_file"; then
-		rm -f "$global_selection_file"
-		core.print_die "Failed to write to '$global_selection_file'"
-	fi
-}
-
 util.is_plugin_version_installed() {
 	unset -v REPLY; REPLY=
 	local plugin_name="$1"
