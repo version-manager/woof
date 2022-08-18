@@ -165,7 +165,23 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$plugin_version/data.txt"; then
 	fi
 }
 
-# @description Performs any necessary mucking when switching versions
+helper.resymlink_global_all() {
+	var.get_dir 'data-global' 'selection'
+	local dir="$REPLY"
+
+	local file=
+	for file in "$dir"/*; do
+		local version=
+		if ! version=$(<"$file"); then
+			print.fatal "Failed to read from '$file'"
+		fi
+
+		util.plugin_symlink_global_versions "${file##*/}" "$version"
+	done
+	core.print_info 'Resymlinked'
+}
+
+# @description Performs any necessary mucking when switching versions (TODO)
 helper.switch_to_version() {
 	local plugin_name="$1"
 	local plugin_version="$2"
@@ -197,48 +213,3 @@ helper.switch_to_version() {
 	fi
 	core.print_info "Using $plugin_version"
 }
-
-helper.symlink_after_install() {
-	local plugin_name="$1"
-	local plugin_version="$2"
-
-	var.get_dir 'installs' "$plugin_name"
-	local install_dir="$REPLY"
-
-	var.get_dir 'data-global' 'bin'
-	local global_bin_dir="$REPLY"
-
-	util.get_plugin_data "$plugin_name" "$plugin_version" 'bins'
-	local -a bin_dirs=("${REPLY[@]}")
-
-	util.get_plugin_data "$plugin_name" "$plugin_version" 'mans'
-	local -a man_dirs=("${REPLY[@]}") # FIXME
-
-	if [ ! -d "$global_bin_dir" ]; then
-		mkdir -p "$global_bin_dir"
-	fi
-
-	local bin_dir=
-	for bin_dir in "${bin_dirs[@]}"; do
-		if [ -d "$install_dir/$plugin_version/files/$bin_dir" ]; then
-			local bin_file
-			for bin_file in "$install_dir/$plugin_version/files/$bin_dir"/*; do
-				if [ -d "$bin_file" ]; then
-					continue
-				fi
-
-				if [ ! -x "$bin_file" ]; then
-					core.print_warn "File '$bin_file' is in a bin directory, but is not marked as executable"
-					continue
-				fi
-
-				if ! ln -sf "$bin_file" "$global_bin_dir/${bin_file##*/}"; then
-					core.print_warn "Symlink failed. Skipping"
-				fi
-			done; unset -v bin_file
-		else
-			core.print_warn "Directory '$bin_dir' does not exist for plugin '$plugin_name'"
-		fi
-	done; unset -v bin_dir
-}
-

@@ -28,7 +28,7 @@ util.get_table_row() {
 		fi
 	done < "$table_file"; unset -v variant version os arch url comment
 
-	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
+	if [ -z "$REPLY1" ]; then
 		core.print_error "Failed to find a version $plugin_version for $plugin_name"
 		util.print_hint "Does the version begin with 'v'? (Example: v18.0.0)"
 		util.print_hint "Try running 'woof tool clear-version-table $plugin_name'"

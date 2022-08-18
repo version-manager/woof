@@ -11,20 +11,7 @@ woof-tool() {
 	fi
 
 	if [ "$subcmd" = 'resymlink' ]; then
-		local possible_plugin_name="$1"
-		local possible_plugin_version="$2"
-
-		helper.determine_plugin_name "$possible_plugin_name"
-		local plugin_name="$REPLY"
-		unset -v possible_plugin_name
-
-		helper.create_version_table "$plugin_name"
-
-		helper.determine_plugin_version "$plugin_name" "$possible_plugin_version"
-		local plugin_version="$REPLY"
-		unset -v possible_plugin_version
-
-		helper.symlink_after_install "$plugin_name" "$plugin_version"
+		helper.resymlink_global_all
 	elif [ "$subcmd" = 'info' ]; then
 		local possible_plugin_name="$1"
 

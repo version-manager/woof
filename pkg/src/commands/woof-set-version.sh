@@ -29,14 +29,11 @@ woof-set-version() {
 	if [ "$flag_local" = 'yes' ]; then
 		util.plugin_set_local_version "$plugin_name" "$plugin_version"
 
-		# Resymlink
-		# helper.symlink_after_install "$plugin_name" "$plugin_version"
-		# core.print_info "Symlinked version '$plugin_version'"
+		util.plugin_symlink_local_versions "$plugin_name" "$plugin_version"
 	else
 		util.plugin_set_global_version "$plugin_name" "$plugin_version"
 
-		# Resymlink
-		helper.symlink_after_install "$plugin_name" "$plugin_version"
-		core.print_info "Symlinked version '$plugin_version'"
+		util.plugin_symlink_global_versions "$plugin_name" "$plugin_version"
 	fi
+	core.print_info "Symlinked version '$plugin_version'"
 }
