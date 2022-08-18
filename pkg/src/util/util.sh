@@ -89,11 +89,11 @@ util.uname_system() {
 	local kernel= hardware=
 
 	if ! kernel="$(uname -s)"; then
-		die "Could not 'uname -s'"
+		core.print_die "Could not 'uname -s'"
 	fi
 
 	if ! hardware="$(uname -m)"; then
-		die "Could not 'uname -m'"
+		core.print_die "Could not 'uname -m'"
 	fi
 
 	local kernel_pretty= hardware_pretty=
