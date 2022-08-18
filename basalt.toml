@@ -9,7 +9,7 @@ description = 'The version manager to end all version managers'
 [run]
 dependencies = [
 	'https://github.com/hyperupcall/bats-all@v4.3.0',
-	'https://github.com/hyperupcall/bash-core@v0.10.1',
+	'https://github.com/hyperupcall/bash-core@v0.11.0',
 	'https://github.com/hyperupcall/bash-term@v0.6.2',
 	'https://github.com/hyperupcall/bash-std@v0.2.1',
 ]
