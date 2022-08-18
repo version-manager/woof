@@ -7,20 +7,21 @@ STATUS: IN DEVELOPMENT
 ## Why?
 
 - Your OS's package manager doesn't contain the latest (or multiple) `$language` versions
-  - And/or you don't trust random / less maintained APT repositories, AUR packages, etc.
 - You want an OS independent way to install and switch between `$language` versions
-  - And/or if you don't want to remember / forget how to use `update-alternatives`, `archlinux-java`, etc.
-- You are tired of installing and configuration version managers (or version manager plugins) for every single language
-  - And/or you think each version manager comes with its own class of bugs / bad dx, etc.
+- You are tired of installing and configuring version managers (or version manager plugins) for every single language
+- More repeatable builds
 
 ## Features
 
-- Optionally configurationless
-- Can install any language with pure Bash
-- Clean Bash code (heavily favors builtins and Bash facilities over external utilities)
+- _Just Fucking Works_
+- Optionally _configurationless_
+- Clean Bash code
+  - Favors builtins and native Bash facilities over external utilities)
 - Supports 34 languages/programs on at least `x86_64` (see [roadmap](./docs/roadmap.md) for details)
 - Compatible with [.tool-versions](https://asdf-vm.com/manage/configuration.html#tool-versions), nvm's [.nvmrc](https://github.com/nvm-sh/nvm#nvmrc) and read things from popular version managers like `rvm` and `pyenv`
-- Fast (doesn't use shims (only symlinks))
+- Fast
+  - Uses symlinks, not shims
+  - Extremely rarely execs out to external utilities or subshells
 
 ## Preview (v0.2.0)
 

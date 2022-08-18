@@ -179,8 +179,8 @@ This requires a modification to the  API
 - TypeScript, Less, imba, bhai, (via npm)
 - [wasm](https://github.com/appcypher/awesome-wasm-langs)
 - See [hermit packages](https://github.com/cashapp/hermit-packages)
+- Rust
 
 ## Out of Scope
 
-- Rust because `rustup` is actually good
 - Codename to version mapping (few languages do this and its easy to forget codenames)
