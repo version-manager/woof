@@ -4,6 +4,7 @@ load './util/init.sh'
 
 setup() {
 	eval "$("$BASALT_PACKAGE_DIR/pkg/bin/woof" init bash)"
+	cd "$BATS_TEST_TMPDIR"
 }
 
 @test "Warns if using ref protocol" {
