@@ -21,7 +21,7 @@ import "util" as f;
 		os: (
 				if $m.os == "linux" or $m.os == "Linux" then
 					"linux"
-				elif $m.os == "linux64" or $m.os == "linux32" then # haxe
+				elif $m.os == "linux" or $m.os == "linux64" or $m.os == "linux32" then # haxe
 					"linux"
 				elif $m.os == "darwin" or $m.os == "Darwin" or $m.os == "macOS" or $m.os == "macos" or $m.os == "osx" or $m.os == "mac" then
 					"darwin"

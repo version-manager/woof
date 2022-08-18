@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
 helper.toolversions_get_versions() {
-	unset -v REPLY; declare -ag REPLY=()
 	local module_name="$1"
 
 	util.toolversions_get_path
@@ -9,6 +8,8 @@ helper.toolversions_get_versions() {
 	if [ -z "$toolversions_path" ]; then
 		return
 	fi
+
+	unset -v REPLY; declare -ag REPLY=()
 
 	local line=
 	while IFS= read -r line; do
