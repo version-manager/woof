@@ -24,7 +24,7 @@ woof-install() {
 
 	helper.create_version_table "$plugin_name" "$flag_no_cache"
 
-	helper.determine_plugin_version "$plugin_name" "$possible_plugin_version"
+	helper.determine_plugin_version --allow-latest "$plugin_name" "$possible_plugin_version"
 	local plugin_version="$REPLY"
 	unset -v possible_plugin_version
 

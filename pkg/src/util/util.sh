@@ -250,29 +250,29 @@ util.print_hint() {
 util.show_help() {
 	printf '%s\n' "Usage:
    woof init <shell>
-   woof <subcommand> [plugin] [version]
+   woof <subcommand> [args...]
 
 Subcommands:
     init <shell>
         Print code for a particular shell to set the proper PATH, etc.
 
-    install [--no-cache]
+    install [--no-cache] [plugin] [version]
         Install a particular program
 
-    uninstall
+    uninstall [plugin] [version]
         Uninstall a particular program
 
-    get-version
+    get-version [plugin]
         Get the current version of a program
 
-    set-version
+    set-version [plugin] [version]
         Set the current version of a program
 
-    list [--all] [--no-cache]
+    list [--all] [--no-cache] [plugin]
         List programs
 
     tool <resymlink|info|print-dirs|cd-override|debug-table|debug-install|
-        clear-table-cache> [... args]
+        clear-table-cache> [args...]
             Run a particular tool Most of these are for internal use
 "
 }

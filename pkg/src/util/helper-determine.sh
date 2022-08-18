@@ -68,22 +68,34 @@ helper.determine_plugin_name_installed() {
 
 helper.determine_plugin_version() {
 	unset REPLY; REPLY=
+	local flag_allow_latest='no'
+	if [ "$1" = '--allow-latest' ]; then
+		flag_allow_latest='yes'
+		shift || print.panic 'Failed to shift'
+	fi
 	local plugin_name="$1"
 	local plugin_version="$2"
-
-	var.get_plugin_table_file "$plugin_name"
-	local table_file="$REPLY"
 
 	util.uname_system
 	local real_os="$REPLY1"
 	local real_arch="$REPLY2"
+
+	if [[ "$flag_allow_latest" = 'yes' && "$plugin_version" = 'latest' ]]; then
+		helper.determine_latest_version "$plugin_name" "$real_os" "$real_arch"
+		plugin_version="$REPLY"
+	fi
+
+	var.get_plugin_table_file "$plugin_name"
+	local table_file="$REPLY"
+
+
 
 	if [ -z "$plugin_version" ]; then
 		local -a ui_keys=()
 		local -A ui_table=()
 
 		local match_found='no'
-		local version= os= arch= url= comment=
+		local variant= version= os= arch= url= comment=
 		while IFS='|' read -r variant version os arch url comment; do
 			if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 				match_found='yes'
@@ -156,4 +168,22 @@ helper.determine_plugin_version_installed() {
 	fi
 
 	REPLY="$plugin_version"
+}
+
+helper.determine_latest_version() {
+	unset -v REPLY; REPLY=
+	local plugin_name="$1"
+	local real_os="$2"
+	local real_arch="$3"
+
+	var.get_plugin_table_file "$plugin_name"
+	local table_file="$REPLY"
+
+	local variant= version= os= arch= url= comment=
+	while IFS='|' read -r variant version os arch url comment; do
+		if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+			REPLY="$version"
+			break
+		fi
+	done < "$table_file"; unset version os arch url comment
 }
