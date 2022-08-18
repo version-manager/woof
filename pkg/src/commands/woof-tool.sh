@@ -101,8 +101,12 @@ woof-tool() {
 			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then
-		printf '%s\n' 'cd override'
-		helper.toolversions_set_versions_in_accordance
+		util.toolversions_get_path
+		local toolversions_file="$REPLY"
+
+		if [ -n "$toolversions_file" ]; then
+			helper.toolversions_set_versions "$toolversions_file"
+		fi
 	else
 		core.print_die "Subcommand '$subcmd' is not valid"
 	fi

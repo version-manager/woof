@@ -8,7 +8,7 @@ load './util/init.sh'
 	EOF
 
 	declare -gA tools=()
-	helper.toolversions_parse '.tool-versions' 'tools'
+	util.toolversions_parse '.tool-versions' 'tools'
 	assert [ "${#tools[@]}" -eq '1' ]
 	test_index_object_keys 'tools' '0'
 	assert [ "$REPLY" = 'ruby' ]
@@ -21,7 +21,7 @@ load './util/init.sh'
 	EOF
 
 	declare -gA tools=()
-	helper.toolversions_parse '.tool-versions' 'tools'
+	util.toolversions_parse '.tool-versions' 'tools'
 	assert [ "${#tools[@]}" -eq '1' ]
 	test_index_object_keys 'tools' '0'
 	assert [ "$REPLY" = 'ruby' ]
@@ -34,7 +34,7 @@ load './util/init.sh'
 	EOF
 
 	declare -gA tools=()
-	helper.toolversions_parse '.tool-versions' 'tools'
+	util.toolversions_parse '.tool-versions' 'tools'
 	assert [ "${#tools[@]}" -eq '1' ]
 	test_index_object_keys 'tools' '0'
 	assert [ "$REPLY" = 'nodejs' ]
@@ -49,7 +49,7 @@ load './util/init.sh'
 	EOF
 
 	declare -gA tools=()
-	helper.toolversions_parse '.tool-versions' 'tools'
+	util.toolversions_parse '.tool-versions' 'tools'
 	assert [ "${#tools[@]}" -eq '2' ]
 	test_index_object_keys 'tools' '0'
 	assert [ "$REPLY" = 'nodejs' ]
@@ -65,7 +65,7 @@ cat > '.tool-versions' <<-"EOF"
 	EOF
 
 	declare -gA tools=()
-	helper.toolversions_parse '.tool-versions' 'tools'
+	util.toolversions_parse '.tool-versions' 'tools'
 	assert [ "${#tools[@]}" -eq '1' ]
 	test_index_object_keys 'tools' '0'
 	assert [ "$REPLY" = 'ruby' ]

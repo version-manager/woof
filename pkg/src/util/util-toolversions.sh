@@ -19,17 +19,30 @@ util.toolversions_get_path() {
 	fi
 }
 
-util.toolversions_foreach() {
-	unset -v EACH_MODULE_NAME
-	EACH_MODULE_NAME=
-	local -ga EACH_MODULE_VERSIONS=()
+util.toolversions_parse() {
+	local toolversions_path="$1"
+	local -n __toolversions_variable="$2"
 
-	local -n __line="$1"
+	local line=
+	while IFS= read -r line; do
+		line=${line%%#*}
+		line=${line#"${line%%[![:space:]]*}"}
+		line=${line%"${line##*[![:space:]]}"}
 
-	__line=${__line%%#*}
-	__line=${__line#"${__line%%[![:space:]]*}"}
-	__line=${__line%"${__line##*[![:space:]]}"}
+		if [ -n "$line" ]; then
+			local module_name="${line%% *}"
+			module_name=${module_name%%$'\t'*}
 
-	EACH_MODULE_NAME="${__line%% *}"
-	IFS=' ' read -ra EACH_MODULE_VERSIONS <<< "${__line#* }"
+			local module_versions_str="${line#* }"
+			module_versions_str=${module_versions_str#*$'\t'}
+			# shellcheck disable=SC2206
+			module_versions=($module_versions_str)
+
+			local old_ifs="$IFS"
+			IFS='|'
+			__toolversions_variable[$module_name]="${module_versions[*]}"
+			IFS="$old_ifs"; unset -v old_ifs
+		fi
+
+	done < "$toolversions_path"; unset -v line
 }
