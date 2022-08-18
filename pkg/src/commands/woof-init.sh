@@ -24,6 +24,7 @@ woof-init() {
 		printf '%s\n' '# per tty (local) installs'
 		std.shell_path_prepend "$tty_dir/bin"
 		rm -rf "${tty_dir:?}";
+		mkdir -p "$tty_dir"
 		# shellcheck disable=SC2059
 		printf "__woof_cleanup() { rm -rf \"$tty_dir\"; }
 trap __woof_cleanup EXIT\n"
