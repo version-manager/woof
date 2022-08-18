@@ -41,7 +41,7 @@ trap __woof_cleanup EXIT\n"
 	# TODO: do not hard code these
 
 	# deno
-	var.get_dir 'installs' 'deno'
+	var.get_dir 'installed-tools' 'deno'
 	local install_dir="$REPLY"
 
 	util.plugin_get_global_version 'deno'

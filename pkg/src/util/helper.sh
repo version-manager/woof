@@ -63,7 +63,7 @@ helper.install_plugin_version() {
 	var.get_plugin_workspace_dir "$plugin_name"
 	local workspace_dir="$REPLY"
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	# If there is an interactive flag, then we are debugging the installation
@@ -123,7 +123,7 @@ helper.install_plugin_version() {
 		core.print_die "Variable '\$REPLY_DIR' must be set at the end of <plugin>.install"
 	fi
 
-	# Move extracted contents to 'installs' directory
+	# Move extracted contents to 'installed-tools' directory
 	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$plugin_version/files"; then
 		rm -rf "$workspace_dir"
 		core.print_die "Could not move extracted contents to '$install_dir/$plugin_version/files'"
@@ -189,7 +189,7 @@ helper.switch_to_version() {
 	var.get_dir 'data-global' 'common'
 	local global_common_dir="$REPLY"
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	if [ ! -d "$global_common_dir" ]; then

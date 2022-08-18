@@ -127,7 +127,7 @@ util.get_plugin_data() {
 	local plugin_version="$2"
 	local specified_key="$3"
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	local data_file="$install_dir/$plugin_version/data.txt"
@@ -147,7 +147,7 @@ util.is_plugin_version_installed() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	if [ -f "$install_dir/$plugin_version/done" ]; then

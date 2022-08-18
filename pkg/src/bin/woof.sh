@@ -37,16 +37,16 @@ main.woof() {
 	esac done; unset -v arg
 
 	# Get action name
-	local action_name="$1"
-	if [ -z "$action_name" ]; then
+	local subcommand="$1"
+	if [ -z "$subcommand" ]; then
 		util.help_show
-		core.print_die 'No action was given'
+		core.print_die 'No subcommand was given'
 	fi
 	if ! shift; then
 		core.print_die 'Failed to shift'
 	fi
 
-	case $action_name in
+	case $subcommand in
 		init) woof-init "$@";;
 		install) woof-install "$@" ;;
 		uninstall) woof-uninstall "$@" ;;
@@ -55,6 +55,6 @@ main.woof() {
 		list) woof-list "$@" ;;
 		plugin) woof-plugin "$@" ;;
 		tool) woof-tool "$@" ;;
-		*) core.print_die "Subcommand '$action_name' not recognized" ;;
+		*) core.print_die "Subcommand '$subcommand' not recognized" ;;
 	esac
 }

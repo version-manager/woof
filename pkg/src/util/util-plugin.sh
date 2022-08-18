@@ -99,7 +99,7 @@ util.plugin_symlink_core() {
 	local plugin_version="$2"
 	local target_bin_dir="$3"
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	util.get_plugin_data "$plugin_name" "$plugin_version" 'bins'

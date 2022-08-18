@@ -34,7 +34,7 @@ helper.determine_plugin_name_installed() {
 	unset REPLY; REPLY=
 	local plugin_name="$1"
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	if [ -z "$plugin_name" ]; then
@@ -133,7 +133,7 @@ helper.determine_plugin_version_installed() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	if [ -z "$plugin_version" ]; then

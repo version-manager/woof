@@ -1,5 +1,5 @@
 # shellcheck shell=bash
 
-woof-plugin-add() {
+woof-plugin-enable() {
 	:
 }

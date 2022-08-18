@@ -43,7 +43,7 @@ woof-list() {
 		done < "$table_file" | util.sort_versions
 		unset -v variant version os arch url comment
 	else
-		var.get_dir 'installs' "$plugin_name"
+		var.get_dir 'installed-tools' "$plugin_name"
 		local install_dir="$REPLY"
 
 		core.shopt_push -s nullglob
@@ -58,6 +58,7 @@ woof-list() {
 		done; unset -v version
 		if (( ${#versions[@]} == 0)); then
 			term.style_italic -Pd 'No items'
+			return
 		fi
 	fi
 }

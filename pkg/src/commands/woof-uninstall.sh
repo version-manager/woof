@@ -12,7 +12,7 @@ woof-uninstall() {
 	local plugin_version="$REPLY"
 	unset -v possible_plugin_version
 
-	var.get_dir 'installs' "$plugin_name"
+	var.get_dir 'installed-tools' "$plugin_name"
 	local install_dir="$REPLY"
 
 	# Do uninstall
