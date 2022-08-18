@@ -11,21 +11,46 @@ woof-init() {
 		core.print_die 'Shell not supported'
 	fi
 
-	var.get_dir 'global' 'bin'
+	# global
+	printf '%s\n' '# global installs'
+	var.get_dir 'data-global' 'bin'
 	std.shell_path_prepend "$REPLY"
+	printf '\n'
 
+	# tty
+	if var.get_tty_dir; then
+		local tty_dir="$REPLY"
 
+		printf '%s\n' '# per tty (local) installs'
+		std.shell_path_prepend "$tty_dir/bin"
+		rm -rf "${tty_dir:?}";
+		# shellcheck disable=SC2059
+		printf "__woof_cleanup() { rm -rf \"$tty_dir\"; }
+trap __woof_cleanup EXIT\n"
+		printf '\n'
+	fi
+
+	# cd
+	printf '%s\n' '# cd override'
+	woof_override_cd
+	printf '\n'
+
+	# plugins
+	printf '%s\n' '# plugins'
+	# TODO: do not hard code these
+
+	# deno
 	var.get_dir 'installs' 'deno'
 	local install_dir="$REPLY"
 
-	util.get_current_plugin_version 'deno'
+	util.plugin_get_global_version 'deno'
 	local version="$REPLY"
 
 	std.shell_variable_assignment 'DENO_INSTALL_ROOT' "$install_dir/$version/files"
 	std.shell_variable_export 'DENO_INSTALL_ROOT'
 	std.shell_path_prepend "$DENO_INSTALL_ROOT/bin/bin"
 
-	woof_override_cd
+	# go
 	source "$BASALT_PACKAGE_DIR/pkg/src/plugins/go.sh"
 	go.env
 }

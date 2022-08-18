@@ -16,7 +16,7 @@ When creating version managers, there are two approaches: shims and symlinks
 
 In essence, the shim layer is an indirection layer that facilities executing the proper version. This is usually implemented with some sort of shell script. The version is derived from the current context, which can include the current tty/pty, current directory, or global version. I don't like shims, primarily because they incur a time penalty; that is, the startup initialization of a shell. This would influence things like benchmarks. This approach also feels dirty to me.
 
-Shims might be required to make features such as (per-tty versions) more reliable
+Shims might be required to make features such as (per-tty versions) more reliable. But, they can significantly slow things down, as in the case with [asdf](https://github.com/asdf-vm/asdf/issues/290)
 
 ### Symlinks
 

@@ -1,8 +1,22 @@
 # shellcheck shell=bash
 
 woof-set-version() {
-	local possible_plugin_name="$1"
-	local possible_plugin_version="$2"
+	local flag_local='no'
+	local arg=
+	for arg; do case $arg in
+	--local)
+		flag_local='yes'
+		;;
+	-*)
+		core.print_die "Flag '$arg' not recognized"
+		;;
+	*)
+		subcmds+=("$arg")
+		shift
+	esac done; unset -v arg
+
+	local possible_plugin_name="${subcmds[0]}"
+	local possible_plugin_version="${subcmds[1]}"
 
 	helper.determine_plugin_name "$possible_plugin_name"
 	local plugin_name="$REPLY"
@@ -12,18 +26,17 @@ woof-set-version() {
 	local plugin_version="$REPLY"
 	unset -v possible_plugin_version
 
-	# Write version selection
-	var.get_dir 'global' 'selection'
-	local global_selection_dir="$REPLY"
-	if [ -d "$global_selection_dir" ]; then
-		mkdir -p "$global_selection_dir"
-	fi
-	if ! printf '%s\n' "$plugin_version" > "$global_selection_dir/$plugin_name"; then
-		core.print_die "Failed to write new global version to disk"
-	fi
-	core.print_info "Set version '$plugin_version' as global version"
+	if [ "$flag_local" = 'yes' ]; then
+		util.plugin_set_local_version "$plugin_name" "$plugin_version"
 
-	# Resymlink
-	helper.symlink_after_install "$plugin_name" "$plugin_version"
-	core.print_info "Symlinked version '$plugin_version'"
+		# Resymlink
+		# helper.symlink_after_install "$plugin_name" "$plugin_version"
+		# core.print_info "Symlinked version '$plugin_version'"
+	else
+		util.plugin_set_global_version "$plugin_name" "$plugin_version"
+
+		# Resymlink
+		helper.symlink_after_install "$plugin_name" "$plugin_version"
+		core.print_info "Symlinked version '$plugin_version'"
+	fi
 }

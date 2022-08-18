@@ -170,7 +170,7 @@ helper.switch_to_version() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
-	var.get_dir 'global' 'common'
+	var.get_dir 'data-global' 'common'
 	local global_common_dir="$REPLY"
 
 	var.get_dir 'installs' "$plugin_name"
@@ -205,7 +205,7 @@ helper.symlink_after_install() {
 	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
-	var.get_dir 'global' 'bin'
+	var.get_dir 'data-global' 'bin'
 	local global_bin_dir="$REPLY"
 
 	util.get_plugin_data "$plugin_name" "$plugin_version" 'bins'

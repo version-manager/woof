@@ -18,16 +18,13 @@ STATUS: IN DEVELOPMENT
 - Optionally configurationless
 - Can install any language with pure Bash
 - Clean Bash code (heavily favors builtins and Bash facilities over external utilities)
+- Supports 34 languages/programs on at least `x86_64` (see [roadmap](./docs/roadmap.md) for details)
+- Compatible with [.tool-versions](https://asdf-vm.com/manage/configuration.html#tool-versions), nvm's [.nvmrc](https://github.com/nvm-sh/nvm#nvmrc) and read things from popular version managers like `rvm` and `pyenv`
+- Fast (doesn't use shims (only symlinks))
 
 ## Preview (v0.2.0)
 
 [![asciicast](https://asciinema.org/a/485308.svg)](https://asciinema.org/a/485308)
-
-## Current Support
-
-Woof already supports 34 languages/programs on at least `x86_64`. For more details, see the [roadmap](./docs/roadmap.md)
-
-We attempt to be reasonably compatible with all existing tools. For example, it will read asdf's [.tool-versions](https://asdf-vm.com/manage/configuration.html#tool-versions), nvm's [.nvmrc](https://github.com/nvm-sh/nvm#nvmrc) and read things from popular version managers like `rvm` and `pyenv`
 
 ## Prerequisites
 

@@ -28,7 +28,7 @@ go.switch() {
 }
 
 go.env() {
-	var.get_dir 'global' 'common'
+	var.get_dir 'data-global' 'common'
 	local global_common_dir="$REPLY"
 
 	# FIXME make into m.<>

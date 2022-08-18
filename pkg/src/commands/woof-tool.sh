@@ -32,7 +32,7 @@ woof-tool() {
 		local plugin_name="$REPLY"
 		unset -v possible_plugin_name
 
-		var.get_dir 'global' 'selection'
+		var.get_dir 'data-global' 'selection'
 		local global_selection_dir="$REPLY"
 
 		printf '%s\n' '------ GLOBAL ------'

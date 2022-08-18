@@ -146,7 +146,7 @@ util.get_global_selection() {
 	unset REPLY; REPLY=
 	local plugin_name="$1"
 
-	var.get_dir 'global' 'selection'
+	var.get_dir 'data-global' 'selection'
 	local global_selection_file="$REPLY/$plugin_name"
 
 	local global_selection=
@@ -164,7 +164,7 @@ util.set_global_selection() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
-	var.get_dir 'global' 'selection'
+	var.get_dir 'data-global' 'selection'
 	local global_selection_file="$REPLY/$plugin_name"
 	core.print_info "Setting $plugin_version as global default for $plugin_name"
 	if [ ! -d "${global_selection_file%/*}" ]; then
@@ -189,20 +189,6 @@ util.is_plugin_version_installed() {
 	else
 		return 1
 	fi
-}
-
-util.get_current_plugin_version() {
-	local plugin_name="$1"
-
-	var.get_dir 'global' 'selection'
-	local global_selection_dir="$REPLY"
-
-	if [ ! -f "$global_selection_dir/$plugin_name" ]; then
-		core.print_die "Failed to find (global) default for plugin '$plugin_name'"
-	fi
-
-	unset -v REPLY; REPLY= # TODO: make this everywhere
-	REPLY=$(<"$global_selection_dir/$plugin_name")
 }
 
 util.assert_not_empty() {
@@ -259,10 +245,10 @@ Subcommands:
     uninstall [plugin] [version]
         Uninstall a particular program
 
-    get-version [plugin]
+    get-version [--local] [plugin]
         Get the current version of a program
 
-    set-version [plugin] [version]
+    set-version [--local] [plugin] [version]
         Set the current version of a program
 
     list [--all] [--no-cache] [plugin]
