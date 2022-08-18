@@ -239,6 +239,10 @@ util.sanitize_path() {
 	REPLY="$path"
 }
 
+util.sort_versions() {
+	sort -V
+}
+
 util.print_hint() {
 	printf '%s\n' "  -> $1"
 }

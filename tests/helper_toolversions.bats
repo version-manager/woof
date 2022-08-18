@@ -14,7 +14,7 @@ load './util/init.sh'
 
 @test "Works in base case 2" {
 	cat > '.tool-versions' <<-"EOF"
-	 ruby 2.5.3 
+	 ruby 2.5.3
 	EOF
 
 	helper.toolversions_get_versions 'ruby'

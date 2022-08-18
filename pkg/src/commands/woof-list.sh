@@ -44,7 +44,7 @@ woof-list() {
 					printf '%s\n' "$version"
 				fi
 			fi
-		done < "$table_file" | sort -V
+		done < "$table_file" | util.sort_versions
 		unset -v variant version os arch url comment
 	else
 		var.get_dir 'installs' "$module_name"

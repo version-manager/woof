@@ -1,5 +1,35 @@
 # shellcheck shell=bash
 
+# TODO: check if the line is valid (module that exists, must have a version)
+
+helper.toolversions_parse() {
+	local toolversions_path="$1"
+	local -n __toolversions_variable="$2"
+
+	local line=
+	while IFS= read -r line; do
+		line=${line%%#*}
+		line=${line#"${line%%[![:space:]]*}"}
+		line=${line%"${line##*[![:space:]]}"}
+
+		if [ -n "$line" ]; then
+			local module_name="${line%% *}"
+			module_name=${module_name%%$'\t'*}
+
+			local module_versions_str="${line#* }"
+			module_versions_str=${module_versions_str#*$'\t'}
+			# shellcheck disable=SC2206
+			module_versions=($module_versions_str)
+
+			local old_ifs="$IFS"
+			IFS='|'
+			__toolversions_variable[$module_name]="${module_versions[*]}"
+			IFS="$old_ifs"; unset -v old_ifs
+		fi
+
+	done < "$toolversions_path"; unset -v line
+}
+
 helper.toolversions_get_versions() {
 	local module_name="$1"
 
@@ -15,8 +45,9 @@ helper.toolversions_get_versions() {
 	while IFS= read -r line; do
 		util.toolversions_foreach 'line'
 
+		echo v "$EACH_MODULE_NAME"
 		if [ "$EACH_MODULE_NAME" = "$module_name" ]; then
-			REPLY=("${EACH_VERSIONS[@]}")
+			REPLY=("${EACH_MODULE_VERSIONS[@]}")
 		fi
 	done < "$toolversions_path"; unset -v line
 }

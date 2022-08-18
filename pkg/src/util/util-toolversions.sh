@@ -19,17 +19,13 @@ util.toolversions_get_path() {
 	fi
 }
 
-# TODO: check if the line is valid (module that exists, must have a version)
 util.toolversions_foreach() {
-	unset -v EACH_MODULE_NAME EACH_MODULE_VERSIONS
-	if [ -z "$1" ]; then
-		return
-	fi
+	unset -v EACH_MODULE_NAME
 	EACH_MODULE_NAME=
 	local -ga EACH_MODULE_VERSIONS=()
 
 	local -n __line="$1"
-	
+
 	__line=${__line%%#*}
 	__line=${__line#"${__line%%[![:space:]]*}"}
 	__line=${__line%"${__line##*[![:space:]]}"}

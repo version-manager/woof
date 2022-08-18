@@ -4,6 +4,6 @@ task.run() {
 	./pkg/bin/woof "$@"
 }
 
-task.release() {
-	fox release
+task.test() {
+	bats ./tests
 }
