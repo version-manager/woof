@@ -17,15 +17,15 @@ parse_hashicorp() {
 	while IFS= read -r line; do
 		if [[ $line =~ $regex ]]; then
 			local version_path="${BASH_REMATCH[1]}"
-			
+
 			local url="$prefix/$version_path"
 			local version_html=
 			if ! version_html=$(curl -fsSL "$url"); then
 				core.err_set "Could not fetch '$url'"
 				return
 			fi
-			
-			local version_regex=$'^[ \t]*<a data-product=".+"[ \t]*data-version="(.+)"[ \t]*data-os="(.+)"[ \t]*data-arch="(.+)"[ \t]*href="/(.+)"[ \t]*>'
+
+			local version_regex=$'^[ \t]*<a[ \t]*data-product=".+"[ \t]*data-version="(.+)"[ \t]*data-os="(.+)"[ \t]*data-arch="(.+)"[ \t]*href="(.+)"[ \t]*>'
 			local line=
 			while IFS= read -r line; do
 				if [[ $line == *@('.deb'|'.rpm'|'.zst')* ]]; then
@@ -37,7 +37,7 @@ parse_hashicorp() {
 					local version_os="${BASH_REMATCH[2]}"
 					local version_arch="${BASH_REMATCH[3]}"
 					local version_uri="${BASH_REMATCH[4]}"
-					
+
 					case $version_os in
 						linux|freebsd|darwin|openbsd|netbsd|solaris) : ;;
 						windows|web) continue ;;
@@ -47,9 +47,9 @@ parse_hashicorp() {
 					esac
 
 					case $version_arch in
-						x86_64)
+						x86_64|amd64)
 							version_arch='x86_64' ;;
-						amd64|arm64|ppc64le|s390x) : ;;
+						arm64|ppc64le|s390x) : ;;
 						# boundary: armelv5|armhfv6
 						# nomad: arm{5,6,7}|amd64-lxc
 						# packer: mips{,64,le}
@@ -58,7 +58,7 @@ parse_hashicorp() {
 						386) version_arch='x86' ;;
 						*) printf '%s\n' "Not support arch: $line: $version_arch" >&2; exit 1 ;;
 					esac
-					printf '%s\n' "${product^}|v$module_version|$version_os|$version_arch|$prefix/$version_uri"
+					printf '%s\n' "${product^}|v$module_version|$version_os|$version_arch|$version_uri"
 				fi
 			done <<< "$version_html"; unset -v line
 		fi
