@@ -3,29 +3,29 @@
 # shellcheck disable=SC2059
 tty.fullscreen_init() {
 	stty -echo
-	term.cursor_hide; printf "$REPLY"
-	term.cursor_savepos; printf "$REPLY"
-	term.screen_save; printf "$REPLY"
-	
-	term.erase_saved_lines; printf "$REPLY"
+	term.cursor_hide -p
+	term.cursor_savepos -p
+	term.screen_save -p
+
+	term.erase_saved_lines -p
 	read -r global_tty_height global_tty_width < <(stty size)
 }
 
 # shellcheck disable=SC2059
 tty.fullscreen_deinit() {
-	term.screen_restore; printf "$REPLY"
-	term.cursor_restorepos; printf "$REPLY"
-	term.cursor_show; printf "$REPLY"
+	term.screen_restore -p
+	term.cursor_restorepos -p
+	term.cursor_show -p
 	stty echo
 }
 
 tty.all_save() {
-	term.cursor_savepos; printf "$REPLY"
-	term.screen_save; printf "$REPLY"
+	term.cursor_savepos -p
+	term.screen_save -p
 }
 tty.all_restore() {
-	term.screen_restore; printf "$REPLY"
-	term.cursor_restorepos; printf "$REPLY"
+	term.screen_restore -p
+	term.cursor_restorepos -p
 }
 
 # backwards
@@ -101,13 +101,13 @@ tty.private.print_list() {
 	local start=$((index - (global_tty_height / 2)))
 	local end=$((start + global_tty_height))
 
-	term.cursor_to 0 0; printf "$REPLY"
-	
+	term.cursor_to -p 0 0
+
 	# shellcheck disable=SC1007
 	local i= str= prefix=
 	for ((i=start; i<end; i++)); do
 		if ((i != start)); then
-			term.cursor_down 1; printf "$REPLY"
+			term.cursor_down -p 1
 		fi
 
 		if ((index+1 == i)); then
@@ -124,7 +124,7 @@ tty.private.print_list() {
 		fi
 
 		printf '\r'
-		term.erase_line_end; printf "$REPLY"
+		term.erase_line_end -p
 		# shellcheck disable=SC2059
 		printf "$str"
 	done; unset -v i
