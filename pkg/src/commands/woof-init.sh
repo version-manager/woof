@@ -13,9 +13,9 @@ woof-init() {
 
 	var.get_dir 'global' 'bin'
 	std.shell_path_prepend "$REPLY"
-	
 
-	var.get_module_install_dir 'deno'
+
+	var.get_dir 'installs' 'deno'
 	local install_dir="$REPLY"
 
 	util.get_current_module_version 'deno'

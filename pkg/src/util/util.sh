@@ -130,7 +130,7 @@ util.get_module_data() {
 	local module_version="$2"
 	local specified_key="$3"
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	local data_file="$install_dir/$module_version/data.txt"
@@ -184,7 +184,7 @@ util.is_module_version_installed() {
 	local module_name="$1"
 	local module_version="$2"
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	if [ -d "$install_dir/$module_version/done" ]; then

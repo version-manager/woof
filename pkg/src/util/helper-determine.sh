@@ -34,7 +34,7 @@ helper.determine_module_name_installed() {
 	unset REPLY; REPLY=
 	local module_name="$1"
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	if [ -z "$module_name" ]; then
@@ -123,7 +123,7 @@ helper.determine_module_version_installed() {
 	local module_name="$1"
 	local module_version="$2"
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	if [ -z "$module_version" ]; then

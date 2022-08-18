@@ -10,12 +10,7 @@ var.get_module_workspace_dir() {
 	REPLY="$WOOF_STATE_HOME/workspace-$1"
 }
 
-var.get_module_install_dir() {
-	unset -v REPLY
-	REPLY="$WOOF_STATE_HOME/installs/$1"
-}
-
 var.get_dir() {
 	unset -v REPLY
-	REPLY="$WOOF_STATE_HOME/$1/$2"
+	REPLY="$WOOF_STATE_HOME/$1${2:+/$2}"
 }

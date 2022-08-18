@@ -47,7 +47,7 @@ woof-list() {
 		done < "$table_file" | sort -V
 		unset -v variant version os arch url comment
 	else
-		var.get_module_install_dir "$module_name"
+		var.get_dir 'installs' "$module_name"
 		local install_dir="$REPLY"
 
 		core.shopt_push -s nullglob

@@ -12,7 +12,7 @@ woof-uninstall() {
 	local module_version="$REPLY"
 	unset -v possible_module_version
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	# Do uninstall

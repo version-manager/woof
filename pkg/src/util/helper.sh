@@ -62,7 +62,7 @@ helper.install_module_version() {
 	var.get_module_workspace_dir "$module_name"
 	local workspace_dir="$REPLY"
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	# If there is an interactive flag, then we are debugging the installation
@@ -175,7 +175,7 @@ helper.switch_to_version() {
 	var.get_dir 'global' 'common'
 	local global_common_dir="$REPLY"
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	if [ ! -d "$global_common_dir" ]; then
@@ -204,7 +204,7 @@ helper.symlink_after_install() {
 	local module_name="$1"
 	local module_version="$2"
 
-	var.get_module_install_dir "$module_name"
+	var.get_dir 'installs' "$module_name"
 	local install_dir="$REPLY"
 
 	var.get_dir 'global' 'bin'
