@@ -18,7 +18,7 @@ woof-init() {
 	var.get_dir 'installs' 'deno'
 	local install_dir="$REPLY"
 
-	util.get_current_module_version 'deno'
+	util.get_current_plugin_version 'deno'
 	local version="$REPLY"
 
 	std.shell_variable_assignment 'DENO_INSTALL_ROOT' "$install_dir/$version/files"
@@ -26,7 +26,7 @@ woof-init() {
 	std.shell_path_prepend "$DENO_INSTALL_ROOT/bin/bin"
 
 	woof_override_cd
-	source "$BASALT_PACKAGE_DIR/pkg/src/modules/go.sh"
+	source "$BASALT_PACKAGE_DIR/pkg/src/plugins/go.sh"
 	go.env
 }
 

@@ -49,7 +49,7 @@ There are three levels of support:
 
 ## Buildfull
 
-This requires a modification to the Module API
+This requires a modification to the  API
 
 | Language | Current Support | Official Download                                 | Replaces                                                                                                                                                                                                   |
 | -------- | --------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

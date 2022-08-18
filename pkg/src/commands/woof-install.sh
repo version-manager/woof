@@ -15,26 +15,26 @@ woof-install() {
 		shift
 	esac done; unset -v arg
 
-	local possible_module_name="${subcmds[0]}"
-	local possible_module_version="${subcmds[1]}"
+	local possible_plugin_name="${subcmds[0]}"
+	local possible_plugin_version="${subcmds[1]}"
 
-	helper.determine_module_name "$possible_module_name"
-	local module_name="$REPLY"
-	unset -v possible_module_name
+	helper.determine_plugin_name "$possible_plugin_name"
+	local plugin_name="$REPLY"
+	unset -v possible_plugin_name
 
-	helper.create_version_table "$module_name" "$flag_no_cache"
+	helper.create_version_table "$plugin_name" "$flag_no_cache"
 
-	helper.determine_module_version "$module_name" "$possible_module_version"
-	local module_version="$REPLY"
-	unset -v possible_module_version
+	helper.determine_plugin_version "$plugin_name" "$possible_plugin_version"
+	local plugin_version="$REPLY"
+	unset -v possible_plugin_version
 
-	helper.install_module_version "$module_name" "$module_version"
+	helper.install_plugin_version "$plugin_name" "$plugin_version"
 	util.get_global_selection
 	local global_selection="$REPLY"
 	if [ -z "$global_selection" ]; then
-		util.set_global_selection "$module_name" "$module_version"
+		util.set_global_selection "$plugin_name" "$plugin_version"
 	fi
 
-	helper.switch_to_version "$module_name" "$module_version"
-	helper.symlink_after_install "$module_name" "$module_version"
+	helper.switch_to_version "$plugin_name" "$plugin_version"
+	helper.symlink_after_install "$plugin_name" "$plugin_version"
 }

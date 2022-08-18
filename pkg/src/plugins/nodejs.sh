@@ -14,7 +14,7 @@ nodejs.install() {
 	m.ensure mv ./*/* './dir'
 
 	# TODO:
-	# m.ensure mv './dir/lib/node_modules' './dir/lib/node_modules_old'
+	# m.ensure mv './dir/lib/node_plugins' './dir/lib/node_plugins_old'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
@@ -23,13 +23,13 @@ nodejs.install() {
 
 nodejs.switch() {
 	local install_dir="$1"
-	local module_version="$2"
+	local plugin_version="$2"
 
 	# TODO: npm just replaces the symlink with a directory
-	# mkdir -p './node_modules'
-	# m.ensure rm -rf './node_modules'/{corepack,npm}
-	# m.ensure cp -r "$install_dir/lib/node_modules_old"/{corepack,npm} './node_modules'
-	# m.ensure ln -sf "$PWD/node_modules" "$install_dir/lib/node_modules"
+	# mkdir -p './node_plugins'
+	# m.ensure rm -rf './node_plugins'/{corepack,npm}
+	# m.ensure cp -r "$install_dir/lib/node_plugins_old"/{corepack,npm} './node_plugins'
+	# m.ensure ln -sf "$PWD/node_plugins" "$install_dir/lib/node_plugins"
 }
 
 nodejs.dir() {

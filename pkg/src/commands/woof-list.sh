@@ -18,21 +18,21 @@ woof-list() {
 		shift
 	esac done; unset -v arg
 
-	local possible_module_name="${subcmds[0]}"
+	local possible_plugin_name="${subcmds[0]}"
 
 
-	helper.determine_module_name "$possible_module_name"
-	local module_name="$REPLY"
-	unset -v possible_module_name
+	helper.determine_plugin_name "$possible_plugin_name"
+	local plugin_name="$REPLY"
+	unset -v possible_plugin_name
 
 	if [ "$flag_installed" = 'yes' ]; then
-		helper.create_version_table "$module_name"
+		helper.create_version_table "$plugin_name"
 
 		util.uname_system
 		local real_os="$REPLY1"
 		local real_arch="$REPLY2"
 
-		var.get_module_table_file "$module_name"
+		var.get_plugin_table_file "$plugin_name"
 		local table_file="$REPLY"
 
 		local variant= version= os= arch= url= comment=
@@ -47,7 +47,7 @@ woof-list() {
 		done < "$table_file" | util.sort_versions
 		unset -v variant version os arch url comment
 	else
-		var.get_dir 'installs' "$module_name"
+		var.get_dir 'installs' "$plugin_name"
 		local install_dir="$REPLY"
 
 		core.shopt_push -s nullglob

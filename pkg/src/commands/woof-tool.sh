@@ -11,41 +11,41 @@ woof-tool() {
 	fi
 
 	if [ "$subcmd" = 'resymlink' ]; then
-		local possible_module_name="$1"
-		local possible_module_version="$2"
+		local possible_plugin_name="$1"
+		local possible_plugin_version="$2"
 
-		helper.determine_module_name "$possible_module_name"
-		local module_name="$REPLY"
-		unset -v possible_module_name
+		helper.determine_plugin_name "$possible_plugin_name"
+		local plugin_name="$REPLY"
+		unset -v possible_plugin_name
 
-		helper.create_version_table "$module_name"
+		helper.create_version_table "$plugin_name"
 
-		helper.determine_module_version "$module_name" "$possible_module_version"
-		local module_version="$REPLY"
-		unset -v possible_module_version
+		helper.determine_plugin_version "$plugin_name" "$possible_plugin_version"
+		local plugin_version="$REPLY"
+		unset -v possible_plugin_version
 
-		helper.symlink_after_install "$module_name" "$module_version"
+		helper.symlink_after_install "$plugin_name" "$plugin_version"
 	elif [ "$subcmd" = 'info' ]; then
-		local possible_module_name="$1"
+		local possible_plugin_name="$1"
 
-		helper.determine_module_name "$possible_module_name"
-		local module_name="$REPLY"
-		unset -v possible_module_name
+		helper.determine_plugin_name "$possible_plugin_name"
+		local plugin_name="$REPLY"
+		unset -v possible_plugin_name
 
 		var.get_dir 'global' 'selection'
 		local global_selection_dir="$REPLY"
 
 		printf '%s\n' '------ GLOBAL ------'
-		if [ -f "$global_selection_dir/$module_name" ]; then
-			printf '%s\n' "Version: $(<"$global_selection_dir/$module_name")"
+		if [ -f "$global_selection_dir/$plugin_name" ]; then
+			printf '%s\n' "Version: $(<"$global_selection_dir/$plugin_name")"
 		else
 			printf '%s\n' "Version: (no global)"
 		fi
 		printf '\n'
 
 		printf '%s\n' '------ DIRECTORY ------'
-		m.toolversions_get_versions "$module_name"
-		m.toolversions_get_first_valid_version "$module_name"
+		m.toolversions_get_versions "$plugin_name"
+		m.toolversions_get_first_valid_version "$plugin_name"
 		printf '%s\n' "Version: ${version:-(no directory)}"
 
 	elif [ "$subcmd" = 'print-dirs' ]; then
@@ -63,41 +63,41 @@ woof-tool() {
 		done; unset -v var_name
 		unset -vn var_value
 	elif [ "$subcmd" = 'debug-table' ]; then
-		local possible_module_name="$1"
+		local possible_plugin_name="$1"
 
-		helper.determine_module_name "$possible_module_name"
-		local module_name="$REPLY"
-		unset -v possible_module_name
+		helper.determine_plugin_name "$possible_plugin_name"
+		local plugin_name="$REPLY"
+		unset -v possible_plugin_name
 
-		util.run_function "$module_name.table"
+		util.run_function "$plugin_name.table"
 	elif [ "$subcmd" = 'debug-install' ]; then
-		local possible_module_name="$1"
-		local possible_module_version="$2"
+		local possible_plugin_name="$1"
+		local possible_plugin_version="$2"
 
-		helper.determine_module_name "$possible_module_name"
-		local module_name="$REPLY"
-		unset -v possible_module_name
+		helper.determine_plugin_name "$possible_plugin_name"
+		local plugin_name="$REPLY"
+		unset -v possible_plugin_name
 
-		helper.create_version_table "$module_name"
+		helper.create_version_table "$plugin_name"
 
-		helper.determine_module_version "$module_name" "$possible_module_version"
-		local module_version="$REPLY"
-		unset -v possible_module_version
+		helper.determine_plugin_version "$plugin_name" "$possible_plugin_version"
+		local plugin_version="$REPLY"
+		unset -v possible_plugin_version
 
-		helper.install_module_version --interactive "$module_name" "$module_version"
+		helper.install_plugin_version --interactive "$plugin_name" "$plugin_version"
 	elif [ "$subcmd" = 'clear-table-cache' ]; then
-		local module_name="$1"
+		local plugin_name="$1"
 
-		var.get_module_table_file "$module_name"
+		var.get_plugin_table_file "$plugin_name"
 		local table_file="$REPLY"
 
-		if [ -z "$module_name" ]; then
+		if [ -z "$plugin_name" ]; then
 			core.print_info "Removing all table cache"
-			# Since '$module_name' is empty, the basename of '$table_file' is
+			# Since '$plugin_name' is empty, the basename of '$table_file' is
 			# not correct, but that doesn't matter as it is not used here
 			rm -rf "${table_file%/*}"
 		else
-			core.print_info "Removing table cache for '$module_name'"
+			core.print_info "Removing table cache for '$plugin_name'"
 			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then

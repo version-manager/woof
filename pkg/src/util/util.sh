@@ -2,12 +2,12 @@
 
 util.get_table_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 	local real_os="$3"
 	local real_arch="$4"
 
-	var.get_module_table_file "$module_name"
+	var.get_plugin_table_file "$plugin_name"
 	local table_file="$REPLY"
 
 	if [ ! -f "$table_file" ]; then
@@ -22,7 +22,7 @@ util.get_table_row() {
 
 	local variant= version= os= arch= url= comment=
 	while IFS='|' read -r variant version os arch url comment; do
-		if  [ "$module_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		if  [ "$plugin_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			REPLY1=$url
 			REPLY2=$comment
 			return 0
@@ -32,7 +32,7 @@ util.get_table_row() {
 	if [ -z "$REPLY1" ] || [ -z "$REPLY2" ]; then
 		core.print_error "Failed to find corresponding row in version table"
 		util.print_hint "Does the version begin with 'v'? (Example: v18.0.0)"
-		util.print_hint "Try running 'woof tool clear-version-table $module_name'"
+		util.print_hint "Try running 'woof tool clear-version-table $plugin_name'"
 		exit 1
 	fi
 
@@ -122,18 +122,18 @@ util.uname_system() {
 	REPLY2="$hardware_pretty"
 }
 
-util.get_module_data() {
+util.get_plugin_data() {
 	unset -v REPLY
 	declare -g REPLY=()
 
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 	local specified_key="$3"
 
-	var.get_dir 'installs' "$module_name"
+	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
-	local data_file="$install_dir/$module_version/data.txt"
+	local data_file="$install_dir/$plugin_version/data.txt"
 	local key= values=
 	while IFS='=' read -r key values; do
 		IFS=':' read -ra values <<< "$values"
@@ -147,10 +147,10 @@ util.get_module_data() {
 
 util.get_global_selection() {
 	unset REPLY; REPLY=
-	local module_name="$1"
+	local plugin_name="$1"
 
 	var.get_dir 'global' 'selection'
-	local global_selection_file="$REPLY/$module_name"
+	local global_selection_file="$REPLY/$plugin_name"
 
 	local global_selection=
 	if [ -f "$global_selection_file" ]; then
@@ -164,48 +164,48 @@ util.get_global_selection() {
 
 util.set_global_selection() {
 	unset REPLY; REPLY=
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 
 	var.get_dir 'global' 'selection'
-	local global_selection_file="$REPLY/$module_name"
-	core.print_info "Setting $module_version as global default for $module_name"
+	local global_selection_file="$REPLY/$plugin_name"
+	core.print_info "Setting $plugin_version as global default for $plugin_name"
 	if [ ! -d "${global_selection_file%/*}" ]; then
 		mkdir -p "${global_selection_file%/*}"
 	fi
-	if ! printf '%s\n' "$module_version" > "$global_selection_file"; then
+	if ! printf '%s\n' "$plugin_version" > "$global_selection_file"; then
 		rm -f "$global_selection_file"
 		core.print_die "Could not write to '$global_selection_file'"
 	fi
 }
 
-util.is_module_version_installed() {
+util.is_plugin_version_installed() {
 	unset -v REPLY; REPLY=
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 
-	var.get_dir 'installs' "$module_name"
+	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
-	if [ -d "$install_dir/$module_version/done" ]; then
+	if [ -d "$install_dir/$plugin_version/done" ]; then
 		return $?
 	else
 		return $?
 	fi
 }
 
-util.get_current_module_version() {
-	local module_name="$1"
+util.get_current_plugin_version() {
+	local plugin_name="$1"
 
 	var.get_dir 'global' 'selection'
 	local global_selection_dir="$REPLY"
 
-	if [ ! -f "$global_selection_dir/$module_name" ]; then
-		core.print_die "Could not find (global) default for module '$module_name'"
+	if [ ! -f "$global_selection_dir/$plugin_name" ]; then
+		core.print_die "Could not find (global) default for plugin '$plugin_name'"
 	fi
 
 	unset -v REPLY; REPLY= # TODO: make this everywhere
-	REPLY=$(<"$global_selection_dir/$module_name")
+	REPLY=$(<"$global_selection_dir/$plugin_name")
 }
 
 util.assert_not_empty() {
@@ -250,7 +250,7 @@ util.print_hint() {
 util.show_help() {
 	printf '%s\n' "Usage:
    woof init <shell>
-   woof <subcommand> [module] [version]
+   woof <subcommand> [plugin] [version]
 
 Subcommands:
     init <shell>

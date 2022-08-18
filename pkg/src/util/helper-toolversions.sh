@@ -6,25 +6,25 @@ helper.toolversions_set_versions() {
 	declare -gA tools=()
 	util.toolversions_parse "$toolversions_path" 'tools'
 
-	local module_name=
-	for module_name in "${!tools[@]}"; do
+	local plugin_name=
+	for plugin_name in "${!tools[@]}"; do
 		local -a versions=()
-		IFS='|' read -ra versions <<< "${tools[$module_name]}"
-		for module_version in "${versions[@]}"; do
-			if [[ $module_version == ref:* ]]; then
-				core.print_warn "Skipping '$module_version' for '$module_name' as 'ref:' is not yet supported"
-			elif [[ $module_version == path:* ]]; then
-				core.print_warn "Skipping '$module_version' for '$module_name' as 'path:' is not yet supported"
-			elif [[ $module_version == 'system' ]]; then
-				core.print_warn "Skipping 'system' for '$module_name' as 'system' is not yet supported"
+		IFS='|' read -ra versions <<< "${tools[$plugin_name]}"
+		for plugin_version in "${versions[@]}"; do
+			if [[ $plugin_version == ref:* ]]; then
+				core.print_warn "Skipping '$plugin_version' for '$plugin_name' as 'ref:' is not yet supported"
+			elif [[ $plugin_version == path:* ]]; then
+				core.print_warn "Skipping '$plugin_version' for '$plugin_name' as 'path:' is not yet supported"
+			elif [[ $plugin_version == 'system' ]]; then
+				core.print_warn "Skipping 'system' for '$plugin_name' as 'system' is not yet supported"
 			else
-				if util.is_module_version_installed "$module_name" "$module_version"; then
-					printf '%s\n' "Should switch to $module_name version $module_version"
+				if util.is_plugin_version_installed "$plugin_name" "$plugin_version"; then
+					printf '%s\n' "Should switch to $plugin_name version $plugin_version"
 				else
-					printf '%s\n' "Should install and switch to $module_name version $module_version"
+					printf '%s\n' "Should install and switch to $plugin_name version $plugin_version"
 				fi
 			fi
-		done; unset -v module_version
-	done; unset -v module_name
+		done; unset -v plugin_version
+	done; unset -v plugin_name
 }
 

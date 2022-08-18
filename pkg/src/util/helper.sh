@@ -1,13 +1,13 @@
 # shellcheck shell=bash
 
-# @description For a given module, construct a table of all versions for all
-# platforms (kernel and architecture). This eventually calls the "<module>.table"
+# @description For a given plugin, construct a table of all versions for all
+# platforms (kernel and architecture). This eventually calls the "<plugin>.table"
 # function and properly deals with caching
 helper.create_version_table() {
-	local module_name="$1"
+	local plugin_name="$1"
 	local flag_no_cache="$2"
 
-	var.get_module_table_file "$module_name"
+	var.get_plugin_table_file "$plugin_name"
 	local table_file="$REPLY"
 
 	core.print_info 'Gathering versions'
@@ -27,17 +27,17 @@ helper.create_version_table() {
 
 	if [ "$should_use_cache" = 'no' ]; then
 		local table_string=
-		if table_string=$(util.run_function "$module_name.table"); then
+		if table_string=$(util.run_function "$plugin_name.table"); then
 			if core.err_exists; then
 				core.print_error "$ERR"
 				exit "$ERRCODE"
 			fi
 		else
-			core.print_die "A fatal error occured while running '$module_name.table'"
+			core.print_die "A fatal error occured while running '$plugin_name.table'"
 		fi
 
 		if [ -z "$table_string" ]; then
-			core.print_die "Function '$module_name.table' must output a well-formed table of variable names. Nothing was sent"
+			core.print_die "Function '$plugin_name.table' must output a well-formed table of variable names. Nothing was sent"
 		fi
 
 		if ! printf '%s' "$table_string" > "$table_file"; then
@@ -49,7 +49,7 @@ helper.create_version_table() {
 	fi
 }
 
-helper.install_module_version() {
+helper.install_plugin_version() {
 	local flag_interactive='no'
 	if [ "$1" = '--interactive' ]; then
 		flag_interactive='yes'
@@ -57,13 +57,13 @@ helper.install_module_version() {
 			core.panic 'Failed to shift'
 		fi
 	fi
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 
-	var.get_module_workspace_dir "$module_name"
+	var.get_plugin_workspace_dir "$plugin_name"
 	local workspace_dir="$REPLY"
 
-	var.get_dir 'installs' "$module_name"
+	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
 	# If there is an interactive flag, then we are debugging the installation
@@ -78,25 +78,25 @@ helper.install_module_version() {
 		install_dir="$interactive_dir/install_dir"
 	fi
 
-	if util.is_module_version_installed "$module_name" "$module_version"; then
-		core.print_die "Version '$module_version' is already installed for module '$module_name'"
+	if util.is_plugin_version_installed "$plugin_name" "$plugin_version"; then
+		core.print_die "Version '$plugin_version' is already installed for plugin '$plugin_name'"
 	fi
 
 	# Preparation actions
-	rm -rf "$workspace_dir" "${install_dir:?}/$module_version"
-	mkdir -p "$workspace_dir" "$install_dir/$module_version"
+	rm -rf "$workspace_dir" "${install_dir:?}/$plugin_version"
+	mkdir -p "$workspace_dir" "$install_dir/$plugin_version"
 
 	util.uname_system
 	local os="$REPLY1"
 	local arch="$REPLY2"
 
 	# Determine correct binary for current system
-	if util.get_table_row "$module_name" "$module_version" "$os" "$arch"; then :; else
+	if util.get_table_row "$plugin_name" "$plugin_version" "$os" "$arch"; then :; else
 		exit $?
 	fi
 	local url="$REPLY1"
 
-	# Execute '<module>.install'
+	# Execute '<plugin>.install'
 	local old_pwd="$PWD"
 	if ! cd -- "$workspace_dir"; then
 		core.panic 'Failed to cd'
@@ -108,35 +108,35 @@ helper.install_module_version() {
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_INCLUDES=() REPLY_LIBS=() REPLY_MANS=() REPLY_BASH_COMPLETIONS=() \
 		REPLY_ZSH_COMPLETIONS=() REPLY_FISH_COMPLETIONS=()
-	if util.run_function "$module_name.install" "$url" "${module_version/#v}" "$os" "$arch"; then
+	if util.run_function "$plugin_name.install" "$url" "${plugin_version/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"
 			core.panic
 		fi
 	else
 		rm -rf "$workspace_dir"
-		core.print_die "Unexpected error while calling '$module_name.install'"
+		core.print_die "Unexpected error while calling '$plugin_name.install'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
 
 	if [ -z "$REPLY_DIR" ]; then
-		core.print_die "Variable '\$REPLY_DIR' must be set at the end of <module>.install"
+		core.print_die "Variable '\$REPLY_DIR' must be set at the end of <plugin>.install"
 	fi
 
 	# Move extracted contents to 'installs' directory
-	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$module_version/files"; then
+	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$plugin_version/files"; then
 		rm -rf "$workspace_dir"
-		core.print_die "Could not move extracted contents to '$install_dir/$module_version/files'"
+		core.print_die "Could not move extracted contents to '$install_dir/$plugin_version/files'"
 	fi
 
 	# Save information about bin, man, etc. pages later
 	local old_ifs="$IFS"; IFS=':'
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
-mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
-		rm -rf "$workspace_dir" "${install_dir:?}/$module_version"
-		core.print_die "Could not write to '$install_dir/$module_version/data.txt'"
+mans=${REPLY_MANS[*]}" > "$install_dir/$plugin_version/data.txt"; then
+		rm -rf "$workspace_dir" "${install_dir:?}/$plugin_version"
+		core.print_die "Could not write to '$install_dir/$plugin_version/data.txt'"
 	fi
 	IFS="$old_ifs"
 
@@ -160,8 +160,8 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
-		: > "$install_dir/$module_version/done"
-		core.print_info 'Installed' "$module_version"
+		: > "$install_dir/$plugin_version/done"
+		core.print_info 'Installed' "$plugin_version"
 	else
 		core.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
 	fi
@@ -169,51 +169,51 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$module_version/data.txt"; then
 
 # @description Performs any necessary mucking when switching versions
 helper.switch_to_version() {
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 
 	var.get_dir 'global' 'common'
 	local global_common_dir="$REPLY"
 
-	var.get_dir 'installs' "$module_name"
+	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
 	if [ ! -d "$global_common_dir" ]; then
 		mkdir -p "$global_common_dir"
 	fi
 
-	# Execute '<module>.switch'
+	# Execute '<plugin>.switch'
 	local old_pwd="$PWD"
 	if ! cd -- "$global_common_dir"; then
 		core.panic 'Failed to cd'
 	fi
-	if util.run_function --optional "$module_name.switch" "$install_dir/$module_version/files" "$module_version"; then
+	if util.run_function --optional "$plugin_name.switch" "$install_dir/$plugin_version/files" "$plugin_version"; then
 		if core.err_exists; then
 			core.panic
 		fi
 	else
-		core.print_die "Unexpected error while calling '$module_name.switch'"
+		core.print_die "Unexpected error while calling '$plugin_name.switch'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
-	core.print_info "Using $module_version"
+	core.print_info "Using $plugin_version"
 }
 
 helper.symlink_after_install() {
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 
-	var.get_dir 'installs' "$module_name"
+	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
 	var.get_dir 'global' 'bin'
 	local global_bin_dir="$REPLY"
 
-	util.get_module_data "$module_name" "$module_version" 'bins'
+	util.get_plugin_data "$plugin_name" "$plugin_version" 'bins'
 	local -a bin_dirs=("${REPLY[@]}")
 
-	util.get_module_data "$module_name" "$module_version" 'mans'
+	util.get_plugin_data "$plugin_name" "$plugin_version" 'mans'
 	local -a man_dirs=("${REPLY[@]}") # FIXME
 
 	if [ ! -d "$global_bin_dir" ]; then
@@ -222,9 +222,9 @@ helper.symlink_after_install() {
 
 	local bin_dir=
 	for bin_dir in "${bin_dirs[@]}"; do
-		if [ -d "$install_dir/$module_version/files/$bin_dir" ]; then
+		if [ -d "$install_dir/$plugin_version/files/$bin_dir" ]; then
 			local bin_file
-			for bin_file in "$install_dir/$module_version/files/$bin_dir"/*; do
+			for bin_file in "$install_dir/$plugin_version/files/$bin_dir"/*; do
 				if [ -d "$bin_file" ]; then
 					continue
 				fi
@@ -239,7 +239,7 @@ helper.symlink_after_install() {
 				fi
 			done; unset -v bin_file
 		else
-			core.print_warn "Directory '$bin_dir' does not exist for module '$module_name'"
+			core.print_warn "Directory '$bin_dir' does not exist for plugin '$plugin_name'"
 		fi
 	done; unset -v bin_dir
 }

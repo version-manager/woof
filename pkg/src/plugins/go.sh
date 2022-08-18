@@ -19,7 +19,7 @@ go.install() {
 
 go.switch() {
 	local install_dir="$1"
-	local module_version="$2"
+	local plugin_version="$2"
 
 	go install -v 'golang.org/x/tools/gopls@latest'
 	go install -v 'golang.org/x/tools/cmd/goimports@latest'

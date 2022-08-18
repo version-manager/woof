@@ -1,84 +1,84 @@
 # shellcheck shell=bash
 
-helper.determine_module_name() {
+helper.determine_plugin_name() {
 	unset REPLY; REPLY=
-	local module_name="$1"
+	local plugin_name="$1"
 
-	if [ -z "$module_name" ]; then
-		local -a all_modules_arr=("$BASALT_PACKAGE_DIR/pkg/src/modules"/*.sh)
-		all_modules_arr=("${all_modules_arr[@]##*/}")
-		all_modules_arr=("${all_modules_arr[@]%.sh}")
+	if [ -z "$plugin_name" ]; then
+		local -a all_plugins_arr=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/*.sh)
+		all_plugins_arr=("${all_plugins_arr[@]##*/}")
+		all_plugins_arr=("${all_plugins_arr[@]%.sh}")
 
-		local -A all_modules_obj=()
-		for m in "${all_modules[@]}"; do
-			all_modules_obj["$m"]=
+		local -A all_plugins_obj=()
+		for m in "${all_plugins[@]}"; do
+			all_plugins_obj["$m"]=
 		done; unset m
 
-		tty.multiselect "$global_selection" all_modules_arr all_modules_obj
-		module_name="$REPLY"
+		tty.multiselect "$global_selection" all_plugins_arr all_plugins_obj
+		plugin_name="$REPLY"
 	fi
 
-	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/modules/$module_name.sh"
+	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/plugins/$plugin_name.sh"
 	if [ ! -f "$plugin_file" ]; then
-		core.print_die "Module '$module_name' not found"
+		core.print_die "Plugin '$plugin_name' not found"
 	fi
 
 	if ! source "$plugin_file"; then
-		core.print_die "Could not successfully source module '$module_name'"
+		core.print_die "Could not successfully source plugin '$plugin_name'"
 	fi
 
-	REPLY=$module_name
+	REPLY=$plugin_name
 }
 
-helper.determine_module_name_installed() {
+helper.determine_plugin_name_installed() {
 	unset REPLY; REPLY=
-	local module_name="$1"
+	local plugin_name="$1"
 
-	var.get_dir 'installs' "$module_name"
+	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
-	if [ -z "$module_name" ]; then
+	if [ -z "$plugin_name" ]; then
 		core.shopt_push -s nullglob
-		local -a module_list=("$install_dir"/*/)
+		local -a plugin_list=("$install_dir"/*/)
 		core.shopt_pop
 
-		if (( ${#module_list[@]} == 0 )); then
-			core.print_die "Cannot uninstall as no modules are installed"
+		if (( ${#plugin_list[@]} == 0 )); then
+			core.print_die "Cannot uninstall as no plugins are installed"
 		fi
 
-		module_list=("${module_list[@]%/}")
-		module_list=("${module_list[@]##*/}")
+		plugin_list=("${plugin_list[@]%/}")
+		plugin_list=("${plugin_list[@]##*/}")
 
-		local -A modules_table=()
-		local module=
-		for module in "${module_list[@]}"; do
-			modules_table["$module"]=
-		done; unset module
+		local -A plugins_table=()
+		local plugin=
+		for plugin in "${plugin_list[@]}"; do
+			plugins_table["$plugin"]=
+		done; unset plugin
 
-		tty.multiselect 0 module_list modules_table
-		module_name=$REPLY
+		tty.multiselect 0 plugin_list plugins_table
+		plugin_name=$REPLY
 	fi
 
 	if [ ! -d "$install_dir" ]; then
-		core.print_die "No versions of module '$module_name' are installed"
+		core.print_die "No versions of plugin '$plugin_name' are installed"
 	fi
 
-	REPLY=$module_name
+	REPLY=$plugin_name
 }
 
-helper.determine_module_version() {
+helper.determine_plugin_version() {
 	unset REPLY; REPLY=
-	local module_name="$1"
-	local module_version="$2"
+	local plugin_name="$1"
+	local plugin_version="$2"
 
-	var.get_module_table_file "$module_name"
+	var.get_plugin_table_file "$plugin_name"
 	local table_file="$REPLY"
 
 	util.uname_system
 	local real_os="$REPLY1"
 	local real_arch="$REPLY2"
 
-	if [ -z "$module_version" ]; then
+	if [ -z "$plugin_version" ]; then
 		local -a ui_keys=()
 		local -A ui_table=()
 
@@ -96,43 +96,43 @@ helper.determine_module_version() {
 			core.print_die "Could not find any matching versions for the current os/arch"
 		fi
 
-		util.get_global_selection "$module_name"
+		util.get_global_selection "$plugin_name"
 		local global_selection="$REPLY"
 
 		tty.multiselect "$global_selection" ui_keys ui_table
-		module_version="$REPLY"
+		plugin_version="$REPLY"
 	fi
 
 	local is_valid_string='yes'
 	local variant= version= os= arch= url= comment=
 	while IFS='|' read -r variant version os arch url comment; do
-		if [ "$module_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		if [ "$plugin_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			is_valid_string='yes'
 		fi
 	done < "$table_file"; unset variant version os arch url comment
 
 	if [ "$is_valid_string" != yes ]; then
-		core.print_die "Version '$module_version' is not valid for module '$module_name' on this architecture"
+		core.print_die "Version '$plugin_version' is not valid for plugin '$plugin_name' on this architecture"
 	fi
 
-	REPLY=$module_version
+	REPLY=$plugin_version
 }
 
 # @description Get the installed version string, if one was not already specified
-helper.determine_module_version_installed() {
-	local module_name="$1"
-	local module_version="$2"
+helper.determine_plugin_version_installed() {
+	local plugin_name="$1"
+	local plugin_version="$2"
 
-	var.get_dir 'installs' "$module_name"
+	var.get_dir 'installs' "$plugin_name"
 	local install_dir="$REPLY"
 
-	if [ -z "$module_version" ]; then
+	if [ -z "$plugin_version" ]; then
 		core.shopt_push -s nullglob
 		local -a versions_list=("$install_dir"/*/)
 		core.shopt_pop
 
 		if (( ${#versions_list[@]} == 0 )); then
-			core.print_die "Cannot uninstall as no versions of module '$module_name' are installed"
+			core.print_die "Cannot uninstall as no versions of plugin '$plugin_name' are installed"
 		fi
 
 		versions_list=("${versions_list[@]%/}")
@@ -144,16 +144,16 @@ helper.determine_module_version_installed() {
 			versions_table["$version"]=
 		done; unset version
 
-		util.get_global_selection "$module_name"
+		util.get_global_selection "$plugin_name"
 		local global_selection="$REPLY"
 
 		tty.multiselect "$global_selection" versions_list versions_table
-		module_version="$REPLY"
+		plugin_version="$REPLY"
 	fi
 
-	if [ ! -d "$install_dir/$module_version" ]; then
-		core.print_die "Version '$module_version' is not valid for module '$module_name'"
+	if [ ! -d "$install_dir/$plugin_version" ]; then
+		core.print_die "Version '$plugin_version' is not valid for plugin '$plugin_name'"
 	fi
 
-	REPLY="$module_version"
+	REPLY="$plugin_version"
 }

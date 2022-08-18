@@ -1,8 +1,8 @@
-# Module API
+# Plugin API
 
-Use the Module API to implement a version manager for a particular language. In this repository, the modules are located in `./pkg/src/modules`
+Use the Plugin API to implement a version manager for a particular language. In this repository, the plugins are located in `./pkg/src/plugins`
 
-## `<module>.table()`
+## `<plugin>.table()`
 
 Prints a version table to standard output. Each line of standard output looks like the following:
 
@@ -19,7 +19,7 @@ NodeJS|v15.9.0|linux|x86_64|https://nodejs.org/download/release/v15.9.0/node-v15
 
 To see the exact supported values for `<os>` and `<arch>`, see [roadmap.md](../roadmap.md)
 
-## `<module>.install()`
+## `<plugin>.install()`
 
 Downloads and extracts a particular version of a language. The following positional parameters are set:
 
@@ -41,19 +41,19 @@ Set the following variables for installation to complete successfully. `REPLY_DI
 
 Persisted state across installs / uninstalls
 
-## `<module>.switch()`
+## `<plugin>.switch()`
 
 Called when switching to a particular version
 
 - `$1`: install_dir
-- `$2`: module_version
+- `$2`: plugin_version
 
-## `<module>.env()`
+## `<plugin>.env()`
 
-Called when a module needs to set the environment
+Called when a plugin needs to set the environment
 
-## `<module>.dir()`
+## `<plugin>.dir()`
 
-Called when a module needs to hook into `cd`. For example, the NodeJS module needs to change versions depending on not only `.tool-versions`, but also `.nvm` and `.node-version`
+Called when a plugin needs to hook into `cd`. For example, the NodeJS plugin needs to change versions depending on not only `.tool-versions`, but also `.nvm` and `.node-version`
 
-By default, this automatically does the correct parsing of `.tool-versions` for the particular module
+By default, this automatically does the correct parsing of `.tool-versions` for the particular plugin
