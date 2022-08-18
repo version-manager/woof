@@ -1,0 +1,52 @@
+# shellcheck shell=bash
+
+util.help_show() {
+	printf '%s\n' "Usage:
+   woof init <shell>
+   woof <subcommand> [args...]
+
+Subcommands:
+    init <shell>
+        Print code for a particular shell to set the proper PATH, etc.
+
+    install [--no-cache] [plugin] [version]
+        Install a particular program
+
+    uninstall [plugin] [version]
+        Uninstall a particular program
+
+    get-version [--local] [plugin]
+        Get the current version of a program
+
+    set-version [--local] [plugin] [version]
+        Set the current version of a program
+
+    list [--all] [--no-cache] [plugin]
+        List programs
+"
+	util.help_show_plugin_core
+	printf '%s\n' "
+    tool <resymlink|info|print-dirs|cd-override|debug-table|debug-install|
+        clear-table-cache> [args...]
+            Run a particular tool Most of these are for internal use
+"
+}
+
+util.help_show_plugin() {
+	printf '%s\n' "Usage:
+   woof plugin <subcommand> [args...]
+
+Subcommands:"
+	util.help_show_plugin_core
+}
+
+util.help_show_plugin_core() {
+	printf '%s\n' "    plugin add [name]
+        Add a plugin
+
+    plugin remove [name]
+        Remove a plugin
+
+    plugin list
+        List plugins"
+}

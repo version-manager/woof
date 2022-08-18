@@ -3,7 +3,7 @@
 woof-tool() {
 	local subcmd="$1"
 	if [ -z "$subcmd" ]; then
-		util.show_help
+		util.help_show
 		core.print_die 'Expected subcommand'
 	fi
 	if ! shift; then

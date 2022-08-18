@@ -25,7 +25,7 @@ main.woof() {
 	local arg=
 	for arg; do case "$arg" in
 	--help|-h)
-		util.show_help
+		util.help_show
 		exit
 		;;
 	-*)
@@ -39,7 +39,7 @@ main.woof() {
 	# Get action name
 	local action_name="$1"
 	if [ -z "$action_name" ]; then
-		util.show_help
+		util.help_show
 		core.print_die 'No action was given'
 	fi
 	if ! shift; then
@@ -53,6 +53,7 @@ main.woof() {
 		get-version) woof-get-version "$@" ;;
 		set-version) woof-set-version "$@" ;;
 		list) woof-list "$@" ;;
+		plugin) woof-plugin "$@" ;;
 		tool) woof-tool "$@" ;;
 		*) core.print_die "Subcommand '$action_name' not recognized" ;;
 	esac

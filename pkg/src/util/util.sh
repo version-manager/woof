@@ -195,33 +195,3 @@ util.sort_versions() {
 util.print_hint() {
 	printf '%s\n' "  -> $1"
 }
-
-util.show_help() {
-	printf '%s\n' "Usage:
-   woof init <shell>
-   woof <subcommand> [args...]
-
-Subcommands:
-    init <shell>
-        Print code for a particular shell to set the proper PATH, etc.
-
-    install [--no-cache] [plugin] [version]
-        Install a particular program
-
-    uninstall [plugin] [version]
-        Uninstall a particular program
-
-    get-version [--local] [plugin]
-        Get the current version of a program
-
-    set-version [--local] [plugin] [version]
-        Set the current version of a program
-
-    list [--all] [--no-cache] [plugin]
-        List programs
-
-    tool <resymlink|info|print-dirs|cd-override|debug-table|debug-install|
-        clear-table-cache> [args...]
-            Run a particular tool Most of these are for internal use
-"
-}
