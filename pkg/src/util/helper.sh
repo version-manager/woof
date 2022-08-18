@@ -17,14 +17,15 @@ helper.create_version_table() {
 		mkdir -p "${table_file%/*}"
 	fi
 
+	local should_use_cache='yes'
 	if [ -f "$table_file" ]; then
-		flag_no_cache=yes
+		should_use_cache=yes
 	fi
 	if [ "$flag_no_cache" = 'yes' ]; then
-		flag_no_cache=no
+		should_use_cache=no
 	fi
 
-	if [ "$flag_no_cache" = no ]; then
+	if [ "$should_use_cache" = 'no' ]; then
 		local table_string=
 		if table_string=$(util.run_function "$module_name.table"); then
 			if core.err_exists; then
@@ -44,7 +45,7 @@ helper.create_version_table() {
 			core.print_die "Could not write to '$table_file'"
 		fi
 
-		unset table_string
+		unset -v table_string
 	fi
 }
 
