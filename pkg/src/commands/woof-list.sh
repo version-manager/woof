@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 woof-list() {
-	local flag_available='no'
+	local flag_installed='no'
 	local arg=
 	for arg; do case $arg in
-	--available)
-		flag_available='yes'
+	--installed)
+		flag_installed='yes'
 		;;
 	--all)
 		flag_all='yes'
@@ -20,12 +20,12 @@ woof-list() {
 
 	local possible_module_name="${subcmds[0]}"
 
+
 	helper.determine_module_name "$possible_module_name"
 	local module_name="$REPLY"
 	unset -v possible_module_name
 
-
-	if [ "$flag_available" = 'yes' ]; then
+	if [ "$flag_installed" = 'yes' ]; then
 		helper.create_version_table "$module_name"
 
 		util.uname_system
@@ -60,5 +60,8 @@ woof-list() {
 		for version in "${versions[@]}"; do
 			printf '%s\n' "$version"
 		done; unset -v version
+		if (( ${#versions[@]} == 0)); then
+			term.style_italic -Pd 'No items'
+		fi
 	fi
 }
