@@ -1,9 +1,11 @@
 import "util" as f;
 
+# TODO: convert to github-release
+
 .[]
 	| .tag_name as $version
 	| .assets[]
-	| if (.name | contains(".zip")) or (.name | contains("sha256")) then empty else . end 
+	| if (.name | contains(".zip")) or (.name | contains("sha256")) then empty else . end
 	| (.name | capture("^helm-(.*)-(?<os>.+)-(?<arch>.+?)\\.")) as $m
 	| {
 		variant: "Helm",

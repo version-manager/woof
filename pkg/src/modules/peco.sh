@@ -2,7 +2,9 @@
 
 peco.table() {
 	m.fetch_github_release 'peco/peco' \
-		| m.run_jq 'peco'
+		| m.run_jq 'github-release' \
+			--arg global_variant 'Peco' \
+			--arg global_regex "^peco_(?<os>.+)_(?<arch>.+?)\\."
 }
 
 peco.install() {

@@ -2,7 +2,10 @@
 
 gleam.table() {
 	m.fetch_github_release 'gleam-lang/gleam' \
-		| m.run_jq 'gleam'
+		| m.run_jq 'github-release' \
+			--arg global_variant 'Gleam' \
+			--arg global_regex "^gleam-(?<version>.+)-(?<os>linux|macos)(?:-(?<arch>.+?))?\\." \
+			--arg global_default_arch "x86_64" # FIXME possible bug? (universal?)
 }
 
 gleam.install() {

@@ -6,8 +6,8 @@ import "util" as f;
 	| (($version | split("."))[1] | tonumber) as $version_minor
 		# The patch release may include the rc (i.g. '-rc3'). We remove that just
 		# so $version_patch can be a number. Release candidates are still downloadable
-	| (($version[0:$version | rindex("-")] | split("."))[2] | tonumber) as $version_patch 
-	| .assets[] 
+	| (($version[0:$version | rindex("-")] | split("."))[2] | tonumber) as $version_patch
+	| .assets[]
 	| (if $version_major == 0 and $version_minor == 35 and $version_patch == 0
 			or $version_major == 0 and $version_minor <= 35 then
 			.name | capture("^deno_(?<os>.+?)_(?<arch>.+?)\\.")

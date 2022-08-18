@@ -2,7 +2,9 @@
 
 earthly.table() {
 	m.fetch_github_release 'earthly/earthly' \
-		| m.run_jq 'earthly'
+		| m.run_jq 'github-release' \
+			--arg global_variant 'Earthly' \
+			--arg global_regex "^earthly-(?<os>.+)-(?<arch>.+)"
 }
 
 earthly.install() {

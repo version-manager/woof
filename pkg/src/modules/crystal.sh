@@ -2,7 +2,9 @@
 
 crystal.table() {
 	m.fetch_github_release 'crystal-lang/crystal' \
-		| m.run_jq 'crystal'
+		| m.run_jq 'github-release' \
+			--arg global_variant "Crystal" \
+			--arg global_regex "^crystal[_-](.+?)-1[_-](?:(?<os>.+?)-)?(?<arch>.+?)\\."
 }
 
 crystal.install() {

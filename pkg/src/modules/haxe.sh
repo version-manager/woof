@@ -2,7 +2,10 @@
 
 haxe.table() {
 	m.fetch_github_release 'HaxeFoundation/haxe' \
-		| m.run_jq 'haxe'
+		| m.run_jq 'github-release' \
+			--arg global_variant 'Haxe' \
+			--arg global_regex "^haxe-.+-(?<os>.+?)\\." \
+			--arg global_default_arch "x86_64"
 }
 
 haxe.install() {

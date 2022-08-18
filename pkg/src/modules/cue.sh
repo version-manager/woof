@@ -2,7 +2,9 @@
 
 cue.table() {
 	m.fetch_github_release 'cue-lang/cue' \
-		| m.run_jq 'cue'
+		| m.run_jq 'github-release' \
+			--arg global_variant 'Cue' \
+			--arg global_regex "^cue_v(?<version>.+?)_(?<os>.+?)_(?<arch>.+?)\\."
 }
 
 cue.install() {

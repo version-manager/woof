@@ -21,14 +21,14 @@ m.fetch() {
 	else
 		m.ensure curl -fsSL "$@"
 	fi
-	
+
 }
 
 m.rmln() {
 	local target="$1"
 	local link="$2"
 
-	m.ensure rm -rf "$link" 
+	m.ensure rm -rf "$link"
 	m.ensure ln -sf "$target" "$link"
 }
 
@@ -55,7 +55,7 @@ m.unpack() {
 
 m.run_bash() {
 	local file="$1"
-	
+
 	# Ex. 'm.run_bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" "consul"'
 	if [[ ${file::1} == '/' ]]; then
 		bash "$@"
@@ -69,13 +69,17 @@ m.run_bash() {
 
 m.run_jq() {
 	local file="$1"
-	
+
+	# Note: with --arg, the first one specified as an argument takes presidence
+
 	# Ex. 'm.run_jq "$BASALT_PACKAGE_DIR/pkg/src/filters/crystal.jq"'
 	if [[ ${file::1} == '/' ]]; then
-		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$@"
+		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$@" "${@:2}" --arg global_default_arch ''
 	# Ex. 'm.run_jq "crystal"'
-	elif [[ $file =~ ^[[:alpha:]]+$ ]]; then
-		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$BASALT_PACKAGE_DIR/pkg/src/filters/$file.jq" "${@:2}"
+	elif [[ $file =~ ^[[:alpha:]_-]+$ ]]; then
+		local jq_file="$BASALT_PACKAGE_DIR/pkg/src/filters/$file.jq"
+
+		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$jq_file" "${@:2}" --arg global_default_arch ''
 	else
 		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" "$@"
 	fi
@@ -102,7 +106,7 @@ m.git_tag_to_versions_array() {
 
 m.fetch_github_tags() {
 	local prefix="$1"
-	
+
 	local {_,refspec}=
 	while read -r _ refspec; do
 		printf '%s\n' "${refspec#refs/tags/}"
@@ -111,7 +115,7 @@ m.fetch_github_tags() {
 
 m.fetch_github_release() {
 	local repo="$1"
-	
+
 	local -i has_more_pages=2 i=1
 	for ((i=1; has_more_pages==2; ++i)); do
 		local url="https://api.github.com/repos/$repo/releases?per_page=100&page=$i"

@@ -17,10 +17,10 @@ woof-uninstall() {
 
 	# Do uninstall
 	printf '%s\n' "Uninstalling $module_name"
-	if [ -e "$install_dir/$module_version" ]; then
+	if [ -e "$install_dir/$module_version" ]; then # TODO: redundant because helper.determine_module_version_installed
 		rm -rf "${install_dir:?}/$module_version"
 		core.print_info "Removed version '$module_version' for module '$module_name'"
 	else
-		core.print_info "Version '$module_version' for module '$module_name' is not installed"
+		core.print_error "Version '$module_version' for module '$module_name' is not installed"
 	fi
 }
