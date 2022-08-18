@@ -19,7 +19,7 @@ util.get_table_row() {
 		real_os="$REPLY1"
 		real_arch="$REPLY2"
 	fi
-	
+
 	local variant= version= os= arch= url= comment=
 	while IFS='|' read -r variant version os arch url comment; do
 		if  [ "$module_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
@@ -125,7 +125,7 @@ util.uname_system() {
 util.get_module_data() {
 	unset -v REPLY
 	declare -g REPLY=()
-	
+
 	local module_name="$1"
 	local module_version="$2"
 	local specified_key="$3"
@@ -246,16 +246,29 @@ util.print_hint() {
 util.show_help() {
 	printf '%s\n' "Usage:
    woof init <shell>
-   woof <action> [module] [version]
+   woof <subcommand> [module] [version]
 
-Actions:
-   init <shell>
-   install [--no-cache]
-   uninstall
-   get-version
-   set-version
-   list [--installed] [--all]
-   tool <resymlink|info|print-dirs|cd-override
-      debug-table|debug-install|clear-table-cache> [... args]
+Subcommands:
+    init <shell>
+        Print code for a particular shell to set the proper PATH, etc.
+
+    install [--no-cache]
+        Install a particular program
+
+    uninstall
+        Uninstall a particular program
+
+    get-version
+        Get the current version of a program
+
+    set-version
+        Set the current version of a program
+
+    list [--installed] [--all]
+        List programs
+
+    tool <resymlink|info|print-dirs|cd-override|debug-table|debug-install|
+        clear-table-cache> [... args]
+            Run a particular tool Most of these are for internal use
 "
 }

@@ -17,7 +17,7 @@ woof-tool() {
 		helper.determine_module_name "$possible_module_name"
 		local module_name="$REPLY"
 		unset -v possible_module_name
-		
+
 		helper.create_version_table "$module_name"
 
 		helper.determine_module_version "$module_name" "$possible_module_version"
@@ -31,7 +31,7 @@ woof-tool() {
 		helper.determine_module_name "$possible_module_name"
 		local module_name="$REPLY"
 		unset -v possible_module_name
-		
+
 		var.get_dir 'global' 'selection'
 		local global_selection_dir="$REPLY"
 
@@ -52,7 +52,7 @@ woof-tool() {
 		local var_name=
 		for var_name in $WOOF_VARS; do
 			local -n var_value="$var_name"
-		
+
 			printf '%s\n' "---------- $var_name ----------"
 			if [ -d "$var_value" ]; then
 				tree -aL 2 --filelimit 15 --noreport "$var_value"
@@ -77,7 +77,7 @@ woof-tool() {
 		helper.determine_module_name "$possible_module_name"
 		local module_name="$REPLY"
 		unset -v possible_module_name
-		
+
 		helper.create_version_table "$module_name"
 
 		helper.determine_module_version "$module_name" "$possible_module_version"
@@ -87,7 +87,7 @@ woof-tool() {
 		helper.install_module_version --interactive "$module_name" "$module_version"
 	elif [ "$subcmd" = 'clear-table-cache' ]; then
 		local module_name="$1"
-		
+
 		var.get_module_table_file "$module_name"
 		local table_file="$REPLY"
 
