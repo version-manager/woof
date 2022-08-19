@@ -17,14 +17,16 @@ go.install() {
 	REPLY_BINS=('./bin')
 }
 
+# TODO: if this (or any others fail), then symlink will fail. Edit so it does not stay as 'installed'
 go.switch() {
-	local install_dir="$1"
-	local plugin_version="$2"
+	# local install_dir="$1"
+	# local plugin_version="$2"
 
-	go install -v 'golang.org/x/tools/gopls@latest'
-	go install -v 'golang.org/x/tools/cmd/goimports@latest'
-	go install -v 'github.com/ramya-rao-a/go-outline@latest'
-	go install -v 'github.com/stamblerre/gocode@latest'
+	# go install -v 'golang.org/x/tools/gopls@latest'
+	# go install -v 'golang.org/x/tools/cmd/goimports@latest'
+	# go install -v 'github.com/ramya-rao-a/go-outline@latest'
+	# go install -v 'github.com/stamblerre/gocode@latest'
+	:
 }
 
 go.env() {

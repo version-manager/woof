@@ -52,7 +52,22 @@ trap __woof_cleanup EXIT\n"
 	std.shell_path_prepend "$DENO_INSTALL_ROOT/bin/bin"
 	printf '\n'
 
+	# pnpm
+	printf '%s\n' '# pnpm'
+	std.shell_variable_assignment 'PNPM_HOME' "${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+	std.shell_variable_export 'PNPM_HOME'
+	std.shell_path_prepend '$PNPM_HOME'
+	printf '\n'
+
+	# deno
+	printf '%s\n' '# deno'
+	std.shell_variable_assignment 'DENO_INSTALL' "${XDG_STATE_HOME:-$HOME/.local/state}/deno"
+	std.shell_variable_export 'DENO_INSTALL'
+	std.shell_path_prepend '$DENO_INSTALL'
+	printf '\n'
+
 	# go
+	printf '%s\n' '# go'
 	source "$BASALT_PACKAGE_DIR/pkg/src/plugins/go.sh"
 	go.env
 }
