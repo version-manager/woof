@@ -18,8 +18,8 @@ helper.create_version_table() {
 	fi
 
 	local should_use_cache='yes'
-	if [ -f "$table_file" ]; then
-		should_use_cache=yes
+	if [ ! -f "$table_file" ]; then
+		should_use_cache=no
 	fi
 	if [ "$flag_no_cache" = 'yes' ]; then
 		should_use_cache=no
