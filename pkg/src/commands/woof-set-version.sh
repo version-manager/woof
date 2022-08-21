@@ -27,13 +27,13 @@ woof-set-version() {
 	unset -v possible_plugin_version
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.plugin_set_global_version "$plugin_name" "$plugin_version"
+		util.tool_set_global_version "$plugin_name" "$plugin_version"
 
-		util.plugin_symlink_global_versions "$plugin_name" "$plugin_version"
+		util.tool_symlink_global_versions "$plugin_name" "$plugin_version"
 	else
-		util.plugin_set_local_version "$plugin_name" "$plugin_version"
+		util.tool_set_local_version "$plugin_name" "$plugin_version"
 
-		util.plugin_symlink_local_versions "$plugin_name" "$plugin_version"
+		util.tool_symlink_local_versions "$plugin_name" "$plugin_version"
 	fi
 	util.print_info "Symlinked version '$plugin_version'"
 }

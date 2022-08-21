@@ -106,10 +106,10 @@ helper.determine_plugin_version() {
 			core.print_die "Could not find any matching versions for the current os/arch"
 		fi
 
-		util.plugin_get_global_version --no-error "$plugin_name"
-		local global_selection="$REPLY"
+		util.tool_get_global_version --no-error "$plugin_name"
+		local tool_version="$REPLY"
 
-		tty.multiselect "$global_selection" ui_keys ui_table
+		tty.multiselect "$tool_version" ui_keys ui_table
 		plugin_version="$REPLY"
 	fi
 
@@ -154,10 +154,10 @@ helper.determine_plugin_version_installed() {
 			versions_table["$version"]=
 		done; unset version
 
-		util.plugin_get_global_version --no-error "$plugin_name"
-		local global_selection="$REPLY"
+		util.tool_get_global_version --no-error "$plugin_name"
+		local tool_version="$REPLY"
 
-		tty.multiselect "$global_selection" versions_list versions_table
+		tty.multiselect "$tool_version" versions_list versions_table
 		plugin_version="$REPLY"
 	fi
 

@@ -49,10 +49,10 @@ trap __woof_cleanup EXIT\n"
 	var.get_dir 'installed-tools' 'deno'
 	local install_dir="$REPLY"
 
-	util.plugin_get_global_version 'deno'
-	local version="$REPLY"
+	util.tool_get_global_version 'deno'
+	local tool_version="$REPLY"
 
-	std.shell_variable_assignment 'DENO_INSTALL_ROOT' "$install_dir/$version/files"
+	std.shell_variable_assignment 'DENO_INSTALL_ROOT' "$install_dir/$tool_version/files"
 	std.shell_variable_export 'DENO_INSTALL_ROOT'
 	std.shell_path_prepend "$DENO_INSTALL_ROOT/bin/bin"
 	printf '\n'

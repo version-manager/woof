@@ -19,8 +19,8 @@ helper.toolversions_set_versions() {
 				core.print_warn "Skipping 'system' for '$plugin_name' as 'system' is not yet supported"
 			else
 				if util.is_plugin_version_installed "$plugin_name" "$plugin_version"; then
-					util.plugin_set_local_version "$plugin_name" "$plugin_version"
-					util.plugin_symlink_local_versions "$plugin_name" "$plugin_version"
+					util.tool_set_local_version "$plugin_name" "$plugin_version"
+					util.tool_symlink_local_versions "$plugin_name" "$plugin_version"
 					printf '%s\n' "Switched to $plugin_name version $plugin_version"
 				else
 					printf '%s\n' "Cannot switch to $plugin_name version $plugin_version; try to install it first"

@@ -25,9 +25,9 @@ woof-get-version() {
 	unset -v possible_plugin_name
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.plugin_get_global_version "$flag_fullpath" "$plugin_name"
+		util.tool_get_global_version "$flag_fullpath" "$plugin_name"
 	else
-		util.plugin_get_local_version "$flag_fullpath" "$plugin_name"
+		util.tool_get_local_version "$flag_fullpath" "$plugin_name"
 	fi
 	local version="$REPLY"
 

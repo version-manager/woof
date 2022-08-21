@@ -30,9 +30,9 @@ woof-list() {
 	fi
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.plugin_list_global_versions "$flag_no_cache" "$flag_all" "${plugins[@]}"
+		util.tool_list_global_versions "$flag_no_cache" "$flag_all" "${plugins[@]}"
 	else
-		util.plugin_list_local_versions "$flag_no_cache" "$flag_all" "${plugins[@]}"
+		util.tool_list_local_versions "$flag_no_cache" "$flag_all" "${plugins[@]}"
 	fi
 
 }

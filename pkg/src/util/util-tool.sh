@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-util.plugin_get_global_version() {
+util.tool_get_global_version() {
 	# shellcheck disable=SC1007
 	local arg= flag_no_error='no'
 	for arg; do case $arg in
@@ -25,7 +25,7 @@ util.plugin_get_global_version() {
 	REPLY=$(<"$dir/$plugin_name")
 }
 
-util.plugin_get_local_version() {
+util.tool_get_local_version() {
 	# shellcheck disable=SC1007
 	local arg= flag_no_error='no'
 	for arg; do case $arg in
@@ -52,7 +52,7 @@ util.plugin_get_local_version() {
 	fi
 }
 
-util.plugin_set_global_version() {
+util.tool_set_global_version() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
@@ -71,7 +71,7 @@ util.plugin_set_global_version() {
 }
 
 
-util.plugin_set_local_version() {
+util.tool_set_local_version() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
@@ -92,7 +92,7 @@ util.plugin_set_local_version() {
 	fi
 }
 
-util.plugin_list_global_versions() {
+util.tool_list_global_versions() {
 	local flag_no_cache="$1"
 	local flag_all="$2"
 	if ! shift 2; then
@@ -170,7 +170,7 @@ util.plugin_list_global_versions() {
 	fi
 }
 
-util.plugin_list_local_versions() {
+util.tool_list_local_versions() {
 	local flag_no_cache="$1"
 	local flag_all="$2"
 	if ! shift 2; then
@@ -201,31 +201,31 @@ util.plugin_list_local_versions() {
 	done
 }
 
-util.plugin_symlink_global_versions() {
+util.tool_symlink_global_versions() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
 	var.get_dir 'data-global' 'bin'
 	local target_bin_dir="$REPLY"
 
-	util.plugin_symlink_core "$plugin_name" "$plugin_version" "$target_bin_dir"
+	util.tool_symlink_core "$plugin_name" "$plugin_version" "$target_bin_dir"
 }
 
-util.plugin_symlink_local_versions() {
+util.tool_symlink_local_versions() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 
 	if var.get_tty_dir; then
 		local target_bin_dir="$REPLY/bin"
 
-		util.plugin_symlink_core "$plugin_name" "$plugin_version" "$target_bin_dir"
+		util.tool_symlink_core "$plugin_name" "$plugin_version" "$target_bin_dir"
 	else
 		core.print_die "Failed because standard input is not a tty"
 	fi
 }
 
 # TODO: private
-util.plugin_symlink_core() {
+util.tool_symlink_core() {
 	local plugin_name="$1"
 	local plugin_version="$2"
 	local target_bin_dir="$3"

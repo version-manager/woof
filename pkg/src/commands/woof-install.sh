@@ -33,10 +33,10 @@ woof-install() {
 
 	helper.install_plugin_version 'no' "$flag_force" "$plugin_name" "$plugin_version"
 
-	util.plugin_get_global_version --no-error "$plugin_name"
-	local global_selection="$REPLY"
-	if [ -z "$global_selection" ]; then
-		util.plugin_set_global_version "$plugin_name" "$plugin_version"
+	util.tool_get_global_version --no-error "$plugin_name"
+	local tool_version="$REPLY"
+	if [ -z "$tool_version" ]; then
+		util.tool_set_global_version "$plugin_name" "$plugin_version"
 	fi
 
 	helper.switch_to_version "$plugin_name" "$plugin_version"

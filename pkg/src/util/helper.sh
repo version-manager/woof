@@ -178,7 +178,7 @@ helper.resymlink_global_all() {
 			print.fatal "Failed to read from '$file'"
 		fi
 
-		util.plugin_symlink_global_versions "${file##*/}" "$version"
+		util.tool_symlink_global_versions "${file##*/}" "$version"
 	done
 	util.print_info 'Resymlinked'
 }
@@ -215,5 +215,5 @@ helper.switch_to_version() {
 	fi
 	util.print_info "Using $plugin_version"
 
-	util.plugin_symlink_global_versions "$plugin_name" "$plugin_version"
+	util.tool_symlink_global_versions "$plugin_name" "$plugin_version"
 }
