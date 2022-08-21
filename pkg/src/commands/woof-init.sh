@@ -36,6 +36,11 @@ trap __woof_cleanup EXIT\n"
 	woof_override_cd
 	printf '\n'
 
+	# woof
+	printf '%s\n' '# woof()'
+	woof_function
+	printf '\n'
+
 	# plugins
 	printf '%s\n' '# plugins'
 	# TODO: do not hard code these
@@ -75,7 +80,7 @@ trap __woof_cleanup EXIT\n"
 woof_override_cd() {
 	case $shell in
 	fish)
-		cat<<-"EOF"
+		cat <<-"EOF"
 		function cd
 		  woof tool cd-override
 		  builtin cd "$@"
@@ -83,7 +88,7 @@ woof_override_cd() {
 		EOF
 		;;
 	zsh|ksh|bash|sh)
-		cat<<-"EOF"
+		cat <<-"EOF"
 		cd() {
 		  woof tool cd-override
 		  builtin cd "$@"
@@ -91,4 +96,15 @@ woof_override_cd() {
 		EOF
 		;;
 	esac
+}
+
+woof_function() {
+	printf '%s\n' "woof() {
+	if __woof_location=\$(type -P woof); then
+		\"\$__woof_location\" \"\$@\"
+		builtin hash -r
+	else
+		printf '%s\n' \"Error: Failed to find 'woof' executable\" >&2
+	fi
+}"
 }
