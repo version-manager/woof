@@ -3,7 +3,7 @@
 woof-plugin-install() {
 	local specified_plugin="$1"
 
-	if util.pluginmeta_is_plugin_installed "specified_plugin"; then
+	if util.plugin_is_installed "specified_plugin"; then
 		core.print.die "Plugin '$specified_plugin' already installed"
 	fi
 
@@ -13,9 +13,9 @@ woof-plugin-install() {
 	if [ "${specified_plugin::2}" = './' ]; then
 		specified_plugin=$(readlink -f "$specified_plugin")
 
-		util.pluginmeta_install_symlink 'symlink' "$specified_plugin" "$installed_plugins_dir"
+		util.plugin_install_with_symlink 'symlink' "$specified_plugin" "$installed_plugins_dir"
 	elif [ "${specified_plugin::1}" = '/' ]; then
-		util.pluginmeta_install_symlink 'symlink' "$specified_plugin" "$installed_plugins_dir"
+		util.plugin_install_with_symlink 'symlink' "$specified_plugin" "$installed_plugins_dir"
 	elif [[ "$specified_plugin" =~ ^github\.com/(.*?)/(.*) ]]; then
 		local repo_owner="${BASH_REMATCH[1]}"
 		local repo_name="${BASH_REMATCH[2]}"

@@ -1,10 +1,10 @@
 # shellcheck shell=bash
 
-util.pluginmeta_is_plugin_installed() {
+util.plugin_is_installed() {
 	unset -v REPLY; REPLY=
 	local specified_plugin="$1"
 
-	uitl.pluginmeta_parse_pluginlist
+	uitl.plugin_list_parse
 	local entry=
 	for entry in "${REPLY[@]}"; do
 		local plugin_type="${entry%%|*}"
@@ -27,7 +27,7 @@ util.pluginmeta_is_plugin_installed() {
 	return 1
 }
 
-util.pluginmeta_install_symlink() {
+util.plugin_install_with_symlink() {
 	local plugin_type="$1"
 	local plugin_place="$2"
 	local target_dir="$3"
@@ -37,7 +37,7 @@ util.pluginmeta_install_symlink() {
 		core.print_die "Path at '$plugin_place' is not a directory"
 	fi
 
-	if ! util.pluginmeta_is_plugin_installed "$plugin_place"; then
+	if ! util.plugin_is_installed "$plugin_place"; then
 		if [ ! -d "$target_dir" ]; then
 			mkdir -p "$target_dir"
 		fi
@@ -46,13 +46,13 @@ util.pluginmeta_install_symlink() {
 			core.print_die "Failed to symlink plugin directory"
 		fi
 
-		util.pluginmeta_add_to_list "$plugin_type" "$plugin_place"
+		util.plugin_list_add "$plugin_type" "$plugin_place"
 	else
 		core.print_die "Plugin '$plugin_place' is already installed"
 	fi
 }
 
-util.pluginmeta_add_to_list() {
+util.plugin_list_add() {
 	local plugin_type="$1"
 	local plugin_place="$2"
 
@@ -68,7 +68,7 @@ util.pluginmeta_add_to_list() {
 	fi
 }
 
-uitl.pluginmeta_parse_pluginlist() {
+uitl.plugin_list_parse() {
 	var.get_dir 'common'
 	local plugin_list_file="$REPLY/plugin-list.txt"
 
