@@ -204,7 +204,7 @@ util.tool_symlink_global_versions() {
 	var.get_dir 'data-global' 'bin'
 	local target_bin_dir="$REPLY"
 
-	util.tool_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
+	util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
 }
 
 util.tool_symlink_local_versions() {
@@ -214,14 +214,13 @@ util.tool_symlink_local_versions() {
 	if var.get_tty_dir; then
 		local target_bin_dir="$REPLY/bin"
 
-		util.tool_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
+		util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
 	else
 		core.print_die "Failed because standard input is not a tty"
 	fi
 }
 
-# TODO: private
-util.tool_symlink_core() {
+util.tool_private_symlink_core() {
 	local tool_name="$1"
 	local tool_version="$2"
 	local target_bin_dir="$3"
