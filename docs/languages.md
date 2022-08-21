@@ -177,10 +177,6 @@ This requires a modification to the  API
 - Bash
 - OPAM / OCAML
 - TypeScript, Less, imba, bhai, (via npm)
-- [wasm](https://github.com/appcypher/awesome-wasm-langs)
-- See [hermit packages](https://github.com/cashapp/hermit-packages)
+- See
+- See
 - Rust
-
-## Out of Scope
-
-- Codename to version mapping (few languages do this and its easy to forget codenames)

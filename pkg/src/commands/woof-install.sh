@@ -1,11 +1,14 @@
 # shellcheck shell=bash
 
 woof-install() {
-	local flag_no_cache='no'
+	local flag_no_cache='no' flag_force='no'
 	local arg=
 	for arg; do case $arg in
 	--no-cache)
 		flag_no_cache='yes'
+		;;
+	--force)
+		flag_force='yes'
 		;;
 	-*)
 		core.print_die "Flag '$arg' not recognized"
@@ -28,13 +31,13 @@ woof-install() {
 	local plugin_version="$REPLY"
 	unset -v possible_plugin_version
 
-	helper.install_plugin_version "$plugin_name" "$plugin_version"
-	util.plugin_get_global_version "$plugin_name"
+	helper.install_plugin_version 'no' "$flag_force" "$plugin_name" "$plugin_version"
+
+	util.plugin_get_global_version --no-error "$plugin_name"
 	local global_selection="$REPLY"
 	if [ -z "$global_selection" ]; then
 		util.plugin_set_global_version "$plugin_name" "$plugin_version"
 	fi
 
 	helper.switch_to_version "$plugin_name" "$plugin_version"
-	util.plugin_symlink_global_versions "$plugin_name" "$plugin_version"
 }

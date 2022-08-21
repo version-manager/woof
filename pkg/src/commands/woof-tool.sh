@@ -71,7 +71,7 @@ woof-tool() {
 		local plugin_version="$REPLY"
 		unset -v possible_plugin_version
 
-		helper.install_plugin_version --interactive "$plugin_name" "$plugin_version"
+		helper.install_plugin_version 'yes' 'yes' "$plugin_name" "$plugin_version"
 	elif [ "$subcmd" = 'clear-table-cache' ]; then
 		local plugin_name="$1"
 

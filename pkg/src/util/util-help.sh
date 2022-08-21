@@ -9,19 +9,19 @@ Subcommands:
     init <shell>
         Print code for a particular shell to set the proper PATH, etc.
 
-    install [--no-cache] [plugin] [version]
+    install [--no-cache] [--force] [plugin] [version]
         Install a particular program
 
     uninstall [plugin] [version]
         Uninstall a particular program
 
-    get-version [--global] [plugin]
+    get-version [--global] [--full] [plugin]
         Get the current version of a program
 
     set-version [--global] [plugin] [version]
         Set the current version of a program
 
-    list [--all] [--no-cache] [plugin]
+    list [--global] [--no-cache] [--all] [plugin]
         List programs
 "
 	util.help_show_plugin_core

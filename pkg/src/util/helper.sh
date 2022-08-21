@@ -13,16 +13,17 @@ helper.create_version_table() {
 	core.print_info 'Gathering versions'
 	core.print_debug "Table file: $table_file"
 
+	# TODO: function to abstract this
 	if [ ! -d "${table_file%/*}" ]; then
 		mkdir -p "${table_file%/*}"
 	fi
 
 	local should_use_cache='yes'
 	if [ ! -f "$table_file" ]; then
-		should_use_cache=no
+		should_use_cache='no'
 	fi
 	if [ "$flag_no_cache" = 'yes' ]; then
-		should_use_cache=no
+		should_use_cache='no'
 	fi
 
 	if [ "$should_use_cache" = 'no' ]; then
@@ -50,15 +51,10 @@ helper.create_version_table() {
 }
 
 helper.install_plugin_version() {
-	local flag_interactive='no'
-	if [ "$1" = '--interactive' ]; then
-		flag_interactive='yes'
-		if ! shift; then
-			core.panic 'Failed to shift'
-		fi
-	fi
-	local plugin_name="$1"
-	local plugin_version="$2"
+	local flag_interactive="$1"
+	local flag_force="$2"
+	local plugin_name="$3"
+	local plugin_version="$4"
 
 	var.get_plugin_workspace_dir "$plugin_name"
 	local workspace_dir="$REPLY"
@@ -79,7 +75,13 @@ helper.install_plugin_version() {
 	fi
 
 	if util.is_plugin_version_installed "$plugin_name" "$plugin_version"; then
-		core.print_die "Version '$plugin_version' is already installed for plugin '$plugin_name'"
+		if [ "$flag_force" = 'yes' ]; then
+			if rm -rf "${install_dir:?}/$plugin_version"; then :; else
+				core.print_die "Failed to remove directory: '${install_dir:?}/$plugin_version'"
+			fi
+		else
+			core.print_die "Version '$plugin_version' is already installed for plugin '$plugin_name'"
+		fi
 	fi
 
 	util.uname_system
@@ -212,4 +214,6 @@ helper.switch_to_version() {
 		core.panic 'Failed to cd'
 	fi
 	core.print_info "Using $plugin_version"
+
+	util.plugin_symlink_global_versions "$plugin_name" "$plugin_version"
 }
