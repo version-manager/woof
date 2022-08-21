@@ -7,7 +7,19 @@ m.ensure() {
 }
 
 m.fetch() {
-	util.print_info 'Fetching' "$url"
+	local url=
+
+	local arg=
+	for arg; do case $arg in
+	-*)
+		continue
+		;;
+	*)
+		url=$arg
+		;;
+	esac done; unset -v arg
+
+	util.print_info "Fetching $url"
 
 	# --progress-bar goes to standard error
 	if [ -t 2 ]; then

@@ -158,7 +158,7 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/data.txt"; then
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
 		: > "$install_dir/$tool_version/done"
-		util.print_info 'Installed' "$tool_version"
+		util.print_info "Installed $tool_version"
 	else
 		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
 	fi
