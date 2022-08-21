@@ -1,5 +1,11 @@
 # shellcheck shell=bash
 
+nodejs.env() {
+	std.shell_variable_assignment 'PNPM_HOME' "${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+	std.shell_variable_export 'PNPM_HOME'
+	std.shell_path_prepend '$PNPM_HOME'
+}
+
 nodejs.table() {
 	m.run_bash 'nodejs'
 }

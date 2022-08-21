@@ -1,5 +1,12 @@
 # shellcheck shell=bash
 
+go.env() {
+	var.get_dir 'data-global' 'common'
+	local global_common_dir="$REPLY"
+	# TODO gopath
+	:
+}
+
 go.table() {
 	m.fetch 'https://go.dev/dl' \
 		| perl "$BASALT_PACKAGE_DIR/pkg/src/filters/go.pl"
@@ -29,11 +36,3 @@ go.switch() {
 	:
 }
 
-go.env() {
-	var.get_dir 'data-global' 'common'
-	local global_common_dir="$REPLY"
-
-	# FIXME make into m.<>
-	# shell.variable_assignment 'GOROOT' "$global_common_dir/goroot"
-	# shell.variable_export 'GOROOT'
-}

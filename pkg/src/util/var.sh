@@ -10,6 +10,7 @@ var.get_plugin_workspace_dir() {
 	REPLY="$WOOF_STATE_HOME/workspace-$1"
 }
 
+# TODO: add error checking and do --no-error for woof-init, etc.
 var.get_tty_dir() {
 	unset -v REPLY; REPLY=
 

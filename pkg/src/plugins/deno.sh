@@ -1,5 +1,11 @@
 # shellcheck shell=bash
 
+deno.env() {
+	std.shell_variable_assignment 'DENO_INSTALL' "${XDG_STATE_HOME:-$HOME/.local/state}/deno"
+	std.shell_variable_export 'DENO_INSTALL'
+	std.shell_path_prepend '$DENO_INSTALL'
+}
+
 deno.table() {
 	m.fetch_github_release 'denoland/deno' \
 		| m.run_jq 'deno'

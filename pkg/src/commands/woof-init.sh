@@ -24,7 +24,7 @@ woof-init() {
 		printf '%s\n' '# local (per-tty) installs'
 		std.shell_path_prepend "$tty_dir/bin"
 		# shellcheck disable=SC2059
-		printf "rm -rf \"${tty_dir}\";
+		printf "rm -rf \"${tty_dir}\"
 mkdir -p \"$tty_dir\"
 __woof_cleanup() { rm -rf \"$tty_dir\"; }
 trap __woof_cleanup EXIT\n"
@@ -41,40 +41,16 @@ trap __woof_cleanup EXIT\n"
 	woof_function
 	printf '\n'
 
-	# plugins
-	printf '%s\n' '# plugins'
-	# TODO: do not hard code these
+	# TODO: do not hardcode
+	printf '%s\n' '# --- plugins ----'
+	local tool=
+	for tool in nodejs deno go; do
+		source "$BASALT_PACKAGE_DIR/pkg/src/plugins/$tool.sh"
 
-	# deno
-	var.get_dir 'installed-tools' 'deno'
-	local install_dir="$REPLY"
-
-	util.tool_get_global_version 'deno'
-	local tool_version_global="$REPLY"
-
-	std.shell_variable_assignment 'DENO_INSTALL_ROOT' "$install_dir/$tool_version_global/files"
-	std.shell_variable_export 'DENO_INSTALL_ROOT'
-	std.shell_path_prepend "$DENO_INSTALL_ROOT/bin/bin"
-	printf '\n'
-
-	# pnpm
-	printf '%s\n' '# pnpm'
-	std.shell_variable_assignment 'PNPM_HOME' "${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
-	std.shell_variable_export 'PNPM_HOME'
-	std.shell_path_prepend '$PNPM_HOME'
-	printf '\n'
-
-	# deno
-	printf '%s\n' '# deno'
-	std.shell_variable_assignment 'DENO_INSTALL' "${XDG_STATE_HOME:-$HOME/.local/state}/deno"
-	std.shell_variable_export 'DENO_INSTALL'
-	std.shell_path_prepend '$DENO_INSTALL'
-	printf '\n'
-
-	# go
-	printf '%s\n' '# go'
-	source "$BASALT_PACKAGE_DIR/pkg/src/plugins/go.sh"
-	go.env
+		printf '%s\n' "# $tool"
+		"$tool".env
+		printf '\n'
+	done
 }
 
 woof_override_cd() {
