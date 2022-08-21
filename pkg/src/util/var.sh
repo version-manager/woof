@@ -17,7 +17,7 @@ var.get_tty_dir() {
 	--no-error)
 		flag_no_error='yes'
 		if ! shift; then
-			core.print_fatal 'Failed to shift'
+			util.print_fatal_die 'Failed to shift'
 			exit 1
 		fi
 		;;
@@ -35,7 +35,7 @@ var.get_tty_dir() {
 		if [ "$flag_no_error" = 'yes' ]; then
 			return 0
 		else
-			core.print_die "Failed because standard input is not a tty"
+			util.print_error_die "Failed because standard input is not a tty"
 		fi
 	fi
 }

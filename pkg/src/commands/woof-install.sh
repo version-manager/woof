@@ -12,7 +12,7 @@ woof-install() {
 		flag_force='yes'
 		;;
 	-*)
-		core.print_die "Flag '$arg' not recognized"
+		util.print_error_die "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

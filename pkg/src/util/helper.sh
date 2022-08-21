@@ -27,20 +27,19 @@ helper.create_version_table() {
 		local table_string=
 		if table_string=$(util.run_function "$tool_name.table"); then
 			if core.err_exists; then
-				core.print_error "$ERR"
-				exit "$ERRCODE"
+				util.print_error_die "$ERR"
 			fi
 		else
-			core.print_die "Failed to run '$tool_name.table()'"
+			util.print_error_die "Failed to run '$tool_name.table()'"
 		fi
 
 		if [ -z "$table_string" ]; then
-			core.print_die "No versions found for $tool_name ('$tool_name.table()' printed nothing)"
+			util.print_error_die "No versions found for $tool_name ('$tool_name.table()' printed nothing)"
 		fi
 
 		if ! printf '%s' "$table_string" > "$table_file"; then
 			rm -f "$table_file"
-			core.print_die "Could not write to '$table_file'"
+			util.print_error_die "Could not write to '$table_file'"
 		fi
 
 		unset -v table_string
@@ -65,7 +64,7 @@ helper.install_tool_version() {
 	local interactive_dir=
 	if [ "$flag_interactive" = 'yes' ]; then
 		if ! interactive_dir="$(mktemp -d)/woof-interactive-$RANDOM"; then
-			core.print_die 'Failed to mktemp'
+			util.print_error_die 'Failed to mktemp'
 		fi
 		workspace_dir="$interactive_dir/workspace_dir"
 		install_dir="$interactive_dir/install_dir"
@@ -74,10 +73,10 @@ helper.install_tool_version() {
 	if util.is_tool_version_installed "$tool_name" "$tool_version"; then
 		if [ "$flag_force" = 'yes' ]; then
 			if rm -rf "${install_dir:?}/$tool_version"; then :; else
-				core.print_die "Failed to remove directory: '${install_dir:?}/$tool_version'"
+				util.print_error_die "Failed to remove directory: '${install_dir:?}/$tool_version'"
 			fi
 		else
-			core.print_die "Version '$tool_version' is already installed for plugin '$tool_name'"
+			util.print_error_die "Version '$tool_version' is already installed for plugin '$tool_name'"
 		fi
 	fi
 
@@ -112,20 +111,20 @@ helper.install_tool_version() {
 		fi
 	else
 		rm -rf "$workspace_dir"
-		core.print_die "Unexpected error while calling '$tool_name.install'"
+		util.print_error_die "Unexpected error while calling '$tool_name.install'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
 
 	if [ -z "$REPLY_DIR" ]; then
-		core.print_die "Variable '\$REPLY_DIR' must be set at the end of <plugin>.install"
+		util.print_error_die "Variable '\$REPLY_DIR' must be set at the end of <plugin>.install"
 	fi
 
 	# Move extracted contents to 'installed-tools' directory
 	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$tool_version/files"; then
 		rm -rf "$workspace_dir"
-		core.print_die "Could not move extracted contents to '$install_dir/$tool_version/files'"
+		util.print_error_die "Could not move extracted contents to '$install_dir/$tool_version/files'"
 	fi
 
 	# Save information about bin, man, etc. pages later
@@ -133,7 +132,7 @@ helper.install_tool_version() {
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
 mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/data.txt"; then
 		rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
-		core.print_die "Failed to write to '$install_dir/$tool_version/data.txt'"
+		util.print_error_die "Failed to write to '$install_dir/$tool_version/data.txt'"
 	fi
 	IFS="$old_ifs"
 
@@ -141,7 +140,7 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/data.txt"; then
 		util.print_info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
 		if (
 			if ! cd -- "$workspace_dir"; then
-				core.print_die 'Failed to cd'
+				util.print_error_die 'Failed to cd'
 			fi
 			printf '%s\n' "Download URL: $url"
 			bash

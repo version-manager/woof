@@ -11,7 +11,7 @@ woof-get-version() {
 		flag_fullpath='yes'
 		;;
 	-*)
-		core.print_die "Flag '$arg' not recognized"
+		util.print_error_die "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

@@ -34,19 +34,19 @@ util.plugin_install_with_symlink() {
 
 	# Ensure specified path is a directroy
 	if [ ! -d "$plugin_place" ]; then
-		core.print_die "Path at '$plugin_place' is not a directory"
+		util.print_error_die "Path at '$plugin_place' is not a directory"
 	fi
 
 	if ! util.plugin_is_installed "$plugin_place"; then
 		util.mkdirp "$target_dir"
 
 		if ln -sfT "$plugin_place" "$target_dir/${plugin_place##*/}"; then :; else
-			core.print_die "Failed to symlink plugin directory"
+			util.print_error_die "Failed to symlink plugin directory"
 		fi
 
 		util.plugin_list_add "$plugin_type" "$plugin_place"
 	else
-		core.print_die "Plugin '$plugin_place' is already installed"
+		util.print_error_die "Plugin '$plugin_place' is already installed"
 	fi
 }
 
@@ -60,7 +60,7 @@ util.plugin_list_add() {
 	util.mkdirp "${plugin_list_file%/*}"
 
 	if ! printf '%s\n' "$plugin_type|$plugin_place" >> "$plugin_list_file"; then
-		core.print_die "Failed to write to file '$plugin_list_file'"
+		util.print_error_die "Failed to write to file '$plugin_list_file'"
 	fi
 }
 

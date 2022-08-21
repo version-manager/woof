@@ -21,11 +21,11 @@ helper.determine_tool_name() {
 
 	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/plugins/$tool_name.sh"
 	if [ ! -f "$plugin_file" ]; then
-		core.print_die "Plugin '$tool_name' not found"
+		util.print_error_die "Plugin '$tool_name' not found"
 	fi
 
 	if ! source "$plugin_file"; then
-		core.print_die "Could not successfully source plugin '$tool_name'"
+		util.print_error_die "Could not successfully source plugin '$tool_name'"
 	fi
 
 	REPLY=$tool_name
@@ -44,7 +44,7 @@ helper.determine_tool_name_installed() {
 		core.shopt_pop
 
 		if (( ${#plugin_list[@]} == 0 )); then
-			core.print_die "Cannot uninstall as no plugins are installed"
+			util.print_error_die "Cannot uninstall as no plugins are installed"
 		fi
 
 		plugin_list=("${plugin_list[@]%/}")
@@ -61,7 +61,7 @@ helper.determine_tool_name_installed() {
 	fi
 
 	if [ ! -d "$install_dir" ]; then
-		core.print_die "No versions of plugin '$tool_name' are installed"
+		util.print_error_die "No versions of plugin '$tool_name' are installed"
 	fi
 
 	REPLY=$tool_name
@@ -104,7 +104,7 @@ helper.determine_tool_version() {
 		done < "$table_file"; unset version os arch url comment
 
 		if [ "$match_found" != 'yes' ]; then
-			core.print_die "Could not find any matching versions for the current os/arch"
+			util.print_error_die "Could not find any matching versions for the current os/arch"
 		fi
 
 		util.tool_get_global_version --no-error "$tool_name"
@@ -123,7 +123,7 @@ helper.determine_tool_version() {
 	done < "$table_file"; unset variant version os arch url comment
 
 	if [ "$is_valid_string" != yes ]; then
-		core.print_die "Version '$tool_version' is not valid for plugin '$tool_name' on this architecture"
+		util.print_error_die "Version '$tool_version' is not valid for plugin '$tool_name' on this architecture"
 	fi
 
 	REPLY=$tool_version
@@ -143,7 +143,7 @@ helper.determine_tool_version_installed() {
 		core.shopt_pop
 
 		if (( ${#versions_list[@]} == 0 )); then
-			core.print_die "Cannot uninstall as no versions of plugin '$tool_name' are installed"
+			util.print_error_die "Cannot uninstall as no versions of plugin '$tool_name' are installed"
 		fi
 
 		versions_list=("${versions_list[@]%/}")
@@ -163,7 +163,7 @@ helper.determine_tool_version_installed() {
 	fi
 
 	if [ ! -d "$install_dir/$tool_version" ]; then
-		core.print_die "Version '$tool_version' is not valid for plugin '$tool_name'"
+		util.print_error_die "Version '$tool_version' is not valid for plugin '$tool_name'"
 	fi
 
 	REPLY="$tool_version"

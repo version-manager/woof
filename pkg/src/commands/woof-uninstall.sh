@@ -23,6 +23,6 @@ woof-uninstall() {
 		rm -rf "${install_dir:?}/$tool_version"
 		util.print_info "Removed version '$tool_version' for plugin '$tool_name'"
 	else
-		core.print_die "Version '$tool_version' for plugin '$tool_name' is not installed"
+		util.print_error_die "Version '$tool_version' for plugin '$tool_name' is not installed"
 	fi
 }

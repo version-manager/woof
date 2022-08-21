@@ -15,18 +15,18 @@ woof-list() {
 		flag_all='yes'
 		;;
 	-*)
-		core.print_die "Flag '$arg' not recognized"
+		util.print_error_die "Flag '$arg' not recognized"
 		;;
 	*)
 		plugins+=("$arg")
 	esac done; unset -v arg
 
 	if [[ "$flag_no_cache" = 'yes' && "$flag_all" = 'no' ]]; then
-		core.print_die "Flag --no-cache must only be used with --all"
+		util.print_error_die "Flag --no-cache must only be used with --all"
 	fi
 
 	if [[ "$flag_all" = 'yes' && "${#plugins}" -gt 0 ]]; then
-		core.print_die "Cannot pass in plugins if passing in '--all'"
+		util.print_error_die "Cannot pass in plugins if passing in '--all'"
 	fi
 
 	if [ "$flag_global" = 'yes' ]; then

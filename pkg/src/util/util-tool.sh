@@ -7,7 +7,7 @@ util.tool_get_global_version() {
 	--no-error)
 		flag_no_error='yes'
 		if ! shift; then
-			core.print_fatal 'Failed to shift'
+			util.print_fatal_die 'Failed to shift'
 			exit 1
 		fi
 		;;
@@ -24,7 +24,7 @@ util.tool_get_global_version() {
 		if [ "$flag_no_error" = 'yes' ]; then
 			return
 		else
-			core.print_die "A global version of '$tool_name' has not been set"
+			util.print_error_die "A global version of '$tool_name' has not been set"
 		fi
 	fi
 
@@ -38,7 +38,7 @@ util.tool_get_local_version() {
 	--no-error)
 		flag_no_error='yes'
 		if ! shift; then
-			core.print_fatal 'Failed to shift'
+			util.print_fatal_die 'Failed to shift'
 			exit 1
 		fi
 		;;
@@ -53,7 +53,7 @@ util.tool_get_local_version() {
 		if [ "$flag_no_error" = 'yes' ]; then
 			return
 		else
-			core.print_die "Failed to find local default for plugin '$tool_name'"
+			util.print_error_die "Failed to find local default for plugin '$tool_name'"
 		fi
 	fi
 
@@ -71,7 +71,7 @@ util.tool_set_global_version() {
 	util.mkdirp "$dir"
 
 	if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
-		core.print_die "Failed to write new global version to disk"
+		util.print_error_die "Failed to write new global version to disk"
 	fi
 
 	util.print_info "Set version '$tool_version' as global version"
@@ -88,7 +88,7 @@ util.tool_set_local_version() {
 	util.mkdirp "$dir"
 
 	if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
-		core.print_die "Failed to write new tty-specific version to disk"
+		util.print_error_die "Failed to write new tty-specific version to disk"
 	fi
 
 	util.print_info "Set version '$tool_version' as tty-specific version"
@@ -98,7 +98,7 @@ util.tool_list_global_versions() {
 	local flag_no_cache="$1"
 	local flag_all="$2"
 	if ! shift 2; then
-		core.print_fatal 'Failed to shift'
+		util.print_fatal_die 'Failed to shift'
 		exit 1
 	fi
 
@@ -176,7 +176,7 @@ util.tool_list_local_versions() {
 	local flag_no_cache="$1"
 	local flag_all="$2"
 	if ! shift 2; then
-		core.print_fatal 'Failed to shift'
+		util.print_fatal_die 'Failed to shift'
 		exit 1
 	fi
 
@@ -184,7 +184,7 @@ util.tool_list_local_versions() {
 	local toolversions_file="$REPLY"
 
 	if [ -z "$toolversions_file" ]; then
-		core.print_die 'Local project not found'
+		util.print_error_die 'Local project not found'
 	fi
 
 	local -A tools=()

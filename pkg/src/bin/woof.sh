@@ -19,11 +19,11 @@ main.woof() {
 	local token_file="$WOOF_DATA_HOME/token"
 	if [ -f "$token_file" ]; then
 		if ! GITHUB_TOKEN=$(<"$token_file"); then
-			core.print_die "Failed to read from file '$token_file'"
+			util.print_error_die "Failed to read from file '$token_file'"
 		fi
 		export GITHUB_TOKEN
 	else
-		core.print_die "Must have a file containing your GitHub token at '$token_file'"
+		util.print_error_die "Must have a file containing your GitHub token at '$token_file'"
 	fi
 	unset -v token_file
 
@@ -37,11 +37,11 @@ main.woof() {
 	--quiet|-q)
 		global_flag_quiet='yes'
 		if ! shift; then
-			core.print_die 'Failed to shift'
+			util.print_fatal_die 'Failed to shift'
 		fi
 		;;
 	-*)
-		core.print_die "Global flag '$arg' not recognized"
+		util.print_error_die "Global flag '$arg' not recognized"
 		;;
 	*)
 		break
@@ -52,10 +52,10 @@ main.woof() {
 	local subcommand="$1"
 	if [ -z "$subcommand" ]; then
 		util.help_show
-		core.print_die 'No subcommand was given'
+		util.print_error_die 'No subcommand was given'
 	fi
 	if ! shift; then
-		core.print_die 'Failed to shift'
+		util.print_fatal_die 'Failed to shift'
 	fi
 
 	case $subcommand in
@@ -67,6 +67,6 @@ main.woof() {
 		list) woof-list "$@" ;;
 		plugin) woof-plugin "$@" ;;
 		tool) woof-tool "$@" ;;
-		*) core.print_die "Subcommand '$subcommand' not recognized" ;;
+		*) util.print_error_die "Subcommand '$subcommand' not recognized" ;;
 	esac
 }

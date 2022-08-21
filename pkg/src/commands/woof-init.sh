@@ -9,7 +9,7 @@ woof-init() {
 		flag_no_cd='yes'
 		;;
 	-*)
-		core.print_die "Flag '$arg' not recognized"
+		util.print_error_die "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")
@@ -19,11 +19,11 @@ woof-init() {
 	local shell="${subcmds[0]}"
 
 	if [ -z "$shell" ]; then
-		core.print_die 'Shell not specified'
+		util.print_error_die 'Shell not specified'
 	fi
 
 	if [[ $shell != @(fish|zsh|ksh|bash|sh) ]]; then
-		core.print_die 'Shell not supported'
+		util.print_error_die 'Shell not supported'
 	fi
 
 	# global

@@ -4,10 +4,10 @@ woof-tool() {
 	local subcmd="$1"
 	if [ -z "$subcmd" ]; then
 		util.help_show
-		core.print_die 'Expected subcommand'
+		util.print_error_die 'Expected subcommand'
 	fi
 	if ! shift; then
-		core.print_die 'Failed to shift'
+		util.print_fatal_die 'Failed to shift'
 	fi
 
 	if [ "$subcmd" = 'resymlink' ]; then
@@ -72,6 +72,6 @@ woof-tool() {
 			helper.toolversions_set_versions "$toolversions_file"
 		fi
 	else
-		core.print_die "Subcommand '$subcmd' is not valid"
+		util.print_error_die "Subcommand '$subcmd' is not valid"
 	fi
 }

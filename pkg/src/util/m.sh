@@ -2,7 +2,7 @@
 
 m.ensure() {
 	if "$@"; then :; else
-		core.print_die "Command '$*' failed (code $?)"
+		util.print_error_die "Command '$*' failed (code $?)"
 	fi
 }
 
@@ -149,7 +149,7 @@ m.fetch_github_release() {
 			elif ((exit_code == 29)); then # '29' is not taken by curl
 				has_more_pages=0
 			else
-				core.print_die "Failed to execute curl or jq"
+				util.print_error_die "Failed to execute curl or jq"
 			fi
 		fi
 	done

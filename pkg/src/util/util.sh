@@ -11,7 +11,7 @@ util.get_table_row() {
 	local table_file="$REPLY"
 
 	if [ ! -f "$table_file" ]; then
-		core.print_die "Expected file '$table_file' to exist"
+		util.print_error_die "Expected file '$table_file' to exist"
 	fi
 
 	if [ -z "$real_os" ] || [ -z "$real_arch" ]; then
@@ -89,11 +89,11 @@ util.uname_system() {
 	local kernel= hardware=
 
 	if ! kernel="$(uname -s)"; then
-		core.print_die "Could not 'uname -s'"
+		util.print_error_die "Failed to execute 'uname -s'"
 	fi
 
 	if ! hardware="$(uname -m)"; then
-		core.print_die "Could not 'uname -m'"
+		util.print_error_die "Failed to execute 'uname -m'"
 	fi
 
 	local kernel_pretty= hardware_pretty=
@@ -103,7 +103,7 @@ util.uname_system() {
 		Linux) kernel_pretty='linux' ;;
 		Darwin) kernel_pretty='darwin' ;;
 		FreeBSD) kernel_pretty='freebsd' ;;
-		*) core.print_die "Kernel '$kernel' unsupported. Please create a bug report if this is a mistake" ;;
+		*) util.print_error_die "Kernel '$kernel' unsupported. Please create a bug report if this is a mistake" ;;
 	esac
 
 	# x86_64|x86|armv7l|aarch64
@@ -112,7 +112,7 @@ util.uname_system() {
 		amd64|x86_64) hardware_pretty='x86_64' ;;
 		armv7l) hardware_pretty='armv7l' ;;
 		aarch64) hardware_pretty='aarch64' ;;
-		*) core.print_die "Hardware '$hardware' unsupported. Please create a bug report if this is a mistake" ;;
+		*) util.print_error_die "Hardware '$hardware' unsupported. Please create a bug report if this is a mistake" ;;
 	esac
 
 	REPLY1="$kernel_pretty"

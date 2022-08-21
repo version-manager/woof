@@ -4,6 +4,6 @@ woof-plugin-uninstall() {
 	local specified_plugin="$1"
 
 	if ! util.plugin_is_installed "$specified_plugin"; then
-		core.print_die "Plugin '$specified_plugin' is not installed"
+		util.print_error_die "Plugin '$specified_plugin' is not installed"
 	fi
 }
