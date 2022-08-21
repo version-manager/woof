@@ -10,7 +10,7 @@ vault.install() {
 
 	m.fetch -o './vault.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './vault.zip' -d './dir/bin'
+	m.unpack './vault.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

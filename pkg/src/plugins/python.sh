@@ -14,7 +14,7 @@ python.install() {
 	local version="$2"
 
 	m.fetch -o './python.tar.xz' "$url"
-	m.ensure tar xf './python.tar.xz'
+	m.unpack './python.tar.xz'
 	m.ensure mv ./Python-*/ './dir'
 	m.cd './dir'
 

@@ -13,7 +13,7 @@ please.install() {
 
 	m.fetch -o './please.tar.gz' "$url"
 	mkdir -p './dir'
-	m.ensure tar xf './please.tar.gz'
+	m.unpack './please.tar.gz'
 	mv './please' './dir/bin'
 
 	REPLY_DIR='./dir'

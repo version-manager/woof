@@ -15,7 +15,7 @@ helm.install() {
 	local version="$2"
 
 	m.fetch -o './helm.tar.gz' "$url"
-	m.unpack 'gzip' './helm.tar.gz'
+	m.unpack './helm.tar.gz'
 
 	m.ensure mv ./*/helm .
 	m.ensure mkdir -p './dir/bin'

@@ -10,7 +10,7 @@ terraform.install() {
 
 	m.fetch -o './terraform.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './terraform.zip' -d './dir/bin'
+	m.unpack './terraform.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

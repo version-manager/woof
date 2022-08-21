@@ -10,7 +10,7 @@ vagrant.install() {
 
 	m.fetch -o './vagrant.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './vagrant.zip' -d './dir/bin'
+	m.unpack './vagrant.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

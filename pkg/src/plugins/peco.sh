@@ -12,7 +12,7 @@ peco.install() {
 	local version="$2"
 
 	m.fetch -o './peco.tar.gz' "$url"
-	m.ensure tar xf './peco.tar.gz'
+	m.unpack './peco.tar.gz'
 	m.ensure mv ./peco_*/ './dir'
 	mkdir -p './dir/bin'
 	m.ensure mv './dir/peco' './dir/bin'

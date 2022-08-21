@@ -10,7 +10,7 @@ boundary.install() {
 
 	m.fetch -o './boundary.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './boundary.zip' -d './dir/bin'
+	m.unpack './boundary.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

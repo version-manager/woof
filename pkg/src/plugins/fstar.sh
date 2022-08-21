@@ -12,7 +12,7 @@ fstar.install() {
 	local version="$2"
 
 	m.fetch -o './fstar.tar.gz' "$url"
-	m.ensure tar xf './fstar.tar.gz'
+	m.unpack './fstar.tar.gz'
 	m.ensure mv './fstar' './dir'
 
 	REPLY_DIR='./dir'

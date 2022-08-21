@@ -12,7 +12,7 @@ gh.install() {
 	local version="$2"
 
 	m.fetch -o gh.tar.gz "$url"
-	m.ensure tar xf './gh.tar.gz'
+	m.unpack './gh.tar.gz'
 	m.ensure mv ./gh_*/ './dir'
 
 	REPLY_DIR='./dir'

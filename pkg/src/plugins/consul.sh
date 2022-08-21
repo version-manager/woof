@@ -10,7 +10,7 @@ consul.install() {
 
 	m.fetch -o './consul.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './consul.zip' -d './dir/bin'
+	m.unpack './consul.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

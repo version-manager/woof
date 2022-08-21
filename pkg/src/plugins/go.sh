@@ -18,7 +18,7 @@ go.install() {
 
 	m.fetch -o './file.tar.gz' "$url"
 	mkdir -p './dir'
-	m.ensure tar xf './file.tar.gz' -C './dir' --strip-components=1
+	m.unpack './file.tar.gz' -d'./dir' -s
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

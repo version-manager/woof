@@ -51,23 +51,47 @@ m.cd() {
 }
 
 m.unpack() {
-	local cmd="$1"
-	local file="$2"
-	if ! shift; then util.print_error_die "Failed to shift"; fi
-	if ! shift; then util.print_error_die "Failed to shift"; fi
+	local file= flag_directory= flag_strip='no'
 
-	if [[ "$cmd" != @(gzip) ]]; then
-		util.print_error_die "m.unpack: Unrecognized command: $cmd"
-	fi
+	local arg=
+	for arg; do case $arg in
+		-d*) flag_directory=${arg#-d} ;;
+		-s) flag_strip='yes' ;;
+		*) file=$arg ;;
+	esac done; unset -v arg
+
+	local file="$1"
+	if ! shift; then util.print_error_die "Failed to shift"; fi
 
 	util.sanitize_path "$PWD/$file"
 	util.print_info 'Unpacking' "$REPLY"
+
 	if command -v pv &>/dev/null; then
 		pv "$file"
 	else
 		cat "$file"
-	fi | if [ "$cmd" = 'gzip' ]; then
-		m.ensure tar xzf - "$@"
+	fi | if [[ $file == *.tar* ]]; then
+		local -a args=()
+		if [ -n "$flag_directory" ]; then
+			args+=('-C' "$flag_directory")
+		fi
+		if [ "$flag_strip" = 'yes' ]; then
+			args+=('--strip-components=1')
+		fi
+
+		tar xf "$file" "${args[@]}"
+	elif [[ $file == *.zip ]]; then
+		local -a args=()
+		if [ -n "$flag_directory" ]; then
+			args+=('-d' "$flag_directory")
+		fi
+		if [ "$flag_strip" = 'yes' ]; then
+			core.print_fatal_die "Cannot use strip with zip files"
+		fi
+
+		m.ensure unzip -qq "$file" "${args[@]}"
+	else
+		util.print_error_die "Failed to extract file: '$file'"
 	fi
 }
 
@@ -101,10 +125,6 @@ m.run_jq() {
 	else
 		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" "$@"
 	fi
-}
-
-m.log() {
-	printf '%s\n' "$1"
 }
 
 m.git_tag_to_versions_array() {

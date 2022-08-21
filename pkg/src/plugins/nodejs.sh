@@ -15,7 +15,7 @@ nodejs.install() {
 	local version="$2"
 
 	m.fetch -o './file.tar.gz' "$url"
-	m.unpack 'gzip' './file.tar.gz'
+	m.unpack './file.tar.gz'
 	mkdir -p 'dir'
 	m.ensure mv ./*/* './dir'
 

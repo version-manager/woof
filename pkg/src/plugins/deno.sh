@@ -17,7 +17,7 @@ deno.install() {
 
 	m.fetch -o './deno.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './deno.zip' -d './dir/bin'
+	m.unpack './deno.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

@@ -10,7 +10,7 @@ nomad.install() {
 
 	m.fetch -o './nomad.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './nomad.zip' -d './dir/bin'
+	m.unpack './nomad.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

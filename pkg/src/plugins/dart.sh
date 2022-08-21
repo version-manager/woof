@@ -10,7 +10,7 @@ dart.install() {
 
 	m.fetch -o file.zip "$url"
 	mkdir -p 'dir'
-	m.ensure unzip -qq file.zip -d 'dir'
+	m.unpack './file.zip' -d'dir'
 
 	dir=(./dir/*)
 

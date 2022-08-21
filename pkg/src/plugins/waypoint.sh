@@ -10,7 +10,7 @@ waypoint.install() {
 
 	m.fetch -o './waypoint.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './waypoint.zip' -d './dir/bin'
+	m.unpack './waypoint.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

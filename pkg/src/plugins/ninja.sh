@@ -15,7 +15,7 @@ ninja.install() {
 
 	m.fetch -o './ninja.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './ninja.zip' -d './dir/bin'
+	m.unpack './ninja.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

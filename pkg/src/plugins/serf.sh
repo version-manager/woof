@@ -10,7 +10,7 @@ serf.install() {
 
 	m.fetch -o './serf.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './serf.zip' -d './dir/bin'
+	m.unpack './serf.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

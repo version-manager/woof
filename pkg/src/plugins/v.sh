@@ -13,7 +13,7 @@ v.install() {
 	local version="$2"
 
 	m.fetch -o './v.zip' "$url"
-	m.ensure unzip -qq './v.zip'
+	m.unpack './v.zip'
 	m.ensure mv './v' './dir'
 
 	REPLY_DIR='./dir'

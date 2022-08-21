@@ -10,7 +10,7 @@ zig.install() {
 	local version="$2"
 
 	m.fetch -o './zig.tar.xz' "$url"
-	m.ensure tar xaf './zig.tar.xz'
+	m.unpack './zig.tar.xz'
 	m.ensure mv ./*/ './dir'
 
 	mkdir -p './dir/bin'

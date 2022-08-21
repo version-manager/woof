@@ -13,7 +13,7 @@ haxe.install() {
 	local version="$2"
 
 	m.fetch -o './haxe.tar.gz' "$url"
-	m.ensure tar xaf './haxe.tar.gz'
+	m.unpack './haxe.tar.gz'
 	m.ensure mv ./*/ './dir'
 	mkdir -p './dir/bin'
 	m.ensure mv ./dir/haxe* './dir/bin'

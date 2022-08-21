@@ -14,7 +14,7 @@ gleam.install() {
 
 	m.fetch -o './gleam.tar.gz' "$url"
 	mkdir -p './dir/bin'
-	m.ensure tar xf './gleam.tar.gz' -C './dir/bin'
+	m.unpack './gleam.tar.gz' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

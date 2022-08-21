@@ -13,7 +13,7 @@ neko.install() {
 	local version="$2"
 
 	m.fetch -o './neko.tar.gz' "$url"
-	m.ensure tar xf './neko.tar.gz'
+	m.unpack './neko.tar.gz'
 	m.ensure mv ./neko-*/ './dir'
 
 	REPLY_DIR='./dir'

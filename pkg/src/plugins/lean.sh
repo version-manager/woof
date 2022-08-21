@@ -13,7 +13,7 @@ lean.install() {
 	local version="$2"
 
 	m.fetch -o './lean.zip' "$url"
-	m.ensure unzip -qq './lean.zip'
+	m.unpack './lean.zip'
 	m.ensure mv ./lean-*/ './dir'
 	m.ensure mv './dir/bin' './dir/oldbin'
 	mkdir -p './dir/bin'

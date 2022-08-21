@@ -10,7 +10,7 @@ packer.install() {
 
 	m.fetch -o './packer.zip' "$url"
 	mkdir -p './dir/bin'
-	m.ensure unzip -qq './packer.zip' -d './dir/bin'
+	m.unpack './packer.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

@@ -13,7 +13,7 @@ cue.install() {
 
 	m.fetch -o './cue.tar.gz' "$url"
 	mkdir -p './dir'
-	m.ensure tar xf './cue.tar.gz' -C './dir'
+	m.unpack './cue.tar.gz' -d'./dir'
 	mkdir -p './dir/bin'
 	m.ensure mv './dir/cue' './dir/bin'
 

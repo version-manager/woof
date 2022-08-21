@@ -10,7 +10,7 @@ nim.install() {
 
 	m.fetch -o file.tar.xz "$url"
 	mkdir -p 'dir'
-	m.ensure tar xaf file.tar.xz -C 'dir' --strip-components=1
+	m.unpack file.tar.xz -d'./dir' -s
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
