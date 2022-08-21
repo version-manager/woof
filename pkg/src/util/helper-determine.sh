@@ -19,7 +19,7 @@ helper.determine_tool_name() {
 		tool_name="$REPLY"
 	fi
 
-	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/plugins/$tool_name.sh"
+	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/tools/$tool_name.sh"
 	if [ ! -f "$plugin_file" ]; then
 		util.print_error_die "Plugin '$tool_name' not found"
 	fi

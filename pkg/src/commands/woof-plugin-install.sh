@@ -19,6 +19,7 @@ woof-plugin-install() {
 	elif [[ "$specified_plugin" =~ ^github\.com/(.*?)/(.*) ]]; then
 		local repo_owner="${BASH_REMATCH[1]}"
 		local repo_name="${BASH_REMATCH[2]}"
-		printf '%s\n' "Should clone github.com/$repo_owner/$repo_name" # TODO
+
+		util.plugin_install_with_git 'git_repository' "$specified_plugin" "$installed_plugins_dir"
 	fi
 }

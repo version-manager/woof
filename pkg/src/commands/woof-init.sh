@@ -60,7 +60,7 @@ trap __woof_cleanup EXIT\n"
 	printf '%s\n' '# --- plugins ----'
 	local tool=
 	for tool in nodejs deno go; do
-		source "$BASALT_PACKAGE_DIR/pkg/src/plugins/$tool.sh"
+		source "$BASALT_PACKAGE_DIR/pkg/src/tools/$tool.sh"
 
 		printf '%s\n' "# $tool"
 		"$tool".env
