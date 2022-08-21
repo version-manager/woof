@@ -10,7 +10,7 @@ helper.create_version_table() {
 	var.get_plugin_table_file "$plugin_name"
 	local table_file="$REPLY"
 
-	core.print_info 'Gathering versions'
+	util.print_info 'Gathering versions'
 	core.print_debug "Table file: $table_file"
 
 	# TODO: function to abstract this
@@ -141,7 +141,7 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$plugin_version/data.txt"; then
 	IFS="$old_ifs"
 
 	if [ "$flag_interactive" = 'yes' ]; then
-		core.print_info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
+		util.print_info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
 		if (
 			if ! cd -- "$workspace_dir"; then
 				core.print_die 'Failed to cd'
@@ -161,9 +161,9 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$plugin_version/data.txt"; then
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
 		: > "$install_dir/$plugin_version/done"
-		core.print_info 'Installed' "$plugin_version"
+		util.print_info 'Installed' "$plugin_version"
 	else
-		core.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
+		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
 	fi
 }
 
@@ -180,7 +180,7 @@ helper.resymlink_global_all() {
 
 		util.plugin_symlink_global_versions "${file##*/}" "$version"
 	done
-	core.print_info 'Resymlinked'
+	util.print_info 'Resymlinked'
 }
 
 # @description Performs any necessary mucking when switching versions (TODO)
@@ -213,7 +213,7 @@ helper.switch_to_version() {
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
-	core.print_info "Using $plugin_version"
+	util.print_info "Using $plugin_version"
 
 	util.plugin_symlink_global_versions "$plugin_name" "$plugin_version"
 }

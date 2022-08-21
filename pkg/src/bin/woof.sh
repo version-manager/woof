@@ -22,14 +22,21 @@ main.woof() {
 	fi
 	unset -v token_file
 
+	local global_flag_quiet='no'
 	local arg=
 	for arg; do case "$arg" in
 	--help|-h)
 		util.help_show
 		exit
 		;;
+	--quiet|-q)
+		global_flag_quiet='yes'
+		if ! shift; then
+			core.print_die 'Failed to shift'
+		fi
+		;;
 	-*)
-		core.print_die "Flag '$arg' not recognized"
+		core.print_die "Global flag '$arg' not recognized"
 		;;
 	*)
 		break

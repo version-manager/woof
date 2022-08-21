@@ -21,7 +21,7 @@ woof-uninstall() {
 	# do it anyways, Just in Case
 	if [ -e "$install_dir/$plugin_version" ]; then
 		rm -rf "${install_dir:?}/$plugin_version"
-		core.print_info "Removed version '$plugin_version' for plugin '$plugin_name'"
+		util.print_info "Removed version '$plugin_version' for plugin '$plugin_name'"
 	else
 		core.print_die "Version '$plugin_version' for plugin '$plugin_name' is not installed"
 	fi

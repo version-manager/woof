@@ -67,7 +67,7 @@ util.plugin_set_global_version() {
 		core.print_die "Failed to write new global version to disk"
 	fi
 
-	core.print_info "Set version '$plugin_version' as global version"
+	util.print_info "Set version '$plugin_version' as global version"
 }
 
 
@@ -86,7 +86,7 @@ util.plugin_set_local_version() {
 			core.print_die "Failed to write new tty-specific version to disk"
 		fi
 
-		core.print_info "Set version '$plugin_version' as tty-specific version"
+		util.print_info "Set version '$plugin_version' as tty-specific version"
 	else
 		core.print_die "Failed because standard input is not a tty"
 	fi

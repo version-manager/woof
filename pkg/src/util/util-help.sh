@@ -3,7 +3,14 @@
 util.help_show() {
 	printf '%s\n' "Usage:
    woof init <shell>
-   woof <subcommand> [args...]
+   woof [flags] <subcommand> [args...]
+
+Flags:
+    -h, --help
+        Print help
+
+    -q, --quiet
+        Do not log informattive messages to stdout. Useful for scripting. Error messages will still be printed
 
 Subcommands:
     init <shell>

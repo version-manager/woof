@@ -35,5 +35,5 @@ woof-set-version() {
 
 		util.plugin_symlink_local_versions "$plugin_name" "$plugin_version"
 	fi
-	core.print_info "Symlinked version '$plugin_version'"
+	util.print_info "Symlinked version '$plugin_version'"
 }

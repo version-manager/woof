@@ -7,14 +7,14 @@ m.ensure() {
 }
 
 m.fetch() {
-	core.print_info 'Fetching' "$url"
+	util.print_info 'Fetching' "$url"
 
 	# --progress-bar goes to standard error
 	if [ -t 2 ]; then
 		# TODO: Alternate screen should have same contents as current screen to prevent jarding
 		# core.trap_add 'tty.all_restore' INT
 		# tty.all_save
-		# core.print_info 'Fetching' "$url"
+		# util.print_info 'Fetching' "$url"
 		m.ensure curl -fSL --progress-bar "$@"
 		# tty.all_restore
 		# core.trap_remove 'tty.all_restore' INT
@@ -43,7 +43,7 @@ m.unpack() {
 	fi
 
 	util.sanitize_path "$PWD/$file"
-	core.print_info 'Unpacking' "$REPLY"
+	util.print_info 'Unpacking' "$REPLY"
 	if command -v pv &>/dev/null; then
 		pv "$file"
 	else

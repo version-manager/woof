@@ -79,12 +79,12 @@ woof-tool() {
 		local table_file="$REPLY"
 
 		if [ -z "$plugin_name" ]; then
-			core.print_info "Removing all table cache"
+			util.print_info "Removing all table cache"
 			# Since '$plugin_name' is empty, the basename of '$table_file' is
 			# not correct, but that doesn't matter as it is not used here
 			rm -rf "${table_file%/*}"
 		else
-			core.print_info "Removing table cache for '$plugin_name'"
+			util.print_info "Removing table cache for '$plugin_name'"
 			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then
