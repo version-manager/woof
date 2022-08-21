@@ -13,10 +13,7 @@ helper.create_version_table() {
 	util.print_info 'Gathering versions'
 	core.print_debug "Table file: $table_file"
 
-	# TODO: function to abstract this
-	if [ ! -d "${table_file%/*}" ]; then
-		mkdir -p "${table_file%/*}"
-	fi
+	util.mkdirp "${table_file%/*}"
 
 	local should_use_cache='yes'
 	if [ ! -f "$table_file" ]; then
@@ -194,9 +191,7 @@ helper.switch_to_version() {
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
 
-	if [ ! -d "$global_common_dir" ]; then
-		mkdir -p "$global_common_dir"
-	fi
+	util.mkdirp "$global_common_dir"
 
 	# Execute '<plugin>.switch'
 	local old_pwd="$PWD"

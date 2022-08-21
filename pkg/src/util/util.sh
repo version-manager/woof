@@ -192,6 +192,10 @@ util.sort_versions() {
 	sort -V
 }
 
-util.print_hint() {
-	printf '%s\n' "  -> $1"
+util.mkdirp() {
+	local dir="$1"
+
+	if [ ! -d "$dir" ]; then
+		mkdir -p "$dir"
+	fi
 }

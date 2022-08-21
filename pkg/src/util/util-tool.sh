@@ -59,9 +59,7 @@ util.tool_set_global_version() {
 	var.get_dir 'data-global' 'selection'
 	local dir="$REPLY"
 
-	if [ -d "$dir" ]; then
-		mkdir -p "$dir"
-	fi
+	util.mkdirp "$dir"
 
 	if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
 		core.print_die "Failed to write new global version to disk"
@@ -78,9 +76,7 @@ util.tool_set_local_version() {
 	if var.get_tty_dir; then
 		local dir="$REPLY/selection"
 
-		if [ ! -d "$dir" ]; then
-			mkdir -p "$dir"
-		fi
+		util.mkdirp "$dir"
 
 		if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
 			core.print_die "Failed to write new tty-specific version to disk"
@@ -236,9 +232,7 @@ util.tool_symlink_core() {
 	util.get_plugin_data "$tool_name" "$tool_version" 'bins'
 	local -a bin_dirs=("${REPLY[@]}")
 
-	if [ ! -d "$target_bin_dir" ]; then
-		mkdir -p "$target_bin_dir"
-	fi
+	util.mkdirp "$target_bin_dir"
 
 	local bin_dir=
 	for bin_dir in "${bin_dirs[@]}"; do

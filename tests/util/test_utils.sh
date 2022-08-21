@@ -23,9 +23,8 @@ test_snapshot_cmd() {
 	shift || core.fatal 'Failed to shift'
 
 	local snapshot_file="$BATS_TEST_DIRNAME/snapshots/$filename"
-	if [ ! -d "${snapshot_file%/*}" ]; then
-		mkdir -p "${snapshot_file%/*}"
-	fi
+
+	util.mkdirp "${snapshot_file%/*}"
 
 	"$@" > "$snapshot_file"
 }

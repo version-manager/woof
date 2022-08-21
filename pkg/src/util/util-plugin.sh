@@ -38,9 +38,7 @@ util.plugin_install_with_symlink() {
 	fi
 
 	if ! util.plugin_is_installed "$plugin_place"; then
-		if [ ! -d "$target_dir" ]; then
-			mkdir -p "$target_dir"
-		fi
+		util.mkdirp "$target_dir"
 
 		if ln -sfT "$plugin_place" "$target_dir/${plugin_place##*/}"; then :; else
 			core.print_die "Failed to symlink plugin directory"
@@ -59,9 +57,7 @@ util.plugin_list_add() {
 	var.get_dir 'common'
 	local plugin_list_file="$REPLY/plugin-list.txt"
 
-	if [ ! -d "${plugin_list_file%/*}" ]; then
-		mkdir -p "${plugin_list_file%/*}"
-	fi
+	util.mkdirp "${plugin_list_file%/*}"
 
 	if ! printf '%s\n' "$plugin_type|$plugin_place" >> "$plugin_list_file"; then
 		core.print_die "Failed to write to file '$plugin_list_file'"
