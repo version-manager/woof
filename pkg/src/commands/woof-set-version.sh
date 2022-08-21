@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 woof-set-version() {
-	local flag_local='no'
+	local flag_global='no'
 	local arg=
 	for arg; do case $arg in
-	--local)
-		flag_local='yes'
+	--global)
+		flag_global='yes'
 		;;
 	-*)
 		core.print_die "Flag '$arg' not recognized"
@@ -26,14 +26,14 @@ woof-set-version() {
 	local plugin_version="$REPLY"
 	unset -v possible_plugin_version
 
-	if [ "$flag_local" = 'yes' ]; then
-		util.plugin_set_local_version "$plugin_name" "$plugin_version"
-
-		util.plugin_symlink_local_versions "$plugin_name" "$plugin_version"
-	else
+	if [ "$flag_global" = 'yes' ]; then
 		util.plugin_set_global_version "$plugin_name" "$plugin_version"
 
 		util.plugin_symlink_global_versions "$plugin_name" "$plugin_version"
+	else
+		util.plugin_set_local_version "$plugin_name" "$plugin_version"
+
+		util.plugin_symlink_local_versions "$plugin_name" "$plugin_version"
 	fi
 	core.print_info "Symlinked version '$plugin_version'"
 }

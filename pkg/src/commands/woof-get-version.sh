@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 woof-get-version() {
-	local flag_local='no'
+	local flag_global='no'
 	local arg=
 	for arg; do case $arg in
-	--local)
-		flag_local='yes'
+	--global)
+		flag_global='yes'
 		;;
 	-*)
 		core.print_die "Flag '$arg' not recognized"
@@ -21,10 +21,10 @@ woof-get-version() {
 	local plugin_name="$REPLY"
 	unset -v possible_plugin_name
 
-	if [ "$flag_local" = 'yes' ]; then
-		util.plugin_get_local_version "$plugin_name"
-	else
+	if [ "$flag_global" = 'yes' ]; then
 		util.plugin_get_global_version "$plugin_name"
+	else
+		util.plugin_get_local_version "$plugin_name"
 	fi
 	local version="$REPLY"
 

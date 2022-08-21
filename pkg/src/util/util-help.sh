@@ -15,10 +15,10 @@ Subcommands:
     uninstall [plugin] [version]
         Uninstall a particular program
 
-    get-version [--local] [plugin]
+    get-version [--global] [plugin]
         Get the current version of a program
 
-    set-version [--local] [plugin] [version]
+    set-version [--global] [plugin] [version]
         Set the current version of a program
 
     list [--all] [--no-cache] [plugin]
