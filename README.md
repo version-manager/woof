@@ -33,7 +33,7 @@ External utilities are _only_ used due to necessity or efficiency. The following
 
 - cURL
 - jq 1.6
-- POSIX `mv`, `cat`, `cp`, `uname`, `stty`, `sed`, etc.
+- POSIX `mv`, `cat`, `cp`, `uname`, `stty`,, etc.
 - sort (TODO: phase out -V GNUism)
 - Optional: `pv`
 

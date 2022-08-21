@@ -4,9 +4,11 @@ Woof is the version manager to end all version managers.
 
 ## Summary
 
-Akin to [asdf](https://github.com/asdf-vm/asdf) and [sdkman](https://sdkman.io), Woof is a multi-tool version manager. That is, it manages the installation of multiple versions for multiple tools simultaneously
+Woof is a multi-tool version manager. That is, it manages the installation of multiple versions for multiple tools simultaneously
 
-Woof supports many popular languages out of the box - see the [Roadmap](,/roadmap.md) for more details
+It is similar to alternatives like [asdf](https://github.com/asdf-vm/asdf), [Hermit](https://github.com/cashapp/hermit), and [sdkman](https://sdkman.io) - but it's superior in many ways
+
+Woof supports many popular languages out of the box - see the [Roadmap](./roadmap.md) for more details
 
 ## Concepts
 
@@ -16,7 +18,7 @@ There are two main concepts:
 
 ### Plugins
 
-Plugins are analogous to asdf or sdkman's _plugins_. They represent all the version possibilities of a particular tool. Examples of tools that may have a plugin include NodeJS, Python, and [Please](https://please.build). Variants are also supported - for example, Python may have at least [cpython](https://github.com/python/cpython), [Nuitka](https://github.com/Nuitka/Nuitka), and [MicroPython](https://micropython.org) variants.
+Plugins include code that enables the installation of (almost) any version of a particular tool. Plugins can support multiple tools or variants of a tool. For example, potential plugins include include NodeJS, Python, and [Please](https://please.build). Variants are also supported - for example, Python may have at least [cpython](https://github.com/python/cpython), [Nuitka](https://github.com/Nuitka/Nuitka), and [MicroPython](https://micropython.org) variants.
 
 To add support for a new language, tool, or program, write a plugin. Each plugin is implemented in a single Bash file. Functionalities of a particular plugin is a simple Bash function. See the [Plugin API](./api/plugin.md) for more details.
 
