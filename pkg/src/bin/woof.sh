@@ -1,6 +1,11 @@
 # shellcheck shell=bash
 
 main.woof() {
+	global_trap_err() {
+		core.print_stacktrace
+	}
+	core.trap_add 'global_trap_err' 'ERR'
+
 	global_stty_saved=
 	global_tty_height=
 	global_tty_width=
