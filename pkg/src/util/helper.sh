@@ -4,10 +4,10 @@
 # platforms (kernel and architecture). This eventually calls the "<plugin>.table"
 # function and properly deals with caching
 helper.create_version_table() {
-	local plugin_name="$1"
+	local tool_name="$1"
 	local flag_no_cache="$2"
 
-	var.get_plugin_table_file "$plugin_name"
+	var.get_plugin_table_file "$tool_name"
 	local table_file="$REPLY"
 
 	util.print_info 'Gathering versions'
@@ -28,17 +28,17 @@ helper.create_version_table() {
 
 	if [ "$should_use_cache" = 'no' ]; then
 		local table_string=
-		if table_string=$(util.run_function "$plugin_name.table"); then
+		if table_string=$(util.run_function "$tool_name.table"); then
 			if core.err_exists; then
 				core.print_error "$ERR"
 				exit "$ERRCODE"
 			fi
 		else
-			core.print_die "Failed to run '$plugin_name.table()'"
+			core.print_die "Failed to run '$tool_name.table()'"
 		fi
 
 		if [ -z "$table_string" ]; then
-			core.print_die "No versions found for $plugin_name ('$plugin_name.table()' printed nothing)"
+			core.print_die "No versions found for $tool_name ('$tool_name.table()' printed nothing)"
 		fi
 
 		if ! printf '%s' "$table_string" > "$table_file"; then
@@ -50,16 +50,16 @@ helper.create_version_table() {
 	fi
 }
 
-helper.install_plugin_version() {
+helper.install_tool_version() {
 	local flag_interactive="$1"
 	local flag_force="$2"
-	local plugin_name="$3"
-	local plugin_version="$4"
+	local tool_name="$3"
+	local tool_version="$4"
 
-	var.get_plugin_workspace_dir "$plugin_name"
+	var.get_plugin_workspace_dir "$tool_name"
 	local workspace_dir="$REPLY"
 
-	var.get_dir 'installed-tools' "$plugin_name"
+	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	# If there is an interactive flag, then we are debugging the installation
@@ -74,13 +74,13 @@ helper.install_plugin_version() {
 		install_dir="$interactive_dir/install_dir"
 	fi
 
-	if util.is_plugin_version_installed "$plugin_name" "$plugin_version"; then
+	if util.is_tool_version_installed "$tool_name" "$tool_version"; then
 		if [ "$flag_force" = 'yes' ]; then
-			if rm -rf "${install_dir:?}/$plugin_version"; then :; else
-				core.print_die "Failed to remove directory: '${install_dir:?}/$plugin_version'"
+			if rm -rf "${install_dir:?}/$tool_version"; then :; else
+				core.print_die "Failed to remove directory: '${install_dir:?}/$tool_version'"
 			fi
 		else
-			core.print_die "Version '$plugin_version' is already installed for plugin '$plugin_name'"
+			core.print_die "Version '$tool_version' is already installed for plugin '$tool_name'"
 		fi
 	fi
 
@@ -89,12 +89,12 @@ helper.install_plugin_version() {
 	local arch="$REPLY2"
 
 	# Determine correct binary for current system
-	util.get_table_row "$plugin_name" "$plugin_version" "$os" "$arch"
+	util.get_table_row "$tool_name" "$tool_version" "$os" "$arch"
 	local url="$REPLY1"
 
 	# Preparation actions
-	rm -rf "$workspace_dir" "${install_dir:?}/$plugin_version"
-	mkdir -p "$workspace_dir" "$install_dir/$plugin_version"
+	rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
+	mkdir -p "$workspace_dir" "$install_dir/$tool_version"
 
 	# Execute '<plugin>.install'
 	local old_pwd="$PWD"
@@ -108,14 +108,14 @@ helper.install_plugin_version() {
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_INCLUDES=() REPLY_LIBS=() REPLY_MANS=() REPLY_BASH_COMPLETIONS=() \
 		REPLY_ZSH_COMPLETIONS=() REPLY_FISH_COMPLETIONS=()
-	if util.run_function "$plugin_name.install" "$url" "${plugin_version/#v}" "$os" "$arch"; then
+	if util.run_function "$tool_name.install" "$url" "${tool_version/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"
 			core.panic
 		fi
 	else
 		rm -rf "$workspace_dir"
-		core.print_die "Unexpected error while calling '$plugin_name.install'"
+		core.print_die "Unexpected error while calling '$tool_name.install'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
@@ -126,17 +126,17 @@ helper.install_plugin_version() {
 	fi
 
 	# Move extracted contents to 'installed-tools' directory
-	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$plugin_version/files"; then
+	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$tool_version/files"; then
 		rm -rf "$workspace_dir"
-		core.print_die "Could not move extracted contents to '$install_dir/$plugin_version/files'"
+		core.print_die "Could not move extracted contents to '$install_dir/$tool_version/files'"
 	fi
 
 	# Save information about bin, man, etc. pages later
 	local old_ifs="$IFS"; IFS=':'
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
-mans=${REPLY_MANS[*]}" > "$install_dir/$plugin_version/data.txt"; then
-		rm -rf "$workspace_dir" "${install_dir:?}/$plugin_version"
-		core.print_die "Failed to write to '$install_dir/$plugin_version/data.txt'"
+mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/data.txt"; then
+		rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
+		core.print_die "Failed to write to '$install_dir/$tool_version/data.txt'"
 	fi
 	IFS="$old_ifs"
 
@@ -160,8 +160,8 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$plugin_version/data.txt"; then
 
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
-		: > "$install_dir/$plugin_version/done"
-		util.print_info 'Installed' "$plugin_version"
+		: > "$install_dir/$tool_version/done"
+		util.print_info 'Installed' "$tool_version"
 	else
 		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
 	fi
@@ -185,13 +185,13 @@ helper.resymlink_global_all() {
 
 # @description Performs any necessary mucking when switching versions (TODO)
 helper.switch_to_version() {
-	local plugin_name="$1"
-	local plugin_version="$2"
+	local tool_name="$1"
+	local tool_version="$2"
 
 	var.get_dir 'data-global' 'common'
 	local global_common_dir="$REPLY"
 
-	var.get_dir 'installed-tools' "$plugin_name"
+	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	if [ ! -d "$global_common_dir" ]; then
@@ -203,17 +203,17 @@ helper.switch_to_version() {
 	if ! cd -- "$global_common_dir"; then
 		core.panic 'Failed to cd'
 	fi
-	if util.run_function --optional "$plugin_name.switch" "$install_dir/$plugin_version/files" "$plugin_version"; then
+	if util.run_function --optional "$tool_name.switch" "$install_dir/$tool_version/files" "$tool_version"; then
 		if core.err_exists; then
 			core.panic
 		fi
 	else
-		core.print_die "Unexpected error while calling '$plugin_name.switch'"
+		core.print_die "Unexpected error while calling '$tool_name.switch'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		core.panic 'Failed to cd'
 	fi
-	util.print_info "Using $plugin_version"
+	util.print_info "Using $tool_version"
 
-	util.tool_symlink_global_versions "$plugin_name" "$plugin_version"
+	util.tool_symlink_global_versions "$tool_name" "$tool_version"
 }

@@ -18,16 +18,16 @@ woof-get-version() {
 		shift
 	esac done; unset -v arg
 
-	local possible_plugin_name="${subcmds[0]}"
+	local possible_tool_name="${subcmds[0]}"
 
-	helper.determine_plugin_name "$possible_plugin_name"
-	local plugin_name="$REPLY"
-	unset -v possible_plugin_name
+	helper.determine_tool_name "$possible_tool_name"
+	local tool_name="$REPLY"
+	unset -v possible_tool_name
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.tool_get_global_version "$flag_fullpath" "$plugin_name"
+		util.tool_get_global_version "$flag_fullpath" "$tool_name"
 	else
-		util.tool_get_local_version "$flag_fullpath" "$plugin_name"
+		util.tool_get_local_version "$flag_fullpath" "$tool_name"
 	fi
 	local version="$REPLY"
 

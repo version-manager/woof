@@ -13,26 +13,26 @@ woof-tool() {
 	if [ "$subcmd" = 'resymlink' ]; then
 		helper.resymlink_global_all
 	elif [ "$subcmd" = 'info' ]; then
-		local possible_plugin_name="$1"
+		local possible_tool_name="$1"
 
-		helper.determine_plugin_name "$possible_plugin_name"
-		local plugin_name="$REPLY"
-		unset -v possible_plugin_name
+		helper.determine_tool_name "$possible_tool_name"
+		local tool_name="$REPLY"
+		unset -v possible_tool_name
 
 		var.get_dir 'data-global' 'selection'
 		local global_selection_dir="$REPLY"
 
 		printf '%s\n' '------ GLOBAL ------'
-		if [ -f "$global_selection_dir/$plugin_name" ]; then
-			printf '%s\n' "Version: $(<"$global_selection_dir/$plugin_name")"
+		if [ -f "$global_selection_dir/$tool_name" ]; then
+			printf '%s\n' "Version: $(<"$global_selection_dir/$tool_name")"
 		else
 			printf '%s\n' "Version: (no global)"
 		fi
 		printf '\n'
 
 		printf '%s\n' '------ DIRECTORY ------'
-		m.toolversions_get_versions "$plugin_name"
-		m.toolversions_get_first_valid_version "$plugin_name"
+		m.toolversions_get_versions "$tool_name"
+		m.toolversions_get_first_valid_version "$tool_name"
 		printf '%s\n' "Version: ${version:-(no directory)}"
 
 	elif [ "$subcmd" = 'print-dirs' ]; then
@@ -50,41 +50,41 @@ woof-tool() {
 		done; unset -v var_name
 		unset -vn var_value
 	elif [ "$subcmd" = 'debug-table' ]; then
-		local possible_plugin_name="$1"
+		local possible_tool_name="$1"
 
-		helper.determine_plugin_name "$possible_plugin_name"
-		local plugin_name="$REPLY"
-		unset -v possible_plugin_name
+		helper.determine_tool_name "$possible_tool_name"
+		local tool_name="$REPLY"
+		unset -v possible_tool_name
 
-		util.run_function "$plugin_name.table"
+		util.run_function "$tool_name.table"
 	elif [ "$subcmd" = 'debug-install' ]; then
-		local possible_plugin_name="$1"
-		local possible_plugin_version="$2"
+		local possible_tool_name="$1"
+		local possible_tool_version="$2"
 
-		helper.determine_plugin_name "$possible_plugin_name"
-		local plugin_name="$REPLY"
-		unset -v possible_plugin_name
+		helper.determine_tool_name "$possible_tool_name"
+		local tool_name="$REPLY"
+		unset -v possible_tool_name
 
-		helper.create_version_table "$plugin_name"
+		helper.create_version_table "$tool_name"
 
-		helper.determine_plugin_version "$plugin_name" "$possible_plugin_version"
-		local plugin_version="$REPLY"
-		unset -v possible_plugin_version
+		helper.determine_tool_version "$tool_name" "$possible_tool_version"
+		local tool_version="$REPLY"
+		unset -v possible_tool_version
 
-		helper.install_plugin_version 'yes' 'yes' "$plugin_name" "$plugin_version"
+		helper.install_tool_version 'yes' 'yes' "$tool_name" "$tool_version"
 	elif [ "$subcmd" = 'clear-table-cache' ]; then
-		local plugin_name="$1"
+		local tool_name="$1"
 
-		var.get_plugin_table_file "$plugin_name"
+		var.get_plugin_table_file "$tool_name"
 		local table_file="$REPLY"
 
-		if [ -z "$plugin_name" ]; then
+		if [ -z "$tool_name" ]; then
 			util.print_info "Removing all table cache"
-			# Since '$plugin_name' is empty, the basename of '$table_file' is
+			# Since '$tool_name' is empty, the basename of '$table_file' is
 			# not correct, but that doesn't matter as it is not used here
 			rm -rf "${table_file%/*}"
 		else
-			util.print_info "Removing table cache for '$plugin_name'"
+			util.print_info "Removing table cache for '$tool_name'"
 			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then

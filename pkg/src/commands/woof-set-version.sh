@@ -15,25 +15,25 @@ woof-set-version() {
 		shift
 	esac done; unset -v arg
 
-	local possible_plugin_name="${subcmds[0]}"
-	local possible_plugin_version="${subcmds[1]}"
+	local possible_tool_name="${subcmds[0]}"
+	local possible_tool_version="${subcmds[1]}"
 
-	helper.determine_plugin_name "$possible_plugin_name"
-	local plugin_name="$REPLY"
-	unset -v possible_plugin_name
+	helper.determine_tool_name "$possible_tool_name"
+	local tool_name="$REPLY"
+	unset -v possible_tool_name
 
-	helper.determine_plugin_version_installed "$plugin_name" "$possible_plugin_version"
-	local plugin_version="$REPLY"
-	unset -v possible_plugin_version
+	helper.determine_tool_version_installed "$tool_name" "$possible_tool_version"
+	local tool_version="$REPLY"
+	unset -v possible_tool_version
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.tool_set_global_version "$plugin_name" "$plugin_version"
+		util.tool_set_global_version "$tool_name" "$tool_version"
 
-		util.tool_symlink_global_versions "$plugin_name" "$plugin_version"
+		util.tool_symlink_global_versions "$tool_name" "$tool_version"
 	else
-		util.tool_set_local_version "$plugin_name" "$plugin_version"
+		util.tool_set_local_version "$tool_name" "$tool_version"
 
-		util.tool_symlink_local_versions "$plugin_name" "$plugin_version"
+		util.tool_symlink_local_versions "$tool_name" "$tool_version"
 	fi
-	util.print_info "Symlinked version '$plugin_version'"
+	util.print_info "Symlinked version '$tool_version'"
 }

@@ -46,7 +46,7 @@ Persisted state across installs / uninstalls
 Called when switching to a particular version
 
 - `$1`: install_dir
-- `$2`: plugin_version
+- `$2`: tool_version
 
 ## `<plugin>.env()`
 

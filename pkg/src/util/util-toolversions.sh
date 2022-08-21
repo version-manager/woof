@@ -30,17 +30,17 @@ util.toolversions_parse() {
 		line=${line%"${line##*[![:space:]]}"}
 
 		if [ -n "$line" ]; then
-			local plugin_name="${line%% *}"
-			plugin_name=${plugin_name%%$'\t'*}
+			local tool_name="${line%% *}"
+			tool_name=${tool_name%%$'\t'*}
 
-			local plugin_versions_str="${line#* }"
-			plugin_versions_str=${plugin_versions_str#*$'\t'}
+			local tool_versions_str="${line#* }"
+			tool_versions_str=${tool_versions_str#*$'\t'}
 			# shellcheck disable=SC2206
-			plugin_versions=($plugin_versions_str)
+			tool_versions=($tool_versions_str)
 
 			local old_ifs="$IFS"
 			IFS='|'
-			__toolversions_variable[$plugin_name]="${plugin_versions[*]}"
+			__toolversions_variable[$tool_name]="${tool_versions[*]}"
 			IFS="$old_ifs"; unset -v old_ifs
 		fi
 

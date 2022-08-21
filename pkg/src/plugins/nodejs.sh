@@ -23,7 +23,7 @@ nodejs.install() {
 
 nodejs.switch() {
 	local install_dir="$1"
-	local plugin_version="$2"
+	local tool_version="$2"
 
 	# TODO: npm just replaces the symlink with a directory
 	# mkdir -p './node_plugins'

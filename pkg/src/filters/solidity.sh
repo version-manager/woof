@@ -13,14 +13,14 @@ parse_solidity() {
 		fi
 
 		while IFS= read -r line; do
-			local plugin_version=${line%%+*}
-			plugin_version=${plugin_version##*-}
+			local tool_version=${line%%+*}
+			tool_version=${tool_version##*-}
 
 			local version_url="$mirror/$slug/$line"
 			if [ "$slug" = 'linux-x86_64' ]; then
-				printf '%s\n' "Solidity|$plugin_version|linux|x86_64|$version_url"
+				printf '%s\n' "Solidity|$tool_version|linux|x86_64|$version_url"
 			else
-				printf '%s\n' "Solidity|$plugin_version|darwin|x86_64|$version_url"
+				printf '%s\n' "Solidity|$tool_version|darwin|x86_64|$version_url"
 			fi
 		done <<< "$text"
 	done

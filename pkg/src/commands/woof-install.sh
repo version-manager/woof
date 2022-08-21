@@ -18,26 +18,26 @@ woof-install() {
 		shift
 	esac done; unset -v arg
 
-	local possible_plugin_name="${subcmds[0]}"
-	local possible_plugin_version="${subcmds[1]}"
+	local possible_tool_name="${subcmds[0]}"
+	local possible_tool_version="${subcmds[1]}"
 
-	helper.determine_plugin_name "$possible_plugin_name"
-	local plugin_name="$REPLY"
-	unset -v possible_plugin_name
+	helper.determine_tool_name "$possible_tool_name"
+	local tool_name="$REPLY"
+	unset -v possible_tool_name
 
-	helper.create_version_table "$plugin_name" "$flag_no_cache"
+	helper.create_version_table "$tool_name" "$flag_no_cache"
 
-	helper.determine_plugin_version --allow-latest "$plugin_name" "$possible_plugin_version"
-	local plugin_version="$REPLY"
-	unset -v possible_plugin_version
-
-	helper.install_plugin_version 'no' "$flag_force" "$plugin_name" "$plugin_version"
-
-	util.tool_get_global_version --no-error "$plugin_name"
+	helper.determine_tool_version --allow-latest "$tool_name" "$possible_tool_version"
 	local tool_version="$REPLY"
-	if [ -z "$tool_version" ]; then
-		util.tool_set_global_version "$plugin_name" "$plugin_version"
+	unset -v possible_tool_version
+
+	helper.install_tool_version 'no' "$flag_force" "$tool_name" "$tool_version"
+
+	util.tool_get_global_version --no-error "$tool_name"
+	local tool_version_global="$REPLY"
+	if [ -z "$tool_version_global" ]; then
+		util.tool_set_global_version "$tool_name" "$tool_version"
 	fi
 
-	helper.switch_to_version "$plugin_name" "$plugin_version"
+	helper.switch_to_version "$tool_name" "$tool_version"
 }

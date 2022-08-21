@@ -2,12 +2,12 @@
 
 util.get_table_row() {
 	unset REPLY{1,2}; REPLY1= REPLY2=
-	local plugin_name="$1"
-	local plugin_version="$2"
+	local tool_name="$1"
+	local tool_version="$2"
 	local real_os="$3"
 	local real_arch="$4"
 
-	var.get_plugin_table_file "$plugin_name"
+	var.get_plugin_table_file "$tool_name"
 	local table_file="$REPLY"
 
 	if [ ! -f "$table_file" ]; then
@@ -22,16 +22,16 @@ util.get_table_row() {
 
 	local variant= version= os= arch= url= comment=
 	while IFS='|' read -r variant version os arch url comment; do
-		if  [ "$plugin_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		if  [ "$tool_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			REPLY1=$url
 			REPLY2=$comment
 		fi
 	done < "$table_file"; unset -v variant version os arch url comment
 
 	if [ -z "$REPLY1" ]; then
-		core.print_error "Failed to find a version $plugin_version for $plugin_name"
+		core.print_error "Failed to find a version $tool_version for $tool_name"
 		util.print_hint "Does the version begin with 'v'? (Example: v18.0.0)"
-		util.print_hint "Try running 'woof tool clear-version-table $plugin_name'"
+		util.print_hint "Try running 'woof tool clear-version-table $tool_name'"
 		exit 1
 	fi
 }
@@ -123,14 +123,14 @@ util.get_plugin_data() {
 	unset -v REPLY
 	declare -g REPLY=()
 
-	local plugin_name="$1"
-	local plugin_version="$2"
+	local tool_name="$1"
+	local tool_version="$2"
 	local specified_key="$3"
 
-	var.get_dir 'installed-tools' "$plugin_name"
+	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
 
-	local data_file="$install_dir/$plugin_version/data.txt"
+	local data_file="$install_dir/$tool_version/data.txt"
 	local key= values=
 	while IFS='=' read -r key values; do
 		IFS=':' read -ra values <<< "$values"
@@ -142,15 +142,15 @@ util.get_plugin_data() {
 	done < "$data_file"; unset -v key values
 }
 
-util.is_plugin_version_installed() {
+util.is_tool_version_installed() {
 	unset -v REPLY; REPLY=
-	local plugin_name="$1"
-	local plugin_version="$2"
+	local tool_name="$1"
+	local tool_version="$2"
 
-	var.get_dir 'installed-tools' "$plugin_name"
+	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
 
-	if [ -f "$install_dir/$plugin_version/done" ]; then
+	if [ -f "$install_dir/$tool_version/done" ]; then
 		return 0
 	else
 		return 1

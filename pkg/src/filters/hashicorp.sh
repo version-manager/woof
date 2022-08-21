@@ -33,7 +33,7 @@ parse_hashicorp() {
 				fi
 
 				if [[ $line =~ $version_regex ]]; then
-					local plugin_version="${BASH_REMATCH[1]}"
+					local tool_version="${BASH_REMATCH[1]}"
 					local version_os="${BASH_REMATCH[2]}"
 					local version_arch="${BASH_REMATCH[3]}"
 					local version_uri="${BASH_REMATCH[4]}"
@@ -58,7 +58,7 @@ parse_hashicorp() {
 						386) version_arch='x86' ;;
 						*) printf '%s\n' "Not support arch: $line: $version_arch" >&2; exit 1 ;;
 					esac
-					printf '%s\n' "${product^}|v$plugin_version|$version_os|$version_arch|$version_uri"
+					printf '%s\n' "${product^}|v$tool_version|$version_os|$version_arch|$version_uri"
 				fi
 			done <<< "$version_html"; unset -v line
 		fi

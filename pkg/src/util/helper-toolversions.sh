@@ -6,27 +6,27 @@ helper.toolversions_set_versions() {
 	declare -gA tools=()
 	util.toolversions_parse "$toolversions_path" 'tools'
 
-	local plugin_name=
-	for plugin_name in "${!tools[@]}"; do
+	local tool_name=
+	for tool_name in "${!tools[@]}"; do
 		local -a versions=()
-		IFS='|' read -ra versions <<< "${tools[$plugin_name]}"
-		for plugin_version in "${versions[@]}"; do
-			if [[ $plugin_version == ref:* ]]; then
-				core.print_warn "Skipping '$plugin_version' for '$plugin_name' as 'ref:' is not yet supported"
-			elif [[ $plugin_version == path:* ]]; then
-				core.print_warn "Skipping '$plugin_version' for '$plugin_name' as 'path:' is not yet supported"
-			elif [[ $plugin_version == 'system' ]]; then
-				core.print_warn "Skipping 'system' for '$plugin_name' as 'system' is not yet supported"
+		IFS='|' read -ra versions <<< "${tools[$tool_name]}"
+		for tool_version in "${versions[@]}"; do
+			if [[ $tool_version == ref:* ]]; then
+				core.print_warn "Skipping '$tool_version' for '$tool_name' as 'ref:' is not yet supported"
+			elif [[ $tool_version == path:* ]]; then
+				core.print_warn "Skipping '$tool_version' for '$tool_name' as 'path:' is not yet supported"
+			elif [[ $tool_version == 'system' ]]; then
+				core.print_warn "Skipping 'system' for '$tool_name' as 'system' is not yet supported"
 			else
-				if util.is_plugin_version_installed "$plugin_name" "$plugin_version"; then
-					util.tool_set_local_version "$plugin_name" "$plugin_version"
-					util.tool_symlink_local_versions "$plugin_name" "$plugin_version"
-					printf '%s\n' "Switched to $plugin_name version $plugin_version"
+				if util.is_tool_version_installed "$tool_name" "$tool_version"; then
+					util.tool_set_local_version "$tool_name" "$tool_version"
+					util.tool_symlink_local_versions "$tool_name" "$tool_version"
+					printf '%s\n' "Switched to $tool_name version $tool_version"
 				else
-					printf '%s\n' "Cannot switch to $plugin_name version $plugin_version; try to install it first"
+					printf '%s\n' "Cannot switch to $tool_name version $tool_version; try to install it first"
 				fi
 			fi
-		done; unset -v plugin_version
-	done; unset -v plugin_name
+		done; unset -v tool_version
+	done; unset -v tool_name
 }
 
