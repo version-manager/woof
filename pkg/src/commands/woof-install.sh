@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
 woof-install() {
+	local -a subcmds=()
 	local flag_no_cache='no' flag_force='no'
 	local arg=
 	for arg; do case $arg in

@@ -1,7 +1,22 @@
 # shellcheck shell=bash
 
 woof-init() {
-	local shell="$1"
+	local -a subcmds=()
+	local flag_no_cd='no'
+	local arg=
+	for arg; do case $arg in
+	--no-cd)
+		flag_no_cd='yes'
+		;;
+	-*)
+		core.print_die "Flag '$arg' not recognized"
+		;;
+	*)
+		subcmds+=("$arg")
+		shift
+	esac done; unset -v arg
+
+	local shell="${subcmds[0]}"
 
 	if [ -z "$shell" ]; then
 		core.print_die 'Shell not specified'
@@ -33,7 +48,7 @@ trap __woof_cleanup EXIT\n"
 
 	# cd
 	printf '%s\n' '# cd override'
-	woof_override_cd
+	woof_override_cd "$flag_no_cd"
 	printf '\n'
 
 	# woof
@@ -54,7 +69,10 @@ trap __woof_cleanup EXIT\n"
 }
 
 woof_override_cd() {
+	local flag_no_cd="$1"
+
 	case $shell in
+	# TODO flag_no_cd
 	fish)
 		cat <<-"EOF"
 		function cd
@@ -64,12 +82,15 @@ woof_override_cd() {
 		EOF
 		;;
 	zsh|ksh|bash|sh)
-		cat <<-"EOF"
-		cd() {
-		  woof tool cd-override
-		  builtin cd "$@"
-		}
-		EOF
+		printf '%s\n' '__woof_cd_hook() {
+	woof tool cd-override
+}'
+	if [ "$flag_no_cd" = 'no' ]; then
+		printf '%s\n' 'cd() {
+	__woof_cd_hook
+	builtin cd "$@"
+}'
+	fi
 		;;
 	esac
 }

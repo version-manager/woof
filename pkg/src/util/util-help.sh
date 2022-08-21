@@ -13,7 +13,7 @@ Flags:
         Do not log informattive messages to stdout. Useful for scripting. Error messages will still be printed
 
 Subcommands:
-    init <shell>
+    init [--no-cd] <shell>
         Print code for a particular shell to set the proper PATH, etc.
 
     install [--no-cache] [--force] [plugin] [version]
