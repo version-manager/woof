@@ -180,7 +180,7 @@ helper.resymlink_global_all() {
 	util.print_info 'Resymlinked'
 }
 
-# @description Performs any necessary mucking when switching versions (TODO)
+# @description Performs any necessary mucking when switching versions
 helper.switch_to_version() {
 	local tool_name="$1"
 	local tool_version="$2"

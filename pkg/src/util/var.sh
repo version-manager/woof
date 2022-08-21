@@ -10,8 +10,19 @@ var.get_plugin_workspace_dir() {
 	REPLY="$WOOF_STATE_HOME/workspace-$1"
 }
 
-# TODO: add error checking and do --no-error for woof-init, etc.
 var.get_tty_dir() {
+	# shellcheck disable=SC1007
+	local arg= flag_no_error='no'
+	for arg; do case $arg in
+	--no-error)
+		flag_no_error='yes'
+		if ! shift; then
+			core.print_fatal 'Failed to shift'
+			exit 1
+		fi
+		;;
+	esac done; unset -v arg
+
 	unset -v REPLY; REPLY=
 
 	local tty_output=
@@ -21,7 +32,11 @@ var.get_tty_dir() {
 		# shellcheck disable=SC2269
 		REPLY="$REPLY"
 	else
-		return 1
+		if [ "$flag_no_error" = 'yes' ]; then
+			return 0
+		else
+			core.print_die "Failed because standard input is not a tty"
+		fi
 	fi
 }
 

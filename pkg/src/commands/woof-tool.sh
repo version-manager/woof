@@ -12,29 +12,6 @@ woof-tool() {
 
 	if [ "$subcmd" = 'resymlink' ]; then
 		helper.resymlink_global_all
-	elif [ "$subcmd" = 'info' ]; then
-		local possible_tool_name="$1"
-
-		helper.determine_tool_name "$possible_tool_name"
-		local tool_name="$REPLY"
-		unset -v possible_tool_name
-
-		var.get_dir 'data-global' 'selection'
-		local global_selection_dir="$REPLY"
-
-		printf '%s\n' '------ GLOBAL ------'
-		if [ -f "$global_selection_dir/$tool_name" ]; then
-			printf '%s\n' "Version: $(<"$global_selection_dir/$tool_name")"
-		else
-			printf '%s\n' "Version: (no global)"
-		fi
-		printf '\n'
-
-		printf '%s\n' '------ DIRECTORY ------'
-		m.toolversions_get_versions "$tool_name"
-		m.toolversions_get_first_valid_version "$tool_name"
-		printf '%s\n' "Version: ${version:-(no directory)}"
-
 	elif [ "$subcmd" = 'print-dirs' ]; then
 		local var_name=
 		for var_name in $WOOF_VARS; do
@@ -44,7 +21,7 @@ woof-tool() {
 			if [ -d "$var_value" ]; then
 				tree -aL 2 --filelimit 15 --noreport "$var_value"
 			else
-				printf '\033[3m%s\033[0m\n' '  Does not exist'	# TODO: term-info
+				term.style_italic -Pd 'Does not exist'
 			fi
 			printf '\n'
 		done; unset -v var_name

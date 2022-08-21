@@ -8,8 +8,7 @@ parse_hashicorp() {
 	local url="$prefix/$product"
 	local html=
 	if ! html=$(curl -fsSL "$url"); then
-		core.err_set "Could not fetch '$url'" # TODO: bug
-		return
+		f.die "Could not fetch '$url'"
 	fi
 
 	local regex=$'^[ \t]*<a[ \t]*href=[\'"]/(.*)[\'"]>'

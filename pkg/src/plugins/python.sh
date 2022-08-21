@@ -16,15 +16,15 @@ python.install() {
 	m.fetch -o './python.tar.xz' "$url"
 	m.ensure tar xf './python.tar.xz'
 	m.ensure mv ./Python-*/ './dir'
-	m.ensure cd -- './dir'
+	m.cd './dir'
 
 	./configure \
 		--prefix="$PWD/prefix" \
-		--enable-optimizations 
+		--enable-optimizations
 	make -j"$(nproc)"
 	make install
 
-	m.ensure cd '..' # FIXME
+	m.cd '..'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./prefix/bin')

@@ -4,7 +4,13 @@ util.tool_get_global_version() {
 	# shellcheck disable=SC1007
 	local arg= flag_no_error='no'
 	for arg; do case $arg in
-		--no-error) flag_no_error='yes'; shift || { core.print_fatal 'Failed to shift'; exit 1; } # FIXME
+	--no-error)
+		flag_no_error='yes'
+		if ! shift; then
+			core.print_fatal 'Failed to shift'
+			exit 1
+		fi
+		;;
 	esac done; unset -v arg
 
 	local tool_name="$1"
@@ -29,27 +35,30 @@ util.tool_get_local_version() {
 	# shellcheck disable=SC1007
 	local arg= flag_no_error='no'
 	for arg; do case $arg in
-		--no-error) flag_no_error='yes'; shift || { core.print_fatal 'Failed to shift'; exit 1; } # FIXME
+	--no-error)
+		flag_no_error='yes'
+		if ! shift; then
+			core.print_fatal 'Failed to shift'
+			exit 1
+		fi
+		;;
 	esac done; unset -v arg
 
 	local tool_name="$1"
 
-	if var.get_tty_dir; then
-		local dir="$REPLY/selection"
+	var.get_tty_dir
+	local dir="$REPLY/selection"
 
-		if [ ! -f "$dir/$tool_name" ]; then
-			if [ "$flag_no_error" = 'yes' ]; then
-				return
-			else
-				core.print_die "Failed to find local default for plugin '$tool_name'"
-			fi
+	if [ ! -f "$dir/$tool_name" ]; then
+		if [ "$flag_no_error" = 'yes' ]; then
+			return
+		else
+			core.print_die "Failed to find local default for plugin '$tool_name'"
 		fi
-
-		unset -v REPLY; REPLY=
-		REPLY=$(<"$dir/$tool_name")
-	else
-		core.print_die "Failed because standard input is not a tty"
 	fi
+
+	unset -v REPLY; REPLY=
+	REPLY=$(<"$dir/$tool_name")
 }
 
 util.tool_set_global_version() {
@@ -73,19 +82,16 @@ util.tool_set_local_version() {
 	local tool_name="$1"
 	local tool_version="$2"
 
-	if var.get_tty_dir; then
-		local dir="$REPLY/selection"
+	var.get_tty_dir
+	local dir="$REPLY/selection"
 
-		util.mkdirp "$dir"
+	util.mkdirp "$dir"
 
-		if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
-			core.print_die "Failed to write new tty-specific version to disk"
-		fi
-
-		util.print_info "Set version '$tool_version' as tty-specific version"
-	else
-		core.print_die "Failed because standard input is not a tty"
+	if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
+		core.print_die "Failed to write new tty-specific version to disk"
 	fi
+
+	util.print_info "Set version '$tool_version' as tty-specific version"
 }
 
 util.tool_list_global_versions() {
@@ -211,13 +217,10 @@ util.tool_symlink_local_versions() {
 	local tool_name="$1"
 	local tool_version="$2"
 
-	if var.get_tty_dir; then
-		local target_bin_dir="$REPLY/bin"
+	var.get_tty_dir
+	local target_bin_dir="$REPLY/bin"
 
-		util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
-	else
-		core.print_die "Failed because standard input is not a tty"
-	fi
+	util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
 }
 
 util.tool_private_symlink_core() {

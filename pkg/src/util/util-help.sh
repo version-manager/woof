@@ -33,7 +33,7 @@ Subcommands:
 "
 	util.help_show_plugin_core
 	printf '%s\n' "
-    tool <resymlink|info|print-dirs|cd-override|debug-table|debug-install|
+    tool <resymlink|print-dirs|cd-override|debug-table|debug-install|
         clear-table-cache> [args...]
             Run a particular tool Most of these are for internal use
 "

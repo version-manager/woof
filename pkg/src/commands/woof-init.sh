@@ -18,9 +18,9 @@ woof-init() {
 	printf '\n'
 
 	# tty
-	if var.get_tty_dir; then
-		local tty_dir="$REPLY"
-
+	var.get_tty_dir --no-error
+	local tty_dir="$REPLY"
+	if [ -n "$tty_dir" ]; then
 		printf '%s\n' '# local (per-tty) installs'
 		std.shell_path_prepend "$tty_dir/bin"
 		# shellcheck disable=SC2059

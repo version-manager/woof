@@ -32,6 +32,12 @@ m.rmln() {
 	m.ensure ln -sf "$target" "$link"
 }
 
+m.cd() {
+	local dir="$1"
+
+	m.ensure cd -- "$dir"
+}
+
 m.unpack() {
 	local cmd="$1"
 	local file="$2"
@@ -135,17 +141,4 @@ m.fetch_github_release() {
 			fi
 		fi
 	done
-}
-
-m.toolversions_get_versions() {
-	if helper.toolversions_get_versions "$@"; then :; else
-		return $?
-	fi
-
-}
-
-m.toolversions_get_first_valid_version() {
-	if helper.toolversions_get_first_valid_version "$@"; then :; else
-		return $?
-	fi
 }
