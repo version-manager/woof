@@ -41,13 +41,6 @@ Set the following variables for installation to complete successfully. `REPLY_DI
 
 Persisted state across installs / uninstalls
 
-## `<plugin>.switch()`
-
-Called when switching to a particular version
-
-- `$1`: install_dir
-- `$2`: tool_version
-
 ## `<plugin>.env()`
 
 Called when a plugin needs to set the environment

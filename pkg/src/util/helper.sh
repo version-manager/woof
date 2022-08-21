@@ -193,21 +193,6 @@ helper.switch_to_version() {
 
 	util.mkdirp "$global_common_dir"
 
-	# Execute '<plugin>.switch'
-	local old_pwd="$PWD"
-	if ! cd -- "$global_common_dir"; then
-		core.panic 'Failed to cd'
-	fi
-	if util.run_function --optional "$tool_name.switch" "$install_dir/$tool_version/files" "$tool_version"; then
-		if core.err_exists; then
-			core.panic
-		fi
-	else
-		core.print_die "Unexpected error while calling '$tool_name.switch'"
-	fi
-	if ! cd -- "$old_pwd"; then
-		core.panic 'Failed to cd'
-	fi
 	util.print_info "Using $tool_version"
 
 	util.tool_symlink_global_versions "$tool_name" "$tool_version"
