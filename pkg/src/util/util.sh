@@ -41,12 +41,12 @@ util.run_function() {
 	if [ "$1" = '--optional' ]; then
 		flag_optional='yes'
 		if ! shift; then
-			core.panic 'Failed to shift'
+			util.print_error_die 'Failed to shift'
 		fi
 	fi
 	local function_name="$1"
 	if ! shift; then
-		core.panic 'Failed to shift'
+		util.print_error_die 'Failed to shift'
 	fi
 
 	if declare -f "$function_name" &>/dev/null; then
@@ -58,7 +58,7 @@ util.run_function() {
 		fi
 	else
 		if [ "$flag_optional" = 'no' ]; then
-			core.panic "Function '$function_name' not defined"
+			util.print_error_die "Function '$function_name' not defined"
 		fi
 	fi
 }
@@ -163,7 +163,7 @@ util.assert_not_empty() {
 		local -n __variable="$variable_name"
 
 		if [ -z "$__variable" ]; then
-			core.panic "Failed because variable '$variable_name' is empty"
+			util.print_error_die "Failed because variable '$variable_name' is empty"
 		fi
 	done; unset -v variable_name
 }

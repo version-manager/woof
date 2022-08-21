@@ -53,11 +53,11 @@ m.cd() {
 m.unpack() {
 	local cmd="$1"
 	local file="$2"
-	if ! shift; then core.panic "Failed to shift"; fi
-	if ! shift; then core.panic "Failed to shift"; fi
+	if ! shift; then util.print_error_die "Failed to shift"; fi
+	if ! shift; then util.print_error_die "Failed to shift"; fi
 
 	if [[ "$cmd" != @(gzip) ]]; then
-		core.panic "m.unpack: Unrecognized command: $cmd"
+		util.print_error_die "m.unpack: Unrecognized command: $cmd"
 	fi
 
 	util.sanitize_path "$PWD/$file"

@@ -15,7 +15,7 @@ util.toolversions_get_path() {
 		fi
 		printf '%s' "$PWD/$toolversions_file"
 	); then
-		core.panic "Could not cd when looking for '$toolversions_file'"
+		util.print_error_die "Could not cd when looking for '$toolversions_file'"
 	fi
 }
 

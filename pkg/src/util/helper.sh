@@ -95,7 +95,7 @@ helper.install_tool_version() {
 	# Execute '<plugin>.install'
 	local old_pwd="$PWD"
 	if ! cd -- "$workspace_dir"; then
-		core.panic 'Failed to cd'
+		util.print_error_die 'Failed to cd'
 	fi
 	core.print_debug "Working directory changed to: $PWD"
 
@@ -107,14 +107,14 @@ helper.install_tool_version() {
 	if util.run_function "$tool_name.install" "$url" "${tool_version/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"
-			core.panic
+			util.print_error_die "Failed to successfully execute '$tool_name.install'"
 		fi
 	else
 		rm -rf "$workspace_dir"
 		util.print_error_die "Unexpected error while calling '$tool_name.install'"
 	fi
 	if ! cd -- "$old_pwd"; then
-		core.panic 'Failed to cd'
+		util.print_error_die 'Failed to cd'
 	fi
 
 	if [ -z "$REPLY_DIR" ]; then
