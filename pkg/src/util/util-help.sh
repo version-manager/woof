@@ -48,11 +48,17 @@ Subcommands:"
 }
 
 util.help_show_plugin_core() {
-	printf '%s\n' "    plugin add [name]
+	printf '%s\n' "    plugin install [name]
         Add a plugin
 
-    plugin remove [name]
+    plugin uninstall [name]
         Remove a plugin
+
+    plugin enable [name]
+        Enable a plugin
+
+    plugin disable [name]
+        Disable a plugin
 
     plugin list
         List plugins"

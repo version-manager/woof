@@ -14,10 +14,9 @@ woof-plugin-list() {
 	while IFS='|' read -r plugin_type plugin_place; do
 		has_plugin='yes'
 
-		term.underline -d "${plugin_place##*/}"
-		local tool_name="$REPLY"
+		local tool_name="${plugin_place##*/}"
 
-		printf '%s\n  path: %s\n  type: %s\n' "$tool_name" "$plugin_place" "$plugin_type"
+		printf '%s:\n  path: %s\n  type: %s\n' "$tool_name" "$plugin_place" "$plugin_type"
 	done < "$plugin_list_file"; unset -v line
 
 	if [ "$has_plugin" = 'no' ]; then

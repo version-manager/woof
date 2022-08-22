@@ -18,7 +18,6 @@ util.plugin_is_installed() {
 		fi
 
 		installed_plugins_dir=$(readlink -f "$installed_plugins_dir")
-		echo "$installed_plugins_dir/${specified_plugin##*/}"
 		if [ "$specified_plugin" = "$installed_plugins_dir/${specified_plugin##*/}" ]; then
 			return 0
 		fi
@@ -32,6 +31,11 @@ util.plugin_install_with_symlink() {
 	local plugin_place="$2"
 	local target_dir="$3"
 
+	if [ ! -f "$plugin_place/manifest.ini" ]; then
+		util.print_error_die "Path at '$plugin_place' does not appear to be a directory containing a plugin"
+	fi
+
+	# TODO: add force flag
 	# Ensure specified path is a directroy
 	if [ ! -d "$plugin_place" ]; then
 		util.print_error_die "Path at '$plugin_place' is not a directory"
@@ -50,6 +54,11 @@ util.plugin_install_with_symlink() {
 	fi
 }
 
+util.plugin_install_with_git() {
+	:
+	# TODO
+}
+
 util.plugin_list_add() {
 	local plugin_type="$1"
 	local plugin_place="$2"
@@ -62,6 +71,10 @@ util.plugin_list_add() {
 	if ! printf '%s\n' "$plugin_type|$plugin_place" >> "$plugin_list_file"; then
 		util.print_error_die "Failed to write to file '$plugin_list_file'"
 	fi
+}
+
+util.plugin_list_remove() {
+	:
 }
 
 uitl.plugin_list_parse() {
