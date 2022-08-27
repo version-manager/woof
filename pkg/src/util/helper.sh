@@ -173,6 +173,11 @@ helper.resymlink_global_all() {
 		if ! version=$(<"$file"); then
 			print.fatal "Failed to read from '$file'"
 		fi
+		if [ -z "$version" ]; then
+			core.print_fatal 'Selected version cannot be empty'
+			util.print_hint "file: '$file'"
+			exit 1
+		fi
 
 		util.tool_symlink_global_versions "${file##*/}" "$version"
 	done
