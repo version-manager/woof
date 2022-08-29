@@ -76,7 +76,10 @@ helper.install_tool_version() {
 				util.print_error_die "Failed to remove directory: '${install_dir:?}/$tool_version'"
 			fi
 		else
-			util.print_error_die "Version '$tool_version' is already installed for plugin '$tool_name'"
+			core.print_warn "Version '$tool_version' is already installed for plugin '$tool_name'. Switching to that version"
+			# TODO: global only thing
+			util.tool_set_global_version "$tool_name" "$tool_version"
+			return
 		fi
 	fi
 
