@@ -7,17 +7,17 @@ deno.env() {
 }
 
 deno.table() {
-	m.fetch_github_release 'denoland/deno' \
-		| m.run_jq 'deno'
+	p.fetch_github_release 'denoland/deno' \
+		| p.run_jq 'deno'
 }
 
 deno.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -o './deno.zip' "$url"
-	mkdir -p './dir/bin'
-	m.unpack './deno.zip' -d'./dir/bin'
+	p.fetch -o './deno.zip' "$url"
+	p.mkdir './dir/bin'
+	p.unpack './deno.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

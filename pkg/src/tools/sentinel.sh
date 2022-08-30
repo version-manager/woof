@@ -1,16 +1,16 @@
 # shellcheck shell=bash
 
 sentinel.table() {
-	m.run_bash 'hashicorp' 'sentinel'
+	p.run_bash 'hashicorp' 'sentinel'
 }
 
 sentinel.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -o './sentinel.zip' "$url"
-	mkdir -p './dir/bin'
-	m.unpack './sentinel.zip' -d'./dir/bin'
+	p.fetch -o './sentinel.zip' "$url"
+	p.mkdir './dir/bin'
+	p.unpack './sentinel.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

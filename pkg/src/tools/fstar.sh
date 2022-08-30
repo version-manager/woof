@@ -1,8 +1,8 @@
 # shellcheck shell=bash
 
 fstar.table() {
-	m.fetch_github_release 'FStarLang/FStar' \
-		| m.run_jq 'github-release' \
+	p.fetch_github_release 'FStarLang/FStar' \
+		| p.run_jq 'github-release' \
 			--arg global_variant 'FStar' \
 			--arg global_regex "^fstar_(?<version>.+)_(?<os>.+)_(?<arch>x86_64)\\."
 }
@@ -11,9 +11,9 @@ fstar.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -o './fstar.tar.gz' "$url"
-	m.unpack './fstar.tar.gz'
-	m.ensure mv './fstar' './dir'
+	p.fetch -o './fstar.tar.gz' "$url"
+	p.unpack './fstar.tar.gz'
+	p.ensure mv './fstar' './dir'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

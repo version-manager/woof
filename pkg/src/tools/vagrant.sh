@@ -1,16 +1,16 @@
 # shellcheck shell=bash
 
 vagrant.table() {
-	m.run_bash 'hashicorp' 'vagrant'
+	p.run_bash 'hashicorp' 'vagrant'
 }
 
 vagrant.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -o './vagrant.zip' "$url"
-	mkdir -p './dir/bin'
-	m.unpack './vagrant.zip' -d'./dir/bin'
+	p.fetch -o './vagrant.zip' "$url"
+	p.mkdir './dir/bin'
+	p.unpack './vagrant.zip' -d'./dir/bin'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')

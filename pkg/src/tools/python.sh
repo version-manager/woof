@@ -6,17 +6,17 @@ python.table() {
 	local version=
 	while read -r version; do
 		printf '%s\n' "CPython|$version|linux|x86_64|$prefix/ftp/python/${version#v}/Python-${version#v}.tar.xz"
-	done < <(m.fetch_github_tags 'python/cpython')
+	done < <(p.fetch_github_tags 'python/cpython')
 }
 
 python.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -o './python.tar.xz' "$url"
-	m.unpack './python.tar.xz'
-	m.ensure mv ./Python-*/ './dir'
-	m.cd './dir'
+	p.fetch -o './python.tar.xz' "$url"
+	p.unpack './python.tar.xz'
+	p.ensure mv ./Python-*/ './dir'
+	p.cd './dir'
 
 	./configure \
 		--prefix="$PWD/prefix" \
@@ -24,7 +24,7 @@ python.install() {
 	make -j"$(nproc)"
 	make install
 
-	m.cd '..'
+	p.cd '..'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./prefix/bin')

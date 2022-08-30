@@ -1,16 +1,16 @@
 # shellcheck shell=bash
 
 dart.table() {
-	m.run_bash 'dart'
+	p.run_bash 'dart'
 }
 
 dart.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -o file.zip "$url"
-	mkdir -p 'dir'
-	m.unpack './file.zip' -d'dir'
+	p.fetch -o file.zip "$url"
+	p.mkdir 'dir'
+	p.unpack './file.zip' -d'dir'
 
 	dir=(./dir/*)
 

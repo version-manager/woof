@@ -7,20 +7,20 @@ nodejs.env() {
 }
 
 nodejs.table() {
-	m.run_bash 'nodejs'
+	p.run_bash 'nodejs'
 }
 
 nodejs.install() {
 	local url="$1"
 	local version="$2"
 
-	m.fetch -o './file.tar.gz' "$url"
-	m.unpack './file.tar.gz'
-	mkdir -p 'dir'
-	m.ensure mv ./*/* './dir'
+	p.fetch -o './file.tar.gz' "$url"
+	p.unpack './file.tar.gz'
+	p.mkdir 'dir'
+	p.ensure mv ./*/* './dir'
 
 	# TODO:
-	# m.ensure mv './dir/lib/node_plugins' './dir/lib/node_plugins_old'
+	# p.ensure mv './dir/lib/node_plugins' './dir/lib/node_plugins_old'
 
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
