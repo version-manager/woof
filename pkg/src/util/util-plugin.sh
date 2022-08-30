@@ -3,6 +3,7 @@
 util.plugin_is_installed() {
 	unset -v REPLY; REPLY=
 	local specified_plugin="$1"
+	util.assert_not_empty 'specified_plugin'
 
 	uitl.plugin_list_parse
 	local entry=
@@ -30,6 +31,9 @@ util.plugin_install_with_symlink() {
 	local plugin_type="$1"
 	local plugin_place="$2"
 	local target_dir="$3"
+	util.assert_not_empty 'plugin_type'
+	util.assert_not_empty 'plugin_place'
+	util.assert_not_empty 'target_dir'
 
 	if [ ! -f "$plugin_place/manifest.ini" ]; then
 		util.print_error_die "Path at '$plugin_place' does not appear to be a directory containing a plugin"
@@ -62,6 +66,8 @@ util.plugin_install_with_git() {
 util.plugin_list_add() {
 	local plugin_type="$1"
 	local plugin_place="$2"
+	util.assert_not_empty 'plugin_type'
+	util.assert_not_empty 'plugin_place'
 
 	var.get_dir 'common'
 	local plugin_list_file="$REPLY/plugin-list.txt"

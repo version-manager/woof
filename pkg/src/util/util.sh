@@ -6,6 +6,10 @@ util.get_table_row() {
 	local tool_version="$2"
 	local real_os="$3"
 	local real_arch="$4"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
+	util.assert_not_empty 'real_os'
+	util.assert_not_empty 'real_arch'
 
 	var.get_plugin_table_file "$tool_name"
 	local table_file="$REPLY"
@@ -126,6 +130,9 @@ util.get_plugin_data() {
 	local tool_name="$1"
 	local tool_version="$2"
 	local specified_key="$3"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
+	util.assert_not_empty 'specified_key'
 
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
@@ -146,6 +153,8 @@ util.is_tool_version_installed() {
 	unset -v REPLY; REPLY=
 	local tool_name="$1"
 	local tool_version="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
@@ -163,7 +172,7 @@ util.assert_not_empty() {
 		local -n __variable="$variable_name"
 
 		if [ -z "$__variable" ]; then
-			util.print_error_die "Failed because variable '$variable_name' is empty"
+			util.print_fatal_die "Failed because variable '$variable_name' is empty"
 		fi
 	done; unset -v variable_name
 }
@@ -171,6 +180,7 @@ util.assert_not_empty() {
 util.sanitize_path() {
 	unset -v REPLY; REPLY=
 	local path="$1"
+	util.assert_not_empty 'path'
 
 	# For now, only do this once (replace '/./' with '/')
 	path=${path/\/.\//\/}

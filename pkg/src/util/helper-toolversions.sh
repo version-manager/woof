@@ -2,6 +2,7 @@
 
 helper.toolversions_set_versions() {
 	local toolversions_path="$1"
+	util.assert_not_empty 'toolversions_path'
 
 	declare -gA tools=()
 	util.toolversions_parse "$toolversions_path" 'tools'

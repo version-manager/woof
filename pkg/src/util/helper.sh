@@ -6,6 +6,8 @@
 helper.create_version_table() {
 	local tool_name="$1"
 	local flag_no_cache="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'flag_no_cache'
 
 	var.get_plugin_table_file "$tool_name"
 	local table_file="$REPLY"
@@ -51,6 +53,10 @@ helper.install_tool_version() {
 	local flag_force="$2"
 	local tool_name="$3"
 	local tool_version="$4"
+	util.assert_not_empty 'flag_interactive'
+	util.assert_not_empty 'flag_force'
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_plugin_workspace_dir "$tool_name"
 	local workspace_dir="$REPLY"
@@ -191,6 +197,8 @@ helper.resymlink_global_all() {
 helper.switch_to_version() {
 	local tool_name="$1"
 	local tool_version="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'data-global' 'common'
 	local global_common_dir="$REPLY"

@@ -64,6 +64,8 @@ util.tool_get_local_version() {
 util.tool_set_global_version() {
 	local tool_name="$1"
 	local tool_version="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'data-global' 'selection'
 	local dir="$REPLY"
@@ -81,6 +83,8 @@ util.tool_set_global_version() {
 util.tool_set_local_version() {
 	local tool_name="$1"
 	local tool_version="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_tty_dir
 	local dir="$REPLY/selection"
@@ -206,6 +210,8 @@ util.tool_list_local_versions() {
 util.tool_symlink_global_versions() {
 	local tool_name="$1"
 	local tool_version="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'data-global' 'bin'
 	local target_bin_dir="$REPLY"
@@ -216,6 +222,8 @@ util.tool_symlink_global_versions() {
 util.tool_symlink_local_versions() {
 	local tool_name="$1"
 	local tool_version="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_tty_dir
 	local target_bin_dir="$REPLY/bin"
@@ -227,6 +235,9 @@ util.tool_private_symlink_core() {
 	local tool_name="$1"
 	local tool_version="$2"
 	local target_bin_dir="$3"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
+	util.assert_not_empty 'target_bin_dir'
 
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"

@@ -3,6 +3,7 @@
 helper.determine_tool_name() {
 	unset REPLY; REPLY=
 	local tool_name="$1"
+	util.assert_not_empty 'tool_name'
 
 	if [ -z "$tool_name" ]; then
 		local -a all_tools_arr=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/*.sh)
@@ -34,6 +35,7 @@ helper.determine_tool_name() {
 helper.determine_tool_name_installed() {
 	unset REPLY; REPLY=
 	local tool_name="$1"
+	util.assert_not_empty 'tool_name'
 
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
@@ -133,6 +135,8 @@ helper.determine_tool_version() {
 helper.determine_tool_version_installed() {
 	local tool_name="$1"
 	local tool_version="$2"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
@@ -174,6 +178,9 @@ helper.determine_latest_tool_version() {
 	local tool_name="$1"
 	local real_os="$2"
 	local real_arch="$3"
+	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'real_os'
+	util.assert_not_empty 'real_arch'
 
 	var.get_plugin_table_file "$tool_name"
 	local table_file="$REPLY"
