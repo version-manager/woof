@@ -97,11 +97,7 @@ woof_override_cd() {
 
 woof_function() {
 	printf '%s\n' "woof() {
-	if __woof_location=\$(type -P woof); then
-		\"\$__woof_location\" \"\$@\"
-		builtin hash -r
-	else
-		printf '%s\n' \"Error: Failed to find 'woof' executable\" >&2
-	fi
+	builtin command woof \"\$@\"
+	builtin hash -r
 }"
 }
