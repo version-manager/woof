@@ -60,6 +60,9 @@ util.help_show_plugin_core() {
     plugin disable [name]
         Disable a plugin
 
+    plugin info [name]
+        List information about a plugin
+
     plugin list
         List plugins"
 }

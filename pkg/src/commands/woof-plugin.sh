@@ -35,6 +35,9 @@ woof-plugin() {
 		disable)
 			woof-plugin-disable "$@"
 			;;
+		info)
+			woof-plugin-info "$@"
+			;;
 		list)
 			woof-plugin-list "$@"
 			;;
