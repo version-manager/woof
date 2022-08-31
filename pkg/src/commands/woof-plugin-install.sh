@@ -2,17 +2,18 @@
 
 woof-plugin-install() {
 	local plugin="$1"
-	plugin=${plugin%/}
 
 	if util.plugin_is_installed "$plugin"; then
 		core.print.die "Plugin '$plugin' already installed"
 	fi
 
-	if util.plugin_is_absolute_path "$plugin"; then
-		# keep this for manifest.ini check
-		:
-	elif util.is_relative_path "$plugin"; then
+	plugin=${plugin%/}
+	if [ "${plugin::2}" = './' ]; then
 		plugin=$(readlink -f "$plugin")
+
+		util.plugin_install_with_symlink 'symlink' "$plugin"
+	elif [ "${plugin::1}" = '/' ]; then
+		util.plugin_install_with_symlink 'symlink' "$plugin"
 	fi
 
 	if [ "${plugin::1}" = '/' ]; then

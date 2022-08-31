@@ -67,28 +67,22 @@ util.plugin_parse_manifest() {
 }
 
 util.plugin_is_installed() {
-	unset -v REPLY; REPLY=
-	local specified_plugin="$1"
-	util.assert_not_empty 'specified_plugin'
+	unset -v REPLY_{TYPE,DIR}; REPLY_TYPE= REPLY_DIR=
+	local plugin="$1"
 
-	uitl.plugin_list_parse
-	local entry=
-	for entry in "${REPLY[@]}"; do
-		local plugin_type="${entry%%|*}"
-		local plugin_place="${entry#*|}"
+	var.get_dir 'installed-plugins'
+	local plugins_dir="$REPLY"
 
-		var.get_dir 'installed-plugins'
-		local installed_plugins_dir="$REPLY"
-
-		if [ "$specified_plugin" = "$plugin_place" ]; then
-			return 0
-		fi
-
-		installed_plugins_dir=$(readlink -f "$installed_plugins_dir")
-		if [ "$specified_plugin" = "$installed_plugins_dir/${specified_plugin##*/}" ]; then
-			return 0
-		fi
-	done; unset -v entry
+	plugin=${plugin%/}
+	if [ -L "$plugins_dir/$plugin" ]; then
+		REPLY_TYPE='symlink'
+		REPLY_DIR="$plugins_dir/$plugin"
+		return 0
+	elif [ -d "$plugins_dir/$plugin" ]; then
+		REPLY_TYPE='git'
+		REPLY_DIR="$plugins_dir/$plugin"
+		return 0
+	fi
 
 	return 1
 }
@@ -96,18 +90,32 @@ util.plugin_is_installed() {
 util.plugin_install_with_symlink() {
 	local plugin_type="$1"
 	local plugin_place="$2"
-	local target_dir="$3"
-	util.assert_not_empty 'plugin_type'
-	util.assert_not_empty 'plugin_place'
-	util.assert_not_empty 'target_dir'
 
-	util.mkdirp "$target_dir"
+	var.get_dir 'installed-plugins'
+	local plugins_dir="$REPLY"
 
-	if ln -sfT "$plugin_place" "$target_dir/${plugin_place##*/}"; then :; else
+	util.mkdirp "$plugins_dir"
+
+	if ln -sfT "$plugin_place" "$plugins_dir/${plugin_place##*/}"; then :; else
 		util.print_error_die "Failed to symlink plugin directory"
 	fi
 
-	util.plugin_list_add "$plugin_type" "$plugin_place"
+	# Ensure specified path is a directroy
+	if [ ! -d "$plugin_place" ]; then
+		util.print_error_die "Path at '$plugin_place' is not a directory"
+	fi
+
+	if ! util.plugin_is_installed "$plugin_place"; then
+		util.mkdirp "$plugins_dir"
+
+		if ln -sfT "$plugin_place" "$plugins_dir/${plugin_place##*/}"; then :; else
+			util.print_error_die "Failed to symlink plugin directory"
+		fi
+
+		util.plugin_list_add "$plugin_type" "$plugin_place"
+	else
+		util.print_error_die "Plugin '$plugin_place' is already installed"
+	fi
 }
 
 util.plugin_install_with_git() {
