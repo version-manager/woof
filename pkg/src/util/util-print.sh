@@ -2,6 +2,7 @@
 
 util.print_fatal_die() {
 	core.print_fatal "$@"
+	core.print_stacktrace
 	exit 1
 }
 

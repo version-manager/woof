@@ -101,27 +101,13 @@ util.plugin_install_with_symlink() {
 	util.assert_not_empty 'plugin_place'
 	util.assert_not_empty 'target_dir'
 
-	if [ ! -f "$plugin_place/manifest.ini" ]; then
-		util.print_error_die "Path at '$plugin_place' does not appear to be a directory containing a plugin"
+	util.mkdirp "$target_dir"
+
+	if ln -sfT "$plugin_place" "$target_dir/${plugin_place##*/}"; then :; else
+		util.print_error_die "Failed to symlink plugin directory"
 	fi
 
-	# TODO: add force flag
-	# Ensure specified path is a directroy
-	if [ ! -d "$plugin_place" ]; then
-		util.print_error_die "Path at '$plugin_place' is not a directory"
-	fi
-
-	if ! util.plugin_is_installed "$plugin_place"; then
-		util.mkdirp "$target_dir"
-
-		if ln -sfT "$plugin_place" "$target_dir/${plugin_place##*/}"; then :; else
-			util.print_error_die "Failed to symlink plugin directory"
-		fi
-
-		util.plugin_list_add "$plugin_type" "$plugin_place"
-	else
-		util.print_error_die "Plugin '$plugin_place' is already installed"
-	fi
+	util.plugin_list_add "$plugin_type" "$plugin_place"
 }
 
 util.plugin_install_with_git() {

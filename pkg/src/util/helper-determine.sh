@@ -3,7 +3,6 @@
 helper.determine_tool_name() {
 	unset REPLY; REPLY=
 	local tool_name="$1"
-	util.assert_not_empty 'tool_name'
 
 	if [ -z "$tool_name" ]; then
 		local -a all_tools_arr=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/*.sh)
@@ -13,7 +12,7 @@ helper.determine_tool_name() {
 		local -A all_tools_obj=()
 		for m in "${all_tools_arr[@]}"; do
 			all_tools_obj["$m"]=
-		done; unset m
+		done; unset -v m
 
 		# TODO: save previous selection here
 		tty.multiselect '' all_tools_arr all_tools_obj
@@ -35,7 +34,6 @@ helper.determine_tool_name() {
 helper.determine_tool_name_installed() {
 	unset REPLY; REPLY=
 	local tool_name="$1"
-	util.assert_not_empty 'tool_name'
 
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
@@ -103,7 +101,7 @@ helper.determine_tool_version() {
 				ui_keys+=("$version")
 				ui_table["$version"]="$url $comment"
 			fi
-		done < "$table_file"; unset version os arch url comment
+		done < "$table_file"; unset -v version os arch url comment
 
 		if [ "$match_found" != 'yes' ]; then
 			util.print_error_die "Could not find any matching versions for the current os/arch"
@@ -122,7 +120,7 @@ helper.determine_tool_version() {
 		if [ "$tool_version" = "$version" ] && [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
 			is_valid_string='yes'
 		fi
-	done < "$table_file"; unset variant version os arch url comment
+	done < "$table_file"; unset -v variant version os arch url comment
 
 	if [ "$is_valid_string" != yes ]; then
 		util.print_error_die "Version '$tool_version' is not valid for plugin '$tool_name' on this architecture"
@@ -135,8 +133,6 @@ helper.determine_tool_version() {
 helper.determine_tool_version_installed() {
 	local tool_name="$1"
 	local tool_version="$2"
-	util.assert_not_empty 'tool_name'
-	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
@@ -191,5 +187,5 @@ helper.determine_latest_tool_version() {
 			REPLY="$version"
 			break
 		fi
-	done < "$table_file"; unset version os arch url comment
+	done < "$table_file"; unset -v version os arch url comment
 }
