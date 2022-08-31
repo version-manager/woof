@@ -23,7 +23,6 @@ util.toolversions_parse() {
 	local toolversions_path="$1"
 	local -n __toolversions_variable="$2"
 	util.assert_not_empty 'toolversions_path'
-	util.assert_not_empty '__toolversions_variable'
 
 	local line=
 	while IFS= read -r line; do
