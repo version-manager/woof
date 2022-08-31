@@ -8,7 +8,6 @@ woof-plugin-install() {
 		core.print.die "Plugin '$plugin' already installed"
 	fi
 
-
 	if util.plugin_is_absolute_path "$plugin"; then
 		# keep this for manifest.ini check
 		:
@@ -19,10 +18,6 @@ woof-plugin-install() {
 	if [ "${plugin::1}" = '/' ]; then
 		var.get_dir 'installed-plugins'
 		local installed_plugins_dir="$REPLY"
-
-		if util.plugin_is_installed "$plugin"; then
-			util.print_error_die "Plugin '$plugin' is already installed"
-		fi
 
 		util.plugin_install_with_symlink 'symlink' "$plugin" "$installed_plugins_dir"
 	fi

@@ -16,7 +16,7 @@ woof-plugin-list() {
 
 		local tool_name="${plugin_dir##*/}"
 
-		util.plugin_parse_manifest "$manifest_file"
+		util.plugin_parse_manifest "$plugin_dir/manifest.ini"
 		local slug="$REPLY_SLUG"
 		local name="$REPLY_NAME"
 		local desc="$REPLY_DESC"
