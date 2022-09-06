@@ -5,7 +5,8 @@ helper.determine_tool_name() {
 	local tool_name="$1"
 
 	if [ -z "$tool_name" ]; then
-		local -a all_tools_arr=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/*.sh)
+		# local -a all_tools_arr=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/{for-building,hashicorp,languages,languages-other,misc-tools}/tools/*.sh)\/
+		local -a all_tools_arr=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/languages/tools/*.sh)
 		all_tools_arr=("${all_tools_arr[@]##*/}")
 		all_tools_arr=("${all_tools_arr[@]%.sh}")
 
@@ -20,7 +21,7 @@ helper.determine_tool_name() {
 	fi
 
 	# TODO: do not hard code
-	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/tools/$tool_name.sh"
+	local plugin_file="$BASALT_PACKAGE_DIR/pkg/src/plugins/languages/tools/$tool_name.sh"
 	if [ ! -f "$plugin_file" ]; then
 		util.print_error_die "Plugin '$tool_name' not found"
 	fi

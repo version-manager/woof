@@ -35,6 +35,7 @@ util.plugin_parse_manifest() {
 	local manifest_file="$1"
 	util.assert_not_empty 'manifest_file'
 
+	# shellcheck disable=SC1007
 	local key= value=
 	while IFS='=' read -r key value || [[ -n "$key" && -n "$value" ]]; do
 		key=${key#"${key%%[![:space:]]*}"}
