@@ -71,6 +71,11 @@ woof-tool() {
 		if [ -n "$toolversions_file" ]; then
 			helper.toolversions_set_versions "$toolversions_file"
 		fi
+	elif [ "$subcmd" = 'install-default-plugins' ]; then
+		local dir=
+		for dir in "$BASALT_PACKAGE_DIR"/pkg/src/plugins/{for-building,hashicorp,languages,languages-other,misc-tools}/; do
+		woof-plugin-install --force "$dir"
+		done; unset -v dir
 	else
 		util.print_error_die "Subcommand '$subcmd' is not valid"
 	fi
