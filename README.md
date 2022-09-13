@@ -17,7 +17,7 @@ STATUS: IN DEVELOPMENT
 - Optionally _configurationless_
 - Clean Bash code
   - Favors builtins and native Bash facilities over external utilities)
-- Supports 34 languages/programs on at least `x86_64` (see [roadmap](./docs/roadmap.md) for details)
+- Supports 34 languages/programs on at least `x86_64` (see [roadmap](./docs/roadmap.md) and [languages](./docs/languages.md) for details)
 - Compatible with [.tool-versions](https://asdf-vm.com/manage/configuration.html#tool-versions), nvm's [.nvmrc](https://github.com/nvm-sh/nvm#nvmrc) and read things from popular version managers like `rvm` and `pyenv`
 - Fast
   - Uses symlinks, not shims

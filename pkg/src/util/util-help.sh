@@ -35,7 +35,7 @@ Subcommands:
 	printf '%s\n' "
     tool <resymlink|print-dirs|cd-override|debug-table|debug-install|
         clear-table-cache|install-default-plugins> [args...]
-            Run a particular tool Most of these are for internal use
+            Run a particular tool. Most of these are for internal use
 "
 }
 

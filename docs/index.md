@@ -18,7 +18,15 @@ There are two main concepts:
 
 ### Plugins
 
-Plugins include code that enables the installation of (almost) any version of a particular tool. Plugins can support multiple tools or variants of a tool. For example, potential plugins include include NodeJS, Python, and [Please](https://please.build). Variants are also supported - for example, Python may have at least [cpython](https://github.com/python/cpython), [Nuitka](https://github.com/Nuitka/Nuitka), and [MicroPython](https://micropython.org) variants.
+Plugins include code that manage multiple versions and variants of a tool. For example, a plugin named 'Popular Languages' may manage the following:
+
+- NodeJS
+  - all versions
+- Python
+  - all versions
+  - all variants ([cpython](https://github.com/python/cpython), [Nuitka](https://github.com/Nuitka/Nuitka), and [MicroPython](https://micropython.org))
+- [Please](https://please.build)
+  - all versions
 
 To add support for a new language, tool, or program, write a plugin. Each plugin is implemented in a single Bash file. Functionalities of a particular plugin is a simple Bash function. See the [Plugin API](./api/plugin.md) for more details.
 
