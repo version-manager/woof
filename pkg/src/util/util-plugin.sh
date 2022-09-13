@@ -1,33 +1,5 @@
 # shellcheck shell=bash
 
-util.plugin_is_absolute_path() {
-	local plugin="$1"
-	util.assert_not_empty 'plugin'
-
-	if [ "${plugin::1}" = '/' ]; then
-		if [ ! -f "$plugin/manifest.ini" ]; then
-			util.print_error_die "No plugin found at path: $plugin"
-		fi
-		return 0
-	else
-		return 1
-	fi
-}
-
-util.is_relative_path() {
-	local plugin="$1"
-	util.assert_not_empty 'plugin'
-
-	if [ "${plugin::2}" = './' ]; then
-		if [ ! -f "$plugin/manifest.ini" ]; then
-			util.print_error_die "No plugin found at path: $plugin"
-		fi
-		return 0
-	else
-		return 1
-	fi
-}
-
 util.plugin_parse_manifest() {
 	unset -v REPLY_{SLUG,NAME,DESC,TAGS}
 	declare -ag REPLY_TAGS=()
@@ -67,93 +39,94 @@ util.plugin_parse_manifest() {
 	fi
 }
 
-util.plugin_is_installed() {
-	unset -v REPLY_{TYPE,DIR}; REPLY_TYPE= REPLY_DIR=
+util.plugin_resolve_path() {
+	var.get_dir 'installed-plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY_{SRC,TARGET,TYPE}; REPLY_SRC= REPLY_TARGET= REPLY_TARGET=
 	local plugin="$1"
 
-	var.get_dir 'installed-plugins'
-	local plugins_dir="$REPLY"
-
 	plugin=${plugin%/}
-	if [ -L "$plugins_dir/$plugin" ]; then
+	if [ "${plugin::2}" = './' ]; then
 		REPLY_TYPE='symlink'
-		REPLY_DIR="$plugins_dir/$plugin"
-		return 0
-	elif [ -d "$plugins_dir/$plugin" ]; then
-		REPLY_TYPE='git'
-		REPLY_DIR="$plugins_dir/$plugin"
-		return 0
+		REPLY_SRC=$(readlink -f "$plugin")
+		REPLY_TARGET="$plugins_dir/local/${plugin##*/}"
+	elif [ "${plugin::1}" = '/' ]; then
+		REPLY_TYPE='symlink'
+		REPLY_SRC=$plugin
+		REPLY_TARGET="$plugins_dir/local/${plugin##*/}"
+	else
+		util.print_error_die "Passed plugin must be an absolute or relative path"
 	fi
-
-	return 1
 }
 
-util.plugin_install_with_symlink() {
-	local plugin_type="$1"
-	local plugin_place="$2"
-
+util.plugin_resolve_internal_path() {
 	var.get_dir 'installed-plugins'
 	local plugins_dir="$REPLY"
 
-	util.mkdirp "$plugins_dir"
+	local plugin="$1"
 
-	if ln -sfT "$plugin_place" "$plugins_dir/${plugin_place##*/}"; then :; else
-		util.print_error_die "Failed to symlink plugin directory"
+	if [ ! -d "$plugins_dir/$plugin" ]; then
+		util.print_error_die "Plugin not installed: $plugin"
 	fi
 
-	# Ensure specified path is a directroy
-	if [ ! -d "$plugin_place" ]; then
-		util.print_error_die "Path at '$plugin_place' is not a directory"
-	fi
-
-	if ! util.plugin_is_installed "$plugin_place"; then
-		util.mkdirp "$plugins_dir"
-
-		if ln -sfT "$plugin_place" "$plugins_dir/${plugin_place##*/}"; then :; else
-			util.print_error_die "Failed to symlink plugin directory"
-		fi
-
-		util.plugin_list_add "$plugin_type" "$plugin_place"
-	else
-		util.print_error_die "Plugin '$plugin_place' is already installed"
-	fi
+	REPLY="$plugins_dir/$plugin"
 }
 
-util.plugin_install_with_git() {
-	:
-	# TODO
-}
-
-util.plugin_list_add() {
+util.plugin_assert_is_valid() {
 	local plugin_type="$1"
-	local plugin_place="$2"
-	util.assert_not_empty 'plugin_type'
-	util.assert_not_empty 'plugin_place'
+	local plugin_dir="$2"
 
-	var.get_dir 'common'
-	local plugin_list_file="$REPLY/plugin-list.txt"
+	if [ ! -d "$plugin_dir" ]; then
+		util.print_error_die "Plugin directory does not exist: '$plugin_dir'"
+	fi
 
-	util.mkdirp "${plugin_list_file%/*}"
-
-	if ! printf '%s\n' "$plugin_type|$plugin_place" >> "$plugin_list_file"; then
-		util.print_error_die "Failed to write to file '$plugin_list_file'"
+	if [ ! -f "$plugin_dir/manifest.ini" ]; then
+		util.print_error_die "No plugin found at path: $plugin_dir"
 	fi
 }
 
-util.plugin_list_remove() {
-	:
+util.plugin_prune() {
+	var.get_dir 'installed-plugins'
+	local plugins_dir="$REPLY"
+
+	core.shopt_push -s nullglob
+
+	local file=
+	for file in "$plugins_dir"/*; do
+		if [ ! -e "$file" ]; then
+			unlink "$file"
+		fi
+	done
+
+	core.shopt_pop
 }
 
-uitl.plugin_list_parse() {
-	var.get_dir 'common'
-	local plugin_list_file="$REPLY/plugin-list.txt"
+# @description Installs a symlink plugin. Assumes that the src is a valid directory that's a plugin
+util.plugin_install() {
+	local plugin_type="$1"
+	local plugin_src="$2"
+	local plugin_target="$3"
 
-	unset -v REPLY; declare -ag REPLY=()
+	if [ "$plugin_type" = 'symlink' ]; then
+		if [ -d "$plugin_target" ]; then
+			util.print_error_die "Plugin '$plugin_src' is already installed"
+		else
+			util.mkdirp "${plugin_target%/*}"
 
-	if [ -f "$plugin_list_file" ]; then
-		local line=
-		while IFS='|' read -r line; do
-			REPLY+=("$line")
-		done < "$plugin_list_file"; unset -v line
+			if ln -sfT "$plugin_src" "$plugin_target"; then :; else
+				util.print_error_die "Failed to symlink plugin directory"
+			fi
+		fi
+	fi
+}
+
+util.plugin_uninstall() {
+	local plugin_target="$1"
+
+	if [ -L "$plugin_target" ]; then
+		unlink "$plugin_target"
+	else
+		rm -rf "${plugin_target?:}"
 	fi
 }

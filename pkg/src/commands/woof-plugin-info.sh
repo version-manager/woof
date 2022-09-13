@@ -2,16 +2,14 @@
 
 woof-plugin-info() {
 	local plugin="$1"
-	plugin=${plugin%/}
 
-	local manifest_file=
-	if util.plugin_is_absolute_path "$plugin"; then
-		manifest_file="$plugin/manifest.ini"
-	elif util.is_relative_path "$plugin"; then
-		local dir=
-		dir=$(realpath -f "$plugin")
-		manifest_file="$dir/manifest.ini"
+	if [ -z "$plugin" ]; then
+		util.print_error_die "Passed plugin cannot be empty"
 	fi
+
+	util.plugin_resolve_internal_path "$plugin"
+	local plugin_src="$REPLY"
+	local manifest_file="$plugin_src/manifest.ini"
 
 	util.plugin_parse_manifest "$manifest_file"
 	local slug="$REPLY_SLUG"

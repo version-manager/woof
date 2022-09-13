@@ -3,31 +3,17 @@
 woof-plugin-install() {
 	local plugin="$1"
 
-	if util.plugin_is_installed "$plugin"; then
-		core.print.die "Plugin '$plugin' already installed"
+	if [ -z "$plugin" ]; then
+		util.print_error_die "Passed plugin cannot be empty"
 	fi
 
-	plugin=${plugin%/}
-	if [ "${plugin::2}" = './' ]; then
-		plugin=$(readlink -f "$plugin")
+	util.plugin_prune
 
-		util.plugin_install_with_symlink 'symlink' "$plugin"
-	elif [ "${plugin::1}" = '/' ]; then
-		util.plugin_install_with_symlink 'symlink' "$plugin"
-	fi
+	util.plugin_resolve_path "$plugin"
+	local plugin_type="$REPLY_TYPE"
+	local plugin_src="$REPLY_SRC"
+	local plugin_target="$REPLY_TARGET"
 
-	if [ "${plugin::1}" = '/' ]; then
-		var.get_dir 'installed-plugins'
-		local installed_plugins_dir="$REPLY"
-
-		util.plugin_install_with_symlink 'symlink' "$plugin" "$installed_plugins_dir"
-	fi
-
-	# TODO
-	# if [[ "$specified_plugin" =~ ^github\.com/(.*?)/(.*) ]]; then
-	# 	local repo_owner="${BASH_REMATCH[1]}"
-	# 	local repo_name="${BASH_REMATCH[2]}"
-
-	# 	util.plugin_install_with_git 'git_repository' "$specified_plugin" "$installed_plugins_dir"
-	# fi
+	util.plugin_assert_is_valid "$plugin_type" "$plugin_src"
+	util.plugin_install "$plugin_type" "$plugin_src" "$plugin_target"
 }

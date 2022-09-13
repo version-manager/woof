@@ -58,6 +58,9 @@ main.woof() {
 		util.print_fatal_die 'Failed to shift'
 	fi
 
+	# TODO: remove once plugins are mature
+
+
 	case $subcommand in
 		init) woof-init "$@";;
 		install) woof-install "$@" ;;
