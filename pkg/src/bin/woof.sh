@@ -58,8 +58,11 @@ main.woof() {
 		util.print_fatal_die 'Failed to shift'
 	fi
 
-	# TODO: remove once plugins are mature
-
+	# TODO: remove once plugins are properly defaulted / enabled
+	local dir=
+	for dir in "$BASALT_PACKAGE_DIR"/pkg/src/plugins/{for-building,hashicorp,languages,languages-other,misc-tools}/; do
+	woof-plugin-install --force "$dir"
+	done; unset -v dir
 
 	case $subcommand in
 		init) woof-init "$@";;

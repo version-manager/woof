@@ -107,16 +107,19 @@ util.plugin_install() {
 	local plugin_type="$1"
 	local plugin_src="$2"
 	local plugin_target="$3"
+	local flag_force="$4"
 
 	if [ "$plugin_type" = 'symlink' ]; then
-		if [ -d "$plugin_target" ]; then
-			util.print_error_die "Plugin '$plugin_src' is already installed"
-		else
-			util.mkdirp "${plugin_target%/*}"
-
-			if ln -sfT "$plugin_src" "$plugin_target"; then :; else
-				util.print_error_die "Failed to symlink plugin directory"
+		if [ "$flag_force" = 'no' ]; then
+			if [ -d "$plugin_target" ]; then
+				util.print_error_die "Plugin '$plugin_src' is already installed"
 			fi
+		fi
+
+		util.mkdirp "${plugin_target%/*}"
+
+		if ln -sfT "$plugin_src" "$plugin_target"; then :; else
+			util.print_error_die "Failed to symlink plugin directory"
 		fi
 	fi
 }

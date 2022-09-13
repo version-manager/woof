@@ -48,7 +48,7 @@ Subcommands:"
 }
 
 util.help_show_plugin_core() {
-	printf '%s\n' "    plugin install [name]
+	printf '%s\n' "    plugin install [--force] [name]
         Add a plugin
 
     plugin uninstall [name]
