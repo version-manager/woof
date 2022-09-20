@@ -72,12 +72,12 @@ woof_override_cd() {
 	local flag_no_cd="$1"
 
 	case $shell in
-	# TODO flag_no_cd
 	fish)
 		printf '%s\n' 'function __woof_cd_hook()
 	woof tool cd-override
-end
-function cd
+end'
+	if [ "$flag_no_cd" = 'no' ]; then
+		printf '%s\n' 'function cd
 	__woof_cd_hook
 	builtin cd "$@"
 end
@@ -89,6 +89,7 @@ function popd
 	__woof_cd_hook
 	builtin popd "$@"
 end'
+	fi
 		;;
 	zsh|ksh|bash|sh)
 		printf '%s\n' '__woof_cd_hook() {
