@@ -74,12 +74,21 @@ woof_override_cd() {
 	case $shell in
 	# TODO flag_no_cd
 	fish)
-		cat <<-"EOF"
-		function cd
-		  woof tool cd-override
-		  builtin cd "$@"
-		end
-		EOF
+		printf '%s\n' 'function __woof_cd_hook()
+	woof tool cd-override
+end
+function cd
+	__woof_cd_hook
+	builtin cd "$@"
+end
+function pushd
+	__woof_cd_hook
+	builtin pushd "$@"
+end
+function popd
+	__woof_cd_hook
+	builtin popd "$@"
+end'
 		;;
 	zsh|ksh|bash|sh)
 		printf '%s\n' '__woof_cd_hook() {
@@ -89,6 +98,14 @@ woof_override_cd() {
 		printf '%s\n' 'cd() {
 	__woof_cd_hook
 	builtin cd "$@"
+}
+pushd() {
+	__woof_cd_hook
+	builtin pushd "$@"
+}
+popd() {
+	__woof_cd_hook
+	builtin popd "$@"
 }'
 	fi
 		;;
