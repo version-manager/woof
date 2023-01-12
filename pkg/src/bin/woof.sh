@@ -27,6 +27,8 @@ main.woof() {
 	fi
 	unset -v token_file
 
+	helper.plugin_enable_all_builtins
+
 	local global_flag_quiet='no'
 	local arg=
 	for arg; do case "$arg" in

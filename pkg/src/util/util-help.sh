@@ -63,6 +63,6 @@ util.help_show_plugin_core() {
     plugin info [name]
         List information about a plugin
 
-    plugin list
+    plugin list [--show-variants=web,local,builtin]
         List plugins"
 }

@@ -1,24 +1,41 @@
 # shellcheck shell=bash
 
 woof-plugin-list() {
-	util.plugin_prune
+	local flag_all='no' flag_variant='web,local,builtin'
+	local arg=
+	for arg; do case $arg in
+	--show-variants*)
+		flag_variant=
+		if [[ "$arg" == *=* ]]; then
+			flag_variant="${arg#*=}"
+		fi
+
+		if [ -z "$flag_variant" ]; then
+			util.print_error_die "Option '--show-variants' must have a value"
+		fi
+		;;
+	--show-disabled)
+		flag_all='yes'
+		;;
+	-*)
+		util.print_error_die "Flag '$arg' not recognized"
+		;;
+	esac done; unset -v arg
+	flag_variant=",$flag_variant,"
 
 	var.get_dir 'installed-plugins'
 	local plugins_dir="$REPLY"
 
-	core.shopt_push -s nullglob
-	local dir= plugin_{owner,name}=
-	for dir in "$plugins_dir"/*/*/; do
-		dir=${dir%/}
-		plugin_name=${dir##*/}
-		plugin_owner=${dir%/*}; plugin_owner=${plugin_owner##*/}
 
-		printf '%s\n' "$plugin_owner/$plugin_name"
-	done
-	core.shopt_pop
+	local dirpath=
+	for dirpath in "$plugins_dir"/*; do
+		local dirname="${dirpath##*/}"
+		local install_type=${dirname%%-*}
+		local plugin_slug=${dirname#*-}
 
-	if [ "$has_plugin" = 'no' ]; then
-		term.style_italic -Pd 'No items'
-		return
-	fi
+
+		if [[ "$flag_variant" == *"$install_type"* ]]; then
+			printf '%s\n' "$install_type: $plugin_slug"
+		fi
+	done; unset -v
 }
