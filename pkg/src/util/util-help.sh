@@ -28,6 +28,9 @@ Subcommands:
     set-version [--global] [plugin] [version]
         Set the current version of a program
 
+    exec <program> <version> <executable>
+        Execute the current version of a program
+
     list [--global] [--no-cache] [--all] [plugin]
         List programs
 "

@@ -66,6 +66,7 @@ main.woof() {
 		uninstall) woof-uninstall "$@" ;;
 		get-version) woof-get-version "$@" ;;
 		set-version) woof-set-version "$@" ;;
+		exec) woof-exec "$@" ;;
 		list) woof-list "$@" ;;
 		plugin) woof-plugin "$@" ;;
 		tool) woof-tool "$@" ;;
