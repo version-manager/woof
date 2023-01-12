@@ -137,7 +137,7 @@ util.get_plugin_data() {
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
 
-	local data_file="$install_dir/$tool_version/data.txt"
+	local data_file="$install_dir/$tool_version/.woof__/data.txt"
 	local key= values=
 	while IFS='=' read -r key values; do
 		IFS=':' read -ra values <<< "$values"
@@ -159,7 +159,7 @@ util.is_tool_version_installed() {
 	var.get_dir 'installed-tools' "$tool_name"
 	local install_dir="$REPLY"
 
-	if [ -f "$install_dir/$tool_version/done" ]; then
+	if [ -f "$install_dir/$tool_version/.woof__/done" ]; then
 		return 0
 	else
 		return 1

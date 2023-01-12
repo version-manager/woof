@@ -30,7 +30,7 @@ woof-exec() {
 	local -a bin_dirs="${REPLY[@]}"
 
 	for bin_dir in "${bin_dirs[@]}"; do
-		for bin_file in "$install_dir/$tool_version/files/$bin_dir"/*; do
+		for bin_file in "$install_dir/$tool_version/$bin_dir"/*; do
 			local bin_name="${bin_file##*/}"
 			if [[ -x "$bin_file" && "$bin_name" == "$executable" ]]; then
 				exec -a "$executable" "$bin_file" "${subcmds[@]:3}"

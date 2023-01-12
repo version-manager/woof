@@ -131,17 +131,20 @@ helper.install_tool_version() {
 	fi
 
 	# Move extracted contents to 'installed-tools' directory
-	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$tool_version/files"; then
+	core.shopt_push -s dotglob
+	if ! mv "$workspace_dir/$REPLY_DIR"/* "$install_dir/$tool_version"; then
 		rm -rf "$workspace_dir"
-		util.print_error_die "Could not move extracted contents to '$install_dir/$tool_version/files'"
+		util.print_error_die "Could not move extracted contents to '$install_dir/$tool_version'"
 	fi
+	core.shopt_pop
 
 	# Save information about bin, man, etc. pages later
+	mkdir -p "$install_dir/$tool_version/.woof__"
 	local old_ifs="$IFS"; IFS=':'
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
-mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/data.txt"; then
+mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/.woof__/data.txt"; then
 		rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
-		util.print_error_die "Failed to write to '$install_dir/$tool_version/data.txt'"
+		util.print_error_die "Failed to write to '$install_dir/$tool_version/.woof__/data.txt'"
 	fi
 	IFS="$old_ifs"
 
@@ -165,7 +168,8 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/data.txt"; then
 
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
-		: > "$install_dir/$tool_version/done"
+		mkdir -p "$install_dir/$tool_version/.woof__"
+		: > "$install_dir/$tool_version/.woof__/done"
 		util.print_info "Installed $tool_version"
 	else
 		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"

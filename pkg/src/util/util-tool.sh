@@ -249,9 +249,9 @@ util.tool_private_symlink_core() {
 
 	local bin_dir=
 	for bin_dir in "${bin_dirs[@]}"; do
-		if [ -d "$install_dir/$tool_version/files/$bin_dir" ]; then
+		if [ -d "$install_dir/$tool_version/$bin_dir" ]; then
 			local bin_file
-			for bin_file in "$install_dir/$tool_version/files/$bin_dir"/*; do
+			for bin_file in "$install_dir/$tool_version/$bin_dir"/*; do
 				if [ -d "$bin_file" ]; then
 					continue
 				fi
