@@ -15,7 +15,7 @@ util.tool_get_global_version() {
 
 	local tool_name="$1"
 
-	var.get_dir 'data-global' 'selection'
+	var.get_dir 'plugin-selection'
 	local dir="$REPLY"
 
 	unset -v REPLY; REPLY=
@@ -67,7 +67,7 @@ util.tool_set_global_version() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'data-global' 'selection'
+	var.get_dir 'plugin-selection'
 	local dir="$REPLY"
 
 	util.mkdirp "$dir"
@@ -213,8 +213,8 @@ util.tool_symlink_global_versions() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'data-global' 'bin'
-	local target_bin_dir="$REPLY"
+	var.get_dir 'usr_global'
+	local target_bin_dir="$REPLY/bin"
 
 	util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
 }

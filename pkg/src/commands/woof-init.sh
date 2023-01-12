@@ -28,8 +28,8 @@ woof-init() {
 
 	# global
 	printf '%s\n' '# global installs'
-	var.get_dir 'data-global' 'bin'
-	std.shell_path_prepend "$REPLY"
+	var.get_dir 'usr_global'
+	std.shell_path_prepend "$REPLY/bin"
 	printf '\n'
 
 	# cd

@@ -173,7 +173,7 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/data.txt"; then
 }
 
 helper.resymlink_global_all() {
-	var.get_dir 'data-global' 'selection'
+	var.get_dir 'plugin-selection'
 	local dir="$REPLY"
 
 	local file=
@@ -200,7 +200,7 @@ helper.switch_to_version() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'data-global' 'common'
+	var.get_dir 'plugin-data'
 	local global_common_dir="$REPLY"
 
 	var.get_dir 'installed-tools' "$tool_name"

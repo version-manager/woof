@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 nodejs.env() {
-	var.get_dir 'data-global' 'common'
+	var.get_dir 'plugin-data'
 	local global_common_dir="$REPLY"
 
 	# older version of pnpm did not follow the XDG Base Specification
