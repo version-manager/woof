@@ -32,20 +32,6 @@ woof-init() {
 	std.shell_path_prepend "$REPLY"
 	printf '\n'
 
-	# tty
-	var.get_tty_dir --no-error
-	local tty_dir="$REPLY"
-	if [ -n "$tty_dir" ]; then
-		printf '%s\n' '# local (per-tty) installs'
-		std.shell_path_prepend "$tty_dir/bin"
-		# shellcheck disable=SC2059
-		printf "rm -rf \"${tty_dir}\"
-mkdir -p \"$tty_dir\"
-__woof_cleanup() { rm -rf \"$tty_dir\"; }
-trap __woof_cleanup EXIT\n"
-		printf '\n'
-	fi
-
 	# cd
 	printf '%s\n' '# cd override'
 	woof_override_cd "$flag_no_cd"
@@ -56,15 +42,19 @@ trap __woof_cleanup EXIT\n"
 	woof_function
 	printf '\n'
 
-	# TODO: do not hardcode
 	printf '%s\n' '# --- plugins ----'
-	local tool=
-	for tool in nodejs deno go; do
-		source "$BASALT_PACKAGE_DIR/pkg/src/plugins/temp-tools/tools/$tool.sh"
+	# shellcheck disable=SC1007
+	local plugin_path= tool=
+	for plugin_path in "$BASALT_PACKAGE_DIR/pkg/src/plugins"/*/tools/*.sh; do
+		# shellcheck disable=SC1090
+		source "$plugin_path"
+		tool=${plugin_path##*/}; tool=${tool%*.sh}
 
-		printf '%s\n' "# $tool"
-		"$tool".env
-		printf '\n'
+		if command -v "$tool".env &>/dev/null; then
+			printf '%s\n' "# $tool"
+			"$tool".env
+			printf '\n'
+		fi
 	done
 }
 

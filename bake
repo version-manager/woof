@@ -15,6 +15,16 @@
 #
 # Learn more about it [on GitHub](https://github.com/hyperupcall/bake)
 
+__global_bake_version='1.11.2'
+
+if [ "$BAKE_INTERNAL_ONLY_VERSION" = 'yes' ]; then
+	# This is unused, but keep it here just in case
+	# shellcheck disable=SC2034
+	BAKE_INTERNAL_ONLY_VERSION_SUCCESS='yes'
+
+	return 0
+fi
+
 if [ "$0" != "${BASH_SOURCE[0]}" ] && [ "$BAKE_INTERNAL_CAN_SOURCE" != 'yes' ]; then
 	printf '%s\n' 'Error: This file should not be sourced' >&2
 	return 1
@@ -29,7 +39,7 @@ bake.die() {
 	else
 		__bake_error 'Exiting'
 	fi
-	__bake_print_big '<- ERROR'
+	__bake_print_big --show-time '<- ERROR'
 
 	__bake_print_stacktrace
 
@@ -56,6 +66,7 @@ bake.info() {
 	fi
 }
 
+# breaking: remove in v2
 # @description Dies if any of the supplied variables are empty. Deprecated in favor of 'bake.assert_not_empty'
 # @arg $@ string Names of variables to check for emptiness
 # @see bake.assert_not_empty
@@ -104,8 +115,13 @@ bake.has_flag() {
 		bake.die 'Failed to shift'
 	fi
 
+	local -a flags=("$@")
+	if ((${#flags[@]} == 0)); then
+		flags=("${__bake_args_userflags[@]}")
+	fi
+
 	local arg=
-	for arg; do
+	for arg in "${flags[@]}"; do
 		if [ "$arg" = "$flag_name" ]; then
 			return 0
 		fi
@@ -121,33 +137,33 @@ bake.cfg() {
 	local cfg="$1"
 	local value="$2"
 
+	# breaking: remove in v2
 	case $cfg in
 	stacktrace)
 		case $value in
 			yes) __bake_internal_warn "Passing either 'yes' or 'no' as a value for 'bake.cfg stacktrace' is deprecated. Instead, use either 'on' or 'off'"; __bake_cfg_stacktrace='on' ;;
 			no) __bake_internal_warn "Passing either 'yes' or 'no' as a value for 'bake.cfg stacktrace' is deprecated. Instead, use either 'on' or 'off'"; __bake_cfg_stacktrace='off' ;;
 			on|off) __bake_cfg_stacktrace=$value ;;
-			*) __bake_internal_die2 "Config property '$cfg' accepts only either 'on' or 'off'" ;;
-		esac
-		;;
-	pedantic-task-cd)
-		case $value in
-			yes) __bake_internal_warn "Passing either 'yes' or 'no' as a value for 'bake.cfg pedantic-task-cd' is deprecated. Instead, use either 'on' or 'off'"; trap '__bake_trap_debug' 'DEBUG' ;;
-			no) __bake_internal_warn "Passing either 'yes' or 'no' as a value for 'bake.cfg pedantic-task-cd' is deprecated. Instead, use either 'on' or 'off'"; trap - 'DEBUG' ;;
-			on) trap '__bake_trap_debug' 'DEBUG' ;;
-			off) trap - 'DEBUG' ;;
-			*) __bake_internal_die2 "Config property '$cfg' accepts only either 'on' or 'off'" ;;
+			*) __bake_internal_bigdie "Config property '$cfg' accepts only either 'on' or 'off'" ;;
 		esac
 		;;
 	big-print)
 		case $value in
-			yes|no) __bake_internal_warn "Passing either 'yes' or 'no' as a value for 'bake.cfg big-print' is deprecated. Instead, use either 'on' or 'off'" ;;
-			on|off) ;;
-			*) __bake_internal_die2 "Config property '$cfg' accepts only either 'on' or 'off'" ;;
+			yes|no|on|off) __bake_internal_warn "Passing any once-valid value to 'bake.cfg big-print' is deprecated. Instead, use function comments" ;;
+			*) __bake_internal_bigdie "Config property '$cfg' accepts only either 'on' or 'off'" ;;
+		esac
+		;;
+	pedantic-task-cd)
+		case $value in
+			yes) __bake_internal_warn "Passing either 'yes' or 'no' as a value for 'bake.cfg pedantic-task-cd' is deprecated. Instead, use either 'on' or 'off'"; trap '__bake_trap_debug_fixcd' 'DEBUG' ;;
+			no) __bake_internal_warn "Passing either 'yes' or 'no' as a value for 'bake.cfg pedantic-task-cd' is deprecated. Instead, use either 'on' or 'off'"; trap - 'DEBUG' ;;
+			on) trap '__bake_trap_debug_fixcd' 'DEBUG' ;;
+			off) trap - 'DEBUG' ;;
+			*) __bake_internal_bigdie "Config property '$cfg' accepts only either 'on' or 'off'" ;;
 		esac
 		;;
 	*)
-		__bake_internal_die2 "No config property matched '$cfg'"
+		__bake_internal_bigdie "No config property matched '$cfg'"
 		;;
 	esac
 }
@@ -175,26 +191,51 @@ __bake_print_stacktrace() {
 __bake_trap_err() {
 	local error_code=$?
 
-	__bake_print_big "<- ERROR"
+	__bake_print_big --show-time '<- ERROR'
 	__bake_internal_error "Your Bakefile did not exit successfully (exit code $error_code)"
 	__bake_print_stacktrace
 
 	exit $error_code
 } >&2
 
-__global_bake_trap_debug_current_function=
-__bake_trap_debug() {
+# @description When running a task, ensure that we start in the correct directory
+# @internal
+__bake_trap_debug_fixcd_current_fn=
+__bake_trap_debug_fixcd() {
 	local current_function="${FUNCNAME[1]}"
 
-	if [[ $current_function != "$__global_bake_trap_debug_current_function" \
+	if [[ $current_function != "$__bake_trap_debug_fixcd_current_fn" \
 			&& $current_function == task.* ]]; then
-		if ! cd "$BAKE_ROOT"; then
+		if ! cd -- "$BAKE_ROOT"; then
 			__bake_internal_die "Failed to cd to \$BAKE_ROOT"
 		fi
 	fi
 
-	__global_bake_trap_debug_current_function=$current_function
+	__bake_trap_debug_fixcd_current_fn=$current_function
 } >&2
+
+# @description Ensure that the main function is not ran
+# @internal
+__bake_trap_debug_barrier() {
+	local current_function="${FUNCNAME[1]}"
+
+	if [ "$current_function" = '__bake_main' ]; then
+		# shellcheck disable=SC2034
+		local __version_old="$__global_bake_version"
+
+		trap - DEBUG
+		unset -v BAKE_INTERNAL_ONLY_VERSION
+		unset -v BAKE_INTERNAL_CAN_SOURCE
+
+		__bake_copy_bakescript
+		if [ "$BAKE_FLAG_UPDATE" = 'yes' ]; then
+			exit 0
+		else
+			# shellcheck disable=SC2154
+			exec "$BAKE_ROOT/bake" "${__bake_global_backup_args[@]}"
+		fi
+	fi
+}
 
 # @description Test whether color should be outputed
 # @exitcode 0 if should print color
@@ -203,7 +244,17 @@ __bake_trap_debug() {
 __bake_is_color() {
 	local fd="1"
 
-	if [[ ${NO_COLOR+x} || "$TERM" = 'dumb' ]]; then
+	if [ ${NO_COLOR+x} ]; then
+		return 1
+	fi
+
+	if [[ $FORCE_COLOR == @(1|2|3) ]]; then
+		return 0
+	elif [[ $FORCE_COLOR == '0' ]]; then
+		return 1
+	fi
+
+	if [ "$TERM" = 'dumb' ]; then
 		return 1
 	fi
 
@@ -226,7 +277,7 @@ __bake_internal_die() {
 # doing so, it closes with "<- ERROR" big text
 # @arg $1 string Text to print
 # @internal
-__bake_internal_die2() {
+__bake_internal_bigdie() {
 	__bake_print_big '<- ERROR'
 
 	__bake_internal_error "$1. Exiting"
@@ -267,29 +318,206 @@ __bake_error() {
 	fi
 } >&2
 
+
+# @description Tests if the './bake' file should be replaced. It should only
+# be replaced if we're not in an interactive Git context
+# @internal
+__bake_should_replace_bakescript() {
+	local dir="$BAKE_ROOT"
+	while [ ! -d "$dir/.git" ] && [[ -n "$dir" ]]; do
+		dir=${dir%/*}
+	done
+
+	if [ -d "$dir/.git" ]; then
+		# ref: https://github.com/git/git/blob/d420dda0576340909c3faff364cfbd1485f70376/wt-status.c#L1749
+		# ref2: https://github.com/Byron/gitoxide/blob/375051fa97d79f95fa7179b536e616c4aefd88e2/git-repository/src/repository/state.rs#L8
+		local file=
+		for file in {rebase-apply/applying,rebase-apply/rebasing,rebase-apply,rebase-merge/interactive,rebase-merge,CHERRY_PICK_HEAD,MERGE_HEAD,BISECT_LOG,REVERT_HEAD}; do
+			if [ -f "$dir/.git/$file" ]; then
+				return 1
+			fi
+		done; unset -v file
+	fi
+
+	return 0
+}
+
+# @description Copy 'bake' script to current context
+# @internal
+__bake_copy_bakescript() {
+	# If there was an older version, and the versions are different, let the user know
+	if [ -z ${__version_old+x} ]; then
+		# shellcheck disable=SC2154
+		__bake_internal_warn "Updating from version <=1.10.0 to $__version_new"
+	else
+		if [ -n "$__version_old" ] && [ "$__version_old" != "$__version_new" ]; then
+			__bake_internal_warn "Updating from version $__version_old to $__version_new"
+		fi
+	fi
+
+	# shellcheck disable=SC2154
+	if ! cp -f "$__bake_dynamic_script" "$BAKE_ROOT/bake"; then
+		__bake_internal_die "Failed to copy 'bakeScript.sh'"
+	fi
+	if ! printf '\n%s\n' '__bake_main "$@"' >> "$BAKE_ROOT/bake"; then
+		__bake_internal_die "Failed to append to '$BAKE_ROOT/bake'"
+	fi
+
+	if ! chmod +x "$BAKE_ROOT/bake"; then
+		__bake_internal_die "Failed to 'chmod +x' bake script" >&2
+	fi
+}
+
+# @description Prepares internal variables for time setting
+# @internal
+__bake_time_prepare() {
+	if ((BASH_VERSINFO[0] >= 5)); then
+		__bake_global_timestart=$EPOCHSECONDS
+	fi
+}
+
+# @description Determines total approximate execution time of a task
+# @set string REPLY
+# @internal
+__bake_time_get_total_pretty() {
+	unset -v REPLY; REPLY=
+
+	if ((BASH_VERSINFO[0] >= 5)); then
+		local timediff=$((EPOCHSECONDS - __bake_global_timestart))
+		if ((timediff < 1)); then
+			return
+		fi
+
+		local seconds=$((timediff % 60))
+		local minutes=$((timediff / 60 % 60))
+		local hours=$((timediff / 3600 % 60))
+
+		REPLY="${seconds}s"
+
+		if ((minutes > 0)); then
+			REPLY="${minutes}m $REPLY"
+		fi
+
+		if ((hours > 0)); then
+			REPLY="${hours}h $REPLY"
+		fi
+	fi
+}
+
+# @description Parses the configuration for functions embeded in comments. This properly
+# parses inherited config from the 'init' function
+# @set string __bake_config_docstring
+# @set array __bake_config_watchexec_args
+# @set object __bake_config_map
+# @internal
+__bake_parse_task_comments() {
+	local task_name="$1"
+
+	local tmp_docstring=
+	local -a tmp_watch_args=()
+	local -A tmp_cfg_map=()
+	local line=
+	while IFS= read -r line || [ -n "$line" ]; do
+		if [[ $line =~ ^[[:space:]]*#[[:space:]](doc|watch|config):[[:space:]]*(.*?)$ ]]; then
+			local comment_category="${BASH_REMATCH[1]}"
+			local comment_content="${BASH_REMATCH[2]}"
+
+			if [ "$comment_category" = 'doc' ]; then
+				tmp_docstring=$comment_content
+			elif [ "$comment_category" = 'watch' ]; then
+				readarray -td' ' tmp_watch_args <<< "$comment_content"
+				tmp_watch_args[-1]=${tmp_watch_args[-1]::-1}
+			elif [ "$comment_category" = 'config' ]; then
+				local -a pairs=()
+				readarray -td' ' pairs <<< "$comment_content"
+				pairs[-1]=${pairs[-1]::-1}
+
+				# shellcheck disable=SC1007
+				local pair= key= value=
+				for pair in "${pairs[@]}"; do
+					IFS='=' read -r key value <<< "$pair"
+
+					tmp_cfg_map[$key]=${value:-on}
+				done; unset -v pair
+			fi
+		fi
+
+		# function()
+		if [[ $line =~ ^([[:space:]]*function[[:space:]]*)?(.*?)[[:space:]]*\(\)[[:space:]]*\{ ]]; then
+			local function_name="${BASH_REMATCH[2]}"
+
+			if [ "$function_name" == task."$task_name" ]; then
+				__bake_config_docstring=$tmp_docstring
+
+				__bake_config_watchexec_args+=("${tmp_watch_args[@]}")
+
+				local key=
+				for key in "${!tmp_cfg_map[@]}"; do
+					__bake_config_map[$key]=${tmp_cfg_map[$key]}
+				done; unset -v key
+
+				break
+			elif [ "$function_name" == 'init' ]; then
+				__bake_config_watchexec_args+=("${tmp_watch_args[@]}")
+
+				local key=
+				for key in "${!tmp_cfg_map[@]}"; do
+					__bake_config_map[$key]=${tmp_cfg_map[$key]}
+				done; unset -v key
+			fi
+
+			tmp_docstring=
+			tmp_watch_args=()
+			tmp_cfg_map=()
+		fi
+	done < "$BAKE_FILE"; unset -v line
+}
+
 # @description Nicely prints all 'Bakefile.sh' tasks to standard output
 # @internal
 __bake_print_tasks() {
-	printf '%s\n' 'Tasks:'
-	local str=
+	local str=$'Tasks:\n'
 
-	# shellcheck disable=SC1007,SC2034
-	local regex="^([[:space:]]*function[[:space:]]*)?task\.(.*?)\(\)[[:space:]]*\{[[:space:]]*(#[[:space:]]*(.*))?"
-	local line=
+	local -a task_flags=()
+	# shellcheck disable=SC1007
+	local line= task_docstring=
 	while IFS= read -r line || [ -n "$line" ]; do
-		if [[ "$line" =~ $regex ]]; then
-			str+="  -> ${BASH_REMATCH[2]}"
+		# doc
+		if [[ $line =~ ^[[:space:]]*#[[:space:]]doc:[[:space:]](.*?) ]]; then
+			task_docstring=${BASH_REMATCH[1]}
+		fi
 
-			local task_comment=${BASH_REMATCH[4]}
-			if [ -n "$task_comment" ]; then
+		# flag
+		if [[ $line =~ bake\.has_flag[[:space:]][\'\"]?([[:alnum:]]+) ]]; then
+			task_flags+=("[--${BASH_REMATCH[1]}]")
+		fi
+
+		if [[ $line =~ ^([[:space:]]*function[[:space:]]*)?task\.(.*?)\(\)[[:space:]]*\{[[:space:]]*(#[[:space:]]*(.*))? ]]; then
+			local matched_function_name="${BASH_REMATCH[2]}"
+			local matched_comment="${BASH_REMATCH[4]}"
+
+			if ((${#task_flags[@]} > 0)); then
+				str+="       ${task_flags[*]}"$'\n'
+			fi
+			task_flags=()
+
+			str+="  -> $matched_function_name"
+
+			if [[ -n "$matched_comment" || -n "$task_docstring" ]]; then
+				if [ -n "$matched_comment" ]; then
+					__bake_internal_warn "Adjacent documentation comments are deprecated. Instead, write a comment above 'task.$matched_function_name()' like so: '# doc: $matched_comment'"
+					task_docstring=$matched_comment
+				fi
+
 				if __bake_is_color; then
-					str+=$' \033[3m'"($task_comment)"$'\033[0m'
+					str+=$' \033[3m'"($task_docstring)"$'\033[0m'
 				else
-					str+=" ($task_comment)"
+					str+=" ($task_docstring)"
 				fi
 			fi
 
 			str+=$'\n'
+			task_docstring=
 		fi
 	done < "$BAKE_FILE"; unset -v line
 
@@ -308,11 +536,20 @@ __bake_print_tasks() {
 # @arg $1 string Text to print
 # @internal
 __bake_print_big() {
-	local print_text="$1"
-
-	if [ "$__bake_cfg_big_print" = 'off' ]; then
+	if [ "${__bake_config_map[big-print]}" = 'off' ]; then
 		return
 	fi
+
+	if [ "$1" = '--show-time' ]; then
+		local flag_show_time='yes'
+		local print_text="$2"
+	else
+		local flag_show_time='no'
+		local print_text="$1"
+	fi
+
+	__bake_time_get_total_pretty
+	local time_str="${REPLY:+ ($REPLY) }"
 
 	# shellcheck disable=SC1007
 	local _stty_height= _stty_width=
@@ -320,6 +557,7 @@ __bake_print_big() {
 		if stty size &>/dev/null; then
 			stty size
 		else
+			# Only columns is used by Bake, so '20  was chosen arbitrarily
 			if [ -n "$COLUMNS" ]; then
 				printf '%s\n' "20 $COLUMNS"
 			else
@@ -332,6 +570,9 @@ __bake_print_big() {
 	# shellcheck disable=SC2183
 	printf -v separator_text '%*s' $((_stty_width - ${#print_text} - 1))
 	printf -v separator_text '%s' "${separator_text// /=}"
+	if [[ "$flag_show_time" == 'yes' && -n "$time_str" ]]; then
+		separator_text="${separator_text::5}${time_str}${separator_text:5+${#time_str}:${#separator_text}}"
+	fi
 	if __bake_is_color; then
 		printf '\033[1m%s %s\033[0m\n' "$print_text" "$separator_text"
 	else
@@ -344,15 +585,15 @@ __bake_print_big() {
 # @set REPLY Number of times to shift
 # @internal
 __bake_parse_args() {
-	unset REPLY; REPLY=
+	unset -v REPLY; REPLY=
 	local -i total_shifts=0
 
-	local __bake_arg=
+	local arg=
 	for arg; do case $arg in
 	-f)
 		BAKE_FILE=$2
 		if [ -z "$BAKE_FILE" ]; then
-			__bake_internal_die "A value was not specified for for flag '-f"
+			__bake_internal_die "A value was not specified for for flag '-f'"
 		fi
 		((total_shifts += 2))
 		if ! shift 2; then
@@ -366,21 +607,38 @@ __bake_parse_args() {
 			__bake_internal_die "Specified file '$BAKE_FILE' is not actually a file"
 		fi
 		;;
-	-v)
-		local bake_version='1.9.0'
-		printf '%s\n' "Version: $bake_version"
-		exit 0
-		;;
 	-h)
 		local flag_help='yes'
 		if ! shift; then
 			__bake_internal_die 'Failed to shift'
 		fi
 		;;
+	-w)
+		((total_shifts += 1))
+		if ! shift; then
+			__bake_internal_die 'Failed to shift'
+		fi
+
+		if [[ ! -v 'BAKE_INTERNAL_NO_WATCH_OVERRIDE' ]]; then
+			BAKE_FLAG_WATCH='yes'
+		fi
+		;;
+	-u)
+		((total_shifts += 1))
+		if ! shift; then
+			__bake_internal_die 'Failed to shift'
+		fi
+
+		BAKE_FLAG_UPDATE='yes'
+		;;
+	-v)
+		printf '%s\n' "Version: $__global_bake_version"
+		exit 0
+		;;
 	*)
 		break
 		;;
-	esac done
+	esac done; unset -v arg
 
 	if [ -n "$BAKE_FILE" ]; then
 		BAKE_ROOT=$(
@@ -410,7 +668,7 @@ __bake_parse_args() {
 
 	if [ "$flag_help" = 'yes' ]; then
 		cat <<-"EOF"
-		Usage: bake [-h|-v] [-f <Bakefile>] [var=value ...] <task> [args ...]
+		Usage: bake [-h|-v] [-u|-w] [-f <Bakefile>] [var=value ...] <task> [args ...]
 		EOF
 		__bake_print_tasks
 		exit
@@ -422,10 +680,7 @@ __bake_parse_args() {
 # @description Main function
 # @internal
 __bake_main() {
-	__bake_cfg_stacktrace='off'
-	__bake_cfg_big_print='on'
-
-	# Environment boilerplate
+	# Environment and configuration boilerplate
 	set -ETeo pipefail
 	shopt -s dotglob extglob globasciiranges globstar lastpipe shift_verbose
 	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' \
@@ -433,40 +688,48 @@ __bake_main() {
 		LC_TELEPHONE='C' LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
 	trap '__bake_trap_err' 'ERR'
 	trap ':' 'INT' # Ensure Ctrl-C ends up printing <- ERROR ==== etc.
-	bake.cfg pedantic-task-cd 'off'
+
+	declare -ga __bake_args_original=("$@")
 
 	# Parse arguments
-	# Set `BAKE_{ROOT,FILE}`
-	BAKE_ROOT=; BAKE_FILE=
+	# Set `BAKE_{ROOT,FILE,FLAG_WATCH}`
+	BAKE_ROOT=; BAKE_FILE=; BAKE_FLAG_WATCH=
 	__bake_parse_args "$@"
-	if ! shift "$REPLY"; then
+	if ! shift $REPLY; then
 		__bake_internal_die 'Failed to shift'
 	fi
 
 	# Set variables à la Make
 	# shellcheck disable=SC1007
-	local __bake_key= __bake_value=
-	local __bake_arg=
+	local __bake_key= __bake_value= __bake_arg=
 	for __bake_arg; do case $__bake_arg in
-		*=*)
-			IFS='=' read -r __bake_key __bake_value <<< "$__bake_arg"
+	*=*)
+		IFS='=' read -r __bake_key __bake_value <<< "$__bake_arg"
 
-			declare -g "$__bake_key"
-			local -n __bake_variable="$__bake_key"
-			__bake_variable="$__bake_value"
+		# If 'key=value' is passed, create global variable $value
+		declare -g "$__bake_key"
+		local -n __bake_variable="$__bake_key"
+		__bake_variable="$__bake_value"
 
-			if ! shift; then
-				__bake_internal_die 'Failed to shift'
-			fi
-			;;
-		*) break
+		# If 'key=value' is passed, create global variable $value_key
+		declare -g "var_$__bake_key"
+		local -n __bake_variable="var_$__bake_key"
+		__bake_variable="$__bake_value"
+
+		if ! shift; then
+			__bake_internal_die 'Failed to shift'
+		fi
+		;;
+	*)
+		break
+		;;
 	esac done; unset -v __bake_arg
 	unset -v __bake_key __bake_value
 	unset -vn __bake_variable
 
 	local __bake_task="$1"
 	if [ -z "$__bake_task" ]; then
-		__bake_internal_error "No valid task supplied"
+		__bake_internal_error 'No valid task supplied'
 		__bake_print_tasks
 		exit 1
 	fi
@@ -474,40 +737,61 @@ __bake_main() {
 		__bake_internal_die 'Failed to shift'
 	fi
 
-	if ! cd "$BAKE_ROOT"; then
-		__bake_internal_die "Failed to cd"
-	fi
+	declare -ga __bake_args_userflags=("$@")
 
-	# shellcheck disable=SC2097,SC1007,SC1090
-	__bake_task= source "$BAKE_FILE"
+	declare -g __bake_config_docstring=
+	declare -ga __bake_config_watchexec_args=()
+	declare -gA __bake_config_map=(
+		[stacktrace]='off'
+		[big-print]='on'
+		[pedantic-cd]='off'
+	)
 
-	if declare -f task."$__bake_task" >/dev/null 2>&1; then
-		local line=
-		local shouldTestNextLine='no'
-		while IFS= read -r line; do
-			if [ "$shouldTestNextLine" = 'yes' ]; then
-				if [[ $line == *'bake.cfg'*big-print*@(no|off)* ]]; then
-					__bake_cfg_big_print='off'
-				fi
-				shouldTestNextLine='no'
-			fi
-
-			if [[ $line == @(task."$__bake_task"|init)*'('*')'*'{' ]]; then
-				shouldTestNextLine='yes'
-			fi
-		done < "$BAKE_FILE"; unset -v line shouldTestNextLine
-
-		__bake_print_big "-> RUNNING TASK '$__bake_task'"
-		if declare -f init >/dev/null 2>&1; then
-			init "$__bake_task"
+	if [ "$BAKE_FLAG_WATCH" = 'yes' ]; then
+		if ! command -v watchexec &>/dev/null; then
+			__bake_internal_die "Executable not found: 'watchexec'"
 		fi
-		task."$__bake_task" "$@"
-		__bake_print_big "<- DONE"
+
+		__bake_parse_task_comments "$__bake_task"
+
+		# shellcheck disable=SC1007
+		BAKE_INTERNAL_NO_WATCH_OVERRIDE= exec watchexec "${__bake_config_watchexec_args[@]}" "$BAKE_ROOT/bake" -- "${__bake_args_original[@]}"
 	else
-		__bake_internal_error "Task '$__bake_task' not found"
-		__bake_print_tasks
-		exit 1
+		if ! cd -- "$BAKE_ROOT"; then
+			__bake_internal_die "Failed to cd"
+		fi
+
+		# shellcheck disable=SC2097,SC1007,SC1090
+		__bake_task= source "$BAKE_FILE"
+
+		if declare -f task."$__bake_task" >/dev/null 2>&1; then
+			__bake_parse_task_comments "$__bake_task"
+
+			__bake_print_big "-> RUNNING TASK '$__bake_task'"
+
+			if declare -f init >/dev/null 2>&1; then
+				init "$__bake_task"
+			fi
+
+			__bake_time_prepare
+
+			task."$__bake_task" "${__bake_args_userflags[@]}"
+
+			__bake_print_big --show-time "<- DONE"
+		else
+			__bake_internal_error "Task '$__bake_task' not found"
+			__bake_print_tasks
+			exit 1
+		fi
 	fi
 }
+
+__bake_entrypoint() {
+	printf '%s\n' 'Not implemented.'
+}
+
+if [[ -v BAKE_INTERNAL_EXPERIMENTAL_SINGLEFILE ]]; then
+	__bake_entrypoint "$@"
+fi
 
 __bake_main "$@"

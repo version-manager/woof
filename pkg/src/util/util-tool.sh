@@ -53,7 +53,7 @@ util.tool_get_local_version() {
 		if [ "$flag_no_error" = 'yes' ]; then
 			return
 		else
-			util.print_error_die "Failed to find local default for plugin '$tool_name'"
+			util.print_error_die "No default was found for plugin '$tool_name'"
 		fi
 	fi
 

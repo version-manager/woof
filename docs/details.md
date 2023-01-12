@@ -1,31 +1,51 @@
 # Details
 
-## Things
-
-Current version can be determined by
-
-- Global version (default)
-- Per-directory
-- Per tty/pty
+Woof supports global and local versions. Global versions use symlinks while local versions use shims.
 
 ## Approach
 
-When creating version managers, there are two approaches: shims and symlinks
-
-### Shims
-
-In essence, the shim layer is an indirection layer that facilities executing the proper version. This is usually implemented with some sort of shell script. The version is derived from the current context, which can include the current tty/pty, current directory, or global version. I don't like shims, primarily because they incur a time penalty; that is, the startup initialization of a shell. This would influence things like benchmarks. This approach also feels dirty to me.
-
-Shims might be required to make features such as (per-tty versions) more reliable. But, they can significantly slow things down, as in the case with [asdf](https://github.com/asdf-vm/asdf/issues/290)
+Woof uses a hybrid approach by using both shims and symlinks to manage versions.
 
 ### Symlinks
 
-There is no startup penalty for symlinks, unlike shims. The tradeoff is that it is harder to implement when accounting for the current context. Mainly, extra code needs to be evaluated during the initialization of interactive shells (or just the primary login shell).
+Symlinks are used for global versioning. Global versioning is a simple enough case in which shims are not needed. So, go with the ligher weight approach.
 
-## Installing
+### Shims
 
-The installation steps for installing any particular version of any particular plugin are streamlined.
+Shims are used for contextual versioning (per shell, directory, if has tty).
 
-Unlike similar projects (`asdf`), all plugins are installed by default. Only the most popular plugins are shown by default as not to overwhelm the user.
+When invoking a command (ex. `python`), the `$PATH` is arranged in such a way that a custom Woof script is invoked instead. This script gathers the current context.
 
-Not only that, but all code is ran under the same shell context (with the exception of _filters_, (of which, many are written for Deno in TypeScript)). Similarly, this contrasts previous approaches since extraneous subshells are minimized to reduce unnecessary performance penalties (especially on platforms like Cygwin, etc.). This also means there is more code reuse between plugin
+Shims are necessary to evaluate the current context to decide what version of binary to `exec` into. Right now, a shell script is used, but later a faster language will most definitely be used.
+
+## Plugin Installation
+
+Unlike other version managers, Woof can handle different version of many languages without installing any extra plugins.
+
+Woof allows to enable and disable plugins if they are causing trouble.
+
+## Language Specifics
+
+Differences from stock configuration. These explain how `<plugin.env()` is used.
+
+### Deno
+
+We set `DENO_INSTALL_ROOT` to a custom directory.
+
+Global packages installed with `deno install` all install to that directory and coexist. Its installed binaries are appended to the `PATH`.
+
+### Go
+
+Go has a [page](https://go.dev/doc/manage-install) on managing multiple versions of Go, but it only describes doing so with `go install`. Internally, this uses [go/dl](https://go.googlesource.com/dl), but that is of no use to us. [Here](https://stackoverflow.com/a/10847122/9367643) shows an overview of `GOROOT` vs `GOPATH`.
+
+We set `GOROOT` to a custom directory.
+
+Global packages installed with `go install` all install to that directory and coexist. Its installed binaries are appended to the `PATH`.
+
+### NodeJS
+
+Global packages installed with `npm install -g` are installed per-version.
+
+Run `woof tool resymlink` after installing a package (with `npm`) so it appears in the `PATH`.
+
+Use Yarn or `pnpm` if you want global packages to be shared. `PNPM_HOME` is also set.

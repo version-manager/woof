@@ -3,8 +3,11 @@
 go.env() {
 	var.get_dir 'data-global' 'common'
 	local global_common_dir="$REPLY"
-	# TODO gopath
-	:
+
+	# To follow the XDG Base Directory Specification
+	std.shell_variable_assignment 'GOPATH' "$global_common_dir/gopath"
+	std.shell_variable_export 'GOPATH'
+	std.shell_path_prepend '$GOPATH/bin'
 }
 
 go.table() {
@@ -23,3 +26,8 @@ go.install() {
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
 }
+
+# TODO:
+# go.info() {
+# 	go env
+# }

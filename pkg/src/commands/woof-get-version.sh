@@ -25,11 +25,16 @@ woof-get-version() {
 	unset -v possible_tool_name
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.tool_get_global_version "$flag_fullpath" "$tool_name"
+		util.tool_get_global_version --no-error "$tool_name"
 	else
-		util.tool_get_local_version "$flag_fullpath" "$tool_name"
+		util.tool_get_local_version --no-error "$tool_name"
 	fi
 	local version="$REPLY"
+
+	if [ -n "$version" ]; then
+		util.print_warn "No default was found for plugin '$tool_name'"
+		return
+	fi
 
 	printf '%s\n' "$version"
 }

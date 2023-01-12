@@ -10,13 +10,13 @@ Flags:
         Print help
 
     -q, --quiet
-        Do not log informattive messages to stdout. Useful for scripting. Error messages will still be printed
+        Do not log informattive messages to stdout. Error messages will still be printed
 
 Subcommands:
     init [--no-cd] <shell>
         Print code for a particular shell to set the proper PATH, etc.
 
-    install [--no-cache] [--force] [plugin] [version]
+    install [--no-cache] [--force] [name] [version]
         Install a particular program
 
     uninstall [plugin] [version]

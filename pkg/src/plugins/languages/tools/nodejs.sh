@@ -1,7 +1,11 @@
 # shellcheck shell=bash
 
 nodejs.env() {
-	std.shell_variable_assignment 'PNPM_HOME' "${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+	var.get_dir 'data-global' 'common'
+	local global_common_dir="$REPLY"
+
+	# older version of pnpm did not follow the XDG Base Specification
+	std.shell_variable_assignment 'PNPM_HOME' "$global_common_dir/pnpm_home"
 	std.shell_variable_export 'PNPM_HOME'
 	std.shell_path_prepend '$PNPM_HOME'
 }
@@ -19,9 +23,6 @@ nodejs.install() {
 	p.mkdir 'dir'
 	p.ensure mv ./*/* './dir'
 
-	# TODO:
-	# p.ensure mv './dir/lib/node_plugins' './dir/lib/node_plugins_old'
-
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
 	REPLY_MANS=('./share/man/man1')
@@ -29,4 +30,11 @@ nodejs.install() {
 
 nodejs.dir() {
 	:
+}
+
+nodejs.info() {
+	local npm_bin=
+	npm_bin=$(npm -g bin)
+
+	printf '%s\n' "npm root -g: $npm_bin"
 }

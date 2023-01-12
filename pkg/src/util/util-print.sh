@@ -11,6 +11,11 @@ util.print_error_die() {
 	exit 1
 }
 
+
+util.print_warn() {
+	core.print_warn "$@"
+}
+
 util.print_info() {
 	if [ "$global_flag_quiet" == 'no' ]; then
 		core.print_info "$@"
