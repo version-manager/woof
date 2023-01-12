@@ -28,7 +28,7 @@ Plugins include code that manage multiple versions and variants of a tool. For e
 - [Please](https://please.build)
   - all versions
 
-To add support for a new language, tool, or program, write a plugin. Each plugin is implemented in a single Bash file. Functionalities of a particular plugin is a simple Bash function. See the [Plugin API](./api/plugin.md) for more details.
+To add support for a new language or program, write a plugin. Each plugin is implemented in a single Bash file. Functionalities of a particular plugin is a simple Bash function. See the [Plugin API](./api/plugin.md) for more details.
 
 ### Filters
 

@@ -17,22 +17,22 @@ Subcommands:
         Print code for a particular shell to set the proper PATH, etc.
 
     install [--no-cache] [--force] [name] [version]
-        Install a particular program
+        Install a particular tool
 
     uninstall [plugin] [version]
-        Uninstall a particular program
+        Uninstall a particular tool
 
     get-version [--global] [--full] [plugin]
-        Get the current version of a program
+        Get the current version of a tool
 
     set-version [--global] [plugin] [version]
-        Set the current version of a program
+        Set the current version of a tool
 
-    exec <program> <version> <executable>
-        Execute the current version of a program
+    exec <tool> <version> <executable>
+        Execute the executable of a particular version of a tool
 
     list [--global] [--no-cache] [--all] [plugin]
-        List programs
+        List tools
 "
 	util.help_show_plugin_core
 	printf '%s\n' "
