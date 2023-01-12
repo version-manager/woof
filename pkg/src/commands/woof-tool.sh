@@ -48,7 +48,9 @@ woof-tool() {
 		local tool_version="$REPLY"
 		unset -v possible_tool_version
 
-		helper.install_tool_version 'yes' 'yes' "$tool_name" "$tool_version"
+		local flag_interactive='yes'
+		local flag_force='yes'
+		helper.install_tool_version "$flag_interactive" "$flag_force" "$tool_name" "$tool_version"
 	elif [ "$subcmd" = 'clear-table-cache' ]; then
 		local tool_name="$1"
 

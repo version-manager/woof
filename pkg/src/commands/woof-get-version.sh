@@ -32,7 +32,7 @@ woof-get-version() {
 	local version="$REPLY"
 
 	if [ -n "$version" ]; then
-		util.print_warn "No default was found for plugin '$tool_name'"
+		core.print_warn "No default was found for plugin '$tool_name'"
 		return
 	fi
 

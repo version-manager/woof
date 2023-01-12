@@ -32,7 +32,8 @@ woof-install() {
 	local tool_version="$REPLY"
 	unset -v possible_tool_version
 
-	helper.install_tool_version 'no' "$flag_force" "$tool_name" "$tool_version"
+	local flag_interactive='no'
+	helper.install_tool_version "$flag_interactive" "$flag_force" "$tool_name" "$tool_version"
 
 	util.tool_get_global_version --no-error "$tool_name"
 	local tool_version_global="$REPLY"

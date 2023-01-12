@@ -180,3 +180,4 @@ This requires a modification to the  API
 - See
 - See
 - Rust
+- Neovim

@@ -261,7 +261,9 @@ util.tool_private_symlink_core() {
 					continue
 				fi
 
-				if ! ln -sf "$bin_file" "$target_bin_dir/${bin_file##*/}"; then
+				local bin_name="${bin_file##*/}"
+				core.print_info "symlinking $bin_name"
+				if ! ln -sf "$bin_file" "$target_bin_dir/$bin_name"; then
 					core.print_warn "Symlink failed. Skipping"
 				fi
 			done; unset -v bin_file
