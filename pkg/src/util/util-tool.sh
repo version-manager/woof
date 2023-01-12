@@ -46,7 +46,7 @@ util.tool_get_local_version() {
 
 	local tool_name="$1"
 
-	var.get_tty_dir
+	var.get_dir 'data-local'
 	local dir="$REPLY/selection"
 
 	if [ ! -f "$dir/$tool_name" ]; then
@@ -86,7 +86,7 @@ util.tool_set_local_version() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_tty_dir
+	var.get_dir 'data-local'
 	local dir="$REPLY/selection"
 
 	util.mkdirp "$dir"
@@ -225,7 +225,7 @@ util.tool_symlink_local_versions() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_tty_dir
+	var.get_dir 'data-local'
 	local target_bin_dir="$REPLY/bin"
 
 	util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"

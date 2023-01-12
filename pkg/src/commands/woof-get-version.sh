@@ -1,14 +1,11 @@
 # shellcheck shell=bash
 
 woof-get-version() {
-	local flag_global='no' flag_fullpath='no'
+	local flag_global='no'
 	local arg=
 	for arg; do case $arg in
 	--global)
 		flag_global='yes'
-		;;
-	--fullpath)
-		flag_fullpath='yes'
 		;;
 	-*)
 		util.print_error_die "Flag '$arg' not recognized"
