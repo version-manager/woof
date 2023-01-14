@@ -1,11 +1,19 @@
 # shellcheck shell=bash
 
 woof-exec() {
+	local -a subcmds=()
 	local arg=
 	for arg; do case $arg in
+	--help)
+		util.help_show_usage_and_flags 'exec'
+		util.help_show_cmd_root 'exec'
+		exit 0
+		;;
+	-*)
+		util.print_error_die "Flag '$arg' not recognized"
+		;;
 	*)
 		subcmds+=("$arg")
-		shift
 	esac done; unset -v arg
 
 	local tool_name="${subcmds[0]}"

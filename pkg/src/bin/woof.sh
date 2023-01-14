@@ -31,9 +31,9 @@ main.woof() {
 
 	local global_flag_quiet='no'
 	local arg=
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	--help|-h)
-		util.help_show
+		util.help_show_cmd_root_all
 		exit
 		;;
 	--quiet|-q)
@@ -53,7 +53,7 @@ main.woof() {
 	# Get action name
 	local subcommand="$1"
 	if [ -z "$subcommand" ]; then
-		util.help_show
+		util.help_show_cmd_root_all
 		util.print_error_die 'No subcommand was given'
 	fi
 	if ! shift; then

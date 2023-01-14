@@ -5,6 +5,11 @@ woof-install() {
 	local flag_no_cache='no' flag_force='no'
 	local arg=
 	for arg; do case $arg in
+	--help)
+		util.help_show_usage_and_flags 'install'
+		util.help_show_cmd_root 'install'
+		exit 0
+		;;
 	--no-cache)
 		flag_no_cache='yes'
 		;;
@@ -16,7 +21,6 @@ woof-install() {
 		;;
 	*)
 		subcmds+=("$arg")
-		shift
 	esac done; unset -v arg
 
 	local possible_tool_name="${subcmds[0]}"

@@ -1,9 +1,15 @@
 # shellcheck shell=bash
 
 woof-get-version() {
+	local -a subcmds=()
 	local flag_global='no'
 	local arg=
 	for arg; do case $arg in
+	--help)
+		util.help_show_usage_and_flags 'get-version'
+		util.help_show_cmd_root 'get-version'
+		exit 0
+		;;
 	--global)
 		flag_global='yes'
 		;;
@@ -12,7 +18,6 @@ woof-get-version() {
 		;;
 	*)
 		subcmds+=("$arg")
-		shift
 	esac done; unset -v arg
 
 	local possible_tool_name="${subcmds[0]}"

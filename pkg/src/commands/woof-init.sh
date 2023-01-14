@@ -5,6 +5,11 @@ woof-init() {
 	local flag_no_cd='no'
 	local arg=
 	for arg; do case $arg in
+	--help)
+		util.help_show_usage_and_flags 'init'
+		util.help_show_cmd_root 'init'
+		exit 0
+		;;
 	--no-cd)
 		flag_no_cd='yes'
 		;;
@@ -13,7 +18,6 @@ woof-init() {
 		;;
 	*)
 		subcmds+=("$arg")
-		shift
 	esac done; unset -v arg
 
 	local shell="${subcmds[0]}"

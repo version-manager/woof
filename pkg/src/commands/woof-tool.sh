@@ -1,7 +1,23 @@
 # shellcheck shell=bash
 
 woof-tool() {
-	local subcmd="$1"
+	local -a subcmds=()
+	local arg=
+	for arg; do case $arg in
+	--help)
+		util.help_show_usage_and_flags 'tool'
+		util.help_show_cmd_tool_all 'tool'
+		exit 0
+		;;
+	-*)
+		util.print_error_die "Flag '$arg' not recognized"
+		;;
+	*)
+		break
+	esac done; unset -v arg
+
+	local subcmd="${subcmds[0]}"
+
 	if [ -z "$subcmd" ]; then
 		util.help_show
 		util.print_error_die 'Expected subcommand'

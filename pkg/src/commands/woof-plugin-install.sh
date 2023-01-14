@@ -1,13 +1,20 @@
 # shellcheck shell=bash
 
 woof-plugin-install() {
-	local plugin="$1"
-	local flag_force='no'
 	local -a plugins=()
+	local flag_force='no'
 	local arg=
 	for arg; do case $arg in
+	--help)
+		util.help_show_usage_and_flags 'plugin install'
+		util.help_show_cmd_plugin 'install'
+		exit 0
+		;;
 	--force)
 		flag_force='yes'
+		;;
+	-*)
+		util.print_error_die "Flag '$arg' not recognized"
 		;;
 	*)
 		plugins+=("$arg")

@@ -1,10 +1,15 @@
 # shellcheck shell=bash
 
 woof-list() {
-	local flag_global='no' flag_no_cache='no' flag_all='no'
 	local -a plugins=()
+	local flag_global='no' flag_no_cache='no' flag_all='no'
 	local arg=
 	for arg; do case $arg in
+	--help)
+		util.help_show_usage_and_flags 'list'
+		util.help_show_cmd_root 'list'
+		exit 0
+		;;
 	--global)
 		flag_global='yes'
 		;;
