@@ -23,18 +23,13 @@ woof-install() {
 		subcmds+=("$arg")
 	esac done; unset -v arg
 
-	local possible_tool_name="${subcmds[0]}"
-	local possible_tool_version="${subcmds[1]}"
-
-	helper.determine_tool_name "$possible_tool_name"
+	helper.determine_tool_name "${subcmds[0]}"
 	local tool_name="$REPLY"
-	unset -v possible_tool_name
 
 	helper.create_version_table "$tool_name" "$flag_no_cache"
 
-	helper.determine_tool_version --allow-latest "$tool_name" "$possible_tool_version"
+	helper.determine_tool_version --allow-latest "$tool_name" "${subcmds[1]}"
 	local tool_version="$REPLY"
-	unset -v possible_tool_version
 
 	local flag_interactive='no'
 	helper.install_tool_version "$flag_interactive" "$flag_force" "$tool_name" "$tool_version"

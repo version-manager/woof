@@ -4,9 +4,9 @@ deno.env() {
 	var.get_dir 'plugin-data'
 	local global_common_dir="$REPLY"
 
-	std.shell_variable_assignment 'DENO_INSTALL_ROOT' "$global_common_dir/deno_install"
-	std.shell_variable_export 'c'
-	std.shell_path_prepend '$DENO_INSTALL_ROOT/bin'
+	utility.shell_variable_assignment 'DENO_INSTALL_ROOT' "$global_common_dir/deno_install"
+	utility.shell_variable_export 'c'
+	utility.shell_path_prepend '$DENO_INSTALL_ROOT/bin'
 }
 
 deno.table() {

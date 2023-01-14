@@ -140,11 +140,11 @@ util.plugin_assert_is_valid() {
 	local plugin_dir="$1"
 
 	if [ ! -d "$plugin_dir" ]; then
-		util.print_error_die "Plugin not installed: '$plugin_dir'"
+		util.print_error_die "Plugin does not exist at: '$plugin_dir'"
 	fi
 
 	if [ ! -f "$plugin_dir/manifest.ini" ]; then
-		util.print_error_die "No plugin found at path: $plugin_dir"
+		util.print_error_die "Plugin manifest does not exist at: $plugin_dir"
 	fi
 
 	# This will fatal if various keys could not be found
@@ -152,7 +152,7 @@ util.plugin_assert_is_valid() {
 	local plugin_slug="$REPLY_SLUG"
 
 	if [ "$plugin_slug" != "${plugin_dir##*/}" ]; then
-		util.print_error_die "Plugin with slug '$plugin_dir' does not match the dirname of its path: $plugin_dir"
+		util.print_error_die "Plugin with slug '$plugin_slug' does not match the dirname of its path: $plugin_dir"
 	fi
 }
 

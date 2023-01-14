@@ -5,9 +5,9 @@ go.env() {
 	local global_common_dir="$REPLY"
 
 	# To follow the XDG Base Directory Specification
-	std.shell_variable_assignment 'GOPATH' "$global_common_dir/gopath"
-	std.shell_variable_export 'GOPATH'
-	std.shell_path_prepend '$GOPATH/bin'
+	utility.shell_variable_assignment 'GOPATH' "$global_common_dir/gopath"
+	utility.shell_variable_export 'GOPATH'
+	utility.shell_path_prepend '$GOPATH/bin'
 }
 
 go.table() {
