@@ -80,7 +80,9 @@ helper.determine_tool_version() {
 	local flag_allow_latest='no'
 	if [ "$1" = '--allow-latest' ]; then
 		flag_allow_latest='yes'
-		shift || print.panic 'Failed to shift'
+		if ! shift; then
+			print.panic 'Failed to shift'
+		fi
 	fi
 	local tool_name="$1"
 	local tool_version="$2"

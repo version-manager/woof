@@ -123,7 +123,7 @@ util.help_show_usage_and_flags() {
         Print help
 
     -q, --quiet
-        Do not log informattive messages to stdout. Error messages will still be printed
+        Do not log informative messages to stdout. Error messages will still be printed
 
 Subcommand(s):"
 }

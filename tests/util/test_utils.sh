@@ -20,7 +20,9 @@ test_index_object_keys() {
 
 test_snapshot_cmd() {
 	local filename="$1"
-	shift || core.fatal 'Failed to shift'
+	if ! shift; then
+		core.fatal 'Failed to shift'
+	fi
 
 	local snapshot_file="$BATS_TEST_DIRNAME/snapshots/$filename"
 

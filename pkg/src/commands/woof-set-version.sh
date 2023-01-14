@@ -7,7 +7,7 @@ woof-set-version() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'set-version'
-		util.help_show_cmd_plugin 'set-version'
+		util.help_show_cmd_root 'set-version'
 		exit 0
 		;;
 	--global)

@@ -67,7 +67,9 @@ p.unpack() {
 	esac done; unset -v arg
 
 	local file="$1"
-	if ! shift; then util.print_error_die "Failed to shift"; fi
+	if ! shift; then
+		util.print_error_die "Failed to shift"
+	fi
 
 	util.sanitize_path "$PWD/$file"
 	util.print_info 'Unpacking' "$REPLY"

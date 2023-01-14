@@ -12,7 +12,7 @@ util.print_error_die() {
 }
 
 util.print_info() {
-	if [ "$global_flag_quiet" == 'no' ]; then
+	if [ "$global_flag_quiet" = 'no' ]; then
 		core.print_info "$@"
 	fi
 }
