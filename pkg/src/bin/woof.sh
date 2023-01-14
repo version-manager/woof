@@ -60,16 +60,44 @@ main.woof() {
 		util.print_fatal_die 'Failed to shift'
 	fi
 
+	# shellcheck disable=SC1090
 	case $subcommand in
-		init) woof-init "$@";;
-		install) woof-install "$@" ;;
-		uninstall) woof-uninstall "$@" ;;
-		get-version) woof-get-version "$@" ;;
-		set-version) woof-set-version "$@" ;;
-		exec) woof-exec "$@" ;;
-		list) woof-list "$@" ;;
-		plugin) woof-plugin "$@" ;;
-		tool) woof-tool "$@" ;;
+		init)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-init "$@"
+			;;
+		install)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-install "$@"
+			;;
+		uninstall)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-uninstall "$@"
+			;;
+		get-version)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-get-version "$@"
+			;;
+		set-version)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-set-version "$@"
+			;;
+		exec)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-exec "$@"
+			;;
+		list)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-list "$@"
+			;;
+		plugin)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-plugin "$@"
+			;;
+		tool)
+			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
+			woof-tool "$@"
+			;;
 		*) util.print_error_die "Subcommand '$subcommand' not recognized" ;;
 	esac
 }

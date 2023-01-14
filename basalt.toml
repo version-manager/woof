@@ -13,7 +13,7 @@ dependencies = [
 	'https://github.com/hyperupcall/bash-term@v0.6.2',
 	'https://github.com/hyperupcall/bash-std@v0.2.1',
 ]
-sourceDirs = ['pkg/src/commands', 'pkg/src/util']
+sourceDirs = ['pkg/src/util']
 builtinDirs = []
 binDirs = ['pkg/bin']
 completionDirs = []
