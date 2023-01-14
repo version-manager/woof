@@ -93,10 +93,10 @@ util.help_show_cmd_plugin() {
 		;;
 	info)
 		printf '\n    %s\n' "plugin info [name]
-        List information about a plugin"
+        Show information about a plugin"
 		;;
 	list)
-		printf '\n    %s\n' "plugin list [--show-variants=web,local,builtin]
+		printf '\n    %s\n' "plugin list [plugin]
         List plugins"
 		;;
 	*)

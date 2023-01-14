@@ -8,7 +8,7 @@ util.plugin_install() {
 	local plugin_target="$3"
 	local flag_force="$4"
 
-	util.plugin_assert_is_valid "$plugin_type" "$plugin_src"
+	util.plugin_assert_is_valid "$plugin_src"
 
 	if [ "$plugin_type" = 'symlink' ]; then
 		if [ "$flag_force" = 'no' ]; then
@@ -26,12 +26,12 @@ util.plugin_install() {
 }
 
 util.plugin_uninstall() {
-	local plugin_target="$1"
+	local plugin_dir="$1"
 
-	if [ -L "$plugin_target" ]; then
-		unlink "$plugin_target"
+	if [ -L "$plugin_dir" ]; then
+		unlink "$plugin_dir"
 	else
-		rm -rf "${plugin_target?:}"
+		rm -rf "${plugin_dir?:}"
 	fi
 }
 
@@ -86,34 +86,14 @@ util.plugin_resolve_external_path() {
 	if [ "${plugin::2}" = './' ]; then
 		REPLY_TYPE='symlink'
 		REPLY_SRC=$(readlink -f "$plugin")
-		REPLY_TARGET="$plugins_dir/local/${plugin##*/}"
+		REPLY_TARGET="$plugins_dir/${plugin##*/}"
 	elif [ "${plugin::1}" = '/' ]; then
 		REPLY_TYPE='symlink'
 		REPLY_SRC=$plugin
-		REPLY_TARGET="$plugins_dir/local/${plugin##*/}"
+		REPLY_TARGET="$plugins_dir/${plugin##*/}"
 	else
 		util.print_error_die "Passed plugin must be an absolute or relative path"
 	fi
-}
-
-util.plugin_resolve_internal_path() {
-	var.get_dir 'installed-plugins'
-	local plugins_dir="$REPLY"
-
-	local plugin="$1"
-
-	if [ -d "$plugins_dir/web/$plugin" ]; then
-		REPLY="$plugins_dir/web/$plugin"
-		return
-	elif [ -d "$plugins_dir/local/$plugin" ]; then
-		REPLY="$plugins_dir/local/$plugin"
-		return
-	elif [ -d "$plugins_dir/builtin/$plugin" ]; then
-		REPLY="$plugins_dir/builtin/$plugin"
-		return
-	fi
-
-	util.print_error_die "Plugin not installed: $plugin"
 }
 
 util.plugin_parse_manifest() {
@@ -157,26 +137,53 @@ util.plugin_parse_manifest() {
 
 
 util.plugin_assert_is_valid() {
-	local plugin_type="$1"
-	local plugin_src="$2"
+	local plugin_dir="$1"
 
-	if [ "$plugin_type" = 'symlink' ]; then
-		if [ ! -d "$plugin_src" ]; then
-			util.print_error_die "Plugin directory does not exist: '$plugin_src'"
-		fi
-
-		if [ ! -f "$plugin_src/manifest.ini" ]; then
-			util.print_error_die "No plugin found at path: $plugin_src"
-		fi
-
-		# This will fatal if various keys could not be found
-		util.plugin_parse_manifest "$plugin_src/manifest.ini"
-		local plugin_slug="$REPLY_SLUG"
-
-		if [ "$plugin_slug" != "${plugin_src##*/}" ]; then
-			util.print_error_die "Plugin with slug '$plugin_slug' does not match the dirname of its path: $plugin_src"
-		fi
+	if [ ! -d "$plugin_dir" ]; then
+		util.print_error_die "Plugin not installed: '$plugin_dir'"
 	fi
+
+	if [ ! -f "$plugin_dir/manifest.ini" ]; then
+		util.print_error_die "No plugin found at path: $plugin_dir"
+	fi
+
+	# This will fatal if various keys could not be found
+	util.plugin_parse_manifest "$plugin_dir/manifest.ini"
+	local plugin_slug="$REPLY_SLUG"
+
+	if [ "$plugin_slug" != "${plugin_dir##*/}" ]; then
+		util.print_error_die "Plugin with slug '$plugin_dir' does not match the dirname of its path: $plugin_dir"
+	fi
+}
+
+util.plugin_show_one() {
+	local plugin_dir="$1"
+
+	util.plugin_assert_is_valid "$plugin_dir"
+
+	util.plugin_parse_manifest "$plugin_dir/manifest.ini"
+	local name="$REPLY_NAME" desc="$REPLY_DESC"
+	core.ifs_save
+	IFS=', '; tags="${REPLY_TAGS[*]}"
+	core.ifs_restore
+
+
+	local plugin_slug=${plugin_dir##*/}
+
+	term.color_light_blue -Pd "$plugin_slug:"
+
+	term.color_orange 'name:'
+	printf '    %s\e[0m %s\n' "$REPLY" "$name"
+	# term.style_reset -Pd # TODO
+
+	term.color_orange 'desc:'
+
+	printf '    %s\e[0m %s\n' "$REPLY" "$desc"
+	# term.style_reset -Pd # TODO
+
+	term.color_orange 'tags:'
+	printf '    %s\e[0m %s\n' "$REPLY" "${tags:-N/A}"
+	# term.style_reset -Pd # TODO
 }
 
 util.plugin_prune() {

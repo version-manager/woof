@@ -29,9 +29,6 @@ woof-plugin-install() {
 	util.plugin_prune
 
 	util.plugin_resolve_external_path "$plugin"
-	local plugin_type="$REPLY_TYPE"
-	local plugin_src="$REPLY_SRC"
-	local plugin_target="$REPLY_TARGET"
 
-	util.plugin_install "$plugin_type" "$plugin_src" "$plugin_target" "$flag_force"
+	util.plugin_install "$REPLY_TYPE" "$REPLY_SRC" "$REPLY_TARGET" "$flag_force"
 }

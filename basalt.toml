@@ -1,5 +1,5 @@
 [package]
-type = 'bash'
+type = 'app'
 name = 'woof'
 slug = 'woof'
 version = '0.4.0'
@@ -8,9 +8,9 @@ description = 'The version manager to end all version managers'
 
 [run]
 dependencies = [
-	'https://github.com/hyperupcall/bats-all@v4.3.0',
-	'https://github.com/hyperupcall/bash-core@v0.11.0',
-	'https://github.com/hyperupcall/bash-term@v0.6.2',
+	'https://github.com/hyperupcall/bats-all@v4.6.0',
+	'https://github.com/hyperupcall/bash-core@v0.12.0',
+	'https://github.com/hyperupcall/bash-term@v0.6.3',
 	'https://github.com/hyperupcall/bash-std@v0.2.1',
 ]
 sourceDirs = ['pkg/src/util']
