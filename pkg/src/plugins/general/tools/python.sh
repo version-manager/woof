@@ -6,7 +6,7 @@ python.table() {
 	local version=
 	while read -r version; do
 		printf '%s\n' "CPython|$version|linux|x86_64|$prefix/ftp/python/${version#v}/Python-${version#v}.tar.xz"
-	done < <(p.fetch_github_tags 'python/cpython')
+	done < <(p.fetch_git_tags 'https://github.com/python/cpython')
 }
 
 python.install() {

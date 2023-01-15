@@ -99,7 +99,7 @@ helper.install_tool_version() {
 
 	# Preparation actions
 	rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
-	mkdir -p "$workspace_dir" "$install_dir/$tool_version"
+	mkdir -p "$workspace_dir" "$install_dir"
 
 	# Execute '<plugin>.install'
 	local old_pwd="$PWD"
@@ -126,28 +126,6 @@ helper.install_tool_version() {
 		util.print_error_die 'Failed to cd'
 	fi
 
-	if [ -z "$REPLY_DIR" ]; then
-		util.print_error_die "Variable '\$REPLY_DIR' must be set at the end of <plugin>.install"
-	fi
-
-	# Move extracted contents to 'installed-tools' directory
-	core.shopt_push -s dotglob
-	if ! mv "$workspace_dir/$REPLY_DIR"/* "$install_dir/$tool_version"; then
-		rm -rf "$workspace_dir"
-		util.print_error_die "Could not move extracted contents to '$install_dir/$tool_version'"
-	fi
-	core.shopt_pop
-
-	# Save information about bin, man, etc. pages later
-	mkdir -p "$install_dir/$tool_version/.woof__"
-	local old_ifs="$IFS"; IFS=':'
-	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
-mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/.woof__/data.txt"; then
-		rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
-		util.print_error_die "Failed to write to '$install_dir/$tool_version/.woof__/data.txt'"
-	fi
-	IFS="$old_ifs"
-
 	if [ "$flag_interactive" = 'yes' ]; then
 		util.print_info "Dropping into a shell to interactively debug installation process. Exit shell to continue normally"
 		if (
@@ -166,13 +144,35 @@ mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/.woof__/data.txt"; then
 		rm -rf "$interactive_dir"
 	fi
 
+	if [ -z "$REPLY_DIR" ]; then
+		util.print_error_die "Variable '\$REPLY_DIR' must be set at the end of <plugin>.install"
+	fi
+
+	# Move extracted contents to 'installed-tools' directory
+	core.shopt_push -s dotglob
+	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$tool_version"; then
+		rm -rf "$workspace_dir"
+		util.print_error_die "Could not move extracted contents to '$install_dir/$tool_version'"
+	fi
+	core.shopt_pop
+
+	# Save information about bin, man, etc. pages later
+	mkdir -p "$install_dir/$tool_version/.woof__"
+	local old_ifs="$IFS"; IFS=':'
+	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
+mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/.woof__/data.txt"; then
+		rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
+		util.print_error_die "Failed to write to '$install_dir/$tool_version/.woof__/data.txt'"
+	fi
+	IFS="$old_ifs"
+
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
 		mkdir -p "$install_dir/$tool_version/.woof__"
 		: > "$install_dir/$tool_version/.woof__/done"
 		util.print_info "Installed $tool_version"
 	else
-		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleteds"
+		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleted"
 	fi
 }
 

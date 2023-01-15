@@ -135,28 +135,13 @@ p.run_jq() {
 	fi
 }
 
-p.git_tag_to_versions_array() {
-	local array_variable_name="$1"
-	local url="$2"
-	local prefix="$3"
-
-	local -n array_variable="$array_variable_name"
-	local prefix_length="${#prefix}"
-	while read -r _sha1 refspec; do
-		if [ "${refspec:0:$prefix_length}" = "$prefix" ]; then
-			array_variable+=("${refspec:$prefix_length}")
-		fi
-	done < <(git ls-remote --refs --tags "$url")
-	unset _sha1 refspec
-}
-
-p.fetch_github_tags() {
-	local prefix="$1"
+p.fetch_git_tags() {
+	local url="$1"
 
 	local {_,refspec}=
 	while read -r _ refspec; do
 		printf '%s\n' "${refspec#refs/tags/}"
-	done < <(git ls-remote --refs --tags "https://github.com/$prefix")
+	done < <(git ls-remote --refs --tags "$url")
 }
 
 p.fetch_github_release() {

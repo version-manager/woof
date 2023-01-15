@@ -4,22 +4,22 @@ woof-tool() {
 	local -a subcmds=()
 	local arg=
 	for arg; do case $arg in
-	--help)
-		util.help_show_usage_and_flags 'tool'
-		util.help_show_cmd_tool_all 'tool'
-		exit 0
-		;;
+	# --help)
+	# 	# TODO: implement proper help when there are enough tools to make files for each subcommand
+	# 	util.help_show_usage_and_flags 'tool'
+	# 	util.help_show_cmd_tool_all 'tool'
+	# 	exit 0
+	# 	;;
 	-*)
 		util.print_error_die "Flag '$arg' not recognized"
 		;;
 	*)
-		break
+		subcmds+=("$arg")
 	esac done; unset -v arg
 
-	local subcmd="${subcmds[0]}"
-
+	local subcmd="$1"
 	if [ -z "$subcmd" ]; then
-		util.help_show
+		util.help_show_cmd_tool_all 'tool'
 		util.print_error_die 'Expected subcommand'
 	fi
 	if ! shift; then
@@ -51,18 +51,13 @@ woof-tool() {
 
 		util.run_function "$tool_name.table"
 	elif [ "$subcmd" = 'debug-install' ]; then
-		local possible_tool_name="$1"
-		local possible_tool_version="$2"
-
-		helper.determine_tool_name "$possible_tool_name"
+		helper.determine_tool_name "$1"
 		local tool_name="$REPLY"
-		unset -v possible_tool_name
 
-		helper.create_version_table "$tool_name"
+		helper.create_version_table "$tool_name" 'yes'
 
-		helper.determine_tool_version "$tool_name" "$possible_tool_version"
+		helper.determine_tool_version "$tool_name" "$2"
 		local tool_version="$REPLY"
-		unset -v possible_tool_version
 
 		local flag_interactive='yes'
 		local flag_force='yes'

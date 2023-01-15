@@ -20,7 +20,7 @@ nodejs.install() {
 
 	p.fetch -o './file.tar.gz' "$url"
 	p.unpack './file.tar.gz'
-	p.mkdir 'dir'
+	p.mkdir './dir'
 	p.ensure mv ./*/* './dir'
 
 	REPLY_DIR='./dir'

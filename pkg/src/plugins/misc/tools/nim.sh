@@ -9,7 +9,7 @@ nim.install() {
 	local version="$2"
 
 	p.fetch -o file.tar.xz "$url"
-	p.mkdir 'dir'
+	p.mkdir './dir'
 	p.unpack file.tar.xz -d'./dir' -s
 
 	REPLY_DIR='./dir'
