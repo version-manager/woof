@@ -29,11 +29,11 @@ tty.all_restore() {
 }
 
 # backwards
-tty.private.backwards_all() {
+tty._backwards_all() {
 	new_version_index=0
 }
 
-tty.private.backwards_full_screen() {
+tty._backwards_full_screen() {
 	if ((new_version_index - global_tty_height > 0)); then
 		new_version_index=$((new_version_index - global_tty_height))
 	else
@@ -41,7 +41,7 @@ tty.private.backwards_full_screen() {
 	fi
 }
 
-tty.private.backwards_half_screen() {
+tty._backwards_half_screen() {
 	if ((new_version_index - (global_tty_height/2) > 0)); then
 		new_version_index=$((new_version_index - (global_tty_height/2)))
 	else
@@ -49,14 +49,14 @@ tty.private.backwards_half_screen() {
 	fi
 }
 
-tty.private.backwards_one() {
+tty._backwards_one() {
 	if ((new_version_index > 0)); then
 		new_version_index=$((new_version_index-1))
 	fi
 }
 
 # forwards
-tty.private.forwards_full_screen() {
+tty._forwards_full_screen() {
 	local array_length=$1
 
 	if ((new_version_index + global_tty_height < array_length)); then
@@ -66,7 +66,7 @@ tty.private.forwards_full_screen() {
 	fi
 }
 
-tty.private.forwards_half_screen() {
+tty._forwards_half_screen() {
 	local array_length=$1
 
 	if ((new_version_index + (global_tty_height/2) < array_length)); then
@@ -76,7 +76,7 @@ tty.private.forwards_half_screen() {
 	fi
 }
 
-tty.private.forwards_one() {
+tty._forwards_one() {
 	local array_length=$1
 
 	if ((new_version_index+1 < array_length)); then
@@ -84,13 +84,13 @@ tty.private.forwards_one() {
 	fi
 }
 
-tty.private.forwards_all() {
+tty._forwards_all() {
 	local array_length=$1
 
 	new_version_index=$((array_length-1))
 }
 
-tty.private.print_list() {
+tty._print_list() {
 	local index="$1"
 	if ! shift; then
 		util.print_fatal_die 'Failed to shift'
@@ -171,21 +171,21 @@ tty.multiselect() {
 
 	tty.fullscreen_init
 
-	tty.private.print_list "$new_version_index" "${select_keys_variable[@]}"
+	tty._print_list "$new_version_index" "${select_keys_variable[@]}"
 	while :; do
 		if ! read -rsN1 key; then
 			util.print_error_die 'Could not read input'
 		fi
 
 		case "$key" in
-		g) tty.private.backwards_all ;;
-		$'\x02') tty.private.backwards_full_screen ;; # C-b
-		$'\x15') tty.private.backwards_half_screen ;; # C-u
-		k|$'\x10') tty.private.backwards_one ;; # k, C-p
-		$'\x06') tty.private.forwards_full_screen ${#select_keys_variable[@]} ;; # C-f
-		$'\x04') tty.private.forwards_half_screen ${#select_keys_variable[@]} ;; # C-d
-		j|$'\x0e') tty.private.forwards_one ${#select_keys_variable[@]} ;; # j, C-n
-		G) tty.private.forwards_all ${#select_keys_variable[@]} ;;
+		g) tty._backwards_all ;;
+		$'\x02') tty._backwards_full_screen ;; # C-b
+		$'\x15') tty._backwards_half_screen ;; # C-u
+		k|$'\x10') tty._backwards_one ;; # k, C-p
+		$'\x06') tty._forwards_full_screen ${#select_keys_variable[@]} ;; # C-f
+		$'\x04') tty._forwards_half_screen ${#select_keys_variable[@]} ;; # C-d
+		j|$'\x0e') tty._forwards_one ${#select_keys_variable[@]} ;; # j, C-n
+		G) tty._forwards_all ${#select_keys_variable[@]} ;;
 		$'\n'|$'\x0d') break ;; # enter (success)
 		q|$'\x7f') # q, backspace (fail)
 			new_version_index="$old_version_index"
@@ -207,12 +207,12 @@ tty.multiselect() {
 				fi
 
 				case "$key" in
-				$'\x41') tty.private.backwards_one ;; # up
-				$'\x42') tty.private.forwards_one ${#select_keys_variable[@]} ;; # down
-				$'\x43') tty.private.forwards_one ${#select_keys_variable[@]} ;; # right
-				$'\x44') tty.private.backwards_one ;; # left
-				$'\x48') tty.private.backwards_all ;; # home
-				$'\x46') tty.private.forwards_all ${#select_keys_variable[@]} ;; # end
+				$'\x41') tty._backwards_one ;; # up
+				$'\x42') tty._forwards_one ${#select_keys_variable[@]} ;; # down
+				$'\x43') tty._forwards_one ${#select_keys_variable[@]} ;; # right
+				$'\x44') tty._backwards_one ;; # left
+				$'\x48') tty._backwards_all ;; # home
+				$'\x46') tty._forwards_all ${#select_keys_variable[@]} ;; # end
 				$'\x35')
 					if ! read -rsN1 -t 0.1 key; then
 						# escape (fail)
@@ -221,7 +221,7 @@ tty.multiselect() {
 					fi
 
 					case "$key" in
-					$'\x7e') tty.private.backwards_full_screen ;; # pageup
+					$'\x7e') tty._backwards_full_screen ;; # pageup
 					esac
 					;;
 				$'\x36')
@@ -232,7 +232,7 @@ tty.multiselect() {
 					fi
 
 					case "$key" in
-					$'\x7e') tty.private.forwards_full_screen ${#select_keys_variable[@]} ;; # pagedown
+					$'\x7e') tty._forwards_full_screen ${#select_keys_variable[@]} ;; # pagedown
 					esac
 				esac
 				;;
@@ -240,7 +240,7 @@ tty.multiselect() {
 			;;
 		esac
 
-		tty.private.print_list "$new_version_index" "${select_keys_variable[@]}"
+		tty._print_list "$new_version_index" "${select_keys_variable[@]}"
 	done
 	unset -v key
 	tty.fullscreen_deinit

@@ -216,7 +216,7 @@ util.tool_symlink_global_versions() {
 	var.get_dir 'usr_global'
 	local target_bin_dir="$REPLY/bin"
 
-	util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
+	util._tool_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
 }
 
 util.tool_symlink_local_versions() {
@@ -228,10 +228,10 @@ util.tool_symlink_local_versions() {
 	var.get_dir 'data-local'
 	local target_bin_dir="$REPLY/bin"
 
-	util.tool_private_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
+	util._tool_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
 }
 
-util.tool_private_symlink_core() {
+util._tool_symlink_core() {
 	local tool_name="$1"
 	local tool_version="$2"
 	local target_bin_dir="$3"
