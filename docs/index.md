@@ -6,8 +6,6 @@ Woof is the version manager to end all version managers.
 
 Woof is a multi-tool version manager. That is, it manages the installation of multiple versions for multiple tools simultaneously
 
-It is similar to alternatives like [asdf](https://github.com/asdf-vm/asdf), [Hermit](https://github.com/cashapp/hermit), and [sdkman](https://sdkman.io) - but it's superior in many ways
-
 Woof supports many popular languages out of the box - see the [Roadmap](./roadmap.md) for more details
 
 ## Concepts

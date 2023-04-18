@@ -4,9 +4,9 @@ Woof supports global and local versions.
 
 ## Approach
 
-Woof neither uses shims or symlinks. Symlinks aren't used because they typically must be recreated, sometimes frequently (ex. `npm -g i http-server`). Shims aren't good since they must be reshimed as well, but they have an additional performance overhead.
+Woof neither uses shims or symlinks. Symlinks aren't used because they typically must be recreated, sometimes frequently (ex. `npm -g i http-server`). Shims aren't good since they must be recreated (reshimed) as well, but they have an additional performance overhead.
 
-Instead, Woof manually manages the `PATH`. When initializing, `PATH` is set to the global defaults of each tool. When `cd`'ing, `PATH` is automatically changed, depending on discovered `.tool-version` files.
+Instead, Woof manually manages the `PATH`. When initializing, `PATH` is set to the global defaults of each tool. When `cd`'ing, `PATH` is automatically changed, depending on any discovered `.tool-version` files.
 
 ## Plugin Installation
 
