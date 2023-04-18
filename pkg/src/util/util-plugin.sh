@@ -8,9 +8,10 @@ util.plugin_install() {
 	local plugin_target="$3"
 	local flag_force="$4"
 
-	util.plugin_assert_is_valid "$plugin_src"
 
 	if [ "$plugin_type" = 'symlink' ]; then
+		util.plugin_assert_is_valid "$plugin_src"
+
 		if [ "$flag_force" = 'no' ]; then
 			if [ -d "$plugin_target" ]; then
 				util.print_error_die "Plugin '$plugin_src' is already installed"
@@ -22,6 +23,21 @@ util.plugin_install() {
 		if ln -sfT "$plugin_src" "$plugin_target"; then :; else
 			util.print_error_die "Failed to symlink plugin directory"
 		fi
+	elif [ "$plugin_type" = 'git-repository' ]; then
+		if [ "$flag_force" = 'no' ]; then
+			if [ -d "$plugin_target" ]; then
+				util.print_error_die "Plugin '$plugin_src' is already installed"
+			fi
+		fi
+
+		util.mkdirp "${plugin_target%/*}"
+		if git clone "$plugin_src" "$plugin_target"; then :; else
+			util.print_error_die "Failed to clone Git repository"
+		fi
+
+		util.plugin_assert_is_valid "$plugin_target"
+	else
+		util.print_error_die "Failed to recognize plugin type: '$plugin_type'"
 	fi
 }
 
@@ -91,8 +107,12 @@ util.plugin_resolve_external_path() {
 		REPLY_TYPE='symlink'
 		REPLY_SRC=$plugin
 		REPLY_TARGET="$plugins_dir/${plugin##*/}"
+	elif [[ "$plugin" == "https://"* ]]; then
+		REPLY_TYPE='git-repository'
+		REPLY_SRC=$plugin
+		REPLY_TARGET="$plugins_dir/${plugin##*/}"
 	else
-		util.print_error_die "Passed plugin must be an absolute or relative path"
+		util.print_error_die "Passed plugin must be an absolute path, relative path, or https URL"
 	fi
 }
 
@@ -140,7 +160,7 @@ util.plugin_assert_is_valid() {
 	local plugin_dir="$1"
 
 	if [ ! -d "$plugin_dir" ]; then
-		util.print_error_die "Plugin does not exist at: '$plugin_dir'"
+		util.print_error_die "Plugin does not exist at directory: '$plugin_dir'"
 	fi
 
 	if [ ! -f "$plugin_dir/manifest.ini" ]; then
@@ -151,8 +171,8 @@ util.plugin_assert_is_valid() {
 	util.plugin_parse_manifest "$plugin_dir/manifest.ini"
 	local plugin_slug="$REPLY_SLUG"
 
-	if [ "$plugin_slug" != "${plugin_dir##*/}" ]; then
-		util.print_error_die "Plugin with slug '$plugin_slug' does not match the dirname of its path: $plugin_dir"
+	if [ "woof-plugin-$plugin_slug" != "${plugin_dir##*/}" ]; then
+		util.print_error_die "Plugin with slug '$plugin_slug' does not match the ending of plugin directory $plugin_dir"
 	fi
 }
 
@@ -172,18 +192,32 @@ util.plugin_show_one() {
 
 	term.color_light_blue -Pd "$plugin_slug:"
 
-	term.color_orange 'name:'
-	printf '    %s\e[0m %s\n' "$REPLY" "$name"
-	# term.style_reset -Pd # TODO
+	printf '    '
+	term.color_orange -pd 'name:'
+	term.style_reset -pd
+	printf ' %s\n' "$name"
 
-	term.color_orange 'desc:'
+	printf '    '
+	term.color_orange -pd 'desc:'
+	term.style_reset -pd
+	printf ' %s\n' "$desc"
 
-	printf '    %s\e[0m %s\n' "$REPLY" "$desc"
-	# term.style_reset -Pd # TODO
+	printf '    '
+	term.color_orange -pd 'tags:'
+	term.style_reset -pd
+	printf ' %s\n' "${tags:-N/A}"
 
-	term.color_orange 'tags:'
-	printf '    %s\e[0m %s\n' "$REPLY" "${tags:-N/A}"
-	# term.style_reset -Pd # TODO
+	term.color_orange 'type:'
+	local type=
+	if [ -L "$plugin_dir" ]; then
+		type='symlink'
+	else
+		type='git-repository'
+	fi
+	printf '    '
+	term.color_orange -pd 'tags:'
+	term.style_reset -pd
+	printf ' %s\n' "$type"
 }
 
 util.plugin_prune() {
@@ -191,28 +225,11 @@ util.plugin_prune() {
 	local plugins_dir="$REPLY"
 
 	core.shopt_push -s nullglob
-
 	local file=
 	for file in "$plugins_dir"/*; do
 		if [ ! -e "$file" ]; then
 			unlink "$file"
 		fi
 	done
-
 	core.shopt_pop
 }
-
-util.plugin_get_builtin_plugin_list() {
-	unset -v REPLY; declare -ga REPLY=()
-
-	core.shopt_push -s nullglob
-	# shellcheck disable=SC1007
-	local dir= plugin_{owner,name}=
-	for dir in "$BASALT_PACKAGE_DIR/pkg/src/plugins"/*/; do
-		dir=${dir%/}
-
-		REPLY+=("$dir")
-	done; unset -v dir
-	core.shopt_pop
-}
-

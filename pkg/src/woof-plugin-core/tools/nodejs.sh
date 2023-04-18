@@ -22,10 +22,3 @@ nodejs.install() {
 	REPLY_BINS=('./bin')
 	REPLY_MANS=('./share/man/man1')
 }
-
-nodejs.info() { # TODO
-	local npm_bin=
-	npm_bin=$(npm -g bin)
-
-	printf '%s\n' "npm root -g: $npm_bin"
-}

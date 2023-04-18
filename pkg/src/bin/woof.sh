@@ -50,6 +50,7 @@ main.woof() {
 	: "${WOOF_STATE_HOME:=${XDG_STATE_HOME:-$HOME/.local/state}/woof}"
 	WOOF_VARS='WOOF_CONFIG_HOME WOOF_CACHE_HOME WOOF_DATA_HOME WOOF_STATE_HOME'
 
+	# Validate the existence of GitHub token
 	local token_file="$WOOF_DATA_HOME/token"
 	if [ -f "$token_file" ]; then
 		if ! GITHUB_TOKEN=$(<"$token_file"); then
@@ -61,8 +62,15 @@ main.woof() {
 	fi
 	unset -v token_file
 
-	helper.plugin_enable_all_builtins
+	# Ensure 'woof-plugin-core' is always "installed"
+	local plugin_core_dir="$BASALT_PACKAGE_DIR/pkg/src/woof-plugin-core"
+	local plugin_core_slug="${plugin_core_dir##*/}"
+	var.get_dir 'plugins'
+	local plugin_target="$REPLY/$plugin_core_slug"
+	local flag_force='yes'
+	util.plugin_install 'symlink' "$plugin_core_dir" "$plugin_target" "$flag_force"
 
+	# Parse arguments
 	local global_flag_quiet='no'
 	local arg=
 	for arg; do case $arg in

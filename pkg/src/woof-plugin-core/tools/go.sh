@@ -26,8 +26,3 @@ go.install() {
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
 }
-
-# TODO:
-# go.info() {
-# 	go env
-# }

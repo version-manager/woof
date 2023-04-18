@@ -25,8 +25,3 @@ deno.install() {
 	REPLY_DIR='./dir'
 	REPLY_BINS=('./bin')
 }
-
-# TODO:
-# deno.info() {
-# 	go info
-# }

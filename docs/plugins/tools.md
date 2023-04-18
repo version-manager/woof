@@ -1,5 +1,13 @@
 # Plugin API
 
+## `<plugin>.env()`
+
+Called when a plugin needs to set the environment
+
+This may also be called to hook into `cd`. For example, the NodeJS plugin needs to change versions depending on not only `.tool-versions`, but also `.nvm` and `.node-version`
+
+By default, this automatically does the correct parsing of `.tool-versions` for the particular plugin
+
 ## `<plugin>.table()`
 
 Prints a version table to standard output. Each line of standard output looks like the following:
@@ -38,11 +46,3 @@ Set the following variables for installation to complete successfully. `REPLY_DI
 - `REPLY_FISH_COMPLETIONS=()`
 
 Persisted state across installs / uninstalls
-
-## `<plugin>.env()`
-
-Called when a plugin needs to set the environment
-
-This may also be called to hook into `cd`. For example, the NodeJS plugin needs to change versions depending on not only `.tool-versions`, but also `.nvm` and `.node-version`
-
-By default, this automatically does the correct parsing of `.tool-versions` for the particular plugin
