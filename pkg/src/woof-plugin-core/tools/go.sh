@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 go.env() {
-	var.get_dir 'data-plugin'
+	var.get_dir 'plugins-data'
 	local global_common_dir="$REPLY"
 
 	# To follow the XDG Base Directory Specification

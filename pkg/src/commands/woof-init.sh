@@ -74,7 +74,7 @@ woof-init() {
 			for bin in "${bins[@]}"; do
 				bin=${bin#./}
 
-				var.get_dir 'installed-tools' "$tool_name"
+				var.get_dir 'tools' "$tool_name"
 				local install_dir="$REPLY"
 				local bin_dir="$install_dir/$tool_version/$bin"
 

@@ -134,7 +134,7 @@ util.get_plugin_data() {
 	util.assert_not_empty 'tool_version'
 	util.assert_not_empty 'specified_key'
 
-	var.get_dir 'installed-tools' "$tool_name"
+	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	local data_file="$install_dir/$tool_version/.woof__/data.txt"
@@ -156,7 +156,7 @@ util.is_tool_version_installed() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'installed-tools' "$tool_name"
+	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	if [ -f "$install_dir/$tool_version/.woof__/done" ]; then

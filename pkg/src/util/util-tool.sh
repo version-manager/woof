@@ -16,7 +16,7 @@ util.tool_get_global_version() {
 
 	local tool_name="$1"
 
-	var.get_dir 'data-woof'
+	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
 	unset -v REPLY; REPLY=
@@ -48,7 +48,7 @@ util.tool_get_local_version() {
 
 	local tool_name="$1"
 
-	var.get_dir 'data-woof'
+	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
 	if [ ! -f "$dir/$tool_name" ]; then
@@ -69,7 +69,7 @@ util.tool_set_global_version() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'data-woof'
+	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
 	util.mkdirp "$dir"
@@ -88,7 +88,7 @@ util.tool_set_local_version() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'data-woof'
+	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
 	util.mkdirp "$dir"
@@ -115,7 +115,7 @@ util.tool_list_global_versions() {
 	# fi
 
 	if [ "$flag_all" = 'yes' ]; then
-		var.get_dir 'installed-tools' "$tool_name"
+		var.get_dir 'tools' "$tool_name"
 		local install_dir="$REPLY"
 
 		# TODO: show ones that are 'done' and not 'done'

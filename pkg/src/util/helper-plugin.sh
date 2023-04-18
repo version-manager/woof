@@ -9,7 +9,7 @@ helper.plugin_enable_all_builtins() {
 	for plugin_src in "${builtin_plugins[@]}"; do
 		local plugin_slug="${plugin_src##*/}"
 
-		var.get_dir 'installed-plugins'
+		var.get_dir 'plugins'
 		local plugin_target="$REPLY/$plugin_slug"
 		local flag_force='yes'
 		util.plugin_install 'symlink' "$plugin_src" "$plugin_target" "$flag_force"

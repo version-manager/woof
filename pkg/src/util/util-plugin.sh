@@ -76,7 +76,7 @@ util.plugin_disable() {
 }
 
 util.plugin_resolve_external_path() {
-	var.get_dir 'installed-plugins'
+	var.get_dir 'plugins'
 	local plugins_dir="$REPLY"
 
 	unset -v REPLY_{SRC,TARGET,TYPE}; REPLY_SRC= REPLY_TARGET= REPLY_TARGET=
@@ -187,7 +187,7 @@ util.plugin_show_one() {
 }
 
 util.plugin_prune() {
-	var.get_dir 'installed-plugins'
+	var.get_dir 'plugins'
 	local plugins_dir="$REPLY"
 
 	core.shopt_push -s nullglob

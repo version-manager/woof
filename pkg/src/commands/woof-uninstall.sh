@@ -27,7 +27,7 @@ woof-uninstall() {
 	local tool_version="$REPLY"
 	unset -v possible_tool_version
 
-	var.get_dir 'installed-tools' "$tool_name"
+	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	# Do uninstall

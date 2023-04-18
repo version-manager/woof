@@ -17,7 +17,7 @@ woof-plugin-list() {
 		;;
 	esac done; unset -v arg
 
-	var.get_dir 'installed-plugins'
+	var.get_dir 'plugins'
 	local plugins_dir="$REPLY"
 
 	for plugin_dir in "$plugins_dir"/*; do

@@ -31,7 +31,7 @@ woof-exec() {
 		util.print_error_die "Passed executable cannot be empty"
 	fi
 
-	var.get_dir 'installed-tools' "$tool_name"
+	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	util.get_plugin_data "$tool_name" "$tool_version" 'bins'

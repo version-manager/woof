@@ -61,7 +61,7 @@ helper.install_tool_version() {
 	var.get_plugin_workspace_dir "$tool_name"
 	local workspace_dir="$REPLY"
 
-	var.get_dir 'installed-tools' "$tool_name"
+	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	# If there is an interactive flag, then we are debugging the installation
@@ -148,7 +148,7 @@ helper.install_tool_version() {
 		util.print_error_die "Variable '\$REPLY_DIR' must be set at the end of <plugin>.install"
 	fi
 
-	# Move extracted contents to 'installed-tools' directory
+	# Move extracted contents to 'tools' directory
 	core.shopt_push -s dotglob
 	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$tool_version"; then
 		rm -rf "$workspace_dir"

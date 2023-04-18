@@ -46,7 +46,7 @@ helper.determine_tool_name_installed() {
 	unset REPLY; REPLY=
 	local tool_name="$1"
 
-	var.get_dir 'installed-tools' "$tool_name"
+	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	if [ -z "$tool_name" ]; then
@@ -147,7 +147,7 @@ helper.determine_tool_version_installed() {
 	local tool_name="$1"
 	local tool_version="$2"
 
-	var.get_dir 'installed-tools' "$tool_name"
+	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
 	if [ -z "$tool_version" ]; then

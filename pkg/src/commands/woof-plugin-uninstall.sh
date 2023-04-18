@@ -22,7 +22,7 @@ woof-plugin-uninstall() {
 		util.print_error_die "Passed plugin cannot be empty"
 	fi
 
-	var.get_dir 'installed-plugins'
+	var.get_dir 'plugins'
 	local plugin_dir="$REPLY/$plugin"
 
 	if [ ! -d "$plugin_dir" ]; then
