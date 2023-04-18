@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-eval "$(basalt-package-init)" || exit
+# eval "$(basalt-package-init --no-assert-version woof)"
+# __run "$@"
+
+eval "$(basalt-package-init)"
 basalt.package-init || exit
 basalt.package-load
 

@@ -1,6 +1,40 @@
 # shellcheck shell=bash
 
 main.woof() {
+	# If current Bash doesn't meet minimum requirements, search for one that does. Woof is able
+	# to install ancient versions of Bash, so this logic significantly improves UX
+	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
+		if [ -n "${BASH_INTERNAL_VERSIONEXEC+x}" ]; then
+			printf '%s\n' "Error: Woof: Exec'ed, but version requirements still not satisfied. Aborting to prevent infinite loops"
+			exit 1
+		fi
+
+		local -a bin_dirs=()
+		IFS=':' read -ra bin_dirs <<< "$PATH"
+
+		local bin_dir=
+		for bin_dir in "${bin_dirs[@]}"; do
+			if [ -x "$bin_dir/bash" ]; then
+				local output=
+				output=$("$bin_dir/bash" --version)
+				output=${output#"GNU bash, version "}
+
+				local major_ver=${output%%.*}
+				output=${output#*.}
+				local minor_ver=${output%%.*}
+
+				if ((major_ver >= 5 || (major_ver >= 4 && minor_ver >= 3) )); then
+					printf '%s\n' "Warning: Woof: Bash version from '/usr/bin/env bash' of '$BASH_VERSION' is too low; exec'ing into a newer one: $bin_dir/bash" >&2
+					# shellcheck disable=SC1007
+					BASH_INTERNAL_VERSIONEXEC= exec "$bin_dir/bash" "${BASH_SOURCE[1]}" "$@"
+				fi
+			fi
+		done; unset -v bin_dir
+
+		printf '%s\n' "Error: Woof: Failed to meet minimum Bash requirement of 4.3 and failed to find newer version in PATH" >&2
+		exit 1
+	fi
+
 	global_trap_err() {
 		core.print_stacktrace
 	}
@@ -37,6 +71,7 @@ main.woof() {
 		exit
 		;;
 	--quiet|-q)
+		# shellcheck disable=SC2034
 		global_flag_quiet='yes'
 		if ! shift; then
 			util.print_fatal_die 'Failed to shift'

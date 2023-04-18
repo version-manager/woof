@@ -52,7 +52,7 @@ util.help_show_cmd_root() {
 		;;
 	tool)
 		printf '\n    %s\n' "tool [...]
-        Perform an internal command"
+        Run an internal command"
 		;;
 	*)
 		util.print_fatal_die "Unrecognized argument: $1"
@@ -106,7 +106,7 @@ util.help_show_cmd_plugin() {
 
 # tool
 util.help_show_cmd_tool_all() {
-	printf '\n    %s\n' "tool <resymlink|print-dirs|cd-override|debug-table|debug-install|
+	printf '\n    %s\n' "tool <get-exe|print-dirs|cd-override|debug-table|debug-install|
             clear-table-cache|install-default-plugins> [args...]
         Run a particular tool. Most of these are for internal use"
 }

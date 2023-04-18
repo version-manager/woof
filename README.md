@@ -37,6 +37,10 @@ External utilities are _only_ used due to necessity or efficiency. The following
 - sort (TODO: phase out -V GNUism)
 - Optional: `pv`
 
+## Notes to Self
+
+- Finish install `--dry-run`
+
 ## Installation
 
 Use [Basalt](https://github.com/hyperupcall/basalt), a Bash package manager, to install this project globally

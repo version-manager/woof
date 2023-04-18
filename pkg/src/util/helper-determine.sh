@@ -1,5 +1,7 @@
 # shellcheck shell=bash
 
+# @description Tool names aren't required to be specified on the command line. If one
+# isn't specified, then start a TUI selection screen
 helper.determine_tool_name() {
 	unset REPLY; REPLY=
 	local tool_name="$1"
@@ -32,6 +34,7 @@ helper.determine_tool_name() {
 		util.print_error_die "Plugin '$tool_name' not found"
 	fi
 
+	# shellcheck source=/dev/null
 	if ! source "$plugin_file"; then
 		util.print_error_die "Could not successfully source plugin '$tool_name'"
 	fi

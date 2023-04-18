@@ -28,14 +28,20 @@ woof-get-version() {
 
 	if [ "$flag_global" = 'yes' ]; then
 		util.tool_get_global_version --no-error "$tool_name"
+		local tool_version="$REPLY"
+
+		if [ -z "$tool_version" ]; then
+			core.print_warn "No global default was found for plugin '$tool_name'"
+			return
+		fi
 	else
 		util.tool_get_local_version --no-error "$tool_name"
-	fi
-	local tool_version="$REPLY"
+		local tool_version="$REPLY"
 
-	if [ -n "$tool_version" ]; then
-		core.print_warn "No default was found for plugin '$tool_name'"
-		return
+		if [ -z "$tool_version" ]; then
+			core.print_warn "No local default was found for plugin '$tool_name'"
+			return
+		fi
 	fi
 
 	printf '%s\n' "$tool_version"

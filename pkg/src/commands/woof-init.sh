@@ -30,10 +30,9 @@ woof-init() {
 		util.print_error_die 'Shell not supported'
 	fi
 
-	# global
-	printf '%s\n' '# global installs'
-	var.get_dir 'usr_global'
-	utility.shell_path_prepend "$REPLY/bin"
+	# woof
+	printf '%s\n' '# woof()'
+	woof_function
 	printf '\n'
 
 	# cd
@@ -41,25 +40,51 @@ woof-init() {
 	woof_override_cd "$flag_no_cd"
 	printf '\n'
 
-	# woof
-	printf '%s\n' '# woof()'
-	woof_function
-	printf '\n'
+	# Remove all Woof-related PATH entries
+	local new_path=
+	local entries=
+	IFS=':' read -ra entries <<< "$PATH"
+	local entry=
+	for entry in "${entries[@]}"; do
+		if [[ $entry != *"$WOOF_STATE_HOME"* ]]; then
+			new_path="${new_path:+"$new_path:"}$entry"
+		fi
+	done
 
 	printf '%s\n' '# --- plugins ----'
 	# shellcheck disable=SC1007
-	local plugin_path= tool=
+	local plugin_path= tool_name=
 	for plugin_path in "$BASALT_PACKAGE_DIR/pkg/src/plugins"/*/tools/*.sh; do
 		# shellcheck disable=SC1090
 		source "$plugin_path"
-		tool=${plugin_path##*/}; tool=${tool%*.sh}
+		tool_name=${plugin_path##*/}; tool_name=${tool_name%*.sh}
 
-		if command -v "$tool".env &>/dev/null; then
-			printf '%s\n' "# $tool"
-			"$tool".env
+		if command -v "$tool_name".env &>/dev/null; then
+			printf '%s\n' "# $tool_name"
+			"$tool_name".env
 			printf '\n'
 		fi
-	done
+
+		util.tool_get_global_version --no-error "$tool_name"
+		local tool_version="$REPLY"
+		if [ -n "$tool_version" ]; then
+			util.get_plugin_data "$tool_name" "$tool_version" 'bins'
+			local -a bins=("${REPLY[@]}")
+			local bin=
+			for bin in "${bins[@]}"; do
+				bin=${bin#./}
+
+				var.get_dir 'installed-tools' "$tool_name"
+				local install_dir="$REPLY"
+				local bin_dir="$install_dir/$tool_version/$bin"
+
+				new_path="$bin_dir${new_path:+":$new_path"}"
+			done; unset -v bin
+		fi
+	done; unset -v plugin_path tool
+
+	printf '%s\n' '# --- path ----'
+	printf '%s\n' "PATH=$new_path"
 }
 
 woof_override_cd() {

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-util.toolversions_get_path() {
+util.toolversions_get_file() {
 	unset -v REPLY; REPLY=
 
 	local toolversions_file='.tool-versions'
@@ -11,7 +11,7 @@ util.toolversions_get_path() {
 			fi
 		done
 		if [ "$PWD" = / ]; then
-			exit
+			exit 0
 		fi
 		printf '%s' "$PWD/$toolversions_file"
 	); then

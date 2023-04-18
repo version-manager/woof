@@ -45,8 +45,6 @@ Persisted state across installs / uninstalls
 
 Called when a plugin needs to set the environment
 
-## `<plugin>.dir()`
-
-Called when a plugin needs to hook into `cd`. For example, the NodeJS plugin needs to change versions depending on not only `.tool-versions`, but also `.nvm` and `.node-version`
+This may also be called to hook into `cd`. For example, the NodeJS plugin needs to change versions depending on not only `.tool-versions`, but also `.nvm` and `.node-version`
 
 By default, this automatically does the correct parsing of `.tool-versions` for the particular plugin

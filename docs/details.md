@@ -1,22 +1,12 @@
 # Details
 
-Woof supports global and local versions. Global versions use symlinks while local versions use shims.
+Woof supports global and local versions.
 
 ## Approach
 
-Woof uses a hybrid approach by using both shims and symlinks to manage versions.
+Woof neither uses shims or symlinks. Symlinks aren't used because they typically must be recreated, sometimes frequently (ex. `npm -g i http-server`). Shims aren't good since they must be reshimed as well, but they have an additional performance overhead.
 
-### Symlinks
-
-Symlinks are used for global versioning. Global versioning is a simple enough case in which shims are not needed. So, go with the ligher weight approach.
-
-### Shims
-
-Shims are used for contextual versioning (per shell, directory, if has tty).
-
-When invoking a command (ex. `python`), the `$PATH` is arranged in such a way that a custom Woof script is invoked instead. This script gathers the current context.
-
-Shims are necessary to evaluate the current context to decide what version of binary to `exec` into. Right now, a shell script is used, but later a faster language will most definitely be used.
+Instead, Woof manually manages the `PATH`. When initializing, `PATH` is set to the global defaults of each tool. When `cd`'ing, `PATH` is automatically changed, depending on discovered `.tool-version` files.
 
 ## Plugin Installation
 
@@ -46,6 +36,4 @@ Global packages installed with `go install` all install to that directory and co
 
 Global packages installed with `npm install -g` are installed per-version.
 
-Run `woof tool resymlink` after installing a package (with `npm`) so it appears in the `PATH`.
-
-Use Yarn or `pnpm` if you want global packages to be shared. `PNPM_HOME` is also set.
+Use Yarn or `pnpm` if you want global packages to be shared.

@@ -26,8 +26,14 @@ woof-tool() {
 		util.print_fatal_die 'Failed to shift'
 	fi
 
-	if [ "$subcmd" = 'resymlink' ]; then
-		helper.resymlink_global_all
+	if [ "$subcmd" = 'get-exe' ]; then
+		local cmd="${subcmds[1]}"
+		if [ -z "$cmd" ]; then
+			util.print_error_die 'Failed to supply command'
+			return
+		fi
+
+		helper.toolversions_get_executable_safe "$cmd"
 	elif [ "$subcmd" = 'print-dirs' ]; then
 		local var_name=
 		for var_name in $WOOF_VARS; do
@@ -78,9 +84,8 @@ woof-tool() {
 			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then
-		util.toolversions_get_path
+		util.toolversions_get_file
 		local toolversions_file="$REPLY"
-
 		if [ -n "$toolversions_file" ]; then
 			helper.toolversions_set_versions "$toolversions_file"
 		fi

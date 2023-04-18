@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 deno.env() {
-	var.get_dir 'plugin-data'
+	var.get_dir 'data-plugin'
 	local global_common_dir="$REPLY"
 
 	utility.shell_variable_assignment 'DENO_INSTALL_ROOT' "$global_common_dir/deno_install"

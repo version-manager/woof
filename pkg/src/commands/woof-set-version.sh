@@ -33,12 +33,8 @@ woof-set-version() {
 
 	if [ "$flag_global" = 'yes' ]; then
 		util.tool_set_global_version "$tool_name" "$tool_version"
-
-		util.tool_symlink_global_versions "$tool_name" "$tool_version"
 	else
 		util.tool_set_local_version "$tool_name" "$tool_version"
 
-		util.tool_symlink_local_versions "$tool_name" "$tool_version"
 	fi
-	util.print_info "Symlinked version '$tool_version'"
 }

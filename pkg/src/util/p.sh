@@ -19,7 +19,12 @@ p.fetch() {
 		;;
 	esac done; unset -v arg
 
-	util.print_info "Fetching $url"
+	if [ "$global_flag_dry_run" = 'yes' ]; then
+		util.print_info "Would have fetched $url"
+		return
+	else
+		util.print_info "Fetching $url"
+	fi
 
 	# --progress-bar goes to standard error
 	if [ -t 2 ]; then
@@ -72,7 +77,12 @@ p.unpack() {
 	fi
 
 	util.sanitize_path "$PWD/$file"
-	util.print_info 'Unpacking' "$REPLY"
+	if [ "$global_flag_dry_run" = 'yes' ]; then
+		util.print_info "Would have unpacked: $REPLY"
+		return
+	else
+		util.print_info 'Unpacking' "$REPLY"
+	fi
 
 	if command -v pv &>/dev/null; then
 		pv "$file"

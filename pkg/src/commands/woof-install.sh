@@ -2,6 +2,7 @@
 
 woof-install() {
 	local -a subcmds=()
+	declare -g global_flag_dry_run='no'
 	local flag_no_cache='no' flag_force='no'
 	local arg=
 	for arg; do case $arg in
@@ -12,6 +13,9 @@ woof-install() {
 		;;
 	--no-cache)
 		flag_no_cache='yes'
+		;;
+	--dry-run)
+		global_flag_dry_run='yes'
 		;;
 	--force)
 		flag_force='yes'
@@ -39,6 +43,4 @@ woof-install() {
 	if [ -z "$tool_version_global" ]; then
 		util.tool_set_global_version "$tool_name" "$tool_version"
 	fi
-
-	helper.switch_to_version "$tool_name" "$tool_version"
 }

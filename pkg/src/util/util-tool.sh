@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+
 util.tool_get_global_version() {
 	# shellcheck disable=SC1007
 	local arg= flag_no_error='no'
@@ -15,20 +16,21 @@ util.tool_get_global_version() {
 
 	local tool_name="$1"
 
-	var.get_dir 'plugin-selection'
-	local dir="$REPLY"
+	var.get_dir 'data-woof'
+	local dir="$REPLY/selection"
 
 	unset -v REPLY; REPLY=
 
-	if [ ! -f "$dir/$tool_name" ]; then
+	if [ -f "$dir/$tool_name" ]; then
+		REPLY=$(<"$dir/$tool_name")
+		return
+	else
 		if [ "$flag_no_error" = 'yes' ]; then
 			return
 		else
 			util.print_error_die "A global version of '$tool_name' has not been set"
 		fi
 	fi
-
-	REPLY=$(<"$dir/$tool_name")
 }
 
 util.tool_get_local_version() {
@@ -46,7 +48,7 @@ util.tool_get_local_version() {
 
 	local tool_name="$1"
 
-	var.get_dir 'data-local'
+	var.get_dir 'data-woof'
 	local dir="$REPLY/selection"
 
 	if [ ! -f "$dir/$tool_name" ]; then
@@ -67,8 +69,8 @@ util.tool_set_global_version() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'plugin-selection'
-	local dir="$REPLY"
+	var.get_dir 'data-woof'
+	local dir="$REPLY/selection"
 
 	util.mkdirp "$dir"
 
@@ -86,7 +88,7 @@ util.tool_set_local_version() {
 	util.assert_not_empty 'tool_name'
 	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'data-local'
+	var.get_dir 'data-woof'
 	local dir="$REPLY/selection"
 
 	util.mkdirp "$dir"
@@ -184,7 +186,7 @@ util.tool_list_local_versions() {
 		exit 1
 	fi
 
-	util.toolversions_get_path
+	util.toolversions_get_file
 	local toolversions_file="$REPLY"
 
 	if [ -z "$toolversions_file" ]; then
@@ -207,68 +209,4 @@ util.tool_list_local_versions() {
 	done
 }
 
-util.tool_symlink_global_versions() {
-	local tool_name="$1"
-	local tool_version="$2"
-	util.assert_not_empty 'tool_name'
-	util.assert_not_empty 'tool_version'
 
-	var.get_dir 'usr_global'
-	local target_bin_dir="$REPLY/bin"
-
-	util._tool_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
-}
-
-util.tool_symlink_local_versions() {
-	local tool_name="$1"
-	local tool_version="$2"
-	util.assert_not_empty 'tool_name'
-	util.assert_not_empty 'tool_version'
-
-	var.get_dir 'data-local'
-	local target_bin_dir="$REPLY/bin"
-
-	util._tool_symlink_core "$tool_name" "$tool_version" "$target_bin_dir"
-}
-
-util._tool_symlink_core() {
-	local tool_name="$1"
-	local tool_version="$2"
-	local target_bin_dir="$3"
-	util.assert_not_empty 'tool_name'
-	util.assert_not_empty 'tool_version'
-	util.assert_not_empty 'target_bin_dir'
-
-	var.get_dir 'installed-tools' "$tool_name"
-	local install_dir="$REPLY"
-
-	util.get_plugin_data "$tool_name" "$tool_version" 'bins'
-	local -a bin_dirs=("${REPLY[@]}")
-
-	util.mkdirp "$target_bin_dir"
-
-	local bin_dir=
-	for bin_dir in "${bin_dirs[@]}"; do
-		if [ -d "$install_dir/$tool_version/$bin_dir" ]; then
-			local bin_file
-			for bin_file in "$install_dir/$tool_version/$bin_dir"/*; do
-				if [ -d "$bin_file" ]; then
-					continue
-				fi
-
-				if [ ! -x "$bin_file" ]; then
-					core.print_warn "File '$bin_file' is in a bin directory, but is not marked as executable"
-					continue
-				fi
-
-				local bin_name="${bin_file##*/}"
-				core.print_info "symlinking $bin_name"
-				if ! ln -sf "$bin_file" "$target_bin_dir/$bin_name"; then
-					core.print_warn "Symlink failed. Skipping"
-				fi
-			done; unset -v bin_file
-		else
-			core.print_warn "Directory '$bin_dir' does not exist for plugin '$tool_name'"
-		fi
-	done; unset -v bin_dir
-}

@@ -1,13 +1,8 @@
 # shellcheck shell=bash
 
 nodejs.env() {
-	var.get_dir 'plugin-data'
+	var.get_dir 'data-plugin'
 	local global_common_dir="$REPLY"
-
-	# older version of pnpm did not follow the XDG Base Specification
-	utility.shell_variable_assignment 'PNPM_HOME' "$global_common_dir/pnpm_home"
-	utility.shell_variable_export 'PNPM_HOME'
-	utility.shell_path_prepend '$PNPM_HOME'
 }
 
 nodejs.table() {
@@ -28,11 +23,7 @@ nodejs.install() {
 	REPLY_MANS=('./share/man/man1')
 }
 
-nodejs.dir() {
-	:
-}
-
-nodejs.info() {
+nodejs.info() { # TODO
 	local npm_bin=
 	npm_bin=$(npm -g bin)
 
