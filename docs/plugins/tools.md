@@ -1,7 +1,5 @@
 # Plugin API
 
-Use the Plugin API to implement a version manager for a particular language. In this repository, the plugins are located in `./pkg/src/plugins`
-
 ## `<plugin>.table()`
 
 Prints a version table to standard output. Each line of standard output looks like the following:
