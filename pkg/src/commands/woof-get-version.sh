@@ -7,14 +7,14 @@ woof-get-version() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'get-version'
-		util.help_show_cmd_root 'get-version'
+		util.help_show_part '.get-version'
 		exit 0
 		;;
 	--global)
 		flag_global='yes'
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.get-version' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

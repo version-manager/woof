@@ -7,7 +7,7 @@ woof-list() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'list'
-		util.help_show_cmd_root 'list'
+		util.help_show_part '.list'
 		exit 0
 		;;
 	--global)
@@ -20,7 +20,7 @@ woof-list() {
 		flag_all='yes'
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.list' "Flag '$arg' not recognized"
 		;;
 	*)
 		plugins+=("$arg")

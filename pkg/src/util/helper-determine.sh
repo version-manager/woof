@@ -7,7 +7,8 @@ helper.determine_tool_name() {
 	local tool_name="$1"
 
 	if [ -z "$tool_name" ]; then
-		local -a all_tools_arr=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/*/tools/*.sh)
+		util.plugin_get_active_tools
+		local -a all_tools_arr=("${REPLY[@]}")
 		all_tools_arr=("${all_tools_arr[@]##*/}")
 		all_tools_arr=("${all_tools_arr[@]%.sh}")
 
@@ -23,7 +24,8 @@ helper.determine_tool_name() {
 
 
 	local plugin_file=
-	local -a plugin_files=("$BASALT_PACKAGE_DIR/pkg/src/plugins"/*/tools/*.sh)
+	util.plugin_get_active_tools
+	local -a plugin_files=("${REPLY[@]}")
 	local f=
 	for f in "${plugin_files[@]}";do
 		if [[ "$f" == *"$tool_name"* ]]; then

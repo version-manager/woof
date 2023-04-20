@@ -2,7 +2,6 @@
 
 
 util.tool_get_global_version() {
-	# shellcheck disable=SC1007
 	local arg= flag_no_error='no'
 	for arg; do case $arg in
 	--no-error)
@@ -34,7 +33,6 @@ util.tool_get_global_version() {
 }
 
 util.tool_get_local_version() {
-	# shellcheck disable=SC1007
 	local arg= flag_no_error='no'
 	for arg; do case $arg in
 	--no-error)

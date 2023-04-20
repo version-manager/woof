@@ -11,7 +11,7 @@ woof-plugin() {
 		exit 0
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.plugin' "Flag '$arg' not recognized"
 		;;
 	*)
 		break
@@ -19,8 +19,7 @@ woof-plugin() {
 
 	local subcommand="$1"
 	if [ -z "$subcommand" ]; then
-		util.help_show_cmd_plugin_all
-		util.print_error_die 'No subcommand was given'
+		util.print_help_die '.plugin' 'No subcommand was given'
 	fi
 	if ! shift; then
 		util.print_fatal_die 'Failed to shift'

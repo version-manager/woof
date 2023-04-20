@@ -7,7 +7,6 @@ test_index_object_keys() {
 
 	local -n __object="$object_name"
 
-	# shellcheck disable=SC1007
 	local key= i=0
 	for key in "${!__object[@]}"; do
 		if ((i == n)); then

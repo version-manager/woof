@@ -87,7 +87,7 @@ util.plugin_enable() {
 
 }
 
-util.plugin_disable() {
+util.plugin_disable() { # TODO
 	:
 }
 
@@ -123,7 +123,6 @@ util.plugin_parse_manifest() {
 	local manifest_file="$1"
 	util.assert_not_empty 'manifest_file'
 
-	# shellcheck disable=SC1007
 	local key= value=
 	while IFS='=' read -r key value || [[ -n "$key" && -n "$value" ]]; do
 		key=${key#"${key%%[![:space:]]*}"}
@@ -232,4 +231,14 @@ util.plugin_prune() {
 		fi
 	done
 	core.shopt_pop
+}
+
+util.plugin_get_active_dirs() {
+	unset -v REPLY; REPLY=
+	REPLY=("$WOOF_STATE_HOME/plugins")
+}
+
+util.plugin_get_active_tools() {
+	unset -v REPLY; REPLY=
+	REPLY=("$WOOF_STATE_HOME/plugins"/*/tools/*.sh)
 }

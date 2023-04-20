@@ -103,7 +103,6 @@ tty._print_list() {
 
 	term.cursor_to -p 0 0
 
-	# shellcheck disable=SC1007
 	local i= str= prefix=
 	for ((i=start; i<end; i++)); do
 		if ((i != start)); then

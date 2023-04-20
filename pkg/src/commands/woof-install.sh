@@ -8,7 +8,7 @@ woof-install() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'install'
-		util.help_show_cmd_root 'install'
+		util.help_show_part '.install'
 		exit 0
 		;;
 	--no-cache)
@@ -21,7 +21,7 @@ woof-install() {
 		flag_force='yes'
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.install' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

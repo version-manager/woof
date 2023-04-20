@@ -11,7 +11,7 @@ woof-tool() {
 	# 	exit 0
 	# 	;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.tool' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")
@@ -19,8 +19,8 @@ woof-tool() {
 
 	local subcmd="$1"
 	if [ -z "$subcmd" ]; then
-		util.help_show_cmd_tool_all 'tool'
-		util.print_error_die 'Expected subcommand'
+		util.help_show_cmd_tool_all
+		util.print_help_die '.tool' 'Expected subcommand'
 	fi
 	if ! shift; then
 		util.print_fatal_die 'Failed to shift'

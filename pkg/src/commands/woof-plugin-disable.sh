@@ -6,11 +6,11 @@ woof-plugin-disable() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'plugin disable'
-		util.help_show_cmd_plugin 'disable'
+		util.help_show_part '.plugin.disable'
 		exit 0
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.plugin.disable' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

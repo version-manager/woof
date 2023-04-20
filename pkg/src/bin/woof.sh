@@ -25,7 +25,6 @@ main.woof() {
 
 				if ((major_ver >= 5 || (major_ver >= 4 && minor_ver >= 3) )); then
 					printf '%s\n' "Warning: Woof: Bash version from '/usr/bin/env bash' of '$BASH_VERSION' is too low; exec'ing into a newer one: $bin_dir/bash" >&2
-					# shellcheck disable=SC1007
 					BASH_INTERNAL_VERSIONEXEC= exec "$bin_dir/bash" "${BASH_SOURCE[1]}" "$@"
 				fi
 			fi

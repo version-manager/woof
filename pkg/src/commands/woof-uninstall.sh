@@ -6,11 +6,11 @@ woof-uninstall() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'uninstall'
-		util.help_show_cmd_root 'uninstall'
+		util.help_show_part '.uninstall'
 		exit 0
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.uninstall.' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

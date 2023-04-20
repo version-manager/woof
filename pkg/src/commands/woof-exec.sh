@@ -6,11 +6,11 @@ woof-exec() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'exec'
-		util.help_show_cmd_root 'exec'
+		util.help_show_part '.exec'
 		exit 0
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.exec' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")
@@ -18,17 +18,17 @@ woof-exec() {
 
 	local tool_name="${subcmds[0]}"
 	if [ -z "$tool_name" ]; then
-		util.print_error_die "Passed tool cannot be empty"
+		util.print_help_die '.exec' "Passed tool cannot be empty"
 	fi
 
 	local tool_version="${subcmds[1]}"
 	if [ -z "$tool_version" ]; then
-		util.print_error_die "Passed version cannot be empty"
+		util.print_help_die '.exec' "Passed version cannot be empty"
 	fi
 
 	local executable="${subcmds[2]}"
 	if [ -z "$executable" ]; then
-		util.print_error_die "Passed executable cannot be empty"
+		util.print_help_die '.exec' "Passed executable cannot be empty"
 	fi
 
 	var.get_dir 'tools' "$tool_name"

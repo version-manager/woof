@@ -7,14 +7,14 @@ woof-set-version() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'set-version'
-		util.help_show_cmd_root 'set-version'
+		util.help_show_part '.set-version'
 		exit 0
 		;;
 	--global)
 		flag_global='yes'
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.set-version' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

@@ -6,11 +6,11 @@ woof-plugin-enable() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'plugin enable'
-		util.help_show_cmd_plugin 'enable'
+		util.help_show_part '.plugin.enable'
 		exit 0
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.plugin.enable' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")

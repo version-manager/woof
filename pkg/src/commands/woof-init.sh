@@ -7,14 +7,14 @@ woof-init() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_usage_and_flags 'init'
-		util.help_show_cmd_root 'init'
+		util.help_show_part '.init'
 		exit 0
 		;;
 	--no-cd)
 		flag_no_cd='yes'
 		;;
 	-*)
-		util.print_error_die "Flag '$arg' not recognized"
+		util.print_help_die '.init' "Flag '$arg' not recognized"
 		;;
 	*)
 		subcmds+=("$arg")
@@ -52,9 +52,9 @@ woof-init() {
 	done
 
 	printf '%s\n' '# --- plugins ----'
-	# shellcheck disable=SC1007
+	util.plugin_get_active_tools
 	local plugin_path= tool_name=
-	for plugin_path in "$BASALT_PACKAGE_DIR/pkg/src/plugins"/*/tools/*.sh; do
+	for plugin_path in "${REPLY[@]}"; do
 		# shellcheck disable=SC1090
 		source "$plugin_path"
 		tool_name=${plugin_path##*/}; tool_name=${tool_name%*.sh}
