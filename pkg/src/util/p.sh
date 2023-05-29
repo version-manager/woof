@@ -145,6 +145,48 @@ p.run_jq() {
 	fi
 }
 
+p.run_filter() {
+	local input="$1"
+
+	if [[ ${input::1} == '/' ]]; then
+		p.run_file "$input" "${@:2}"
+	else
+		local files=("$WOOF_STATE_HOME/plugins/$WOOF_PLUGIN_NAME/tools/$input.filter."*)
+		if (( ${#files[@]} == 1 )); then
+			p.run_file "${files[0]}" "${@:2}"
+		elif (( ${#files[@]} > 1 )); then
+			util.print_error_die "Expected glob '$WOOF_STATE_HOME/plugins/$WOOF_PLUGIN_NAME/tools/$input.filter.*' to match one file, but it matched multiple"
+		else
+			files=("$WOOF_PLUGIN_DIR/tools/filters/$input."*)
+			if (( ${#files[@]} == 1 )); then
+				p.run_file "${files[0]}" "${@:2}"
+			elif (( ${#files[@]} > 1 )); then
+				util.print_error_die "Expected glob '$WOOF_PLUGIN_DIR/tools/filters/$input.*' to match one file, but it matched multiple"
+			else
+				util.print_error_die "Failed to find filter for argument: '$input'"
+			fi
+		fi
+	fi
+}
+
+p.run_file() {
+	local file="$1"
+
+	case $file in
+	*.sh)
+		bash "$file" "${@:2}"
+		;;
+	*.bash)
+		bash "$file" "${@:2}"
+		;;
+	*.jq)
+		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filter_utils" -rf "$file" "${@:2}" --arg global_default_arch ''
+		;;
+	*)
+		util.print_error_die "No runner found for file: '$file'"
+	esac
+}
+
 p.fetch_git_tags() {
 	local url="$1"
 
