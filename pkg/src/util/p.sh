@@ -26,7 +26,7 @@ p.fetch() {
 		util.print_info "Fetching $url"
 	fi
 
-	# --progress-bar goes to standard error
+	# progress-bar goes to standard error
 	if [ -t 2 ]; then
 		# TODO: Alternate screen should have same contents as current screen to prevent jarding
 		# core.trap_add 'tty.all_restore' INT
@@ -113,6 +113,7 @@ p.unpack() {
 	fi
 }
 
+# @deprecated
 p.run_bash() {
 	local file="$1"
 
@@ -127,6 +128,7 @@ p.run_bash() {
 	fi
 }
 
+# @deprecated
 p.run_jq() {
 	local file="$1"
 

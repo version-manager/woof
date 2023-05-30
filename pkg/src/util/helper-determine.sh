@@ -37,7 +37,7 @@ helper.determine_tool_name() {
 	fi
 
 	# shellcheck source=/dev/null
-	if ! source "$plugin_file"; then
+	if ! source "$plugin_file"; then # TODO: REMOVE THIS
 		util.print_error_die "Could not successfully source plugin '$tool_name'"
 	fi
 

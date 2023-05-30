@@ -206,7 +206,6 @@ util.plugin_show_one() {
 	term.style_reset -pd
 	printf ' %s\n' "${tags:-N/A}"
 
-	term.color_orange 'type:'
 	local type=
 	if [ -L "$plugin_dir" ]; then
 		type='symlink'
@@ -214,7 +213,7 @@ util.plugin_show_one() {
 		type='git-repository'
 	fi
 	printf '    '
-	term.color_orange -pd 'tags:'
+	term.color_orange -pd 'type:'
 	term.style_reset -pd
 	printf ' %s\n' "$type"
 }
