@@ -61,14 +61,6 @@ main.woof() {
 	fi
 	unset -v token_file
 
-	# Ensure 'woof-plugin-core' is always "installed"
-	local plugin_core_dir="$BASALT_PACKAGE_DIR/pkg/src/woof-plugin-core"
-	local plugin_core_slug="${plugin_core_dir##*/}"
-	var.get_dir 'plugins'
-	local plugin_target="$REPLY/$plugin_core_slug"
-	local flag_force='yes'
-	util.plugin_install 'symlink' "$plugin_core_dir" "$plugin_target" "$flag_force"
-
 	# Parse arguments
 	local global_flag_quiet='no'
 	local arg=
