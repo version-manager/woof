@@ -49,38 +49,37 @@ woof-tool() {
 		done; unset -v var_name
 		unset -vn var_value
 	elif [ "$subcmd" = 'debug-table' ]; then
-		local possible_tool_name="$1"
-
-		helper.determine_tool_name "$possible_tool_name"
-		local tool_name="$REPLY"
-		unset -v possible_tool_name
+		helper.determine_tool_pair "$1"
+		local tool_name="$REPLY2"
 
 		util.run_function "$tool_name.table"
 	elif [ "$subcmd" = 'debug-install' ]; then
-		helper.determine_tool_name "$1"
-		local tool_name="$REPLY"
+		helper.determine_tool_pair "$1"
+		declare -g g_tool_pair="$REPLY"
+		declare -g g_plugin_name="$REPLY1"
+		declare -g g_tool_name="$REPLY2"
 
-		helper.create_version_table "$tool_name" 'yes'
+		helper.create_version_table "$g_tool_pair" 'yes'
 
-		helper.determine_tool_version "$tool_name" "$2"
-		local tool_version="$REPLY"
+		helper.determine_tool_version "$2"
+		local g_tool_version="$REPLY"
 
 		local flag_interactive='yes'
 		local flag_force='yes'
-		helper.install_tool_version "$flag_interactive" "$flag_force" "$tool_name" "$tool_version"
+		helper.install_tool_version "$flag_interactive" "$flag_force" "$g_tool_pair" "$g_tool_version"
 	elif [ "$subcmd" = 'clear-table-cache' ]; then
-		local tool_name="$1"
+		local tool_pair="$1"
 
-		var.get_plugin_table_file "$tool_name"
+		var.get_plugin_table_file "$g_tool_pair"
 		local table_file="$REPLY"
 
-		if [ -z "$tool_name" ]; then
+		if [ -z "$g_tool_pair" ]; then
 			util.print_info "Removing all table cache"
-			# Since '$tool_name' is empty, the basename of '$table_file' is
+			# Since '$tool_pair' is empty, the basename of '$table_file' is
 			# not correct, but that doesn't matter as it is not used here
 			rm -rf "${table_file%/*}"
 		else
-			util.print_info "Removing table cache for '$tool_name'"
+			util.print_info "Removing table cache for '$tool_pair'"
 			rm -f "$table_file"
 		fi
 	elif [ "$subcmd" = 'cd-override' ]; then
@@ -94,6 +93,41 @@ woof-tool() {
 		for dir in "$BASALT_PACKAGE_DIR"/pkg/src/plugins/{for-building,hashicorp,languages,languages-other,misc-tools}/; do
 		woof-plugin-install --force "$dir"
 		done; unset -v dir
+	elif [ "$subcmd" = 'generate-plugin-index' ]; then
+		printf '%s\n' 'Generating...'
+
+		var.get_dir 'data'
+		local index_dir="$REPLY/index"
+		rm -rf "$index_dir"
+		mkdir -p "$index_dir"
+
+		var.get_dir 'plugins'
+		local plugins_dir="$REPLY"
+
+		local plugin_dir=
+		core.shopt_push -s 'nullglob'
+		for plugin_dir in "$plugins_dir"/*/; do
+			local plugin_name="$plugin_dir%/"; plugin_name=${plugin_name##*/}
+
+			# by-plugin
+			mkdir -p "$index_dir/by-plugin/$plugin_name"
+			local tool_file=
+			for tool_file in "$plugin_dir/tools/"*.sh; do
+				local tool_pair=${tool_file##*/}; tool_pair=${tool_pair%.sh}
+
+				ln -s "$tool_file" "$index_dir/by-plugin/$plugin_name/$tool_pair"
+			done; unset -v f file_name file_name_no_ext
+
+			# by-tool
+			mkdir -p "$index_dir/by-tool"
+
+			# by-tag
+			mkdir -p "$index_dir/by-tag"
+		done
+		unset -v plugin_dir
+		core.shopt_pop
+
+		printf '%s\n' 'Done.'
 	else
 		util.print_error_die "Subcommand '$subcmd' is not valid"
 	fi

@@ -8,6 +8,9 @@ util.print_fatal_die() {
 
 util.print_error_die() {
 	core.print_error "$@"
+	if [ -n "${DEV_MODE+x}" ]; then # TODO: standardize this
+		core.print_stacktrace
+	fi
 	exit 1
 }
 
@@ -18,7 +21,7 @@ util.print_help_die() {
 }
 
 util.print_info() {
-	if [ "$global_flag_quiet" = 'no' ]; then
+	if [ "$g_flag_quiet" = 'no' ]; then
 		core.print_info "$@"
 	fi
 }

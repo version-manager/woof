@@ -20,29 +20,28 @@ woof-get-version() {
 		subcmds+=("$arg")
 	esac done; unset -v arg
 
-	local possible_tool_name="${subcmds[0]}"
-
-	helper.determine_tool_name "$possible_tool_name"
-	local tool_name="$REPLY"
-	unset -v possible_tool_name
+	helper.determine_tool_pair "${subcmds[0]}"
+	declare -g g_tool_pair="$REPLY"
+	declare -g g_plugin_name="$REPLY1"
+	declare -g g_tool_name="$REPLY2"
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.tool_get_global_version --no-error "$tool_name"
+		util.tool_get_global_version --no-error "$g_tool_pair"
 		local tool_version="$REPLY"
 
-		if [ -z "$tool_version" ]; then
-			core.print_warn "No global default was found for plugin '$tool_name'"
+		if [ -z "$g_tool_version" ]; then
+			core.print_warn "No global default was found for plugin '$g_tool_pair'"
 			return
 		fi
 	else
-		util.tool_get_local_version --no-error "$tool_name"
-		local tool_version="$REPLY"
+		util.tool_get_local_version --no-error "$g_tool_pair"
+		local g_tool_version="$REPLY"
 
-		if [ -z "$tool_version" ]; then
-			core.print_warn "No local default was found for plugin '$tool_name'"
+		if [ -z "$g_tool_version" ]; then
+			core.print_warn "No local default was found for plugin '$g_tool_pair'"
 			return
 		fi
 	fi
 
-	printf '%s\n' "$tool_version"
+	printf '%s\n' "$g_tool_version"
 }

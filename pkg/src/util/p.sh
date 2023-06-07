@@ -6,6 +6,26 @@ p.ensure() {
 	fi
 }
 
+p.rmln() {
+	local target="$1"
+	local link="$2"
+
+	p.ensure rm -rf "$link"
+	p.ensure ln -sf "$target" "$link"
+}
+
+p.cd() {
+	local dir="$1"
+
+	p.ensure cd -- "$dir"
+}
+
+p.mkdir() {
+	local dir="$1"
+
+	p.ensure mkdir -p -- "$dir"
+}
+
 p.fetch() {
 	local url=
 
@@ -19,7 +39,7 @@ p.fetch() {
 		;;
 	esac done; unset -v arg
 
-	if [ "$global_flag_dry_run" = 'yes' ]; then
+	if [ "$g_flag_dry_run" = 'yes' ]; then
 		util.print_info "Would have fetched $url"
 		return
 	else
@@ -41,26 +61,6 @@ p.fetch() {
 
 }
 
-p.rmln() {
-	local target="$1"
-	local link="$2"
-
-	p.ensure rm -rf "$link"
-	p.ensure ln -sf "$target" "$link"
-}
-
-p.cd() {
-	local dir="$1"
-
-	p.ensure cd -- "$dir"
-}
-
-p.mkdir() {
-	local dir="$1"
-
-	p.ensure mkdir -p -- "$dir"
-}
-
 p.unpack() {
 	local file= flag_directory= flag_strip='no'
 
@@ -77,7 +77,7 @@ p.unpack() {
 	fi
 
 	util.sanitize_path "$PWD/$file"
-	if [ "$global_flag_dry_run" = 'yes' ]; then
+	if [ "$g_flag_dry_run" = 'yes' ]; then
 		util.print_info "Would have unpacked: $REPLY"
 		return
 	else
@@ -113,60 +113,19 @@ p.unpack() {
 	fi
 }
 
-# @deprecated
-p.run_bash() {
-	local file="$1"
-
-	# Ex. 'p.run_bash "$BASALT_PACKAGE_DIR/pkg/src/filters/hashicorp.sh" "consul"'
-	if [[ ${file::1} == '/' ]]; then
-		bash "$@"
-	# Ex. 'p.run_bash "hashicorp" "consul"'
-	elif [[ $file =~ ^[[:alpha:]]+$ ]]; then
-		bash "$BASALT_PACKAGE_DIR/pkg/src/filters/$file.sh" "${@:2}"
-	else
-		bash "$@"
-	fi
-}
-
-# @deprecated
-p.run_jq() {
-	local file="$1"
-
-	# Note: with --arg, the first one specified as an argument takes presidence
-
-	# Ex. 'p.run_jq "$BASALT_PACKAGE_DIR/pkg/src/filters/crystal.jq"'
-	if [[ ${file::1} == '/' ]]; then
-		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$@" "${@:2}" --arg global_default_arch ''
-	# Ex. 'p.run_jq "crystal"'
-	elif [[ $file =~ ^[[:alpha:]_-]+$ ]]; then
-		local jq_file="$BASALT_PACKAGE_DIR/pkg/src/filters/$file.jq"
-
-		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" -rf "$jq_file" "${@:2}" --arg global_default_arch ''
-	else
-		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filters/util" "$@"
-	fi
-}
-
 p.run_filter() {
 	local input="$1"
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
 
 	if [[ ${input::1} == '/' ]]; then
 		p.run_file "$input" "${@:2}"
 	else
-		local files=("$WOOF_STATE_HOME/plugins/$WOOF_PLUGIN_NAME/tools/$input.filter."*)
-		if (( ${#files[@]} == 1 )); then
-			p.run_file "${files[0]}" "${@:2}"
-		elif (( ${#files[@]} > 1 )); then
-			util.print_error_die "Expected glob '$WOOF_STATE_HOME/plugins/$WOOF_PLUGIN_NAME/tools/$input.filter.*' to match one file, but it matched multiple"
+		if [ -f "$plugins_dir/woof-plugin-$WOOF_PLUGIN_NAME/tools/filters/$input" ]; then
+			p.run_file "$plugins_dir/woof-plugin-$WOOF_PLUGIN_NAME/tools/filters/$input" "${@:2}"
 		else
-			files=("$WOOF_PLUGIN_DIR/tools/filters/$input."*)
-			if (( ${#files[@]} == 1 )); then
-				p.run_file "${files[0]}" "${@:2}"
-			elif (( ${#files[@]} > 1 )); then
-				util.print_error_die "Expected glob '$WOOF_PLUGIN_DIR/tools/filters/$input.*' to match one file, but it matched multiple"
-			else
-				util.print_error_die "Failed to find filter for argument: '$input'"
-			fi
+			util.print_error_die "Failed to find filter for argument: '$input'"
 		fi
 	fi
 }
@@ -183,6 +142,9 @@ p.run_file() {
 		;;
 	*.jq)
 		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filter_utils" -rf "$file" "${@:2}" --arg global_default_arch ''
+		;;
+	*.pl)
+		perl "$file" "${@:2}"
 		;;
 	*)
 		util.print_error_die "No runner found for file: '$file'"

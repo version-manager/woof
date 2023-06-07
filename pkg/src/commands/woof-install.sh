@@ -2,7 +2,7 @@
 
 woof-install() {
 	local -a subcmds=()
-	declare -g global_flag_dry_run='no'
+	declare -g g_flag_dry_run='no'
 	local flag_no_cache='no' flag_force='no'
 	local arg=
 	for arg; do case $arg in
@@ -15,7 +15,7 @@ woof-install() {
 		flag_no_cache='yes'
 		;;
 	--dry-run)
-		global_flag_dry_run='yes'
+		g_flag_dry_run='yes'
 		;;
 	--force)
 		flag_force='yes'
@@ -27,20 +27,22 @@ woof-install() {
 		subcmds+=("$arg")
 	esac done; unset -v arg
 
-	helper.determine_tool_name "${subcmds[0]}"
-	local tool_name="$REPLY"
+	helper.determine_tool_pair "${subcmds[0]}"
+	declare -g g_tool_pair="$REPLY"
+	declare -g g_plugin_name="$REPLY1"
+	declare -g g_tool_name="$REPLY2"
 
-	helper.create_version_table "$tool_name" "$flag_no_cache"
+	helper.create_version_table "$flag_no_cache"
 
-	helper.determine_tool_version --allow-latest "$tool_name" "${subcmds[1]}"
-	local tool_version="$REPLY"
+	helper.determine_tool_version --allow-latest "${subcmds[1]}"
+	declare -g g_tool_version="$REPLY"
 
 	local flag_interactive='no'
-	helper.install_tool_version "$flag_interactive" "$flag_force" "$tool_name" "$tool_version"
+	helper.install_tool_version "$flag_interactive" "$flag_force"w5
 
-	util.tool_get_global_version --no-error "$tool_name"
+	util.tool_get_global_version --no-error "$g_tool_pair"
 	local tool_version_global="$REPLY"
 	if [ -z "$tool_version_global" ]; then
-		util.tool_set_global_version "$tool_name" "$tool_version"
+		util.tool_set_global_version "$g_tool_pair" "$g_tool_version"
 	fi
 }

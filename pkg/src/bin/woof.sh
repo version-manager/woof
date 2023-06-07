@@ -40,8 +40,8 @@ main.woof() {
 	core.trap_add 'global_trap_err' 'ERR'
 
 	global_stty_saved=
-	global_tty_height=
-	global_tty_width=
+	g_tty_height=
+	g_tty_width=
 
 	: "${WOOF_CONFIG_HOME:=${XDG_CONFIG_HOME:-$HOME/.config}/woof}"
 	: "${WOOF_CACHE_HOME:=${XDG_CACHE_HOME:-$HOME/.cache}/woof}"
@@ -62,7 +62,7 @@ main.woof() {
 	unset -v token_file
 
 	# Parse arguments
-	local global_flag_quiet='no'
+	local g_flag_quiet='no'
 	local arg=
 	for arg; do case $arg in
 	--help|-h)
@@ -71,7 +71,7 @@ main.woof() {
 		;;
 	--quiet|-q)
 		# shellcheck disable=SC2034
-		global_flag_quiet='yes'
+		g_flag_quiet='yes'
 		if ! shift; then
 			util.print_fatal_die 'Failed to shift'
 		fi
@@ -132,6 +132,8 @@ main.woof() {
 			source "$BASALT_PACKAGE_DIR/pkg/src/commands/woof-$subcommand.sh"
 			woof-tool "$@"
 			;;
-		*) util.print_error_die "Subcommand '$subcommand' not recognized" ;;
+		*)
+			util.print_error_die "Subcommand '$subcommand' not recognized"
+			;;
 	esac
 }

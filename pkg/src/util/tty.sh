@@ -8,7 +8,7 @@ tty.fullscreen_init() {
 	term.screen_save -p
 
 	term.erase_saved_lines -p
-	read -r global_tty_height global_tty_width < <(stty size)
+	read -r g_tty_height g_tty_width < <(stty size)
 }
 
 # shellcheck disable=SC2059
@@ -34,16 +34,16 @@ tty._backwards_all() {
 }
 
 tty._backwards_full_screen() {
-	if ((new_version_index - global_tty_height > 0)); then
-		new_version_index=$((new_version_index - global_tty_height))
+	if ((new_version_index - g_tty_height > 0)); then
+		new_version_index=$((new_version_index - g_tty_height))
 	else
 		new_version_index=0
 	fi
 }
 
 tty._backwards_half_screen() {
-	if ((new_version_index - (global_tty_height/2) > 0)); then
-		new_version_index=$((new_version_index - (global_tty_height/2)))
+	if ((new_version_index - (g_tty_height/2) > 0)); then
+		new_version_index=$((new_version_index - (g_tty_height/2)))
 	else
 		new_version_index=0
 	fi
@@ -59,8 +59,8 @@ tty._backwards_one() {
 tty._forwards_full_screen() {
 	local array_length=$1
 
-	if ((new_version_index + global_tty_height < array_length)); then
-		new_version_index=$((new_version_index + global_tty_height))
+	if ((new_version_index + g_tty_height < array_length)); then
+		new_version_index=$((new_version_index + g_tty_height))
 	else
 		new_version_index=$((array_length-1))
 	fi
@@ -69,8 +69,8 @@ tty._forwards_full_screen() {
 tty._forwards_half_screen() {
 	local array_length=$1
 
-	if ((new_version_index + (global_tty_height/2) < array_length)); then
-		new_version_index=$((new_version_index + (global_tty_height/2)))
+	if ((new_version_index + (g_tty_height/2) < array_length)); then
+		new_version_index=$((new_version_index + (g_tty_height/2)))
 	else
 		new_version_index=$((array_length-1))
 	fi
@@ -98,8 +98,8 @@ tty._print_list() {
 
 	# index represents the center (ex. 17)
 
-	local start=$((index - (global_tty_height / 2)))
-	local end=$((start + global_tty_height))
+	local start=$((index - (g_tty_height / 2)))
+	local end=$((start + g_tty_height))
 
 	term.cursor_to -p 0 0
 
@@ -130,7 +130,7 @@ tty._print_list() {
 }
 
 tty.multiselect() {
-	unset REPLY; REPLY=
+	unset -v REPLY; REPLY=
 	local old_version="$1"; if ! shift; then util.print_fatal_die 'Failed to shift'; fi
 	local select_keys_variable_name="$1"; if ! shift; then util.print_fatal_die 'Failed to shift'; fi
 	local select_table_variable_name="$1"; if ! shift; then util.print_fatal_die 'Failed to shift'; fi

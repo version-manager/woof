@@ -51,13 +51,14 @@ woof-init() {
 		fi
 	done
 
+	# TODO
 	printf '%s\n' '# --- plugins ----'
-	util.plugin_get_active_tools
-	local plugin_path= tool_name=
-	for plugin_path in "${REPLY[@]}"; do
+	util.plugin_get_active_tools --with=toolfileonly
+	local tool_file= tool_name=
+	for tool_file in "${REPLY[@]}"; do
 		# shellcheck disable=SC1090
-		source "$plugin_path"
-		tool_name=${plugin_path##*/}; tool_name=${tool_name%*.sh}
+		source "$tool_file"
+		tool_name=${tool_file##*/}; tool_name=${tool_name%*.sh}
 
 		if command -v "$tool_name".env &>/dev/null; then
 			printf '%s\n' "# $tool_name"
@@ -81,10 +82,33 @@ woof-init() {
 				new_path="$bin_dir${new_path:+":$new_path"}"
 			done; unset -v bin
 		fi
-	done; unset -v plugin_path tool
+	done; unset -v tool_file tool_name
+
+	# Get each currently active global version (for now only global) TODO
+	for file in ~/.local/state/woof/data/selection/*/*; do
+		declare -g g_plugin_name=${file%/*}; g_plugin_name=${g_plugin_name##*/}
+		declare -g g_tool_name=${file##*/}
+		declare -g g_tool_version=
+		g_tool_version=$(<"$file")
+		declare -g g_tool_pair=$g_plugin_name/$g_tool_name
+
+		# local install_dir="$HOME/.local/state/woof/tools/$g_tool_name/$g_tool_name/$g_tool_version"
+		var.get_dir 'tools' "$g_tool_pair"
+		local install_dir="$REPLY/$g_tool_version"
+
+		util.get_plugin_data "$g_tool_pair" "$g_tool_version" 'bins'
+		local bin_dir=
+		for bin_dir in "${REPLY[@]}"; do
+			bin_dir=${bin_dir#./}
+			local tool_dir="$install_dir/$bin_dir"
+
+			new_path="$tool_dir${new_path:+":$new_path"}"
+		done; unset -v bin_dir
+	done
 
 	printf '%s\n' '# --- path ----'
 	printf '%s\n' "PATH=$new_path"
+
 }
 
 woof_override_cd() {

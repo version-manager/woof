@@ -20,21 +20,18 @@ woof-set-version() {
 		subcmds+=("$arg")
 	esac done; unset -v arg
 
-	local possible_tool_name="${subcmds[0]}"
-	local possible_tool_version="${subcmds[1]}"
+	helper.determine_tool_pair "${subcmds[0]}"
+	declare -g g_tool_pair="$REPLY"
+	declare -g g_plugin_name="$REPLY1"
+	declare -g g_tool_name="$REPLY2"
 
-	helper.determine_tool_name "$possible_tool_name"
-	local tool_name="$REPLY"
-	unset -v possible_tool_name
-
-	helper.determine_tool_version_installed "$tool_name" "$possible_tool_version"
+	helper.determine_tool_version_installed "$g_tool_pair" "${subcmds[1]}"
 	local tool_version="$REPLY"
-	unset -v possible_tool_version
 
 	if [ "$flag_global" = 'yes' ]; then
-		util.tool_set_global_version "$tool_name" "$tool_version"
+		util.tool_set_global_version "$g_tool_pair" "$g_tool_version"
 	else
-		util.tool_set_local_version "$tool_name" "$tool_version"
+		util.tool_set_local_version "$g_tool_pair" "$g_tool_version"
 
 	fi
 }

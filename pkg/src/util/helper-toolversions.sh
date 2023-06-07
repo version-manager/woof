@@ -73,11 +73,14 @@ helper.toolversions_set_versions() {
 			elif [[ $tool_version == 'system' ]]; then
 				core.print_warn "Skipping 'system' for '$tool_name' as 'system' is not yet supported"
 			else
-				if util.is_tool_version_installed "$tool_name" "$tool_version"; then
-					util.tool_set_local_version "$tool_name" "$tool_version"
-					printf '%s\n' "Switched to $tool_name version $tool_version"
+				declare -g g_tool_name="$tool_name"
+				declare -g g_tool_version="$tool_version"
+
+				if util.is_tool_version_installed; then
+					util.tool_set_local_version
+					printf '%s\n' "Switched to $g_tool_name version $g_tool_version"
 				else
-					printf '%s\n' "Cannot switch to $tool_name version $tool_version; try to install it first"
+					printf '%s\n' "Cannot switch to $g_tool_name version $g_tool_version; try to install it first"
 				fi
 			fi
 		done; unset -v tool_version

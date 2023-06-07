@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 util.get_table_row() {
-	unset REPLY{1,2}; REPLY1= REPLY2=
+	unset -v REPLY{1,2}; REPLY1= REPLY2=
 	local tool_name="$1"
 	local tool_version="$2"
 	local real_os="$3"
@@ -11,9 +11,9 @@ util.get_table_row() {
 	util.assert_not_empty 'real_os'
 	util.assert_not_empty 'real_arch'
 
-	var.get_plugin_table_file "$tool_name"
+	var.get_plugin_table_file "$g_tool_pair"
 	local table_file="$REPLY"
-
+	echo tf "$table_file"
 	if [ ! -f "$table_file" ]; then
 		util.print_error_die "Expected file '$table_file' to exist"
 	fi
@@ -42,7 +42,7 @@ util.get_table_row() {
 
 util.run_function() {
 	local flag_optional='no'
-	if [ "$1" = '--optional' ]; then
+	if [ "$1" = '--optional' ]; then # TODO: remove optional?
 		flag_optional='yes'
 		if ! shift; then
 			util.print_error_die 'Failed to shift'
@@ -68,7 +68,7 @@ util.run_function() {
 }
 
 util.key_to_index() {
-	unset REPLY; REPLY=
+	unset -v REPLY; REPLY=
 
 	local -n array_name="$1"
 	local key="$2"
@@ -89,7 +89,7 @@ util.key_to_index() {
 }
 
 util.uname_system() {
-	unset REPLY{1,2}; REPLY1= REPLY2=
+	unset -v REPLY{1,2}; REPLY1= REPLY2=
 	local kernel= hardware=
 
 	if ! kernel="$(uname -s)"; then

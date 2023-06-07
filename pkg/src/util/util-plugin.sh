@@ -232,12 +232,86 @@ util.plugin_prune() {
 	core.shopt_pop
 }
 
-util.plugin_get_active_dirs() {
-	unset -v REPLY; REPLY=
-	REPLY=("$WOOF_STATE_HOME/plugins")
+util.plugin_get_active_plugins() {
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY
+	declare -ga REPLY=()
+
+	local dir= plugin_name=
+	for dir in "$plugins_dir/"*/; do
+		plugin_name=${dir%/}
+		plugin_name=${plugin_name##*/}
+		plugin_name=${plugin_name#woof-plugin-}
+
+		REPLY+=("$plugin_name")
+	done
+	unset -v dir plugin
+}
+
+util.plugin_get_active_tools_of_plugin() {
+	local plugin="$1"
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY
+	declare -ga REPLY=()
+
+	local tool= tool_name=
+	for tool in "$plugins_dir/woof-plugin-$plugin/tools/"*.sh; do
+		tool_name=${tool##*/}
+		tool_name=${tool_name%.sh}
+
+		REPLY+=("$tool_name")
+	done
+	unset -v tool tool_name
 }
 
 util.plugin_get_active_tools() {
-	unset -v REPLY; REPLY=
-	REPLY=("$WOOF_STATE_HOME/plugins"/*/tools/*.sh)
+	local flag_with='pair'
+	local arg=
+	for arg; do case $arg in
+	--with=*)
+		local value=${arg#--with=}
+		case $value in
+			pair|toolnameonly|toolfileonly)
+				flag_with=$value
+				;;
+			*)
+				util.print_error_die "Flag '$arg' could not be evaluated"
+				;;
+		esac
+		;;
+	*)
+		util.print_error_die "Flag '$arg' not recognized"
+		;;
+	esac done
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY
+	declare -ga REPLY=()
+
+	local dir= plugin_name= tool=
+	for dir in "$plugins_dir/"*/; do
+		plugin_name=${dir%/}; plugin_name=${plugin_name##*/}
+		plugin_name=${plugin_name#woof-plugin-}
+		for tool in "$dir"tools/*.sh; do
+			if [ "$flag_with" = 'pair' ]; then
+				tool=${tool##*/}; tool=${tool%.sh}
+
+				REPLY+=("${plugin_name}/${tool}")
+			elif [ "$flag_with" = 'toolnameonly' ]; then
+				tool=${tool##*/}; tool=${tool%.sh}
+
+				REPLY+=("$tool")
+			elif [ "$flag_with" = 'toolfileonly' ]; then
+				REPLY+=("$tool")
+			fi
+		done
+	done
+	unset -v dir plugin tool
 }

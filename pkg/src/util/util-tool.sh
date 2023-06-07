@@ -1,6 +1,5 @@
 # shellcheck shell=bash
 
-
 util.tool_get_global_version() {
 	local arg= flag_no_error='no'
 	for arg; do case $arg in
@@ -13,21 +12,21 @@ util.tool_get_global_version() {
 		;;
 	esac done; unset -v arg
 
-	local tool_name="$1"
+	local tool_pair="$1"
 
 	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
 	unset -v REPLY; REPLY=
 
-	if [ -f "$dir/$tool_name" ]; then
-		REPLY=$(<"$dir/$tool_name")
+	if [ -f "$dir/$tool_pair" ]; then
+		REPLY=$(<"$dir/$tool_pair")
 		return
 	else
 		if [ "$flag_no_error" = 'yes' ]; then
 			return
 		else
-			util.print_error_die "A global version of '$tool_name' has not been set"
+			util.print_error_die "A global version of '$tool_pair' has not been set"
 		fi
 	fi
 }
@@ -44,46 +43,48 @@ util.tool_get_local_version() {
 		;;
 	esac done; unset -v arg
 
-	local tool_name="$1"
+	local tool_pair="$1"
 
 	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
-	if [ ! -f "$dir/$tool_name" ]; then
+	unset -v REPLY; REPLY=
+
+	if [ ! -f "$dir/$tool_pair" ]; then
 		if [ "$flag_no_error" = 'yes' ]; then
 			return
 		else
-			util.print_error_die "No default was found for plugin '$tool_name'"
+			util.print_error_die "No default was found for plugin '$tool_pair'"
 		fi
 	fi
 
 	unset -v REPLY; REPLY=
-	REPLY=$(<"$dir/$tool_name")
+	REPLY=$(<"$dir/$tool_pair")
 }
 
 util.tool_set_global_version() {
-	local tool_name="$1"
+	local tool_pair="$1"
 	local tool_version="$2"
-	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_pair'
 	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
-	util.mkdirp "$dir"
+	util.mkdirp "$dir/$g_plugin_name"
 
-	if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
+	if ! printf '%s\n' "$g_tool_version" > "$dir/$g_tool_pair"; then
 		util.print_error_die "Failed to write new global version to disk"
 	fi
 
-	util.print_info "Set version '$tool_version' as global version"
+	util.print_info "Set version '$g_tool_version' as global version"
 }
 
 
 util.tool_set_local_version() {
-	local tool_name="$1"
+	local tool_pair="$1"
 	local tool_version="$2"
-	util.assert_not_empty 'tool_name'
+	util.assert_not_empty 'tool_pair'
 	util.assert_not_empty 'tool_version'
 
 	var.get_dir 'data'
@@ -91,11 +92,11 @@ util.tool_set_local_version() {
 
 	util.mkdirp "$dir"
 
-	if ! printf '%s\n' "$tool_version" > "$dir/$tool_name"; then
+	if ! printf '%s\n' "$g_tool_version" > "$dir/$tool_pair"; then
 		util.print_error_die "Failed to write new tty-specific version to disk"
 	fi
 
-	util.print_info "Set version '$tool_version' as tty-specific version"
+	util.print_info "Set version '$g_tool_version' as tty-specific version"
 }
 
 util.tool_list_global_versions() {
@@ -113,7 +114,7 @@ util.tool_list_global_versions() {
 	# fi
 
 	if [ "$flag_all" = 'yes' ]; then
-		var.get_dir 'tools' "$tool_name"
+		var.get_dir 'tools' "$tool_pair"
 		local install_dir="$REPLY"
 
 		# TODO: show ones that are 'done' and not 'done'
@@ -121,19 +122,19 @@ util.tool_list_global_versions() {
 		for tool in "$install_dir"/*/; do
 			tool=${tool%/}
 			tool=${tool##*/}
-			local tool_name="$tool"
+			local tool_pair="$tool"
 
 			# one shoudl already be created / should not do this in list
 			# as it could mean network request TODO
-			helper.create_version_table "$tool_name" "$flag_no_cache"
+			helper.create_version_table "$flag_no_cache"
 
-			printf '%s\n' "$tool_name"
+			printf '%s\n' "$tool_pair"
 
 			util.uname_system
 			local real_os="$REPLY1"
 			local real_arch="$REPLY2"
 
-			var.get_plugin_table_file "$tool_name"
+			var.get_plugin_table_file "$tool_pair"
 			local table_file="$REPLY"
 
 			local variant= version= os= arch= url= comment=
@@ -146,23 +147,22 @@ util.tool_list_global_versions() {
 			# TODO: auto pager
 		done
 	else
-		local possible_tool_name="$1"
+		helper.determine_tool_pair "$1"
+		declare -g g_tool_pair="$REPLY"
+		declare -g g_plugin_name="$REPLY1"
+		declare -g g_tool_name="$REPLY2"
 
-		helper.determine_tool_name "$possible_tool_name"
-		local tool_name="$REPLY"
-		unset -v possible_tool_name
-
-
+		# TODO
 		# DUPLICATE CODE START ?
-		helper.create_version_table "$tool_name" "$flag_no_cache"
+		helper.create_version_table "$flag_no_cache"
 
-		printf '%s\n' "$tool_name"
+		printf '%s\n' "$g_tool_pair"
 
 		util.uname_system
 		local real_os="$REPLY1"
 		local real_arch="$REPLY2"
 
-		var.get_plugin_table_file "$tool_name"
+		var.get_plugin_table_file "$g_tool_pair"
 		local table_file="$REPLY"
 
 		local variant= version= os= arch= url= comment=

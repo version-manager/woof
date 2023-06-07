@@ -4,12 +4,10 @@
 # platforms (kernel and architecture). This eventually calls the "<plugin>.table"
 # function and properly deals with caching
 helper.create_version_table() {
-	local tool_name="$1"
-	local flag_no_cache="$2"
-	util.assert_not_empty 'tool_name'
+	local flag_no_cache="$1"
 	util.assert_not_empty 'flag_no_cache'
 
-	var.get_plugin_table_file "$tool_name"
+	var.get_plugin_table_file "$g_tool_pair"
 	local table_file="$REPLY"
 
 	util.print_info 'Gathering versions'
@@ -27,16 +25,16 @@ helper.create_version_table() {
 
 	if [ "$should_use_cache" = 'no' ]; then
 		local table_string=
-		if table_string=$(util.run_function "$tool_name.table"); then
+		if table_string=$(WOOF_PLUGIN_NAME=$g_plugin_name util.run_function "$g_tool_name.table"); then
 			if core.err_exists; then
 				util.print_error_die "$ERR"
 			fi
 		else
-			util.print_error_die "Failed to run '$tool_name.table()'"
+			util.print_error_die "Failed to run '$g_tool_name.table()'"
 		fi
 
 		if [ -z "$table_string" ]; then
-			util.print_error_die "No versions found for $tool_name ('$tool_name.table()' printed nothing)"
+			util.print_error_die "No versions found for $g_tool_name ('$g_tool_name.table()' printed nothing)"
 		fi
 
 		if ! printf '%s' "$table_string" > "$table_file"; then
@@ -51,17 +49,13 @@ helper.create_version_table() {
 helper.install_tool_version() {
 	local flag_interactive="$1"
 	local flag_force="$2"
-	local tool_name="$3"
-	local tool_version="$4"
 	util.assert_not_empty 'flag_interactive'
 	util.assert_not_empty 'flag_force'
-	util.assert_not_empty 'tool_name'
-	util.assert_not_empty 'tool_version'
 
-	var.get_plugin_workspace_dir "$tool_name"
+	var.get_plugin_workspace_dir "$g_tool_pair"
 	local workspace_dir="$REPLY"
 
-	var.get_dir 'tools' "$tool_name"
+	var.get_dir 'tools' "$g_tool_pair"
 	local install_dir="$REPLY"
 
 	# If there is an interactive flag, then we are debugging the installation
@@ -76,15 +70,15 @@ helper.install_tool_version() {
 		install_dir="$interactive_dir/install_dir"
 	fi
 
-	if util.is_tool_version_installed "$tool_name" "$tool_version"; then
+	if util.is_tool_version_installed "$g_tool_pair" "$g_tool_version"; then
 		if [ "$flag_force" = 'yes' ]; then
-			if rm -rf "${install_dir:?}/$tool_version"; then :; else
-				util.print_error_die "Failed to remove directory: '${install_dir:?}/$tool_version'"
+			if rm -rf "${install_dir:?}/$g_tool_version"; then :; else
+				util.print_error_die "Failed to remove directory: '${install_dir:?}/$g_tool_version'"
 			fi
 		else
-			core.print_warn "Version '$tool_version' is already installed for plugin '$tool_name'. Switching to that version"
+			core.print_warn "Version '$g_tool_version' is already installed for plugin '$g_tool_pair'. Switching to that version"
 			# TODO: global only thing
-			util.tool_set_global_version "$tool_name" "$tool_version"
+			util.tool_set_global_version "$g_tool_pair" "$g_tool_version"
 			return
 		fi
 	fi
@@ -94,11 +88,11 @@ helper.install_tool_version() {
 	local arch="$REPLY2"
 
 	# Determine correct binary for current system
-	util.get_table_row "$tool_name" "$tool_version" "$os" "$arch"
+	util.get_table_row "$g_tool_name" "$g_tool_version" "$os" "$arch"
 	local url="$REPLY1"
 
 	# Preparation actions
-	rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
+	rm -rf "$workspace_dir" "${install_dir:?}/$g_tool_version"
 	mkdir -p "$workspace_dir" "$install_dir"
 
 	# Execute '<plugin>.install'
@@ -113,14 +107,14 @@ helper.install_tool_version() {
 	declare -g REPLY_DIR=
 	declare -ag REPLY_BINS=() REPLY_INCLUDES=() REPLY_LIBS=() REPLY_MANS=() REPLY_BASH_COMPLETIONS=() \
 		REPLY_ZSH_COMPLETIONS=() REPLY_FISH_COMPLETIONS=()
-	if util.run_function "$tool_name.install" "$url" "${tool_version/#v}" "$os" "$arch"; then
+	if WOOF_PLUGIN_NAME=$g_plugin_name util.run_function "$g_tool_name.install" "$url" "${g_tool_version/#v}" "$os" "$arch"; then
 		if core.err_exists; then
 			rm -rf "$workspace_dir"
-			util.print_error_die "Failed to successfully execute '$tool_name.install'"
+			util.print_error_die "Failed to successfully execute '${g_tool_pair#*/}.install'"
 		fi
 	else
 		rm -rf "$workspace_dir"
-		util.print_error_die "Unexpected error while calling '$tool_name.install'"
+		util.print_error_die "Unexpected error while calling '$g_tool_name.install'"
 	fi
 	if ! cd -- "$old_pwd"; then
 		util.print_error_die 'Failed to cd'
@@ -150,27 +144,27 @@ helper.install_tool_version() {
 
 	# Move extracted contents to 'tools' directory
 	core.shopt_push -s dotglob
-	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$tool_version"; then
+	if ! mv "$workspace_dir/$REPLY_DIR" "$install_dir/$g_tool_version"; then
 		rm -rf "$workspace_dir"
-		util.print_error_die "Could not move extracted contents to '$install_dir/$tool_version'"
+		util.print_error_die "Could not move extracted contents to '$install_dir/$g_tool_version'"
 	fi
 	core.shopt_pop
 
 	# Save information about bin, man, etc. pages later
-	mkdir -p "$install_dir/$tool_version/.woof__"
+	mkdir -p "$install_dir/$g_tool_version/.woof__"
 	local old_ifs="$IFS"; IFS=':'
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
-mans=${REPLY_MANS[*]}" > "$install_dir/$tool_version/.woof__/data.txt"; then
-		rm -rf "$workspace_dir" "${install_dir:?}/$tool_version"
-		util.print_error_die "Failed to write to '$install_dir/$tool_version/.woof__/data.txt'"
+mans=${REPLY_MANS[*]}" > "$install_dir/$g_tool_version/.woof__/data.txt"; then
+		rm -rf "$workspace_dir" "${install_dir:?}/$g_tool_version"
+		util.print_error_die "Failed to write to '$install_dir/$g_tool_version/.woof__/data.txt'"
 	fi
 	IFS="$old_ifs"
 
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
-		mkdir -p "$install_dir/$tool_version/.woof__"
-		: > "$install_dir/$tool_version/.woof__/done"
-		util.print_info "Installed $tool_version"
+		mkdir -p "$install_dir/$g_tool_version/.woof__"
+		: > "$install_dir/$g_tool_version/.woof__/done"
+		util.print_info "Installed $g_tool_version"
 	else
 		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleted"
 	fi

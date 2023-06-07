@@ -97,7 +97,7 @@ util.help_show_cmd_plugin_all() {
 # tool
 util.help_show_cmd_tool_all() {
 	printf '\n    %s\n' "tool <get-exe|print-dirs|cd-override|debug-table|debug-install|
-            clear-table-cache|install-default-plugins> [args...]
+            clear-table-cache|install-default-plugins|generate-plugin-index> [args...]
         Run a particular tool. Most of these are for internal use"
 }
 
