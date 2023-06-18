@@ -29,5 +29,5 @@ woof-plugin-uninstall() {
 		util.print_error_die "Plugin does not exist: ${plugin_dir##*/}"
 	fi
 
-	util.plugin_uninstall "$plugin_dir"
+	helper.plugin_uninstall "$plugin_dir"
 }

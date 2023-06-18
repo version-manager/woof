@@ -30,5 +30,5 @@ woof-plugin-install() {
 
 	util.plugin_resolve_external_path "$plugin"
 
-	util.plugin_install "$REPLY_TYPE" "$REPLY_SRC" "$REPLY_TARGET" "$flag_force"
+	helper.plugin_install "$REPLY_TYPE" "$REPLY_SRC" "$REPLY_TARGET" "$flag_force"
 }

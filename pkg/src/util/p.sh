@@ -135,10 +135,10 @@ p.run_file() {
 
 	case $file in
 	*.sh)
-		bash "$file" "${@:2}"
+		BASH_ENV="$BASALT_PACKAGE_DIR/pkg/src/filter_utils/util/util.sh" bash "$file" "${@:2}"
 		;;
 	*.bash)
-		bash "$file" "${@:2}"
+		BASH_ENV="$BASALT_PACKAGE_DIR/pkg/src/filter_utils/util/util.sh" bash "$file" "${@:2}"
 		;;
 	*.jq)
 		jq -L "$BASALT_PACKAGE_DIR/pkg/src/filter_utils" -rf "$file" "${@:2}" --arg global_default_arch ''

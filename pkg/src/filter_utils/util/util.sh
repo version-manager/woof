@@ -1,7 +1,8 @@
 # shellcheck shell=bash
+echo sourced
 
 f.is_main() {
-	if [ "${BASH_SOURCE[0]}" != "${0}" ]; then :; else
+	if [ "${BASH_SOURCE[0]}" != "$0" ]; then :; else
 		return $?
 	fi
 }

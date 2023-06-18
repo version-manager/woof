@@ -30,7 +30,7 @@ woof-list() {
 		util.print_error_die "Flag --no-cache must only be used with --all"
 	fi
 
-	if [[ "$flag_all" = 'yes' && "${#plugins}" -gt 0 ]]; then
+	if [[ "$flag_all" = 'yes' && "${#plugins[@]}" -gt 0 ]]; then
 		util.print_error_die "Cannot pass in plugins if passing in '--all'"
 	fi
 

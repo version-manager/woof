@@ -13,7 +13,7 @@ util.get_table_row() {
 
 	var.get_plugin_table_file "$g_tool_pair"
 	local table_file="$REPLY"
-	echo tf "$table_file"
+
 	if [ ! -f "$table_file" ]; then
 		util.print_error_die "Expected file '$table_file' to exist"
 	fi
@@ -52,7 +52,6 @@ util.run_function() {
 	if ! shift; then
 		util.print_error_die 'Failed to shift'
 	fi
-
 	if declare -f "$function_name" &>/dev/null; then
 		core.print_debug 'Executing' "$function_name()"
 		if "$function_name" "$@"; then
@@ -137,7 +136,7 @@ util.get_plugin_data() {
 	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
-	local data_file="$install_dir/$tool_version/.woof__/data.txt"
+	local data_file="$install_dir/$tool_version/.woof_/data.txt"
 	local key= values=
 	while IFS='=' read -r key values; do
 		if [ "$specified_key" = "$key" ]; then
@@ -159,7 +158,7 @@ util.is_tool_version_installed() {
 	var.get_dir 'tools' "$tool_name"
 	local install_dir="$REPLY"
 
-	if [ -f "$install_dir/$tool_version/.woof__/done" ]; then
+	if [ -f "$install_dir/$tool_version/.woof_/done" ]; then
 		REPLY="$install_dir/$tool_version"
 		return 0
 	else

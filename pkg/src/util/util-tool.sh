@@ -147,32 +147,45 @@ util.tool_list_global_versions() {
 			# TODO: auto pager
 		done
 	else
-		helper.determine_tool_pair "$1"
-		declare -g g_tool_pair="$REPLY"
-		declare -g g_plugin_name="$REPLY1"
-		declare -g g_tool_name="$REPLY2"
+		var.get_dir 'tools'
+		local tools_dir="$REPLY"
 
-		# TODO
-		# DUPLICATE CODE START ?
-		helper.create_version_table "$flag_no_cache"
+		if ((${#tools_dir[@]} == 0)); then
+			term.style_italic -Pd 'No items'
+			return
+		fi
 
-		printf '%s\n' "$g_tool_pair"
+		util.get_installed_tools
+		for tool_dir in "${REPLY[@]}"; do
+			printf '%s\n' "dir: $tool_dir"
+		done; unset -v tool_dir
 
-		util.uname_system
-		local real_os="$REPLY1"
-		local real_arch="$REPLY2"
+		# helper.determine_tool_pair "$1"
+		# declare -g g_tool_pair="$REPLY"
+		# declare -g g_plugin_name="$REPLY1"
+		# declare -g g_tool_name="$REPLY2"
 
-		var.get_plugin_table_file "$g_tool_pair"
-		local table_file="$REPLY"
+		# # TODO
+		# # DUPLICATE CODE START ?
+		# helper.create_version_table "$flag_no_cache"
 
-		local variant= version= os= arch= url= comment=
-		while IFS='|' read -r variant version os arch url comment; do
-			if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
-				printf '%s\n' "  $version"
-			fi
-		done < "$table_file" | util.sort_versions
-		unset -v variant version os arch url comment
-		# DUPLICATE CODE END
+		# printf '%s\n' "$g_tool_pair"
+
+		# util.uname_system
+		# local real_os="$REPLY1"
+		# local real_arch="$REPLY2"
+
+		# var.get_plugin_table_file "$g_tool_pair"
+		# local table_file="$REPLY"
+
+		# local variant= version= os= arch= url= comment=
+		# while IFS='|' read -r variant version os arch url comment; do
+		# 	if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+		# 		printf '%s\n' "  $version"
+		# 	fi
+		# done < "$table_file" | util.sort_versions
+		# unset -v variant version os arch url comment
+		# # DUPLICATE CODE END
 	fi
 }
 
@@ -207,4 +220,33 @@ util.tool_list_local_versions() {
 	done
 }
 
+util.get_installed_tools() {
+	var.get_dir 'tools'
+	local tools_dir="$REPLY"
 
+	unset -v REPLY; declare -ga REPLY=()
+
+	if [ ! -d "$tools_dir" ]; then
+		return
+	fi
+
+	core.shopt_push -s nullglob
+	local tool_dir=
+	for tool_dir in "$tools_dir"/*/*/; do
+		tool_dir=${tool_dir%/}
+
+		plugin_name=${tool_dir%/*}; plugin_name=${plugin_name##*/}
+		tool_name=${tool_dir##*/}
+
+		printf '%s\n' "$plugin_name/$tool_name"
+		local tool_version=
+		for tool_version in "$tool_dir"/*/; do
+			tool_version=${tool_version%/}
+			tool_version=${tool_version##*/}
+
+			printf '%s\n' "  $tool_version"
+		done; unset -v version
+		printf '\n'
+	done; unset -v tool_dir
+	core.shopt_pop
+}

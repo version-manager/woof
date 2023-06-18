@@ -151,19 +151,19 @@ helper.install_tool_version() {
 	core.shopt_pop
 
 	# Save information about bin, man, etc. pages later
-	mkdir -p "$install_dir/$g_tool_version/.woof__"
+	mkdir -p "$install_dir/$g_tool_version/.woof_"
 	local old_ifs="$IFS"; IFS=':'
 	if ! printf '%s\n' "bins=${REPLY_BINS[*]}
-mans=${REPLY_MANS[*]}" > "$install_dir/$g_tool_version/.woof__/data.txt"; then
+mans=${REPLY_MANS[*]}" > "$install_dir/$g_tool_version/.woof_/data.txt"; then
 		rm -rf "$workspace_dir" "${install_dir:?}/$g_tool_version"
-		util.print_error_die "Failed to write to '$install_dir/$g_tool_version/.woof__/data.txt'"
+		util.print_error_die "Failed to write to '$install_dir/$g_tool_version/.woof_/data.txt'"
 	fi
 	IFS="$old_ifs"
 
 	rm -rf "$workspace_dir"
 	if [ "$flag_interactive" = 'no' ]; then
-		mkdir -p "$install_dir/$g_tool_version/.woof__"
-		: > "$install_dir/$g_tool_version/.woof__/done"
+		mkdir -p "$install_dir/$g_tool_version/.woof_"
+		: > "$install_dir/$g_tool_version/.woof_/done"
 		util.print_info "Installed $g_tool_version"
 	else
 		util.print_info "Exiting interactive environment. Intermediate temporary directories have been deleted"
