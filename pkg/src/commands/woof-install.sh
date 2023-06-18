@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-install() {
-	local -a subcmds=()
+	local -a args=()
 	declare -g g_flag_dry_run='no'
 	local flag_no_cache='no' flag_force='no'
 	local arg=
@@ -24,17 +24,17 @@ woof-install() {
 		util.print_help_die '.install' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 	esac done; unset -v arg
 
-	helper.determine_tool_pair "${subcmds[0]}"
+	helper.determine_tool_pair "${args[0]}"
 	declare -g g_tool_pair="$REPLY"
 	declare -g g_plugin_name="$REPLY1"
 	declare -g g_tool_name="$REPLY2"
 
 	helper.create_version_table "$flag_no_cache"
 
-	helper.determine_tool_version --allow-latest "${subcmds[1]}"
+	helper.determine_tool_version --allow-latest "${args[1]}"
 	declare -g g_tool_version="$REPLY"
 
 	local flag_interactive='no'

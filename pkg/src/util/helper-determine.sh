@@ -11,7 +11,7 @@ helper.determine_tool_pair() {
 	local tool_name=
 
 	if [ -z "$input" ]; then
-		util.plugin_get_active_plugins
+		util.plugin_get_plugins --filter=active --with=name
 		local -a all_plugins_arr=("${REPLY[@]}")
 		local -A all_plugins_obj=()
 		for m in "${all_plugins_arr[@]}"; do
@@ -208,7 +208,7 @@ helper.determine_tool_version_installed() {
 		local version=
 		for version in "${versions_list[@]}"; do
 			versions_table["$version"]=
-		done; unset version
+		done; unset -v version
 
 		util.tool_get_global_version --no-error "$g_tool_pair"
 		local tool_version_global="$REPLY"
@@ -243,4 +243,33 @@ helper.determine_latest_tool_version() {
 			break
 		fi
 	done < "$table_file"; unset -v version os arch url comment
+}
+
+helper.determine_plugin() {
+	local plugin_name="$1"
+
+	if [ -z "$plugin_name" ]; then
+		util.plugin_get_plugins --filter=none --with=name
+
+		local -a plugins_list=("${REPLY[@]}")
+		local -A plugins_table=()
+		local plugin=
+		for plugin in "${plugins_list[@]}"; do
+			plugins_table["$plugin"]=
+		done; unset -v plugin
+
+		tty.multiselect '' plugins_list plugins_table
+		plugin_name=$REPLY
+	fi
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	local dir="$plugins_dir/woof-plugin-$plugin_name"
+	if [ ! -d "$dir" ]; then
+		util.print_error_die "Plugin '$plugin_name' is not valid (non-existent directory: $dir)"
+	fi
+
+	unset -v REPLY; REPLY=
+	REPLY=$plugin_name
 }

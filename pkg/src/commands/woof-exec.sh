@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-exec() {
-	local -a subcmds=()
+	local -a args=()
 	local arg=
 	for arg; do case $arg in
 	--help)
@@ -13,20 +13,20 @@ woof-exec() {
 		util.print_help_die '.exec' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 	esac done; unset -v arg
 
-	local tool_name="${subcmds[0]}"
+	local tool_name="${args[0]}"
 	if [ -z "$tool_name" ]; then
 		util.print_help_die '.exec' "Passed tool cannot be empty"
 	fi
 
-	local tool_version="${subcmds[1]}"
+	local tool_version="${args[1]}"
 	if [ -z "$tool_version" ]; then
 		util.print_help_die '.exec' "Passed version cannot be empty"
 	fi
 
-	local executable="${subcmds[2]}"
+	local executable="${args[2]}"
 	if [ -z "$executable" ]; then
 		util.print_help_die '.exec' "Passed executable cannot be empty"
 	fi
@@ -41,7 +41,7 @@ woof-exec() {
 		for bin_file in "$install_dir/$tool_version/$bin_dir"/*; do
 			local bin_name="${bin_file##*/}"
 			if [[ -x "$bin_file" && "$bin_name" == "$executable" ]]; then
-				exec -a "$executable" "$bin_file" "${subcmds[@]:3}"
+				exec -a "$executable" "$bin_file" "${args[@]:3}"
 			fi
 		done
 	done; unset -v bin_dir

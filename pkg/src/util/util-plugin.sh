@@ -1,5 +1,133 @@
 # shellcheck shell=bash
 
+util.plugin_get_plugins() {
+	local flag_filter='none'
+	local flag_with='none'
+	local arg=
+	for arg; do case $arg in
+	--filter=*)
+		local value=${arg#--filter=}
+		case $value in
+			none|active)
+				flag_with=$value
+				;;
+			*)
+				util.print_error_die "Flag '$arg' could not be evaluated"
+				;;
+		esac
+		;;
+	--with=*)
+		local value=${arg#--with=}
+		case $value in
+			filepath|name)
+				flag_with=$value
+				;;
+			*)
+				util.print_error_die "Flag '$arg' could not be evaluated"
+				;;
+		esac
+		;;
+	*)
+		util.print_error_die "Flag '$arg' not recognized"
+		;;
+	esac done
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY
+	declare -ga REPLY=()
+
+	local dir= plugin_name= entry=
+	for dir in "$plugins_dir/"*/; do
+		dir=${dir%/}
+		plugin_name=${dir##*/}
+		plugin_name=${plugin_name#woof-plugin-}
+
+		if [ "$flag_filter" = 'active' ]; then
+			if ! util.plugin_is_enabled "$plugin_name"; then
+				continue
+			fi
+		fi
+
+		if [ "$flag_with" = 'filepath' ]; then
+			entry=$dir
+		elif [ "$flag_with" = 'name' ]; then
+			entry=${dir##*/}
+			entry=${entry#woof-plugin-}
+		fi
+
+		REPLY+=("$entry")
+	done
+	unset -v dir plugin_name entry
+}
+
+util.plugin_get_active_tools_of_plugin() {
+	local plugin="$1"
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY
+	declare -ga REPLY=()
+
+	local tool= tool_name=
+	for tool in "$plugins_dir/woof-plugin-$plugin/tools/"*.sh; do
+		tool_name=${tool##*/}
+		tool_name=${tool_name%.sh}
+
+		REPLY+=("$tool_name")
+	done
+	unset -v tool tool_name
+}
+
+util.plugin_get_active_tools() {
+	local flag_with='pair'
+	local arg=
+	for arg; do case $arg in
+	--with=*)
+		local value=${arg#--with=}
+		case $value in
+			pair|toolnameonly|toolfileonly)
+				flag_with=$value
+				;;
+			*)
+				util.print_error_die "Flag '$arg' could not be evaluated"
+				;;
+		esac
+		;;
+	*)
+		util.print_error_die "Flag '$arg' not recognized"
+		;;
+	esac done
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY
+	declare -ga REPLY=()
+
+	local dir= plugin_name= tool=
+	for dir in "$plugins_dir/"*/; do
+		plugin_name=${dir%/}; plugin_name=${plugin_name##*/}
+		plugin_name=${plugin_name#woof-plugin-}
+		for tool in "$dir"tools/*.sh; do
+			if [ "$flag_with" = 'pair' ]; then
+				tool=${tool##*/}; tool=${tool%.sh}
+
+				REPLY+=("${plugin_name}/${tool}")
+			elif [ "$flag_with" = 'toolnameonly' ]; then
+				tool=${tool##*/}; tool=${tool%.sh}
+
+				REPLY+=("$tool")
+			elif [ "$flag_with" = 'toolfileonly' ]; then
+				REPLY+=("$tool")
+			fi
+		done
+	done
+	unset -v dir plugin tool
+}
+
 util.plugin_resolve_external_path() {
 	var.get_dir 'plugins'
 	local plugins_dir="$REPLY"
@@ -77,10 +205,10 @@ util.plugin_assert_is_valid() {
 
 	# This will fatal if various keys could not be found
 	util.plugin_parse_manifest "$plugin_dir/manifest.ini"
-	local plugin_slug="$REPLY_SLUG"
+	local plugin_name="$REPLY_SLUG"
 
-	if [ "woof-plugin-$plugin_slug" != "${plugin_dir##*/}" ]; then
-		util.print_error_die "Plugin with slug '$plugin_slug' does not match the ending of plugin directory $plugin_dir"
+	if [ "woof-plugin-$plugin_name" != "${plugin_dir##*/}" ]; then
+		util.print_error_die "Plugin with slug '$plugin_name' does not match the ending of plugin directory $plugin_dir"
 	fi
 }
 
@@ -96,9 +224,10 @@ util.plugin_show_one() {
 	core.ifs_restore
 
 
-	local plugin_slug=${plugin_dir##*/}
+	local plugin_name=${plugin_dir##*/};
+	plugin_name=${plugin_name#woof-plugin-}
 
-	term.color_light_blue -Pd "$plugin_slug:"
+	term.color_light_blue -Pd "$plugin_name:"
 
 	printf '    '
 	term.color_orange -pd 'name:'
@@ -125,6 +254,15 @@ util.plugin_show_one() {
 	term.color_orange -pd 'type:'
 	term.style_reset -pd
 	printf ' %s\n' "$type"
+
+	local enabled='no'
+	if util.plugin_is_enabled "$plugin_name"; then
+		enabled='yes'
+	fi
+	printf '    '
+	term.color_orange -pd 'enabled:'
+	term.style_reset -pd
+	printf ' %s\n' "$enabled"
 }
 
 util.plugin_prune() {
@@ -141,86 +279,40 @@ util.plugin_prune() {
 	core.shopt_pop
 }
 
-util.plugin_get_active_plugins() {
-	var.get_dir 'plugins'
-	local plugins_dir="$REPLY"
+util.plugin_is_enabled() {
+	local plugin_name="$1"
+	util.assert_not_empty 'plugin_name'
 
-	unset -v REPLY
-	declare -ga REPLY=()
+	var.get_dir 'data'
+	local dir="$REPLY/disabled_plugins"
+	util.mkdirp "$dir"
 
-	local dir= plugin_name=
-	for dir in "$plugins_dir/"*/; do
-		plugin_name=${dir%/}
-		plugin_name=${plugin_name##*/}
-		plugin_name=${plugin_name#woof-plugin-}
+	if [ -f "$dir/$plugin_name" ]; then
+		return 1
+	else
+		return 0
+	fi
 
-		REPLY+=("$plugin_name")
-	done
-	unset -v dir plugin
 }
 
-util.plugin_get_active_tools_of_plugin() {
-	local plugin="$1"
+util.plugin_set_disabled() {
+	local plugin_name="$1"
+	util.assert_not_empty 'plugin_name'
 
-	var.get_dir 'plugins'
-	local plugins_dir="$REPLY"
+	var.get_dir 'data'
+	local dir="$REPLY/disabled_plugins"
+	util.mkdirp "$dir"
 
-	unset -v REPLY
-	declare -ga REPLY=()
-
-	local tool= tool_name=
-	for tool in "$plugins_dir/woof-plugin-$plugin/tools/"*.sh; do
-		tool_name=${tool##*/}
-		tool_name=${tool_name%.sh}
-
-		REPLY+=("$tool_name")
-	done
-	unset -v tool tool_name
+	touch "$dir/$plugin_name"
 }
 
-util.plugin_get_active_tools() {
-	local flag_with='pair'
-	local arg=
-	for arg; do case $arg in
-	--with=*)
-		local value=${arg#--with=}
-		case $value in
-			pair|toolnameonly|toolfileonly)
-				flag_with=$value
-				;;
-			*)
-				util.print_error_die "Flag '$arg' could not be evaluated"
-				;;
-		esac
-		;;
-	*)
-		util.print_error_die "Flag '$arg' not recognized"
-		;;
-	esac done
+util.plugin_set_enabled() {
+	local plugin_name="$1"
+	util.assert_not_empty 'plugin_name'
 
-	var.get_dir 'plugins'
-	local plugins_dir="$REPLY"
+	var.get_dir 'data'
+	local dir="$REPLY/disabled_plugins"
+	util.mkdirp "$dir"
 
-	unset -v REPLY
-	declare -ga REPLY=()
-
-	local dir= plugin_name= tool=
-	for dir in "$plugins_dir/"*/; do
-		plugin_name=${dir%/}; plugin_name=${plugin_name##*/}
-		plugin_name=${plugin_name#woof-plugin-}
-		for tool in "$dir"tools/*.sh; do
-			if [ "$flag_with" = 'pair' ]; then
-				tool=${tool##*/}; tool=${tool%.sh}
-
-				REPLY+=("${plugin_name}/${tool}")
-			elif [ "$flag_with" = 'toolnameonly' ]; then
-				tool=${tool##*/}; tool=${tool%.sh}
-
-				REPLY+=("$tool")
-			elif [ "$flag_with" = 'toolfileonly' ]; then
-				REPLY+=("$tool")
-			fi
-		done
-	done
-	unset -v dir plugin tool
+	rm -f "$dir/$plugin_name"
 }

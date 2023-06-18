@@ -67,7 +67,7 @@ main.woof() {
 	for arg; do case $arg in
 	--help|-h)
 		util.help_show_cmd_root_all
-		exit
+		exit 0
 		;;
 	--quiet|-q)
 		# shellcheck disable=SC2034

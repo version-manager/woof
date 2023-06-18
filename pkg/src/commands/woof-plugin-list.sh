@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-plugin-list() {
-	local -a subcmds=()
+	local -a args=()
 	local arg=
 	for arg; do case $arg in
 	--help)
@@ -13,14 +13,9 @@ woof-plugin-list() {
 		util.print_help_die '.plugin.list' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 		;;
 	esac done; unset -v arg
 
-	var.get_dir 'plugins'
-	local plugins_dir="$REPLY"
-
-	for plugin_dir in "$plugins_dir"/*; do
-		util.plugin_show_one "$plugin_dir"
-	done; unset -v
+	helper.plugin_list
 }

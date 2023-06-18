@@ -5,9 +5,6 @@ woof-plugin() {
 	for arg; do case $arg in
 	--help)
 		util.help_show_cmd_plugin_all
-		if ! shift; then
-			util.print_fatal_die 'Failed to shift'
-		fi
 		exit 0
 		;;
 	-*)
@@ -19,7 +16,8 @@ woof-plugin() {
 
 	local subcommand="$1"
 	if [ -z "$subcommand" ]; then
-		util.print_help_die '.plugin' 'No subcommand was given'
+		util.help_show_cmd_plugin_all
+		util.print_error_die 'No subcommand was given'
 	fi
 	if ! shift; then
 		util.print_fatal_die 'Failed to shift'

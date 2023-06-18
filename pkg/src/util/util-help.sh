@@ -41,23 +41,23 @@ util.help_show_part() {
         Add a plugin"
 		;;
 	.plugin.uninstall)
-		printf '\n    %s\n' "plugin uninstall [name]
+		printf '\n    %s\n' "plugin uninstall [name...]
         Remove a plugin"
 		;;
 	.plugin.enable)
-		printf '\n    %s\n' "plugin enable [name]
+		printf '\n    %s\n' "plugin enable [name...]
         Enable a plugin"
 		;;
 	.plugin.disable)
-		printf '\n    %s\n' "plugin disable [name]
+		printf '\n    %s\n' "plugin disable [name...]
         Disable a plugin"
 		;;
 	.plugin.info)
-		printf '\n    %s\n' "plugin info [name]
+		printf '\n    %s\n' "plugin info [name...]
         Show information about a plugin"
 		;;
 	.plugin.list)
-		printf '\n    %s\n' "plugin list [plugin]
+		printf '\n    %s\n' "plugin list
         List plugins"
 		;;
 	.tool)

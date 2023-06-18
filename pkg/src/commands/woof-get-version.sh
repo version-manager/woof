@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-get-version() {
-	local -a subcmds=()
+	local -a args=()
 	local flag_global='no'
 	local arg=
 	for arg; do case $arg in
@@ -17,10 +17,10 @@ woof-get-version() {
 		util.print_help_die '.get-version' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 	esac done; unset -v arg
 
-	helper.determine_tool_pair "${subcmds[0]}"
+	helper.determine_tool_pair "${args[0]}"
 	declare -g g_tool_pair="$REPLY"
 	declare -g g_plugin_name="$REPLY1"
 	declare -g g_tool_name="$REPLY2"

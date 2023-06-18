@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-tool() {
-	local -a subcmds=()
+	local -a args=()
 	local arg=
 	for arg; do case $arg in
 	# --help)
@@ -14,7 +14,7 @@ woof-tool() {
 		util.print_help_die '.tool' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 	esac done; unset -v arg
 
 	local subcmd="$1"
@@ -27,7 +27,7 @@ woof-tool() {
 	fi
 
 	if [ "$subcmd" = 'get-exe' ]; then
-		local cmd="${subcmds[1]}"
+		local cmd="${args[1]}"
 		if [ -z "$cmd" ]; then
 			util.print_error_die 'Failed to supply command'
 			return

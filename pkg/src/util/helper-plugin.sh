@@ -41,51 +41,100 @@ helper.plugin_install() {
 }
 
 helper.plugin_uninstall() {
-	local plugin_dir="$1"
+	local plugin_names=()
 
-	if [ -L "$plugin_dir" ]; then
-		unlink "$plugin_dir"
+	if [ -z "$1" ]; then
+		helper.determine_plugin "$plugin_name"
+		plugin_names=("$REPLY")
 	else
-		rm -rf "${plugin_dir?:}"
+		plugin_names=("$@")
 	fi
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	local plugin_name=
+	for plugin_name in "${plugin_names[@]}"; do
+		local plugin_dir="$plugins_dir/woof-plugin-$plugin_name"
+
+		if [ -L "$plugin_dir" ]; then
+			unlink "$plugin_dir"
+			core.print_warn "Unlinked plugin: $plugin_name"
+		else
+			rm -rf "${plugin_dir?:}"
+			core.print_warn "Deleted plugin: $plugin_name"
+		fi
+	done
 }
 
 helper.plugin_enable() {
-	local plugin_slug="$1"
+	local plugin_names=()
 
-	var.get_dir 'data-state'
-	local global_state_dir="$REPLY"
-
-	if [ ! -d "$global_state_dir" ]; then
-		mkdir -p "$global_state_dir"
+	if [ -z "$1" ]; then
+		helper.determine_plugin "$plugin_name"
+		plugin_names=("$REPLY")
+	else
+		plugin_names=("$@")
 	fi
-	touch "$global_state_dir/installed_plugins"
-	local -a installed_plugins=("$plugin_slug")
-	local line=
-	while IFS= read -r line; do
-		if [ -z "$line" ]; then
-			continue
+
+	local plugin_name=
+	for plugin_name in "${plugin_names[@]}"; do
+		if util.plugin_is_enabled "$plugin_name"; then
+			core.print_warn "Plugin already enabled: $plugin_name"
+		else
+			util.plugin_set_enabled "$plugin_name"
+			util.print_info "Enabled plugin: $plugin_name"
 		fi
-
-		if [ "$line" = "$plugin_slug" ]; then
-			# Already enabled
-			return
-		fi
-
-		installed_plugins+=("$line")
-	done < "$global_state_dir/installed_plugins"
-	unset -v line
-
-	local file_content=
-	local plugin_slug=
-	for plugin_slug in "${installed_plugins[@]}"; do
-		file_content+="$plugin_slug"$'\n'
-	done; unset -v plugin_slug
-
-	printf '%s' "$file_content" > "$global_state_dir/installed_plugins"
-
+	done
 }
 
-helper.plugin_disable() { # TODO
-	:
+helper.plugin_disable() {
+	local plugin_names=()
+
+	if [ -z "$1" ]; then
+		helper.determine_plugin "$plugin_name"
+		plugin_names=("$REPLY")
+	else
+		plugin_names=("$@")
+	fi
+
+	local plugin_name=
+	for plugin_name in "${plugin_names[@]}"; do
+		if util.plugin_is_enabled "$plugin_name"; then
+			util.plugin_set_disabled "$plugin_name"
+			util.print_info "Disabled plugin: $plugin_name"
+		else
+			core.print_warn "Plugin already disabled: $plugin_name"
+		fi
+	done
+}
+
+helper.plugin_info() {
+	local plugin_names=()
+
+	if [ -z "$1" ]; then
+		helper.determine_plugin "$plugin_name"
+		plugin_names=("$REPLY")
+	else
+		plugin_names=("$@")
+	fi
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	local plugin_name=
+	for plugin_name in "${plugin_names[@]}"; do
+		local plugin_dir="$plugins_dir/woof-plugin-$plugin_name"
+
+		util.plugin_show_one "$plugin_dir"
+	done
+}
+
+# @description Lists all plugins in nice format
+helper.plugin_list() {
+	util.plugin_get_plugins --filter=none --with=filepath
+	local plugin_dir
+	for plugin_dir in "${REPLY[@]}"; do
+		util.plugin_show_one "$plugin_dir"
+	done; unset -v plugin_dir
 }

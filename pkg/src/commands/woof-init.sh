@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-init() {
-	local -a subcmds=()
+	local -a args=()
 	local flag_no_cd='no'
 	local arg=
 	for arg; do case $arg in
@@ -17,10 +17,10 @@ woof-init() {
 		util.print_help_die '.init' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 	esac done; unset -v arg
 
-	local shell="${subcmds[0]}"
+	local shell="${args[0]}"
 
 	if [ -z "$shell" ]; then
 		util.print_error_die 'Shell not specified'

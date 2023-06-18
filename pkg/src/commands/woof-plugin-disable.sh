@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-plugin-disable() {
-	local -a subcmds=()
+	local -a args=()
 	local arg=
 	for arg; do case $arg in
 	--help)
@@ -13,8 +13,8 @@ woof-plugin-disable() {
 		util.print_help_die '.plugin.disable' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 	esac done; unset -v arg
 
-	term.style_italic -Pd 'Not Implemented'
+	helper.plugin_disable "${args[@]}"
 }

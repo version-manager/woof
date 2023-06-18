@@ -16,18 +16,5 @@ woof-plugin-uninstall() {
 		plugins+=("$arg")
 	esac done; unset -v arg
 
-	local plugin="${plugins[0]}"
-
-	if [ -z "$plugin" ]; then
-		util.print_help_die '.plugin.uninstall' "Passed plugin cannot be empty"
-	fi
-
-	var.get_dir 'plugins'
-	local plugin_dir="$REPLY/$plugin"
-
-	if [ ! -d "$plugin_dir" ]; then
-		util.print_error_die "Plugin does not exist: ${plugin_dir##*/}"
-	fi
-
-	helper.plugin_uninstall "$plugin_dir"
+	helper.plugin_uninstall "${plugins[@]}"
 }

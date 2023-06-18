@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 woof-uninstall() {
-	local -a subcmds=()
+	local -a args=()
 	local arg=
 	for arg; do case $arg in
 	--help)
@@ -13,13 +13,13 @@ woof-uninstall() {
 		util.print_help_die '.uninstall.' "Flag '$arg' not recognized"
 		;;
 	*)
-		subcmds+=("$arg")
+		args+=("$arg")
 	esac done; unset -v arg
 
-	helper.determine_tool_pair_installed "${subcmds[0]}"
+	helper.determine_tool_pair_installed "${args[0]}"
 	local tool_pair="$REPLY"
 
-	helper.determine_tool_version_installed "$tool_pair" "${subcmds[1]}"
+	helper.determine_tool_version_installed "$tool_pair" "${args[1]}"
 	local tool_version="$REPLY"
 
 	var.get_dir 'tools' "$tool_pair"
