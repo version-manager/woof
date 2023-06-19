@@ -64,11 +64,6 @@ util.tool_get_local_version() {
 }
 
 util.tool_set_global_version() {
-	local tool_pair="$1"
-	local tool_version="$2"
-	util.assert_not_empty 'tool_pair'
-	util.assert_not_empty 'tool_version'
-
 	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
@@ -83,21 +78,16 @@ util.tool_set_global_version() {
 
 
 util.tool_set_local_version() {
-	local tool_pair="$1"
-	local tool_version="$2"
-	util.assert_not_empty 'tool_pair'
-	util.assert_not_empty 'tool_version'
-
 	var.get_dir 'data'
 	local dir="$REPLY/selection"
 
-	util.mkdirp "$dir"
+	util.mkdirp "$dir/$g_plugin_name"
 
-	if ! printf '%s\n' "$g_tool_version" > "$dir/$tool_pair"; then
-		util.print_error_die "Failed to write new tty-specific version to disk"
+	if ! printf '%s\n' "$g_tool_version" > "$dir/$g_tool_pair"; then
+		util.print_error_die "Failed to write new local version to disk"
 	fi
 
-	util.print_info "Set version '$g_tool_version' as tty-specific version"
+	util.print_info "Set version '$g_tool_version' as local version"
 }
 
 util.tool_list_global_versions() {

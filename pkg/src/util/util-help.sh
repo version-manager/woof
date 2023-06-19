@@ -80,12 +80,16 @@ util.help_show_part() {
 		printf '\n    %s\n' "tool debug-install
         Run the install() function of a plugin's tool"
 		;;
+	.tool.dev-release)
+		printf '\n    %s\n' "tool dev-release
+        Release a particular version of the current plugin"
+		;;
 	.tool.clear-table-cache)
-		printf '\n    %s\n' "tool debug-install
+		printf '\n    %s\n' "tool clear-table-cache
         Clear the table cache"
 		;;
 	.tool.cd-override)
-		printf '\n    %s\n' "tool debug-install
+		printf '\n    %s\n' "tool cd-override
         Override the cd builtin"
 		;;
 	*)
@@ -125,6 +129,7 @@ util.help_show_cmd_tool_all() {
 	util.help_show_part '.tool.print-dirs'
 	util.help_show_part '.tool.debug-table'
 	util.help_show_part '.tool.debug-install'
+	util.help_show_part '.tool.dev-release'
 	util.help_show_part '.tool.clear-table-cache'
 	util.help_show_part '.tool.cd-override'
 }

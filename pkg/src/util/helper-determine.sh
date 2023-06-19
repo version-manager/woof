@@ -137,7 +137,7 @@ helper.determine_tool_version() {
 	local real_arch="$REPLY2"
 
 	if [[ "$flag_allow_latest" = 'yes' && "$tool_version" = 'latest' ]]; then
-		helper.determine_latest_tool_version "$g_tool_pair" "$real_os" "$real_arch"
+		util.get_latest_tool_version "$g_tool_pair" "$real_os" "$real_arch"
 		tool_version="$REPLY"
 	fi
 
@@ -192,7 +192,7 @@ helper.determine_tool_version_installed() {
 	var.get_dir 'tools' "$g_tool_pair"
 	local install_dir="$REPLY"
 
-	if [ -z "$g_tool_version" ]; then
+	if [ -z "$tool_version" ]; then
 		core.shopt_push -s nullglob
 		local -a versions_list=("$install_dir"/*/)
 		core.shopt_pop
@@ -222,27 +222,6 @@ helper.determine_tool_version_installed() {
 	fi
 
 	REPLY="$tool_version"
-}
-
-helper.determine_latest_tool_version() {
-	unset -v REPLY; REPLY=
-	local tool_pair="$1"
-	local real_os="$2"
-	local real_arch="$3"
-	util.assert_not_empty 'tool_pair'
-	util.assert_not_empty 'real_os'
-	util.assert_not_empty 'real_arch'
-
-	var.get_plugin_table_file "$g_tool_pair"
-	local table_file="$REPLY"
-
-	local variant= version= os= arch= url= comment=
-	while IFS='|' read -r variant version os arch url comment; do
-		if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
-			REPLY="$version"
-			break
-		fi
-	done < "$table_file"; unset -v version os arch url comment
 }
 
 helper.determine_plugin() {

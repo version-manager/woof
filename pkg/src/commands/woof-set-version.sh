@@ -26,7 +26,7 @@ woof-set-version() {
 	declare -g g_tool_name="$REPLY2"
 
 	helper.determine_tool_version_installed "$g_tool_pair" "${args[1]}"
-	local tool_version="$REPLY"
+	local g_tool_version="$REPLY"
 
 	if [ "$flag_global" = 'yes' ]; then
 		util.tool_set_global_version "$g_tool_pair" "$g_tool_version"

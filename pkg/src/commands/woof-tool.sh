@@ -65,6 +65,46 @@ woof-tool() {
 		local flag_interactive='yes'
 		local flag_force='yes'
 		helper.install_tool_version "$flag_interactive" "$flag_force" "$g_tool_pair" "$g_tool_version"
+	elif [ "$subcmd" = 'dev-release' ]; then
+		if [ ! -f 'manifest.ini' ]; then
+			util.print_error_die "Failed to find file in current directory: 'manifest.ini'"
+		fi
+
+		if [ ! -d '.git' ]; then
+			util.print_error_die "Current directory is not a Git repository"
+		fi
+
+		local output=
+		if ! output=$(git status --porcelain); then
+			util.print_error_die "Failed to run 'git status - -porcelain'"
+		fi
+		if [ -n "$output" ]; then
+			util.print_error_die "Aborting because your working directory is dirty"
+		fi
+		unset -v output
+
+		if ! grep -q 'version *= *' 'manifest.ini'; then
+			util.print_error_die "Failed to find a 'version' key in manifest file"
+		fi
+
+		local current_version=
+		current_version=$(grep 'version *= *' 'manifest.ini' | cut -d= -f2)
+		current_version=${current_version#"${current_version%%[![:space:]]*}"}
+		current_version=${current_version%"${current_version##*[![:space:]]}"}
+		printf '%s\n' "current_version: $current_version"
+
+		local new_version=
+		read -rp 'New Version: ' new_version
+
+		if [[ $new_version == v* ]]; then
+			util.print_error_die "New version should not be prefixed with a 'v'"
+		fi
+
+		sed -Ei'' "s/(version[\\t ]*=[\\t ])(.*)[\\t ]*/\\1$new_version/g" 'manifest.ini'
+
+		git add 'manifest.ini'
+		git commit -nm "release: v$new_version"
+		git tag -a -m "v$new_version" "v$new_version"
 	elif [ "$subcmd" = 'clear-table-cache' ]; then
 		local tool_pair="$1"
 
@@ -86,6 +126,9 @@ woof-tool() {
 		if [ -n "$toolversions_file" ]; then
 			helper.toolversions_set_versions "$toolversions_file"
 		fi
+		util.path_things
+	elif [ "$subcmd" = 'print-eval' ]; then
+		util.path_things
 	else
 		util.print_error_die "Subcommand '$subcmd' is not valid"
 	fi

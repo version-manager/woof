@@ -209,3 +209,95 @@ util.mkdirp() {
 		mkdir -p "$dir"
 	fi
 }
+
+# TODO
+util.path_things() {
+	# Remove all Woof-related PATH entries
+	local new_path=
+	local entries=
+	IFS=':' read -ra entries <<< "$PATH"
+	local entry=
+	for entry in "${entries[@]}"; do
+		if [[ $entry != *"$WOOF_STATE_HOME"* ]]; then
+			new_path="${new_path:+"$new_path:"}$entry"
+		fi
+	done
+
+	printf '%s\n' '# --- plugins ----'
+	util.plugin_get_active_tools --with=toolfileonly
+	local tool_file= tool_name=
+	for tool_file in "${REPLY[@]}"; do
+		# shellcheck disable=SC1090
+		source "$tool_file"
+		tool_name=${tool_file##*/}; tool_name=${tool_name%*.sh}
+
+		if command -v "$tool_name".env &>/dev/null; then
+			printf '%s\n' "# $tool_name"
+			"$tool_name".env
+			printf '\n'
+		fi
+
+		util.tool_get_global_version --no-error "$tool_name"
+		local tool_version="$REPLY"
+		if [ -n "$tool_version" ]; then
+			util.get_plugin_data "$tool_name" "$tool_version" 'bins'
+			local -a bins=("${REPLY[@]}")
+			local bin=
+			for bin in "${bins[@]}"; do
+				bin=${bin#./}
+
+				var.get_dir 'tools' "$tool_name"
+				local install_dir="$REPLY"
+				local bin_dir="$install_dir/$tool_version/$bin"
+
+				new_path="$bin_dir${new_path:+":$new_path"}"
+			done; unset -v bin
+		fi
+	done; unset -v tool_file tool_name
+
+	# Get each currently active global version (for now only global) TODO
+	for file in ~/.local/state/woof/data/selection/*/*; do
+		declare -g g_plugin_name=${file%/*}; g_plugin_name=${g_plugin_name##*/}
+		declare -g g_tool_name=${file##*/}
+		declare -g g_tool_version=
+		g_tool_version=$(<"$file")
+		declare -g g_tool_pair=$g_plugin_name/$g_tool_name
+
+		# local install_dir="$HOME/.local/state/woof/tools/$g_tool_name/$g_tool_name/$g_tool_version"
+		var.get_dir 'tools' "$g_tool_pair"
+		local install_dir="$REPLY/$g_tool_version"
+
+		util.get_plugin_data "$g_tool_pair" "$g_tool_version" 'bins'
+		local bin_dir=
+		for bin_dir in "${REPLY[@]}"; do
+			bin_dir=${bin_dir#./}
+			local tool_dir="$install_dir/$bin_dir"
+
+			new_path="$tool_dir${new_path:+":$new_path"}"
+		done; unset -v bin_dir
+	done
+
+	printf '%s\n' '# --- path ----'
+	printf '%s\n' "PATH=$new_path"
+}
+
+util.get_latest_tool_version() {
+	unset -v REPLY; REPLY=
+	local tool_pair="$1"
+	local real_os="$2"
+	local real_arch="$3"
+	util.assert_not_empty 'tool_pair'
+	util.assert_not_empty 'real_os'
+	util.assert_not_empty 'real_arch'
+
+	var.get_plugin_table_file "$g_tool_pair"
+	local table_file="$REPLY"
+
+	local variant= version= os= arch= url= comment=
+	while IFS='|' read -r variant version os arch url comment; do
+		if [ "$real_os" = "$os" ] && [ "$real_arch" = "$arch" ]; then
+			REPLY="$version"
+			break
+		fi
+	done < "$table_file"; unset -v version os arch url comment
+}
