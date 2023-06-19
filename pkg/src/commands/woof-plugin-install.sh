@@ -20,15 +20,5 @@ woof-plugin-install() {
 		plugins+=("$arg")
 	esac done; unset -v arg
 
-	local plugin="${plugins[0]}"
-
-	if [ -z "$plugin" ]; then
-		util.print_help_die '.plugin.install' "Passed plugin cannot be empty"
-	fi
-
-	util.plugin_prune
-
-	util.plugin_resolve_external_path "$plugin"
-
-	helper.plugin_install "$REPLY_TYPE" "$REPLY_SRC" "$REPLY_TARGET" "$flag_force"
+	helper.plugin_install "$flag_force" "${plugins[@]}"
 }

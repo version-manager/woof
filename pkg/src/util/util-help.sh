@@ -37,7 +37,7 @@ util.help_show_part() {
         Manage a plugin"
 		;;
 	.plugin.install)
-		printf '\n    %s\n' "plugin install [--force] [name]
+		printf '\n    %s\n' "plugin install [--force] [name...]
         Add a plugin"
 		;;
 	.plugin.uninstall)

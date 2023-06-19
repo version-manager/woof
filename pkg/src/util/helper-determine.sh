@@ -273,3 +273,26 @@ helper.determine_plugin() {
 	unset -v REPLY; REPLY=
 	REPLY=$plugin_name
 }
+
+helper.determine_plugin_uri() {
+	local plugin_uri="$1"
+
+	if [ -z "$plugin_uri" ]; then
+		local -a plugins_list=(
+			'github.com/version-manager/woof-plugin-core'
+			'github.com/version-manager/woof-plugin-ancillary'
+			'github.com/version-manager/woof-plugin-hashicorp'
+		)
+		local -A plugins_table=()
+		local plugin=
+		for plugin in "${plugins_list[@]}"; do
+			plugins_table["$plugin"]=
+		done; unset -v plugin
+
+		tty.multiselect '' plugins_list plugins_table
+		plugin_uri=$REPLY
+	fi
+
+	unset -v REPLY; REPLY=
+	REPLY=$plugin_uri
+}

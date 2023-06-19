@@ -39,6 +39,7 @@ util.plugin_get_plugins() {
 	declare -ga REPLY=()
 
 	local dir= plugin_name= entry=
+	core.shopt_push -s nullglob
 	for dir in "$plugins_dir/"*/; do
 		dir=${dir%/}
 		plugin_name=${dir##*/}
@@ -59,6 +60,7 @@ util.plugin_get_plugins() {
 
 		REPLY+=("$entry")
 	done
+	core.shopt_pop
 	unset -v dir plugin_name entry
 }
 

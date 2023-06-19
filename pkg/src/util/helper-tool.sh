@@ -110,7 +110,7 @@ util.tool_list_global_versions() {
 
 	# TODO
 	# if (( ${#versions[@]} == 0)); then
-	# 	term.style_italic -Pd 'No items'
+	# 	term.style_italic -Pd 'No items' >&2
 	# 	return
 	# fi
 
@@ -152,7 +152,7 @@ util.tool_list_global_versions() {
 		local tools_dir="$REPLY"
 
 		if ((${#tools_dir[@]} == 0)); then
-			term.style_italic -Pd 'No items'
+			term.style_italic -Pd 'No items' >&2
 			return
 		fi
 
