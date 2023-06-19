@@ -64,6 +64,30 @@ util.help_show_part() {
 		printf '\n    %s\n' "tool [...]
         Run an internal command"
 		;;
+	.tool.get-exe)
+		printf '\n    %s\n' "tool get-exe
+        Get the executable of a plugin's tool"
+		;;
+	.tool.print-dirs)
+		printf '\n    %s\n' "tool print-dirs
+        Print some directories"
+		;;
+	.tool.debug-table)
+		printf '\n    %s\n' "tool debug-table
+        Run the table() function of a plugin's tool"
+		;;
+	.tool.debug-install)
+		printf '\n    %s\n' "tool debug-install
+        Run the install() function of a plugin's tool"
+		;;
+	.tool.clear-table-cache)
+		printf '\n    %s\n' "tool debug-install
+        Clear the table cache"
+		;;
+	.tool.cd-override)
+		printf '\n    %s\n' "tool debug-install
+        Override the cd builtin"
+		;;
 	*)
 		util.print_fatal_die "Unrecognized help command: $1"
 	esac
@@ -71,7 +95,7 @@ util.help_show_part() {
 
 # root
 util.help_show_cmd_root_all() {
-	util.help_show_usage_and_flags '<command>'
+	util.help_show_usage_and_flags '<subcommand>'
 	util.help_show_part '.init'
 	util.help_show_part '.install'
 	util.help_show_part '.uninstall'
@@ -85,7 +109,7 @@ util.help_show_cmd_root_all() {
 
 # plugin
 util.help_show_cmd_plugin_all() {
-	util.help_show_usage_and_flags 'plugin'
+	util.help_show_usage_and_flags 'plugin <subcommand>'
 	util.help_show_part '.plugin.install'
 	util.help_show_part '.plugin.uninstall'
 	util.help_show_part '.plugin.enable'
@@ -96,9 +120,13 @@ util.help_show_cmd_plugin_all() {
 
 # tool
 util.help_show_cmd_tool_all() {
-	printf '\n    %s\n' "tool <get-exe|print-dirs|cd-override|debug-table|debug-install|
-            clear-table-cache|install-default-plugins|generate-plugin-index> [args...]
-        Run a particular tool. Most of these are for internal use"
+	util.help_show_usage_and_flags 'tool <subcommand>'
+	util.help_show_part '.tool.get-exe'
+	util.help_show_part '.tool.print-dirs'
+	util.help_show_part '.tool.debug-table'
+	util.help_show_part '.tool.debug-install'
+	util.help_show_part '.tool.clear-table-cache'
+	util.help_show_part '.tool.cd-override'
 }
 
 # "helper" functions
@@ -108,7 +136,7 @@ util.help_show_usage_and_flags() {
 	subcmd=${subcmd//./ }
 
 	printf '%s\n\n' "Usage:
-    woof [flags] $subcmd [args...] [--help]"
+    woof [flags] $subcmd [args...]"
 
 	printf '%s' "Flags:
     -h, --help

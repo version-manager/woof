@@ -4,12 +4,10 @@ woof-tool() {
 	local -a args=()
 	local arg=
 	for arg; do case $arg in
-	# --help)
-	# 	# TODO: implement proper help when there are enough tools to make files for each subcommand
-	# 	util.help_show_usage_and_flags 'tool'
-	# 	util.help_show_cmd_tool_all 'tool'
-	# 	exit 0
-	# 	;;
+	--help)
+		util.help_show_cmd_tool_all
+		exit 0
+		;;
 	-*)
 		util.print_help_die '.tool' "Flag '$arg' not recognized"
 		;;
@@ -20,7 +18,7 @@ woof-tool() {
 	local subcmd="$1"
 	if [ -z "$subcmd" ]; then
 		util.help_show_cmd_tool_all
-		util.print_help_die '.tool' 'Expected subcommand'
+		util.print_error_die 'No subcommand was given'
 	fi
 	if ! shift; then
 		util.print_fatal_die 'Failed to shift'
@@ -88,46 +86,6 @@ woof-tool() {
 		if [ -n "$toolversions_file" ]; then
 			helper.toolversions_set_versions "$toolversions_file"
 		fi
-	elif [ "$subcmd" = 'install-default-plugins' ]; then
-		local dir=
-		for dir in "$BASALT_PACKAGE_DIR"/pkg/src/plugins/{for-building,hashicorp,languages,languages-other,misc-tools}/; do
-		woof-plugin-install --force "$dir"
-		done; unset -v dir
-	elif [ "$subcmd" = 'generate-plugin-index' ]; then
-		printf '%s\n' 'Generating...'
-
-		var.get_dir 'data'
-		local index_dir="$REPLY/index"
-		rm -rf "$index_dir"
-		mkdir -p "$index_dir"
-
-		var.get_dir 'plugins'
-		local plugins_dir="$REPLY"
-
-		local plugin_dir=
-		core.shopt_push -s 'nullglob'
-		for plugin_dir in "$plugins_dir"/*/; do
-			local plugin_name="$plugin_dir%/"; plugin_name=${plugin_name##*/}
-
-			# by-plugin
-			mkdir -p "$index_dir/by-plugin/$plugin_name"
-			local tool_file=
-			for tool_file in "$plugin_dir/tools/"*.sh; do
-				local tool_pair=${tool_file##*/}; tool_pair=${tool_pair%.sh}
-
-				ln -s "$tool_file" "$index_dir/by-plugin/$plugin_name/$tool_pair"
-			done; unset -v f file_name file_name_no_ext
-
-			# by-tool
-			mkdir -p "$index_dir/by-tool"
-
-			# by-tag
-			mkdir -p "$index_dir/by-tag"
-		done
-		unset -v plugin_dir
-		core.shopt_pop
-
-		printf '%s\n' 'Done.'
 	else
 		util.print_error_die "Subcommand '$subcmd' is not valid"
 	fi
