@@ -67,8 +67,9 @@ end'
 	fi
 		;;
 	zsh|ksh|bash|sh)
+		# shellcheck disable=SC2016
 		printf '%s\n' '__woof_cd_hook() {
-	woof tool cd-override
+	eval "$(woof tool cd-override)"
 }'
 	if [ "$flag_no_cd" = 'no' ]; then
 		printf '%s\n' 'cd() {
