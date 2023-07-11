@@ -151,7 +151,7 @@ util.tool_list_global_versions() {
 			printf '%s\n' "dir: $tool_dir"
 		done; unset -v tool_dir
 
-		# helper.determine_tool_pair "$1"
+		# helper.determine_tool_pair_active "$1"
 		# declare -g g_tool_pair="$REPLY"
 		# declare -g g_plugin_name="$REPLY1"
 		# declare -g g_tool_name="$REPLY2"

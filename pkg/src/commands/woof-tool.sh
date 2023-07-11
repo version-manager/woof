@@ -47,19 +47,19 @@ woof-tool() {
 		done; unset -v var_name
 		unset -vn var_value
 	elif [ "$subcmd" = 'debug-table' ]; then
-		helper.determine_tool_pair "$1"
-		local tool_name="$REPLY2"
+		helper.determine_tool_pair_active "$1"
+		local tool_name="$REPLY3"
 
 		util.run_function "$tool_name.table"
 	elif [ "$subcmd" = 'debug-install' ]; then
-		helper.determine_tool_pair "$1"
-		declare -g g_tool_pair="$REPLY"
-		declare -g g_plugin_name="$REPLY1"
-		declare -g g_tool_name="$REPLY2"
+		helper.determine_tool_pair_active "$1"
+		declare -g g_tool_pair="$REPLY1"
+		declare -g g_plugin_name="$REPLY2"
+		declare -g g_tool_name="$REPLY3"
 
 		helper.create_version_table "$g_tool_pair" 'yes'
 
-		helper.determine_tool_version "$2"
+		helper.determine_tool_version_active "$2"
 		local g_tool_version="$REPLY"
 
 		local flag_interactive='yes'

@@ -17,22 +17,24 @@ woof-uninstall() {
 	esac done; unset -v arg
 
 	helper.determine_tool_pair_installed "${args[0]}"
-	local tool_pair="$REPLY"
+	declare -g g_tool_pair="$REPLY1"
+	declare -g g_plugin_name="$REPLY2"
+	declare -g g_tool_name="$REPLY3"
 
-	helper.determine_tool_version_installed "$tool_pair" "${args[1]}"
-	local tool_version="$REPLY"
+	helper.determine_tool_version_installed "$g_tool_pair" "${args[1]}"
+	declare -g g_tool_version="$REPLY"
 
-	var.get_dir 'tools' "$tool_pair"
+	var.get_dir 'tools' "$g_tool_pair"
 	local install_dir="$REPLY"
 
 	# Do uninstall
-	printf '%s\n' "Uninstalling $tool_pair"
+	printf '%s\n' "Uninstalling $g_tool_pair"
 	# Note that this is a redundant check since it is done by helper.determine_tool_version_installed(), but we
 	# do it anyways, Just in Case
-	if [ -e "$install_dir/$tool_version" ]; then
-		rm -rf "${install_dir:?}/$tool_version"
-		util.print_info "Removed version '$tool_version' for plugin '$tool_pair'"
+	if [ -e "$install_dir/$g_tool_version" ]; then
+		rm -rf "${install_dir:?}/$g_tool_version"
+		util.print_info "Removed version '$g_tool_version' for plugin '$g_tool_pair'"
 	else
-		util.print_error_die "Version '$tool_version' for plugin '$tool_pair' is not installed"
+		util.print_error_die "Version '$g_tool_version' for plugin '$g_tool_pair' is not installed"
 	fi
 }

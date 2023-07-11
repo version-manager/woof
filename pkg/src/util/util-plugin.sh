@@ -8,29 +8,32 @@ util.plugin_get_plugins() {
 	--filter=*)
 		local value=${arg#--filter=}
 		case $value in
-			none|active)
-				flag_with=$value
-				;;
-			*)
-				util.print_error_die "Flag '$arg' could not be evaluated"
-				;;
+		none|active|installed)
+			flag_with=$value
+			;;
+		*)
+			util.print_error_die "Flag '$arg' could not be evaluated"
+			;;
 		esac
 		;;
 	--with=*)
 		local value=${arg#--with=}
 		case $value in
-			filepath|name)
-				flag_with=$value
-				;;
-			*)
-				util.print_error_die "Flag '$arg' could not be evaluated"
-				;;
+		filepath|name)
+			flag_with=$value
+			;;
+		*)
+			util.print_error_die "Flag '$arg' could not be evaluated"
+			;;
 		esac
 		;;
 	*)
 		util.print_error_die "Flag '$arg' not recognized"
 		;;
-	esac done
+	esac done; unset -v arg
+
+	var.get_dir 'tools'
+	local tools_dir="$REPLY"
 
 	var.get_dir 'plugins'
 	local plugins_dir="$REPLY"
@@ -45,8 +48,14 @@ util.plugin_get_plugins() {
 		plugin_name=${dir##*/}
 		plugin_name=${plugin_name#woof-plugin-}
 
-		if [ "$flag_filter" = 'active' ]; then
+		if [ "$flag_filter" = 'none' ]; then
+			:
+		elif [ "$flag_filter" = 'active' ]; then
 			if ! util.plugin_is_enabled "$plugin_name"; then
+				continue
+			fi
+		elif [ "$flag_filter" = 'installed' ]; then
+			if [ ! -d "$tools_dir/$plugin_name" ]; then
 				continue
 			fi
 		fi
@@ -62,6 +71,60 @@ util.plugin_get_plugins() {
 	done
 	core.shopt_pop
 	unset -v dir plugin_name entry
+}
+
+util.plugin_get_plugin_tools() {
+	local plugin_name="$1"
+
+	local flag_filter='none'
+	local flag_with='none'
+	local arg=
+	for arg; do case $arg in
+	--filter=*)
+		local value=${arg#--filter=}
+		case $value in
+		none|active|installed)
+			flag_with=$value
+			;;
+		*)
+			util.print_error_die "Flag '$arg' could not be evaluated"
+			;;
+		esac
+		;;
+	--with=*)
+		local value=${arg#--with=}
+		case $value in
+		filepath|name)
+			flag_with=$value
+			;;
+		*)
+			util.print_error_die "Flag '$arg' could not be evaluated"
+			;;
+		esac
+		;;
+	-*)
+		util.print_error_die "Flag '$arg' not recognized"
+		;;
+	esac done; unset -v arg
+
+	var.get_dir 'plugins'
+	local plugins_dir="$REPLY"
+
+	unset -v REPLY
+	declare -ga REPLY=()
+
+	local tool= tool_name= entry=
+	for tool in "$plugins_dir/woof-plugin-$plugin_name/tools/"*.sh; do
+		if [ "$flag_with" = 'filepath' ]; then
+			entry=$tool
+		elif [ "$flag_with" = 'name' ]; then
+			entry=${tool##*/}
+			entry=${entry%.sh}
+		fi
+
+		REPLY+=("$entry")
+	done
+	unset -v tool tool_name
 }
 
 util.plugin_get_active_tools_of_plugin() {

@@ -1,72 +1,13 @@
 # shellcheck shell=bash
 
-# @description Tool names aren't required to be specified on the command line. If one
-# isn't specified, then start a TUI selection screen
-helper.determine_tool_pair() {
+helper.determine_tool_pair_active() {
 	unset -v REPLY; REPLY=
 	local input="$1"
 
-	local tool_pair=
-	local plugin_name=
-	local tool_name=
-
-	if [ -z "$input" ]; then
-		util.plugin_get_plugins --filter=active --with=name
-		local -a all_plugins_arr=("${REPLY[@]}")
-		local -A all_plugins_obj=()
-		for m in "${all_plugins_arr[@]}"; do
-			all_plugins_obj["$m"]=
-		done; unset -v m
-		tty.multiselect '' all_plugins_arr all_plugins_obj
-		plugin_name="$REPLY"
-
-		util.plugin_get_active_tools_of_plugin "$plugin_name"
-		local all_tools_arr=("${REPLY[@]}")
-		local -A all_tools_obj=()
-		for m in "${all_tools_arr[@]}"; do
-			all_tools_obj["$m"]=
-		done; unset -v m
-		tty.multiselect '' all_tools_arr all_tools_obj
-		tool_name="$REPLY"
-
-		tool_pair="$plugin_name/$tool_name"
-	elif [[ "$input" != */* ]]; then
-		util.plugin_get_active_tools --with=pair
-		local tools=("${REPLY[@]}")
-
-		local tool=
-		for tool in "${tools[@]}"; do
-			if [ "$input" = "${tool#*/}" ]; then
-				plugin_name=${tool%/*}
-				tool_name=${tool#*/}
-
-				tool_pair="$plugin_name/$tool_name"
-				break
-			fi
-		done
-
-		if [ -z "$tool_name" ]; then
-
-			util.plugin_get_active_tools_of_plugin "$input"
-			local all_tools_arr=("${REPLY[@]}")
-			local -A all_tools_obj=()
-			for m in "${all_tools_arr[@]}"; do
-				all_tools_obj["$m"]=
-			done; unset -v m
-			tty.multiselect '' all_tools_arr all_tools_obj
-			local _tool_name="$REPLY"
-
-			plugin_name=$input
-			tool_name="$_tool_name"
-
-			tool_pair="$plugin_name/$tool_name"
-		fi
-	else
-		plugin_name=${input%/*}
-		tool_name=${input#*/}
-
-		tool_pair=$input
-	fi
+	util.determine_tool_pair "$input" 'active'
+	local tool_pair=$REPLY1
+	local plugin_name=$REPLY2
+	local tool_name=$REPLY3
 
 	var.get_tool_file "$plugin_name" "$tool_name"
 	local tool_file="$REPLY"
@@ -80,48 +21,33 @@ helper.determine_tool_pair() {
 		util.print_error_die "Could not successfully source plugin '$tool_pair'"
 	fi
 
-	REPLY=$tool_pair
-	REPLY1=$plugin_name
-	REPLY2=$tool_name
+	REPLY1=$tool_pair
+	REPLY2=$plugin_name
+	REPLY3=$tool_name
 }
 
 helper.determine_tool_pair_installed() {
 	unset -v REPLY; REPLY=
-	local tool_pair="$1"
+	local input="$1"
+
+	util.determine_tool_pair "$input" 'installed'
+	local tool_pair=$REPLY1
+	local plugin_name=$REPLY2
+	local tool_name=$REPLY3
 
 	var.get_dir 'tools' "$tool_pair"
 	local install_dir="$REPLY"
-
-	if [ -z "$tool_pair" ]; then
-		core.shopt_push -s nullglob
-		local -a plugin_list=("$install_dir"/*/)
-		core.shopt_pop
-
-		if (( ${#plugin_list[@]} == 0 )); then
-			util.print_error_die "Cannot uninstall as no plugins are installed"
-		fi
-
-		plugin_list=("${plugin_list[@]%/}")
-		plugin_list=("${plugin_list[@]##*/}")
-
-		local -A plugins_table=()
-		local plugin=
-		for plugin in "${plugin_list[@]}"; do
-			plugins_table["$plugin"]=
-		done; unset plugin
-
-		tty.multiselect 0 plugin_list plugins_table
-		tool_pair=$REPLY
-	fi
 
 	if [ ! -d "$install_dir" ]; then
 		util.print_error_die "No versions of plugin '$tool_pair' are installed"
 	fi
 
-	REPLY=$tool_pair
+	REPLY1=$tool_pair
+	REPLY2=$plugin_name
+	REPLY3=$tool_name
 }
 
-helper.determine_tool_version() {
+helper.determine_tool_version_active() {
 	unset -v REPLY; REPLY=
 	local flag_allow_latest='no'
 	if [ "$1" = '--allow-latest' ]; then

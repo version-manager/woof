@@ -20,10 +20,10 @@ woof-get-version() {
 		args+=("$arg")
 	esac done; unset -v arg
 
-	helper.determine_tool_pair "${args[0]}"
-	declare -g g_tool_pair="$REPLY"
-	declare -g g_plugin_name="$REPLY1"
-	declare -g g_tool_name="$REPLY2"
+	helper.determine_tool_pair_active "${args[0]}"
+	declare -g g_tool_pair="$REPLY1"
+	declare -g g_plugin_name="$REPLY2"
+	declare -g g_tool_name="$REPLY3"
 
 	local tool_version=
 	if [ "$flag_global" = 'yes' ]; then

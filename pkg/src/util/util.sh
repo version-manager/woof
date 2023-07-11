@@ -301,3 +301,74 @@ util.get_latest_tool_version() {
 		fi
 	done < "$table_file"; unset -v version os arch url comment
 }
+
+util.determine_tool_pair() {
+	local input="$1"
+	local filter="$2"
+
+	local tool_pair=
+	local plugin_name=
+	local tool_name=
+
+	if [ -z "$input" ]; then
+		util.plugin_get_plugins --filter="$filter" --with=name
+		local -a all_plugins_arr=("${REPLY[@]}")
+		local -A all_plugins_obj=()
+		for m in "${all_plugins_arr[@]}"; do
+			all_plugins_obj["$m"]=
+		done; unset -v m
+		tty.multiselect '' all_plugins_arr all_plugins_obj
+		plugin_name="$REPLY"
+
+		util.plugin_get_plugin_tools "$plugin_name" --filter="$filter"
+		util.plugin_get_active_tools_of_plugin "$plugin_name"
+		local all_tools_arr=("${REPLY[@]}")
+		local -A all_tools_obj=()
+		for m in "${all_tools_arr[@]}"; do
+			all_tools_obj["$m"]=
+		done; unset -v m
+		tty.multiselect '' all_tools_arr all_tools_obj
+		tool_name="$REPLY"
+
+		tool_pair="$plugin_name/$tool_name"
+	elif [[ "$input" != */* ]]; then
+		util.plugin_get_active_tools --with=pair
+		local tools=("${REPLY[@]}")
+
+		local tool=
+		for tool in "${tools[@]}"; do
+			if [ "$input" = "${tool#*/}" ]; then
+				plugin_name=${tool%/*}
+				tool_name=${tool#*/}
+
+				tool_pair="$plugin_name/$tool_name"
+				break
+			fi
+		done
+
+		if [ -z "$tool_name" ]; then
+			util.plugin_get_active_tools_of_plugin "$input"
+			local all_tools_arr=("${REPLY[@]}")
+			local -A all_tools_obj=()
+			for m in "${all_tools_arr[@]}"; do
+				all_tools_obj["$m"]=
+			done; unset -v m
+			tty.multiselect '' all_tools_arr all_tools_obj
+			local _tool_name="$REPLY"
+
+			plugin_name=$input
+			tool_name="$_tool_name"
+
+			tool_pair="$plugin_name/$tool_name"
+		fi
+	else
+		plugin_name=${input%/*}
+		tool_name=${input#*/}
+
+		tool_pair=$input
+	fi
+
+	REPLY1=$tool_pair
+	REPLY2=$plugin_name
+	REPLY3=$tool_name
+}
