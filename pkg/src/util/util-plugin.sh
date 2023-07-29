@@ -246,11 +246,7 @@ util.plugin_parse_manifest() {
 			REPLY_TAGS+=("$value")
 		fi
 	done < "$manifest_file"; unset -v key value
-
-	if [ -z "$REPLY_SLUG" ]; then
-		util.print_error_die "Key 'slug' must be set in manifest file: $manifest_file"
-	fi
-
+	
 	if [ -z "$REPLY_NAME" ]; then
 		util.print_error_die "Key 'name' must be set in manifest file: $manifest_file"
 	fi
@@ -271,10 +267,6 @@ util.plugin_assert_is_valid() {
 	# This will fatal if various keys could not be found
 	util.plugin_parse_manifest "$plugin_dir/manifest.ini"
 	local plugin_name="$REPLY_SLUG"
-
-	if [ "woof-plugin-$plugin_name" != "${plugin_dir##*/}" ]; then
-		util.print_error_die "Plugin with slug '$plugin_name' does not match the ending of plugin directory $plugin_dir"
-	fi
 }
 
 util.plugin_show_one() {
