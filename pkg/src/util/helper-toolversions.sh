@@ -76,7 +76,7 @@ helper.toolversions_set_versions() {
 				declare -g g_tool_name="$tool_name"
 				declare -g g_tool_version="$tool_version"
 
-				if util.is_tool_version_installed; then
+				if util.is_tool_version_installed "$g_tool_name" "$g_tool_version"; then
 					util.tool_set_local_version
 					printf '%s\n' "Switched to $g_tool_name version $g_tool_version"
 				else
