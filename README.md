@@ -22,9 +22,9 @@ STATUS: IN DEVELOPMENT
 - Fast
 - Uses no symlinks or shims
 
-## Preview (v0.2.0)
+## Preview (v0.5.0)
 
-[![asciicast](https://asciinema.org/a/485308.svg)](https://asciinema.org/a/485308)
+![Demo](./assets/demo.gif)
 
 ## Prerequisites
 

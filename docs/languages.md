@@ -61,7 +61,7 @@ There are three levels of support:
 | Please   | Dogfooding      | [Official](https://github.com/thought-machine/please) | [asdf-please](https://github.com/asdf-community/asdf-please)                                                                                             |
 | Solidity | Dogfooding      | [Official](https://github.com/ethereum/solidity)      | [asdf-solidity](https://github.com/refillic/asdf-solidity), [svm](https://github.com/web3j/svm)                                                          |
 | V        | Dogfooding      | [Official](https://github.com/vlang/v)                |                                                                                                                                                          |
-| Zig      | Dogfooding      | [Official](https://github.com/ziglang/zig)            | [asdf-zig](https://github.com/cheetah/asdf-zig)                                                                                                          |
+| Zig      | Dogfooding      | [Official](https://github.com/ziglang/zig)            | [asdf-zig](https://github.com/cheetah/asdf-zig), [zvm](https://github.com/tristanisham/zvm)                                                                                                          |
 
 ## TODO
 
