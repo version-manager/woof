@@ -332,9 +332,9 @@ util.determine_tool_pair() {
 
 		tool_pair="$plugin_name/$tool_name"
 	elif [[ "$input" != */* ]]; then
+		# Input might be a tool, search for it in currently enabled plugins
 		util.plugin_get_active_tools --with=pair
 		local tools=("${REPLY[@]}")
-
 		local tool=
 		for tool in "${tools[@]}"; do
 			if [ "$input" = "${tool#*/}" ]; then
@@ -346,20 +346,29 @@ util.determine_tool_pair() {
 			fi
 		done
 
-		if [ -z "$tool_name" ]; then
-			util.plugin_get_active_tools_of_plugin "$input"
-			local all_tools_arr=("${REPLY[@]}")
-			local -A all_tools_obj=()
-			for m in "${all_tools_arr[@]}"; do
-				all_tools_obj["$m"]=
-			done; unset -v m
-			tty.multiselect '' all_tools_arr all_tools_obj
-			local _tool_name="$REPLY"
+		# Input might be a plugin, earch for currently enabled plugins
+		if [ -z "$tool_pair" ]; then
+			var.get_dir 'plugins'
+			local plugins_dir="$REPLY"
+			if [ -d "$plugins_dir/woof-plugin-$input" ]; then
+				util.plugin_get_active_tools_of_plugin "$input"
+				local all_tools_arr=("${REPLY[@]}")
+				local -A all_tools_obj=()
+				for m in "${all_tools_arr[@]}"; do
+					all_tools_obj["$m"]=
+				done; unset -v m
+				tty.multiselect '' all_tools_arr all_tools_obj
+				local _tool_name="$REPLY"
 
-			plugin_name=$input
-			tool_name="$_tool_name"
+				plugin_name=$input
+				tool_name="$_tool_name"
 
-			tool_pair="$plugin_name/$tool_name"
+				tool_pair="$plugin_name/$tool_name"
+			fi
+		fi
+
+		if [ -z "$tool_pair" ]; then
+			util.print_error_die "Failed to find tool or plugin with name: $input"
 		fi
 	else
 		plugin_name=${input%/*}
