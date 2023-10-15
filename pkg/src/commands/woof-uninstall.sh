@@ -37,4 +37,15 @@ woof-uninstall() {
 	else
 		util.print_error_die "Version '$g_tool_version' for plugin '$g_tool_pair' is not installed"
 	fi
+
+	# Remove the selected tool version if it was just uninstalled.
+	var.get_dir 'data'
+	local dir="$REPLY/selection"
+	local selection_file="$dir/$g_tool_pair"
+	local selection=
+	selection=$(<"$selection_file")
+	if [ "$selection" = "$g_tool_version" ]; then
+		rm "$selection_file"
+		core.print_warn "You just removed the Go version that was selected by default."
+	fi
 }
