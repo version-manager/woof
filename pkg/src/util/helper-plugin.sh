@@ -10,7 +10,6 @@ helper.plugin_install() {
 	fi
 
 	local plugin_uris=()
-
 	if [ -z "$1" ]; then
 		helper.determine_plugin_uri "$plugin_name"
 		plugin_uris=("$REPLY")
@@ -20,11 +19,23 @@ helper.plugin_install() {
 
 	local plugin_uri=
 	for plugin_uri in "${plugin_uris[@]}"; do
-		if [[ $plugin_uri =~ ^[a-zA-Z0-9_-]+$ ]]; then
-			plugin_uri="https://github.com/version-manager/woof-plugin-$plugin_uri"
-		fi
-		if [[ $plugin_uri != https://* ]]; then
-			plugin_uri="https://$plugin_uri"
+		# If a local path was not specified
+		if [[ "$plugin_uri" == /* ]]; then
+			:
+		elif [[ "$plugin_uri" == .* ]]; then
+			plugin_uri="$PWD/$plugin_uri"
+		else
+			if [[ "$plugin_uri" == https://* || "$plugin_uri" == http:// ]]; then
+				:
+			elif [[ $plugin_uri == */*/* ]]; then
+				plugin_uri="https://$plugin_uri"
+			elif [[ "$plugin_uri" == */* ]]; then
+				plugin_uri="https://github.com/$plugin_uri"
+			elif [[ "$plugin_uri" == *-* ]]; then
+				plugin_uri="https://github.com/version-manager/$plugin_uri"
+			else
+				plugin_uri="https://github.com/version-manager/woof-plugin-$plugin_uri"
+			fi
 		fi
 
 		util.plugin_resolve_external_path "$plugin_uri"
@@ -43,9 +54,8 @@ helper.plugin_install() {
 			fi
 
 			util.mkdirp "${plugin_target%/*}"
-
 			if ln -sfT "$plugin_src" "$plugin_target"; then :; else
-				util.print_error_die "Failed to symlink plugin directory"
+				util.print_error_die "Failed to symlink plugin: $plugin_src"
 			fi
 		elif [ "$plugin_type" = 'git-repository' ]; then
 			if [ "$flag_force" = 'no' ]; then
@@ -55,11 +65,12 @@ helper.plugin_install() {
 				fi
 			fi
 
+			util.print_info "Cloning repository: $plugin_src"
 			util.mkdirp "${plugin_target%/*}"
-			if git clone --quiet "$plugin_src" "$plugin_target"; then :; else
+			if git clone "$plugin_src" "$plugin_target"; then :; else
 				util.print_error_die "Failed to clone Git repository"
 			fi
-			util.print_info "Cloned: $plugin_target"
+			util.print_info "Installed plugin to: $plugin_target"
 
 			util.plugin_assert_is_valid "$plugin_target"
 		else

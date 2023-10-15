@@ -246,7 +246,7 @@ util.plugin_parse_manifest() {
 			REPLY_TAGS+=("$value")
 		fi
 	done < "$manifest_file"; unset -v key value
-	
+
 	if [ -z "$REPLY_NAME" ]; then
 		util.print_error_die "Key 'name' must be set in manifest file: $manifest_file"
 	fi
@@ -257,16 +257,15 @@ util.plugin_assert_is_valid() {
 	local plugin_dir="$1"
 
 	if [ ! -d "$plugin_dir" ]; then
-		util.print_error_die "Plugin does not exist at directory: '$plugin_dir'"
+		util.print_error_die "Plugin could not be found at a non-existent directory: $plugin_dir"
 	fi
 
 	if [ ! -f "$plugin_dir/manifest.ini" ]; then
-		util.print_error_die "Plugin manifest does not exist at: $plugin_dir"
+		util.print_error_die "Plugin manifest does not exist in directory: $plugin_dir"
 	fi
 
 	# This will fatal if various keys could not be found
 	util.plugin_parse_manifest "$plugin_dir/manifest.ini"
-	local plugin_name="$REPLY_SLUG"
 }
 
 util.plugin_show_one() {
