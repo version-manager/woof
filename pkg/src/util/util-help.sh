@@ -9,7 +9,7 @@ util.help_show_part() {
         Print code for a particular shell to set the proper PATH, etc."
 		;;
 	.install)
-		printf '\n    %s\n' "install [--no-cache] [--force] [name] [version]
+		printf '\n    %s\n' "install [--fetch] [--force] [name] [version]
         Install a particular tool"
 		;;
 	.uninstall)
@@ -29,7 +29,7 @@ util.help_show_part() {
         Execute the executable of a particular version of a tool"
 		;;
 	.list)
-		printf '\n    %s\n' "list [--global] [--no-cache] [--all] [plugin]
+		printf '\n    %s\n' "list [--global] [--fetch] [--all] [plugin]
         List tools"
 		;;
 	.plugin)

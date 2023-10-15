@@ -4,8 +4,8 @@
 # platforms (kernel and architecture). This eventually calls the "<plugin>.table"
 # function and properly deals with caching
 helper.create_version_table() {
-	local flag_no_cache="$1"
-	util.assert_not_empty 'flag_no_cache'
+	local flag_fetch="$1"
+	util.assert_not_empty 'flag_fetch'
 
 	var.get_plugin_table_file "$g_tool_pair"
 	local table_file="$REPLY"
@@ -19,7 +19,7 @@ helper.create_version_table() {
 	if [ ! -f "$table_file" ]; then
 		should_use_cache='no'
 	fi
-	if [ "$flag_no_cache" = 'yes' ]; then
+	if [ "$flag_fetch" = 'yes' ]; then
 		should_use_cache='no'
 	fi
 

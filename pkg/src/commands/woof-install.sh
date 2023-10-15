@@ -3,7 +3,7 @@
 woof-install() {
 	local -a args=()
 	declare -g g_flag_dry_run='no'
-	local flag_no_cache='no' flag_force='no'
+	local flag_fetch='no' flag_force='no'
 	local arg=
 	for arg; do case $arg in
 	--help)
@@ -11,8 +11,8 @@ woof-install() {
 		util.help_show_part '.install'
 		exit 0
 		;;
-	--no-cache)
-		flag_no_cache='yes'
+	--fetch)
+		flag_fetch='yes'
 		;;
 	--dry-run)
 		g_flag_dry_run='yes'
@@ -32,7 +32,7 @@ woof-install() {
 	declare -g g_plugin_name="$REPLY2"
 	declare -g g_tool_name="$REPLY3"
 
-	helper.create_version_table "$flag_no_cache"
+	helper.create_version_table "$flag_fetch"
 
 	helper.determine_tool_version_active --allow-latest "${args[1]}"
 	declare -g g_tool_version="$REPLY"

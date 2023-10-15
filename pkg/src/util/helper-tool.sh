@@ -91,7 +91,7 @@ util.tool_set_local_version() {
 }
 
 util.tool_list_global_versions() {
-	local flag_no_cache="$1"
+	local flag_fetch="$1"
 	local flag_all="$2"
 	if ! shift 2; then
 		util.print_fatal_die 'Failed to shift'
@@ -117,7 +117,7 @@ util.tool_list_global_versions() {
 
 			# one shoudl already be created / should not do this in list
 			# as it could mean network request TODO
-			helper.create_version_table "$flag_no_cache"
+			helper.create_version_table "$flag_fetch"
 
 			printf '%s\n' "$tool_pair"
 
@@ -158,7 +158,7 @@ util.tool_list_global_versions() {
 
 		# # TODO
 		# # DUPLICATE CODE START ?
-		# helper.create_version_table "$flag_no_cache"
+		# helper.create_version_table "$flag_fetch"
 
 		# printf '%s\n' "$g_tool_pair"
 
@@ -181,7 +181,7 @@ util.tool_list_global_versions() {
 }
 
 util.tool_list_local_versions() {
-	local flag_no_cache="$1"
+	local flag_fetch="$1"
 	local flag_all="$2"
 	if ! shift 2; then
 		util.print_fatal_die 'Failed to shift'
