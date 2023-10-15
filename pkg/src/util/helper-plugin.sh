@@ -90,10 +90,10 @@ helper.plugin_uninstall() {
 
 		if [ -L "$plugin_dir" ]; then
 			unlink "$plugin_dir"
-			core.print_warn "Unlinked plugin: $plugin_name"
+			core.print_info "Unlinked plugin: $plugin_name"
 		else
 			rm -rf "${plugin_dir?:}"
-			core.print_warn "Deleted plugin: $plugin_name"
+			core.print_info "Uninstalled plugin: $plugin_name"
 		fi
 	done; unset -v plugin_name
 }
