@@ -1,8 +1,10 @@
 # shellcheck shell=bash
 
 tool1.table() {
-	T1|v1|linux|x86_64|https://example.com/downloads/tool1-v1-linux-x86_64.tar.gz
-	T1|v2|linux|x86_64|https://example.com/downloads/tool1-v2-linux-x86_64.tar.gz
+	cat <<"EOF"
+T1|v1|linux|x86_64|https://example.com/downloads/tool1-v1-linux-x86_64.tar.gz
+T1|v2|linux|x86_64|https://example.com/downloads/tool1-v2-linux-x86_64.tar.gz
+EOF
 }
 
 tool1.install() {

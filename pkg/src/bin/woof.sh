@@ -50,16 +50,18 @@ main.woof() {
 	WOOF_VARS='WOOF_CONFIG_HOME WOOF_CACHE_HOME WOOF_DATA_HOME WOOF_STATE_HOME'
 
 	# Validate the existence of GitHub token
-	local token_file="$WOOF_DATA_HOME/token"
-	if [ -f "$token_file" ]; then
-		if ! GITHUB_TOKEN=$(<"$token_file"); then
-			util.print_error_die "Failed to read from file '$token_file'"
+	if [ "$WOOF_INTERNAL_TESTING" != 'yes' ]; then
+		local token_file="$WOOF_DATA_HOME/token"
+		if [ -f "$token_file" ]; then
+			if ! GITHUB_TOKEN=$(<"$token_file"); then
+				util.print_error_die "Failed to read from file '$token_file'"
+			fi
+			export GITHUB_TOKEN
+		else
+			util.print_error_die "Must have a file containing your GitHub token at '$token_file'"
 		fi
-		export GITHUB_TOKEN
-	else
-		util.print_error_die "Must have a file containing your GitHub token at '$token_file'"
+		unset -v token_file
 	fi
-	unset -v token_file
 
 	# Parse arguments
 	local g_flag_quiet='no'

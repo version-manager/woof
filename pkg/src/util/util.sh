@@ -256,14 +256,14 @@ util.path_things() {
 	done; unset -v tool_file tool_name
 
 	# Get each currently active global version (for now only global) TODO
-	for file in ~/.local/state/woof/data/selection/*/*; do
+	for file in "$WOOF_STATE_HOME/data/selection"/*/*; do
 		declare -g g_plugin_name=${file%/*}; g_plugin_name=${g_plugin_name##*/}
 		declare -g g_tool_name=${file##*/}
 		declare -g g_tool_version=
 		g_tool_version=$(<"$file")
 		declare -g g_tool_pair=$g_plugin_name/$g_tool_name
 
-		# local install_dir="$HOME/.local/state/woof/tools/$g_tool_name/$g_tool_name/$g_tool_version"
+		# local install_dir="$WOOF_STATE_HOME/tools/$g_tool_name/$g_tool_name/$g_tool_version"
 		var.get_dir 'tools' "$g_tool_pair"
 		local install_dir="$REPLY/$g_tool_version"
 
