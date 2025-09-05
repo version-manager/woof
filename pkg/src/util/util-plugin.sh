@@ -174,9 +174,12 @@ util.plugin_get_active_tools() {
 
 	local dir= plugin_name= tool=
 	for dir in "$plugins_dir/"*/; do
-		plugin_name=${dir%/}; plugin_name=${plugin_name##*/}
+		dir=${dir%/}; plugin_name=${dir##*/}
 		plugin_name=${plugin_name#woof-plugin-}
-		for tool in "$dir"tools/*.sh; do
+		core.shopt_push -s nullglob
+		local -a tools=("$dir"/tools/*.sh)
+		core.shopt_pop
+		for tool in "${tools[@]}"; do
 			if [ "$flag_with" = 'pair' ]; then
 				tool=${tool##*/}; tool=${tool%.sh}
 
@@ -189,8 +192,9 @@ util.plugin_get_active_tools() {
 				REPLY+=("$tool")
 			fi
 		done
+		unset -v tools
 	done
-	unset -v dir plugin tool
+	unset -v dir plugin_name tool
 }
 
 util.plugin_resolve_external_path() {

@@ -256,7 +256,10 @@ util.path_things() {
 	done; unset -v tool_file tool_name
 
 	# Get each currently active global version (for now only global) TODO
-	for file in "$WOOF_STATE_HOME/data/selection"/*/*; do
+	core.shopt_push -s nullglob
+	local -a files=("$WOOF_STATE_HOME/data/selection"/*/*)
+	core.shopt_pop
+	for file in "${files[@]}"; do
 		declare -g g_plugin_name=${file%/*}; g_plugin_name=${g_plugin_name##*/}
 		declare -g g_tool_name=${file##*/}
 		declare -g g_tool_version=
@@ -276,6 +279,7 @@ util.path_things() {
 			new_path="$tool_dir${new_path:+":$new_path"}"
 		done; unset -v bin_dir
 	done
+	unset -v
 
 	printf '%s\n' '# --- path ----'
 	printf '%s\n' "PATH=$new_path"
