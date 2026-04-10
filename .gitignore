@@ -1,6 +1,2 @@
 .basalt/
 site/
-
-# Added by cargo
-
-/target
